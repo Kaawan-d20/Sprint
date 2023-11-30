@@ -7,7 +7,7 @@
 </head>
 <body>
                 <!-- TODO -->
-    <form action="CHANGE THIS" method="POST">
+    <form action="index.php" method="POST">
         <label for="loginField">Nom d'utilisateur</label><input type="text" name="loginField" id="loginField">
         <label for="passwordField">Mot de Passe</label><input type="password" name="passwordField" id="passwordField">
         <input type="submit" name="" id="" value="Submit">
