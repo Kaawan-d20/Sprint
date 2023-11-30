@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Info</title>
 </head>
 <body>
-    i'm index.php
+    <h1>Synthese</h1>
+    <?php $content ?>
 </body>
 </html>
