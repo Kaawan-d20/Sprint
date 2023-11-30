@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    i'm index.php
+    <h1>Calendar</h1>
+    <h1>Recherche Client</h1>
 </body>
 </html>
