@@ -29,9 +29,30 @@ function modGetClientFromId($idClient) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM client WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idClient, PDO::PARAM_STR);
+    $prepared -> bindParam(':idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $prepared -> closeCursor();
 }
 
+function modGetAccounts($idClient) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idCompte,idTypeCompte,intitule,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte WHERE idClient=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+function modGetTypeStaff($idE) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT libelleCategorie FROM employe LEFT JOIN categorie ON employe.idCategorie=categorie.idCategorie WHERE idEmploye=:idE';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
