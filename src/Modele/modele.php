@@ -48,7 +48,7 @@ function modGetAccounts($idClient) {
 
 function modGetTypeStaff($idE) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT libelleCategorie FROM employe LEFT JOIN categorie ON employe.idCategorie=categorie.idCategorie WHERE idEmploye=:idE';
+    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:idE';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
     $prepared -> execute();
@@ -56,3 +56,9 @@ function modGetTypeStaff($idE) {
     $prepared -> closeCursor();
     return $prepared;
 }
+
+echo modGetSalt('GayBoi');
+echo modConnect('Lovelace','AZERTY');
+echo modConnect('fdgh','AZERTY');
+echo modConnect('Lovelace','XGFHJ');
+echo modGetTypeStaff('1');
