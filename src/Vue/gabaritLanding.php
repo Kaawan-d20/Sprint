@@ -7,24 +7,38 @@
     <title>Landing</title>
 </head>
 <body>
-    <div class="landingWrapper">
-        <form action="index.php" method="POST">
-        <fieldset>
-            <legend>Connection</legend>
-            <p>
-                <label for="landingLoginField">Nom d'utilisateur</label>
-                <input type="text" name="landingLoginField" id="landingLoginField">
-            </p>
-            <p>
-                <label for="landingPasswordField">Mot de Passe</label>
-                <input type="password" name="landingPasswordField" id="landingPasswordField">
-            </p>
-            <p>
-                <input type="submit" name="landingSubmitBtn"  id="landingSubmitBtn" value="Connection">
-                <input type="reset" name="landingResetBtn" id="landingResetBtn">
-            </p>
-        </fieldset>
-        </form>
+<div class="loginWrapper">
+    <div class="loginCard">
+        <header class="loginCardHeader">
+            <h1>Connection</h1>
+        </header>
+        <div>
+            <form action="index.php" method="POST" class="loginForm">
+                <div class="loginFormFieldWrapper">
+                    <label for="landingLoginField" class="visually-hidden">Nom d'utilisateur</label>
+                    <input type="text" name="landingLoginField" id="landingLoginField" class="loginFormField">
+                </div>
+                <div class="loginFormFieldWrapper">
+                    <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
+                    <input type="password" name="landingPasswordField" id="landingPasswordField" class="loginFormField">
+                    <input type="checkbox" name="showPassword" id="showPassword" onclick="togglePasswordVisibility()">
+                </div>
+                <div>
+                    <input type="submit" name="landingSubmitBtn"  id="landingSubmitBtn" value="Connection" class="cta">
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById("landingPasswordField");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+}
+</script>
 </body>
 </html>

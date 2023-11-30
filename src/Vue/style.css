@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Hedvig+Letters+Serif:opsz@12..24&family=Oswald:wght@400;700&family=Roboto+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Sans&family=Oswald:wght@400;700&family=Space+Mono&display=swap');
 :root {
     --heading-font: 'Dela Gothic One', sans-serif;
     --subheading-font: 'Oswald', sans-serif;
-    --display-font: 'Hedvig Letters Serif', serif;
+    --display-font: 'IBM Plex Sans', sans-serif;
+    --mono-font: 'Space Mono', monospace;
 
     --night: #0f0f0fff;
     --jet: #2d2e2eff;
     --dim-gray: #716969ff;
     --rose-quartz: #bcabaeff;
+    --light-gray: #d3cfd0ff;
     --white: #fbfbfbff;
     
     --validation-green: #94e8b4;
@@ -17,22 +19,63 @@
 }
 
 body {
-    background-color: var(--night);
-    color: var(--white);
+    background-color: var(--white);
+    color: var(--night);
     font-family: var(--display-font);
+    margin: 0;
 }
 
-input {
-    background-color: var(--jet);
-    color: var(--rose-quartz);
+.loginWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginCard {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.loginFormFieldWrapper {
+    padding: 1em;
     border: 1px solid var(--dim-gray);
     border-radius: 5px;
+    
 }
 
-input:valid {
-    box-shadow: inset 1px 1px var(--validation-green), inset -1px -1px var(--validation-green);
+.loginFormField {
+    font-family: var(--mono-font);
+    background-color: var(--white);
+    color: var(--jet);
+    border: none;
 }
 
-input:invalid {
-    color: var(--invalid-red);
+.cta {
+    background-color: var(--electric-lime);
+    border: none;
+}
+
+.visually-hidden:not(:focus):not(:active) {
+    clip: rect(0 0 0 0); 
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap; 
+    width: 1px;
 }
