@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Hedvig+Letters+Serif:opsz@12..24&family=Oswald:wght@400;700&family=Roboto+Slab&display=swap');
+:root {
+    --heading-font: 'Dela Gothic One', sans-serif;
+    --subheading-font: 'Oswald', sans-serif;
+    --display-font: 'Hedvig Letters Serif', serif;
+
+    --night: #0f0f0fff;
+    --jet: #2d2e2eff;
+    --dim-gray: #716969ff;
+    --rose-quartz: #bcabaeff;
+    --white: #fbfbfbff;
+    
+    --validation-green: #94e8b4;
+    --invalid-red: #d52941;
+
+    --electric-lime: #c2f706;
+}
+
+body {
+    background-color: var(--night);
+    color: var(--white);
+    font-family: var(--display-font);
+}
+
+input {
+    background-color: var(--jet);
+    color: var(--rose-quartz);
+    border: 1px solid var(--dim-gray);
+    border-radius: 5px;
+}
+
+input:valid {
+    box-shadow: inset 1px 1px var(--validation-green), inset -1px -1px var(--validation-green);
+}
+
+input:invalid {
+    color: var(--invalid-red);
+}
