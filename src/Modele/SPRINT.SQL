@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS MLR;
 
-CREATE DATABASE IF NOT EXISTS MLR;
+CREATE DATABASE IF NOT EXISTS SPRINT;
 USE MLR;
 # -----------------------------------------------------------------------------
 #       TABLE : RDV
