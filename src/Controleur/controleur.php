@@ -8,16 +8,16 @@ require_once 'vue/vue.php';
  */
 function ctlAcceuil (){
     if (!isset($_SESSION)){
-        afficherLogin();
+        vueAfficherLogin();
     }
     elseif ($_SESSION["type"] == 1){
-        afficherAccueilDirecteur();
+        vueAfficherAccueilDirecteur();
     }
     elseif ($_SESSION["type"] == 2){
-        afficherAccueilConseiller();
+        vueAfficherAccueilConseiller();
     }
     elseif ($_SESSION["type"] == 3){
-        afficherAccueilAgent();
+        vueAfficherAccueilAgent();
     }
     
 }
@@ -26,16 +26,17 @@ function ctlAcceuil (){
  * C'est ici que l'on initialise la session 
  * @param string $username c'est le nom d'utilisateur qui est le login dans la base de données
  * @param string $password c'est le mot de passe de l'utilisateur mais il est hashé et salé
- * @throws Exception
+ * @throws incorrectLoginException si le login ou le mot de passe est incorrect
+ * @throws estVideException si le login ou le mot de passe est vide
  */
-function login ($username, $password) {
+function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {
         echo 'fonction cont login';
-        throw new Exception("Un des champs est vide");
+        throw new estVideException();
     }
     $resutatConnnect = modConnect($username, $password);
     if (empty($resutatConnnect)){
-        throw new Exception("Nom d'utilisateur ou mot de passe incorrect");
+        throw new incorrectLoginException();
     }
     else{
         session_start();
@@ -48,21 +49,21 @@ function login ($username, $password) {
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
  * @param int $idClient c'est l'id du client
- * @throws Exception si l'id est vide
- * @throws Exception si aucun client n'est trouvé
+ * @throws estvideException si l'id est vide
+ * @throws clientNonTrouverException si aucun client n'est trouvé
  */
-function chercherClient($idClient){
+function ctrChercherClient($idClient){
     if ($idClient == '') {
-        throw new Exception('Veuillez entrer un ID');
+        throw new estVideException('Veuillez entrer un ID');
     }
     else{
         $client = modChercherClient($idClient);
         if (empty($client)){
-            throw new Exception('Aucun client trouvé');
+            throw new clientNonTrouverException();
         }
         else{
             modGetClientFromId($idClient);
-            afficherClient($client);
+            vueAfficherClient($client);
         }
     }
 }
@@ -71,26 +72,35 @@ function chercherClient($idClient){
  * @param string $nomClient c'est le nom du client
  * @param string $prenomClient c'est le prénom du client
  * @param string $dateNaissance c'est la date de naissance du client
- * @throws Exception si un des champs est vide
- * @throws Exception si aucun client n'est trouvé
+ * @throws estVideException si un des champs est vide
+ * @throws clientNonTrouverException si aucun client n'est trouvé
  */
-function rechercheAvanceeClient($nomClient, $prenomClient, $dateNaissance) {
+function cltRechercheAvanceeClient($nomClient, $prenomClient, $dateNaissance) {
     if ($prenomClient == '' | $nomClient == '' | $dateNaissance == '') {
-        throw new Exception('Veuillez remplir tous les champs');
+        throw new estVideException();
     }
     else{
         $listeClient = modRechercheAvancéeClient($nomClient, $prenomClient, $dateNaissance);
         if (empty($listeClient)){
-            throw new Exception('Aucun client trouvé');
+            throw new clientNonTrouverException();
         }
         else{
-            afficherRechercheClient($listeClient);
+            vueAfficherRechercheClient($listeClient);
         }
     }
 }
 /**
+ * Fonction qui permet d'obtenir l'agenda d'un conseiller
+ * @param int $idConseiller c'est l'id du conseiller
+ */
+function ctlAgendaConseiller($idConseiller){
+    $agenda = modGetAgendaConseiller($idConseiller);
+    vueAfficherAgendaConseiller($agenda);
+}
+
+/**
  * Fonction qui permet d'afficher les erreurs
  */
 function ctlErreur($erreur) {
-    afficherErreur($erreur) ;
+    vueAfficherErreur($erreur) ;
 }

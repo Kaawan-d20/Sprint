@@ -8,9 +8,9 @@ try {
     if (isset($_POST['connexion'])){
         $username = $_POST['loginField'];
         $password = $_POST['passwordField'];
-        login($username, $password);
+        ctlLogin($username, $password);
     }
-    CtlAcceuil();
+    ctlAcceuil();
 } 
 
 catch(Exception $e) { 
