@@ -3,7 +3,7 @@
  * Fonction qui affiche la page d'accueil du directeur
  * Ne prend pas de paramètres et ne retourne rien
  */
-function afficherAccueilDirecteur(){
+function vueAfficherAccueilDirecteur(){
     $contenu="";
     require_once('gabaritDirecteurHomePage.php');
 }
@@ -12,7 +12,7 @@ function afficherAccueilDirecteur(){
  * Fonction qui affiche la page d'accueil du conseiller
  * Ne prend pas de paramètres et ne retourne rien
  */
-function afficherAccueilConseiller(){
+function vueAfficherAccueilConseiller(){
     $contenu="";
     require_once('gabaritConseillerHomePage.php');
 }
@@ -20,7 +20,7 @@ function afficherAccueilConseiller(){
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
  * Ne prend pas de paramètres et ne retourne rien
  */
-function afficherAccueilAgent(){
+function vueAfficherAccueilAgent(){
     $contenu="";
     require_once('gabaritAccueilHomePage.php');
 }
@@ -28,7 +28,7 @@ function afficherAccueilAgent(){
  * Fonction qui affiche la page de login
  * Ne prend pas de paramètres et ne retourne rien
  */
-function afficherLogin(){
+function vueAfficherLogin(){
     $contenu="";
     require_once('gabaritLanding.php');
 }
@@ -39,7 +39,7 @@ function afficherLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function afficherClient($client){
+function vueAfficherClient($client){
     $contenu= '';
     require_once('gabaritInfoClient.php');
 }
@@ -48,7 +48,7 @@ function afficherClient($client){
  * Ne retourne rien
  * @param array $listeClient c'est la liste des clients
  */
-function afficherRechercheClient($listeClient) {
+function vueAfficherRechercheClient($listeClient) {
     $contenu="<table>";
     foreach ($listeClient as $client) {
         $contenu .= "<tr><td>".$client['id']."</td><td>".$client['nom']."</td><td>".$client['prenom']."</td><td>".$client['dateNaissance']."</td>";
@@ -63,7 +63,7 @@ function afficherRechercheClient($listeClient) {
  * Ne retourne rien
  * @param string $erreur
  */
-function afficherErreur ($erreur) {
+function vueAfficherErreur ($erreur) {
     $content = "<p>".$erreur."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
     require_once('gabaritLanding.php');
 }
