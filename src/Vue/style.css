@@ -1,33 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Sans&family=Oswald:wght@400;700&family=Space+Mono&display=swap');
 :root {
-    --heading-font: 'Dela Gothic One', sans-serif;
-    --subheading-font: 'Oswald', sans-serif;
-    --display-font: 'IBM Plex Sans', sans-serif;
-    --mono-font: 'Space Mono', monospace;
-
     --night: #0f0f0fff;
     --jet: #2d2e2eff;
     --dim-gray: #716969ff;
     --rose-quartz: #bcabaeff;
     --light-gray: #d3cfd0ff;
     --white: #fbfbfbff;
-    
-    --validation-green: #94e8b4;
-    --invalid-red: #d52941;
 
     --electric-lime: #c2f706;
+
+    --dark-spring-green: #306b34ff;
+
+    --heading-font: 'Dela Gothic One', sans-serif;
+    --subheading-font: 'Oswald', sans-serif;
+    --display-font: 'IBM Plex Sans', sans-serif;
+    --mono-font: 'Space Mono', monospace;
+
+    --classic-font-size: 1em;
+    --big-font-size: 1.25em;
+    --bigger-font-size: 2em;
+
+
+    --text: var(--night);
+    --text-secondary: var(--jet);
+    --mid-text: var(--dim-gray);
+    --mid-back: var(--rose-quartz);
+    --background-secondary: var(--light-gray);
+    --background: var(--white);
+
+    --cta: var(--dark-spring-green);
+    --validation-green: #94e8b4;
+    --invalid-red: #d52941;
 }
 
 body {
-    background-color: var(--white);
-    color: var(--night);
+    background-color: var(--background);
+    color: var(--text);
     font-family: var(--display-font);
     margin: 0;
 }
 
+a {
+    color: var(--cta);
+}
+
+h1 {
+    font-family: var(--heading-font);
+}
+
 .loginWrapper {
-    width: 100%;
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,6 +58,7 @@ body {
 .loginCard {
     display: flex;
     flex-direction: column;
+    min-width: 33%;
 }
 
 .loginCardHeader {
@@ -45,29 +68,63 @@ body {
 }
 
 .loginForm {
-    width: fit-content;
     display: flex;
     flex-direction: column;
     gap: 1em;
 }
 
 .loginFormFieldWrapper {
-    padding: 1em;
-    border: 1px solid var(--dim-gray);
+    padding-left: 1em;
+    border: 1px solid var(--mid-text);
     border-radius: 5px;
-    
+    display: flex;
 }
 
 .loginFormField {
+    margin: 1em 0;
+    flex-grow: 1;
     font-family: var(--mono-font);
-    background-color: var(--white);
-    color: var(--jet);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
     border: none;
 }
 
+.loginFormField[type="password"] {
+    kerning: 5px;
+}
+
+.loginFormFieldWrapper:has(*:focus) {
+    border: 1px solid var(--cta);
+}
+
+.loginFormField:focus {
+    outline: none;
+}
+
+.ctaContainer {
+    display: flex;
+    min-height: 4em;
+}
+
 .cta {
-    background-color: var(--electric-lime);
+    background-color: var(--cta);
     border: none;
+    flex-grow: 1;
+    border-radius: 5px;
+    color: var(--background);
+    font-size: var(--big-font-size);
+}
+
+.visibilityButton {
+    padding: 0 1.5em;
+    background-color: transparent;
+    border: none;
+}
+
+.visibilityButton:hover, .visibilityButton:focus {
+    background-color: var(--background-secondary);
+    border-radius: 0 5px 5px 0;
 }
 
 .visually-hidden:not(:focus):not(:active) {
@@ -79,3 +136,4 @@ body {
     white-space: nowrap; 
     width: 1px;
 }
+
