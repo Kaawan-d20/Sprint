@@ -9,11 +9,11 @@
     <h1>Recherche Client</h1>
     <form action="index.php" method="post">
         <p><label for="searchClientField">Chercher un client </label>
-        <input type="text" name="searchNomClientField" id="searchNomClientField">
-        <input type="text" name="searchPrenomClientField" id="searchPrenomClientField">
-        <input type="date" name="searchNaissanceClientField" id="searchNaissanceClientField">
-        <input type="submit" name="rechercherAvanceeClient" value="Rechercher"></p>
+        <input type="text" name="searchNameClientField" id="searchNameClientField">
+        <input type="text" name="searchFirstNameClientField" id="searchFirstNameClientField">
+        <input type="date" name="searchBirthClientField" id="searchBirthClientField">
+        <input type="submit" name="advanceSearchClient" value="Rechercher"></p>
     </form>
-    <?php echo $contenu; ?>
+    <?php echo $content; ?>
 </body>
 </html>

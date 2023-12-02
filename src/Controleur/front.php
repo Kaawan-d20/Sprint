@@ -15,26 +15,26 @@ try {
         $password = $_POST['landingPasswordField'];
         ctlLogin($username, $password);
     }
-    elseif (isset($_POST['rechercherClientAgent'])){
+    elseif (isset($_POST['searchClientBtn'])){
         $idClient = $_POST['searchClientField'];
-        ctrChercherClient($idClient);
+        ctrSearchIdClient($idClient);
     }
-    elseif (isset($_POST['rechercheAvancée'])){
-        vueAfficherRechercheClient();
+    elseif (isset($_POST['advanceSearch'])){
+        vueDisplayAdvanceSearchClient();
     }
-    elseif (isset($_POST['rechercherAvanceeClient'])){
-        $nom = $_POST['searchNomClientField'];
-        $prenom = $_POST['searchPrenomClientField'];
-        $dateNaissance = $_POST['searchNaissanceClientField'];
-        cltRechercheAvanceeClient($nom, $prenom, $dateNaissance);
+    elseif (isset($_POST['advanceSearchClient'])){
+        $name = $_POST['searchNameClientField'];
+        $firstName = $_POST['searchFirstNameClientField'];
+        $dateOfBirth = $_POST['searchBirthClientField'];
+        cltAdvanceSearchClient($name, $firstName, $dateOfBirth);
     }
     else{
-        ctlAcceuil();
+        ctlHome();
     }
 } 
 
 catch(Exception $e) { 
      $msg = $e->getMessage() ;
-     ctlErreur($msg);
+     ctlError($msg);
 }
 

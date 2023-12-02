@@ -1,10 +1,10 @@
 <?
 /**
- * Classe estVideException
+ * Classe isEmptyException
  *
  * Cette classe est utilisée pour gérer les exceptions lorsqu'une valeur est vide.
  **/
-class estVideException extends Exception{
+class isEmptyException extends Exception{
     /**
      * Constructeur de la classe
      *
@@ -52,11 +52,11 @@ class incorrectLoginException extends Exception{
     }
 }
 /**
- * Classe clientNonTrouverException
+ * Classe notFoundClientException
  *
  * Cette classe est utilisée pour gérer les exceptions lorsqu'un idClient est incorrect.
  **/
-class clientNonTrouverException extends Exception{
+class notFoundClientException extends Exception{
     /**
      * Constructeur de la classe
      *

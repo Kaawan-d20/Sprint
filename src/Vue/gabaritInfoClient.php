@@ -7,6 +7,6 @@
 </head>
 <body>
     <h1>Synthese</h1>
-    <?php echo $contenu; ?>
+    <?php echo $content; ?>
 </body>
 </html>
