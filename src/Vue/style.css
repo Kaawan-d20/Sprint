@@ -16,6 +16,7 @@
     --display-font: 'IBM Plex Sans', sans-serif;
     --mono-font: 'Space Mono', monospace;
 
+    --small-font-size: .75em;
     --classic-font-size: 1em;
     --big-font-size: 1.25em;
     --bigger-font-size: 2em;
@@ -126,30 +127,34 @@ h1 {
 /* AGENT ACCUEIL SPECIFIC */
 
 .agentWrapper {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .navWrapper {
-    border-bottom: 1px solid var(--cta);
+    border-bottom: 1px solid var(--text);
 }
 
 nav {
-    padding: 1em;
-    /* background-color: var(--cta); */
+    padding: 1em 2em;
     display: flex;
     align-items: center;
     gap: 1em;
-    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .searchWrapper {
-    flex-grow: 2;
+    flex-grow: 30;
     padding-left: 1em;
     border: 1px solid var(--mid-text);
     background-color: var(--white);
     border-radius: 5px;
 }
 
+.advancedSearchandAccountWrapper {
+    flex-grow: 1;
+    display: flex;
+    gap: 1em;
+}
 .searchWrapper:has(*:focus), .searchWrapper:hover, .advancedSearchButton:focus, .advancedSearchButton:hover{
     border: 1px solid var(--cta);
 }
@@ -189,9 +194,15 @@ nav {
     aspect-ratio: 1;
 }
 
+/* this is the div wrapper for the username menu */
+.dropdown { 
+    position: relative;
+    flex-grow: 1;
+}
+
 .accountButton {
     padding: 0 1.5em;
-    border: 1px solid var(--mid-text);
+    border: 1px solid var(--text-secondary);
     background-color: var(--background);
     font-size: var(--classic-font-size);
     border-radius: 5px;
@@ -200,10 +211,7 @@ nav {
     justify-content: end;
     gap: 1em;
     height: 60px;
-}
-
-.dropdown {
-    position: relative;
+    width: 100%;
 }
 
 .dropdownContent {
@@ -217,11 +225,15 @@ nav {
 .dropdown:hover .dropdownContent {
     padding-top: 5px;
     margin-top: -5px;
-    border: 1px solid var(--mid-text);
+    border: 1px solid var(--cta);
     border-top: none;
     border-radius: 0 0 5px 5px;
     display: flex;
     flex-direction: column;
+}
+
+.dropdown:hover .accountButton {
+    border: 1px solid var(--cta);
 }
 
 .dropdownButton {
@@ -246,6 +258,155 @@ nav {
 .dropdownButton:last-child:hover {
     background-color: var(--invalid-red);
     color: var(--background);
+}
+
+.agentWrapper .calendarWrapper {
+    margin: 1em 2em;
+}
+
+/* CALENDAR */
+
+.weekWrapper {
+    display: grid;    
+    border: 1px solid var(--text);
+    border-radius: 0 0 10px 10px;
+}
+
+.calendarNavWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--text-secondary);
+    border-bottom: none;
+    padding: 1em;
+    /* padding: 1em 1em 2em 1em; */
+    /* margin-bottom: -1em; */
+    border-radius: 10px 10px 0 0;
+}
+
+.dateBlock {
+    display: flex;
+    align-items: baseline;
+    gap: 1em;
+}
+
+.dateBlock h1 {
+    margin: 0;
+}
+
+.weekSelector {
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+    display: flex;
+}
+
+.weekSelector:has(*:hover, *:focus) {
+    border: 1px solid var(--cta);
+}
+
+.weekSelector button {
+    padding: 1em;
+    border: none;
+    background-color: var(--background);
+}
+
+.weekSelector button:hover, .weekSelector button:focus {
+    background-color: var(--background-secondary);
+}
+
+.weekSelector .previous {
+    border-radius: 5px 0 0 5px;
+}
+
+.weekSelector .next {
+    border-radius: 0 5px 5px 0;
+}
+
+.weekSelectorDateField {
+    border: none;
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+.weekSelectorDateField:focus, .weekSelectorDateField:hover {
+    outline: none;
+    background-color: var(--background-secondary);
+}
+
+.day {
+    display: flex;
+    flex-direction: column;
+}
+
+.dayCell {
+    display: flex;
+    gap: 1em;
+    align-items: baseline;
+    justify-content: center;
+    border-bottom: 1px solid var(--text-secondary) ;
+}
+
+.dayCell span {
+    font-family: var(--mono-font);
+}
+
+.pronounsSpan {
+    color: var(--mid-text);
+    font-size: var(--small-font-size);
+}
+
+.events {
+    display: flex;
+    flex-direction: column;
+}
+
+.event {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+.event h2 {
+    margin: 0;
+}
+
+.event p {
+    margin: 0;
+}
+
+.eventDetails {
+    padding: .5em 0;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    border-bottom: 1px solid var(--mid-text);
+}
+
+.event:last-child .eventDetails {
+    border-bottom: none;
+}
+
+.eventTime {
+    font-family: var(--mono-font);
+}
+
+.eventConseiller {
+    padding: .5em;
+    flex-grow: 1;
+    border-radius: 5px;
+    border: 1px solid var(--text-secondary);
+}
+
+.event:hover {
+    background-color: var(--background-secondary);
+    border-radius: 0 0 5px 5px;
+}
+
+.monday .events .event:hover:last-child {
+    border-radius: 0 0 0 10px;
+}
+
+.sunday .events .event:hover:last-child {
+    border-radius: 0 0 10px 0;
 }
 
 
@@ -288,3 +449,29 @@ nav {
     outline: none;
 }
 
+/* MEDIA QUERIES */
+
+@media screen and (min-width: 1600px) {
+
+    /* CALENDAR */
+
+    .weekWrapper {
+        grid-auto-flow:column;
+        grid-auto-columns: 1fr;    
+    }
+
+    .day {
+        border-top: none;
+        border-right: 1px solid var(--text-secondary);
+    }
+    
+    .day:last-child {
+        border-right: none;
+    }
+}
+
+@media screen and (max-width:1800px) {
+    .dayCell h1 {
+        font-size: var(--big-font-size);
+    }
+}
