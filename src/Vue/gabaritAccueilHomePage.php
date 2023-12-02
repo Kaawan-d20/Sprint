@@ -7,11 +7,13 @@
 </head>
 <body>
     <h1>Accueil Agent</h1>
-    <form action="Change this">
-        <label for="searchClientField">Chercher un client</label>
+    <form action="index.php" method="POST">
+        <p><label for="searchClientField">Chercher un client </label>
         <input type="number" name="searchClientField" id="searcClientField">
-        <label for="idClient">Debit Credit</label><input type="number" name="idClient" id="idClient">
-        <label for="calendar">calendar</label><input type="date" name="calendar" id="calendar">
+        <input type="submit" name="rechercherClientAgent" value="Rechercher"></p>
+        <p><label for="idClient">Debit Credit </label><input type="number" name="idClient" id="idClient"></p>
+        <p><label for="calendar">Calendar </label><input type="date" name="calendar" id="calendar"></p>
+        <p><input type="submit" name="rechercheAvancée" value="avancée"></p>
     </form>
 </body>
 </html>

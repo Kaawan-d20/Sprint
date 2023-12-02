@@ -1,4 +1,8 @@
 <?php
+
+if (!isset($_SESSION)){
+    session_start();
+}
 /**
  * Fonction qui affiche la page d'accueil du directeur
  * Ne prend pas de paramètres et ne retourne rien
@@ -41,6 +45,8 @@ function vueAfficherLogin(){
  */
 function vueAfficherClient($client){
     $contenu= '';
+    $contenu .= $client;
+    echo 'echo';
     require_once('gabaritInfoClient.php');
 }
 /**
@@ -48,12 +54,14 @@ function vueAfficherClient($client){
  * Ne retourne rien
  * @param array $listeClient c'est la liste des clients
  */
-function vueAfficherRechercheClient($listeClient) {
-    $contenu="<table>";
+function vueAfficherRechercheClient($listeClient="") {
+    /*$contenu="<table>";
     foreach ($listeClient as $client) {
         $contenu .= "<tr><td>".$client['id']."</td><td>".$client['nom']."</td><td>".$client['prenom']."</td><td>".$client['dateNaissance']."</td>";
     }
-    $contenu .= "</table>";
+    $contenu .= "</table>";*/
+    $contenu = $listeClient;
+    $contenu .= "test avancée";
     require_once('gabaritRechercheClient.php');
 }
 

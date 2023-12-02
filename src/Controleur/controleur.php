@@ -1,6 +1,10 @@
 <?php
 require_once 'modele/modele.php';
 require_once 'vue/vue.php';
+
+if (!isset($_SESSION)){
+    session_start();
+}
 /**
  * Fonction qui affiche la page d'accueil en fonction de la catégorie de l'utilisateur
  * si l'utilisateur n'est pas connecté, affiche la page de login
@@ -30,6 +34,14 @@ function ctlAcceuil (){
  * @throws estVideException si le login ou le mot de passe est vide
  */
 function ctlLogin ($username, $password) {
+    //shunter la connexion
+    session_start();
+    $_SESSION["acitf"] = true;
+    $_SESSION["id"] = 3;
+    $_SESSION["type"] = 3;
+
+
+    return null;
     if ($username == '' || $password == '') {
         echo 'fonction cont login';
         throw new estVideException();
@@ -57,12 +69,11 @@ function ctrChercherClient($idClient){
         throw new estVideException('Veuillez entrer un ID');
     }
     else{
-        $client = modChercherClient($idClient);
+        $client = 'test';//modGetClientFromId($idClient);
         if (empty($client)){
             throw new clientNonTrouverException();
         }
         else{
-            modGetClientFromId($idClient);
             vueAfficherClient($client);
         }
     }
@@ -80,7 +91,7 @@ function cltRechercheAvanceeClient($nomClient, $prenomClient, $dateNaissance) {
         throw new estVideException();
     }
     else{
-        $listeClient = modRechercheAvancéeClient($nomClient, $prenomClient, $dateNaissance);
+        $listeClient = $prenomClient;//modRechercheAvancéeClient($nomClient, $prenomClient, $dateNaissance);
         if (empty($listeClient)){
             throw new clientNonTrouverException();
         }
@@ -91,6 +102,7 @@ function cltRechercheAvanceeClient($nomClient, $prenomClient, $dateNaissance) {
 }
 /**
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
+ * pas encore tester
  * @param int $idConseiller c'est l'id du conseiller
  */
 function ctlAgendaConseiller($idConseiller){
