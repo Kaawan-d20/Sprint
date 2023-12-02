@@ -28,6 +28,9 @@ try {
         $dateOfBirth = $_POST['searchBirthClientField'];
         cltAdvanceSearchClient($name, $firstName, $dateOfBirth);
     }
+    elseif (isset($_POST['deconnexion'])){
+        ctlLogout();
+    }
     else{
         ctlHome();
     }

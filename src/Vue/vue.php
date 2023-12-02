@@ -65,6 +65,23 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+function vueDisplayAgendaConseiller($appointment, $admin){
+
+}
+
+
+
 /**
  * Fonction qui affiche la page d'erreur
  * Ne retourne rien

@@ -14,6 +14,7 @@
         <p><label for="idClient">Debit Credit </label><input type="number" name="idClient" id="idClient"></p>
         <p><label for="calendar">Calendar </label><input type="date" name="calendar" id="calendar"></p>
         <p><input type="submit" name="advanceSearch" value="avancée"></p>
+        <p><input type="submit" name="deconnexion" value="Déconnexion"></p>
     </form>
 </body>
 </html>

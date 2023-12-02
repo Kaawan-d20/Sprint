@@ -37,13 +37,11 @@ function ctlLogin ($username, $password) {
     //shunter la connexion
     session_start();
     $_SESSION["active"] = true; 
-    $_SESSION["id"] = 3;
+    $_SESSION["login"] = 3;
     $_SESSION["type"] = 3;
-
-
     return null;
+    //fin shunter
     if ($username == '' || $password == '') {
-        echo 'fonction cont login';
         throw new estVideException();
     }
     $resultConnnect = modConnect($username, $password);
@@ -53,11 +51,23 @@ function ctlLogin ($username, $password) {
     else{
         session_start();
         $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
-        $_SESSION["id"] = $resultConnnect;
+        $_SESSION["login"] = $resultConnnect;
         $_SESSION["type"] = modGetTypeStaff($resultConnnect);
         ctlHome();
     }
 }
+
+/**
+ * Fonction qui permet de se déconnecter
+ * Ne prend pas de paramètres et ne retourne rien
+ */
+function ctlLogout() {
+    session_destroy();
+    ctlHome();
+}
+
+
+
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
  * @param int $idClient c'est l'id du client
@@ -91,7 +101,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         throw new isEmptyException();
     }
     else{
-        $listClient = $firstNameClient;//modRechercheAvancéeClient($nameClient, $firstNameClient, $dateOfBirth);
+        $listClient = $firstNameClient;//modAdvancedSearchClient($nameClient, $firstNameClient, $dateOfBirth);
         if (empty($listClient)){
             throw new notFoundClientException();
         }
@@ -103,11 +113,12 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
 /**
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
- * @param int $idConseiller c'est l'id du conseiller
+ * @param int $loginEmploye c'est login du conseiller
  */
-function ctlCalendarConseiller($idConseiller){
-    $calendar = modGetAgendaConseiller($idConseiller);
-    vueDisplayAgendaConseiller($calendar);
+function ctlCalendarConseiller($loginEmploye){
+    $appointment = modGetAppointmentConseiller($loginEmploye);
+    $admin = modGetAdminConseiller($loginEmploye);
+    vueDisplayAgendaConseiller($appointment, $admin);
 }
 
 /**
