@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
+    <title>Accueil</title>
+</head>
+<body>
+<div agentWrapper>
+    <div class="navWrapper">
+        <nav>
+            <div class="searchWrapper">
+                <form action="I dunno" method="post">
+                    <label for="searchClientField" class="visually-hidden">Chercher un client</label>
+                    <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
+                    <button class="searchButton">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+            <button class="advancedSearchButton">
+                <i class="fa-regular fa-chart-bar"></i>
+            </button>
+            <div class="dropdown">
+                <button class="accountButton">
+                        Username
+                        <!-- <?php $user?> -->
+                    <i class="fa-solid fa-user"></i>
+                </button>
+                <div class="dropdownContent">
+                    <button class="dropdownButton">
+                        Theme
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="dropdownButton">
+                        Parametres
+                        <i class="fa-solid fa-user-gear"></i>
+                    </button>
+                    <button class="dropdownButton">
+                        Se deconnecter
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <form action="Change this">
+        <label for="searchClientField">Chercher un client</label>
+        <input type="number" name="searchClientField" id="searcClientField">
+        <label for="idClient">Debit Credit</label><input type="number" name="idClient" id="idClient">
+        <label for="calendar">calendar</label><input type="date" name="calendar" id="calendar">
+    </form>
+</div>
+</body>
+</html>

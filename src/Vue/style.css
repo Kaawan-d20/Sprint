@@ -33,6 +33,8 @@
     --invalid-red: #d52941;
 }
 
+/* GENERIC */
+
 body {
     background-color: var(--background);
     color: var(--text);
@@ -47,6 +49,9 @@ a {
 h1 {
     font-family: var(--heading-font);
 }
+
+
+/* LOGIN SPECIFIC */
 
 .loginWrapper {
     min-height: 100vh;
@@ -107,15 +112,6 @@ h1 {
     min-height: 4em;
 }
 
-.cta {
-    background-color: var(--cta);
-    border: none;
-    flex-grow: 1;
-    border-radius: 5px;
-    color: var(--background);
-    font-size: var(--big-font-size);
-}
-
 .visibilityButton {
     padding: 0 1.5em;
     background-color: transparent;
@@ -126,6 +122,144 @@ h1 {
     background-color: var(--background-secondary);
     border-radius: 0 5px 5px 0;
 }
+
+/* AGENT ACCUEIL SPECIFIC */
+
+.agentWrapper {
+    height: 100vh;
+}
+
+.navWrapper {
+    border-bottom: 1px solid var(--cta);
+}
+
+nav {
+    padding: 1em;
+    /* background-color: var(--cta); */
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+.searchWrapper {
+    flex-grow: 2;
+    padding-left: 1em;
+    border: 1px solid var(--mid-text);
+    background-color: var(--white);
+    border-radius: 5px;
+}
+
+.searchWrapper:has(*:focus), .searchWrapper:hover, .advancedSearchButton:focus, .advancedSearchButton:hover{
+    border: 1px solid var(--cta);
+}
+
+.searchWrapper form {
+    gap: 1em;
+    display: flex;
+}
+
+.searchField {
+    margin: 1em 0;
+    flex-grow: 1;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    border: none;
+}
+
+.searchButton {
+    padding: 0 1.5em;
+    background-color: transparent;
+    border: none;
+    border-radius: 0 5px 5px 0;
+}
+
+.searchButton:hover, .searchButton:focus, .advancedSearchButton:focus, .advancedSearchButton:hover {
+    background-color: var(--background-secondary);
+}
+
+.advancedSearchButton {
+    padding: 0 1.5em;
+    border: 1px solid var(--mid-text);
+    background-color: var(--background);
+    border-radius: 5px;
+    height: 60px;
+    aspect-ratio: 1;
+}
+
+.accountButton {
+    padding: 0 1.5em;
+    border: 1px solid var(--mid-text);
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 1em;
+    height: 60px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    width: calc(100% - 2px);
+    
+}
+
+.dropdown:hover .dropdownContent {
+    padding-top: 5px;
+    margin-top: -5px;
+    border: 1px solid var(--mid-text);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdownButton {
+    padding: 1em;
+    border: none;
+    background-color: var(--background);
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.dropdownButton:hover {
+    background-color: var(--background-secondary);
+}
+
+.dropdownButton:last-child {
+    border-radius: 0 0 5px 5px;
+}
+
+.dropdownButton:last-child:hover {
+    background-color: var(--invalid-red);
+    color: var(--background);
+}
+
+
+/* UTILITY */
+
+.cta {
+    background-color: var(--cta);
+    border: none;
+    flex-grow: 1;
+    border-radius: 5px;
+    color: var(--background);
+    font-size: var(--big-font-size);
+}
+
 
 .visually-hidden:not(:focus):not(:active) {
     clip: rect(0 0 0 0); 
@@ -139,5 +273,18 @@ h1 {
 
 .error {
     color: var(--invalid-red);
+}
+
+.searchField {
+    appearance: textfield;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    border: none;
+}
+
+.searchField:focus {
+    outline: none;
 }
 
