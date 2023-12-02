@@ -1,8 +1,5 @@
 <?php
 
-if (!isset($_SESSION)){
-    session_start();
-}
 /**
  * Fonction qui affiche la page d'accueil du directeur
  * Ne prend pas de paramètres et ne retourne rien

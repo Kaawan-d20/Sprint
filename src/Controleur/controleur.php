@@ -35,10 +35,10 @@ function ctlHome (){
  */
 function ctlLogin ($username, $password) {
     //shunter la connexion
-    session_start();
     $_SESSION["active"] = true; 
     $_SESSION["login"] = 3;
     $_SESSION["type"] = 3;
+    ctlHome();
     return null;
     //fin shunter
     if ($username == '' || $password == '') {
@@ -49,7 +49,6 @@ function ctlLogin ($username, $password) {
         throw new incorrectLoginException();
     }
     else{
-        session_start();
         $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
         $_SESSION["login"] = $resultConnnect;
         $_SESSION["type"] = modGetTypeStaff($resultConnnect);
@@ -63,7 +62,7 @@ function ctlLogin ($username, $password) {
  */
 function ctlLogout() {
     session_destroy();
-    ctlHome();
+    vueDisplayLogin();
 }
 
 
@@ -120,6 +119,12 @@ function ctlCalendarConseiller($loginEmploye){
     $admin = modGetAdminConseiller($loginEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
+
+function ctrGetAccount($idClient){
+    $account = modGetAccounts($idClient);
+    echo $account;
+}
+
 
 /**
  * Fonction qui permet d'afficher les erreurs

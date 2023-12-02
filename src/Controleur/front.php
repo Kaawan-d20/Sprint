@@ -3,7 +3,7 @@
 require_once('controleur/controleur.php');
 require_once('modele/modele.php');
 require_once('vue/vue.php');
-if (!isset($_SESSION)){
+if(session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
