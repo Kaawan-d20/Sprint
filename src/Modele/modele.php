@@ -15,7 +15,7 @@ function modGetSalt($login) {
 
 function modConnect($login, $password) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idemploye FROM employe WHERE login=:logi AND password=:pass';
+    $query = 'SELECT * FROM employe WHERE login=:logi AND password=:pass';
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(':logi',$login,PDO::PARAM_STR);
     $prepared -> bindParam(':pass',$password,PDO::PARAM_STR);
@@ -46,19 +46,48 @@ function modGetAccounts($idClient) {
     return $prepared;
 }
 
-function modGetTypeStaff($idE) {
+function modGetTypeStaff($logi) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:idE';
+    $query = 'SELECT idCategorie FROM employe WHERE login=:logi';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $prepared -> closeCursor();
     return $prepared;
 }
 
-echo modGetSalt('GayBoi');
-echo modConnect('Lovelace','AZERTY');
-echo modConnect('fdgh','AZERTY');
-echo modConnect('Lovelace','XGFHJ');
-echo modGetTypeStaff('1');
+function modAdvancedSearchClient($sname,$fname,$bdate) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM client WHERE nom=:sname AND prenom=:fname AND dateNaissance=:bdate';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+function modGetAppointmentConseiller($logi) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idRDV,idMotif,idClient,login,horaire FROM rdv NATURAL JOIN employe WHERE login=:logi';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+function modGetAdminConseiller($logi) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idTa,login,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE login=:logi';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
