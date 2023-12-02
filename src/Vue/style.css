@@ -278,9 +278,6 @@ nav {
     justify-content: space-between;
     border: 1px solid var(--text-secondary);
     border-bottom: none;
-    padding: 1em;
-    /* padding: 1em 1em 2em 1em; */
-    /* margin-bottom: -1em; */
     border-radius: 10px 10px 0 0;
 }
 
@@ -288,13 +285,19 @@ nav {
     display: flex;
     align-items: baseline;
     gap: 1em;
+    padding: 1em;
 }
 
 .dateBlock h1 {
     margin: 0;
 }
 
+.dateBlock span {
+    font-family: var(--mono-font);
+}
+
 .weekSelector {
+    margin: 1em;
     border: 1px solid var(--text-secondary);
     border-radius: 5px;
     display: flex;
@@ -451,7 +454,7 @@ nav {
 
 /* MEDIA QUERIES */
 
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 1300px) {
 
     /* CALENDAR */
 
