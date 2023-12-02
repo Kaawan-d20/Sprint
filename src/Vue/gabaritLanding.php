@@ -30,6 +30,11 @@
                 </div>
             </form>
         </div>
+        <div>
+            <p class="error">
+                <?php $content ?>
+            </p>
+        </div>
     </div>
 </div>
 <script>

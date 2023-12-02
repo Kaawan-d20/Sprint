@@ -137,3 +137,7 @@ h1 {
     width: 1px;
 }
 
+.error {
+    color: var(--invalid-red);
+}
+
