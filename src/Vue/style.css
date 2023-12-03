@@ -143,16 +143,16 @@ nav {
 }
 
 .searchWrapper {
-    flex-grow: 30;
+    flex-grow: 1;
     padding-left: 1em;
     border: 1px solid var(--mid-text);
     background-color: var(--white);
-    border-radius: 5px;
+    border-radius: 5px
 }
 
 .advancedSearchandAccountWrapper {
-    flex-grow: 1;
     display: flex;
+    justify-content: end;
     gap: 1em;
 }
 .searchWrapper:has(*:focus), .searchWrapper:hover, .advancedSearchButton:focus, .advancedSearchButton:hover{
@@ -174,41 +174,42 @@ nav {
     border: none;
 }
 
-.searchButton {
+.searchButton, .advancedSearchButton {
     padding: 0 1.5em;
-    background-color: transparent;
+    background-color: var(--cta);
+    color: var(--background);
     border: none;
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 4px 4px 0;
 }
 
 .searchButton:hover, .searchButton:focus, .advancedSearchButton:focus, .advancedSearchButton:hover {
-    background-color: var(--background-secondary);
+    color: var(--background-secondary);
 }
 
 .advancedSearchButton {
-    padding: 0 1.5em;
-    border: 1px solid var(--mid-text);
-    background-color: var(--background);
     border-radius: 5px;
     height: 60px;
     aspect-ratio: 1;
+    border: 1px solid var(--text-secondary);
 }
 
 /* this is the div wrapper for the username menu */
 .dropdown { 
     position: relative;
-    flex-grow: 1;
+    min-width: 10em;
+    z-index: 2;
+    /* flex-shrink: 1; */
 }
 
 .accountButton {
     padding: 0 1.5em;
     border: 1px solid var(--text-secondary);
-    background-color: var(--background);
-    font-size: var(--classic-font-size);
+    background-color: var(--cta);
+    color: var(--background);
     border-radius: 5px;
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
     gap: 1em;
     height: 60px;
     width: 100%;
@@ -301,6 +302,7 @@ nav {
     border: 1px solid var(--text-secondary);
     border-radius: 5px;
     display: flex;
+    /* z-index: 0; */
 }
 
 .weekSelector:has(*:hover, *:focus) {

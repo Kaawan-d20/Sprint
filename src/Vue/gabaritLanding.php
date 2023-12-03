@@ -17,11 +17,11 @@
             <form action="index.php" method="POST" class="loginForm">
                 <div class="loginFormFieldWrapper">
                     <label for="landingLoginField" class="visually-hidden">Nom d'utilisateur</label>
-                    <input type="text" name="landingLoginField" id="landingLoginField" class="loginFormField" placeholder="Login">
+                    <input type="text" name="landingLoginField" id="landingLoginField" class="loginFormField" placeholder="Login" required>
                 </div>
                 <div class="loginFormFieldWrapper">
                     <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
-                    <input type="password" name="landingPasswordField" id="landingPasswordField" class="loginFormField" placeholder="Password">
+                    <input type="password" name="landingPasswordField" id="landingPasswordField" class="loginFormField" placeholder="Password" required>
                     <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                 </div>
                 <p>Pas de compte ? <a href="i dont know">en créer un</a></p>
