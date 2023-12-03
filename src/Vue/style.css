@@ -178,6 +178,10 @@ nav {
     padding: 0 1.5em;
     background-color: var(--cta);
     color: var(--background);
+    font-size: var(--big-font-size);
+}
+
+.searchButton {
     border: none;
     border-radius: 0 4px 4px 0;
 }
@@ -189,7 +193,6 @@ nav {
 .advancedSearchButton {
     border-radius: 5px;
     height: 60px;
-    aspect-ratio: 1;
     border: 1px solid var(--text-secondary);
 }
 
@@ -206,6 +209,7 @@ nav {
     border: 1px solid var(--text-secondary);
     background-color: var(--cta);
     color: var(--background);
+    font-size: var(--classic-font-size);
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -271,6 +275,7 @@ nav {
     display: grid;    
     border: 1px solid var(--text);
     border-radius: 0 0 10px 10px;
+    min-height: 50vh;
 }
 
 .calendarNavWrapper {
@@ -281,6 +286,7 @@ nav {
     border: 1px solid var(--text-secondary);
     border-bottom: none;
     border-radius: 10px 10px 0 0;
+
 }
 
 .dateBlock {
@@ -303,7 +309,6 @@ nav {
     border: 1px solid var(--text-secondary);
     border-radius: 5px;
     display: flex;
-    /* z-index: 0; */
 }
 
 .weekSelector:has(*:hover, *:focus) {
@@ -349,7 +354,7 @@ nav {
     gap: 1em;
     align-items: baseline;
     justify-content: center;
-    border-bottom: 1px solid var(--text-secondary) ;
+    border-bottom: 1px solid var(--text-secondary);
 }
 
 .dayCell span {

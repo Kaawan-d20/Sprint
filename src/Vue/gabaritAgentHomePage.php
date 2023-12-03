@@ -15,20 +15,19 @@
                 <form action="index.php" method="post">
                     <label for="searchClientField" class="visually-hidden">Chercher un client</label>
                     <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
-                    <button class="searchButton" name="searchClientBtn">
+                    <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
             </div>
             <div class="advancedSearchandAccountWrapper">
                 <form action="index.php" method="post">
-                    <button class="advancedSearchButton" name="advancedSearchBtn">
+                    <button class="advancedSearchButton" name="advancedSearchBtn" title="Recherche avancée">
                         <i class="fa-regular fa-chart-bar"></i>
                     </button>
                 </form>
                 <div class="dropdown">
                     <button class="accountButton">
-                            Username
                             <!-- <?php $user?> -->
                         <i class="fa-solid fa-user"></i>
                     </button>
@@ -59,12 +58,12 @@
                 <span>03</span>
             </div>
             <div class="weekSelector">
-                <button class="previous">
+                <button class="previous" title="Semaine Precedente">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField">
-                <button class="next">
+                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine">
+                <button class="next" title="Semaine Suivante">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -96,7 +95,7 @@
                     <h1>Jeudi</h1>
                     <span>30</span>
                 </div>
-                <div class="events">                </div>
+                <div class="events"></div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
