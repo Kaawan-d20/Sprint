@@ -16,10 +16,10 @@ try {
         ctlLogin($username, $password);
     }
     elseif (isset($_POST['searchClientBtn'])){
-        $idClient = $_POST['searchClientField'];
+        $idClient = $_POST['searchClientByIdField'];
         ctrSearchIdClient($idClient);
     }
-    elseif (isset($_POST['advanceSearch'])){
+    elseif (isset($_POST['advancedSearchBtn'])){
         vueDisplayAdvanceSearchClient();
     }
     elseif (isset($_POST['advanceSearchClient'])){
@@ -28,7 +28,7 @@ try {
         $dateOfBirth = $_POST['searchBirthClientField'];
         cltAdvanceSearchClient($name, $firstName, $dateOfBirth);
     }
-    elseif (isset($_POST['deconnexion'])){
+    elseif (isset($_POST['disconnection'])){
         ctlLogout();
     }
     else{

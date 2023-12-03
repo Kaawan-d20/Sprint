@@ -12,18 +12,20 @@
     <div class="navWrapper">
         <nav>
             <div class="searchWrapper">
-                <form action="I dunno" method="post">
+                <form action="index.php" method="post">
                     <label for="searchClientField" class="visually-hidden">Chercher un client</label>
                     <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
-                    <button class="searchButton">
+                    <button class="searchButton" name="searchClientBtn">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
             </div>
             <div class="advancedSearchandAccountWrapper">
-                <button class="advancedSearchButton">
-                    <i class="fa-regular fa-chart-bar"></i>
-                </button>
+                <form action="index.php" method="post">
+                    <button class="advancedSearchButton" name="advancedSearchBtn">
+                        <i class="fa-regular fa-chart-bar"></i>
+                    </button>
+                </form>
                 <div class="dropdown">
                     <button class="accountButton">
                             Username
@@ -31,18 +33,20 @@
                         <i class="fa-solid fa-user"></i>
                     </button>
                     <div class="dropdownContent">
-                        <button class="dropdownButton">
-                            Theme
-                            <i class="fa-solid fa-moon"></i>
-                        </button>
-                        <button class="dropdownButton">
-                            Parametres
-                            <i class="fa-solid fa-user-gear"></i>
-                        </button>
-                        <button class="dropdownButton">
-                            Se deconnecter
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </button>
+                        <form action="index.php" method="post">
+                            <button class="dropdownButton">
+                                Theme
+                                <i class="fa-solid fa-moon"></i>
+                            </button>
+                            <button class="dropdownButton">
+                                Parametres
+                                <i class="fa-solid fa-user-gear"></i>
+                            </button>
+                            <button class="dropdownButton" name="disconnection">
+                                Se deconnecter
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -92,9 +96,7 @@
                     <h1>Jeudi</h1>
                     <span>30</span>
                 </div>
-                <div class="events">
-                    <div class="event"></div>
-                </div>
+                <div class="events">                </div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
