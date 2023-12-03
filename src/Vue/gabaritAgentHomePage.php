@@ -52,7 +52,7 @@
         <div class="calendarNavWrapper">
             <div class="dateBlock">
                 <h1>Decembre</h1>
-                <span>27-03</span>
+                <span>03</span>
             </div>
             <div class="weekSelector">
                 <button class="previous">
@@ -69,11 +69,64 @@
             <div class="day monday">
                 <div class="dayCell">
                     <h1>Lundi</h1>
-                    <span>1</span>
+                    <span>27</span>
+                </div>
+                <div class="events"></div>
+            </div>
+            <div class="day tuesday">
+                <div class="dayCell">
+                    <h1>Mardi</h1>
+                    <span>28</span>
+                </div>
+                <div class="events"></div>
+            </div>
+            <div class="day wednesday">
+                <div class="dayCell">
+                    <h1>Mercredi</h1>
+                    <span>29</span>
+                </div>
+                <div class="events"></div>
+            </div>
+            <div class="day thursday">
+                <div class="dayCell">
+                    <h1>Jeudi</h1>
+                    <span>30</span>
                 </div>
                 <div class="events">
-
-                    <div class="event">
+                    <div class="event"></div>
+                </div>
+            </div>
+            <div class="day friday">
+                <div class="dayCell">
+                    <h1>Vendredi</h1>
+                    <span>01</span>
+                </div>
+                <div class="events"></div>
+            </div>
+            <div class="day saturday">
+                <div class="dayCell">
+                    <h1>Samedi</h1>
+                    <span>02</span>
+                </div>
+                <div class="events"></div>
+            </div>
+            <div class="day sunday">
+                <div class="dayCell">
+                    <h1>Dimanche</h1>
+                    <span>03</span>
+                </div>
+                <div class="events"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let rendezVous = <?php echo json_encode($appointments); ?>;
+    console.log(rendezVous);
+</script>
+</body>
+</html>
+<!--                     <div class="event">
                         <h2>Ouverture de Compte</h2>
                         <p>Mx Elise Johansson</p>
                         <span class="pronounsSpan">elle/elle</span>
@@ -87,56 +140,4 @@
                                 Alexander
                             </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="day tuesday">
-                <div class="dayCell">
-                    <h1>Mardi</h1>
-                    <span>2</span>
-                </div>
-                <div class="events"></div>
-            </div>
-            <div class="day wednesday">
-                <div class="dayCell">
-                    <h1>Mercredi</h1>
-                    <span>3</span>
-                </div>
-                <div class="events"></div>
-            </div>
-            <div class="day thursday">
-                <div class="dayCell">
-                    <h1>Jeudi</h1>
-                    <span>4</span>
-                </div>
-                <div class="events">
-                    <div class="event"></div>
-                </div>
-            </div>
-            <div class="day friday">
-                <div class="dayCell">
-                    <h1>Vendredi</h1>
-                    <span>5</span>
-                </div>
-                <div class="events"></div>
-            </div>
-            <div class="day saturday">
-                <div class="dayCell">
-                    <h1>Samedi</h1>
-                    <span>6</span>
-                </div>
-                <div class="events"></div>
-            </div>
-            <div class="day sunday">
-                <div class="dayCell">
-                    <h1>Dimanche</h1>
-                    <span>7</span>
-                </div>
-                <div class="events"></div>
-            </div>
-        </div>
-    </div>
-</div>
-</body>
-</html>
+                    </div> -->
