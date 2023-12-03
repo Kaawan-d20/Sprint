@@ -123,7 +123,11 @@
 </div>
 <script>
 
-let conseillers = [];
+
+let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
+let conseillersDict = [];
+let selectedFilters = [];
+
 
 /** create an event div, with every field filled then returns it */ 
 function createEvent(motif = "Ouverture de compte bancaire", 
@@ -139,14 +143,18 @@ function createEvent(motif = "Ouverture de compte bancaire",
     eventHTML.classList.add("event");
 
     eventHTML.dataset.conseiller = conseiller
+    
 
-    if (!(conseiller in conseillers)) {
-        conseillers.push({
-            key : conseiller,
-            value : conseillerColor
-        })
-        console.log(conseillers)
+
+    if (!(conseillersArray.includes(conseiller))) {
+        conseillersArray.push(conseiller);
+        conseillersDict.push({
+            key: conseiller,
+            value: conseillerColor,
+        });
     }
+
+    console.log(conseillersArray)
 
     let eventTitle = document.createElement("h2");
     eventTitle.appendChild(document.createTextNode(motif));
@@ -203,9 +211,7 @@ function generateSingleFilter(name, colorClass) {
     filterBtn.setAttribute("title", "Selectionner " + name);
 
     let icon = document.createElement("i");
-    icon.classList.add("fa-regular", "fa-circle")
-
-    filterBtn.textContent
+    icon.classList.add("fa-regular", "fa-square")
 
     filterBtn.appendChild(icon)
     filterBtn.appendChild(document.createTextNode(name));
@@ -220,7 +226,7 @@ function generateFilters (){
     let filterWrapper = document.createElement("div");
     filterWrapper.classList.add("filterWrapper");
 
-    conseillers.forEach((conseiller) => {
+    conseillersDict.forEach((conseiller) => {
         let filterBtn = generateSingleFilter(conseiller.key, conseiller.value);
         filterWrapper.appendChild(filterBtn);
     })
@@ -236,8 +242,10 @@ function filterToggle(filterBtn) {
         filterBtn.classList.add("active");
         filterBtn.classList.remove("inactive");
 
-        icon.classList.add("fa-circle-dot")
-        icon.classList.remove("fa-circle")
+        icon.classList.add("fa-square-check")
+        icon.classList.remove("fa-square")
+
+        selectedFilters.push(filterBtn.dataset.conseiller);
     }
     else {
         filterBtn.setAttribute("title", "Selectionner " + filterBtn.textContent);
@@ -245,15 +253,42 @@ function filterToggle(filterBtn) {
         filterBtn.classList.add("inactive");
         filterBtn.classList.remove("active");
 
-        icon.classList.add("fa-circle")
-        icon.classList.remove("fa-user-circle-dot")
+        icon.classList.add("fa-square")
+        icon.classList.remove("fa-user-square-check")
+
+        selectedFilters = selectedFilters.filter(item => item !== filterBtn.dataset.conseiller) // GOD THIS IS UGLY
+        // This is basically selectedFilters.remove(filterBtn.dataset.conseiller), I hate that this is not an option
     }
+
+    filterEvents();  
 }
 
-function filterEvents(toKeep) {
-    toKeep.forEach((conseiller) => {
-        
-    })
+function hide (eventHTML) {
+    console.log(eventHTML, "is now hidden");
+    eventHTML.classList.add("hidden")
+}
+
+function show (eventHTML) {
+    console.log(eventHTML, "is now shown");
+    eventHTML.classList.remove("hidden");
+}
+
+function filterEvents() {
+    if (selectedFilters.length == 0) {
+        // No button selected, show everything
+        document.querySelectorAll(".event.hidden").forEach((event) => {
+            show(event);
+        })
+    }
+    else {
+        document.querySelectorAll(".event").forEach((event) => {
+            if (selectedFilters.includes(event.dataset.conseiller)) {
+                show(event);
+            } else {
+                hide(event);
+            }
+        })
+    }
 }
 
 document.querySelector(".tuesday .events").appendChild(createEvent(
@@ -270,8 +305,8 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
 document.querySelector(".tuesday .events").appendChild(createEvent(
     "Fermeture de livret-A",
     "Akira Mashima",
-    "Mr",
-    "Il/Lui",
+    "Mx",
+    "Iel/Iel",
     "14h30",
     "16h30",
     "berry-red",
@@ -286,7 +321,7 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
     "17h30",
     "18h00",
     "lavender",
-    "Eleanor"
+    "Jorjor"
 ))
 
 generateFilters()
