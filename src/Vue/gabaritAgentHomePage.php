@@ -122,7 +122,7 @@
     </div>
 </div>
 <script>
-    let rendezVous = <?php echo json_encode($appointments); ?>;
+    // let rendezVous = <?php echo json_encode($content); ?>;
     console.log(rendezVous);
 </script>
 </body>

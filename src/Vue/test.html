@@ -12,37 +12,40 @@
     <div class="navWrapper">
         <nav>
             <div class="searchWrapper">
-                <form action="I dunno" method="post">
+                <form action="index.php" method="post">
                     <label for="searchClientField" class="visually-hidden">Chercher un client</label>
                     <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
-                    <button class="searchButton">
+                    <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
             </div>
             <div class="advancedSearchandAccountWrapper">
-                <button class="advancedSearchButton">
-                    <i class="fa-regular fa-chart-bar"></i>
-                </button>
+                <form action="index.php" method="post">
+                    <button class="advancedSearchButton" name="advancedSearchBtn" title="Recherche avancée">
+                        <i class="fa-regular fa-chart-bar"></i>
+                    </button>
+                </form>
                 <div class="dropdown">
                     <button class="accountButton">
-                            Username
                             <!-- <?php $user?> -->
                         <i class="fa-solid fa-user"></i>
                     </button>
                     <div class="dropdownContent">
-                        <button class="dropdownButton">
-                            Theme
-                            <i class="fa-solid fa-moon"></i>
-                        </button>
-                        <button class="dropdownButton">
-                            Parametres
-                            <i class="fa-solid fa-user-gear"></i>
-                        </button>
-                        <button class="dropdownButton">
-                            Se deconnecter
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                        </button>
+                        <form action="index.php" method="post">
+                            <button class="dropdownButton">
+                                Theme
+                                <i class="fa-solid fa-moon"></i>
+                            </button>
+                            <button class="dropdownButton">
+                                Parametres
+                                <i class="fa-solid fa-user-gear"></i>
+                            </button>
+                            <button class="dropdownButton" name="disconnection">
+                                Se deconnecter
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -55,12 +58,12 @@
                 <span>03</span>
             </div>
             <div class="weekSelector">
-                <button class="previous">
+                <button class="previous" title="Semaine Precedente">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField">
-                <button class="next">
+                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine">
+                <button class="next" title="Semaine Suivante">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -92,9 +95,7 @@
                     <h1>Jeudi</h1>
                     <span>30</span>
                 </div>
-                <div class="events">
-                    <div class="event"></div>
-                </div>
+                <div class="events"></div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
@@ -121,12 +122,179 @@
     </div>
 </div>
 <script>
-    // let rendezVous = <?php echo json_encode($appointments); ?>;
-    console.log(rendezVous);
+
+let conseillers = [];
+
+/** create an event div, with every field filled then returns it */ 
+function createEvent(motif = "Ouverture de compte bancaire", 
+                    client = "Elise Johansson", 
+                    civilitee="Mx", 
+                    pronoms="elle/elle",
+                    horaireDebut="12:40",
+                    horaireFin="13:40",
+                    conseillerColor="lush-green",
+                    conseiller="Alexander"
+                ) {
+    let eventHTML = document.createElement("div");
+    eventHTML.classList.add("event");
+
+    eventHTML.dataset.conseiller = conseiller
+
+    if (!(conseiller in conseillers)) {
+        conseillers.push({
+            key : conseiller,
+            value : conseillerColor
+        })
+        console.log(conseillers)
+    }
+
+    let eventTitle = document.createElement("h2");
+    eventTitle.appendChild(document.createTextNode(motif));
+    eventHTML.appendChild(eventTitle);
+
+    let eventClient = document.createElement("p");
+    eventClient.appendChild(document.createTextNode(civilitee + " " + client));
+    eventHTML.appendChild(eventClient);
+
+    let pronounsSpan = document.createElement("span");
+    pronounsSpan.classList.add("pronounsSpan");
+    pronounsSpan.appendChild(document.createTextNode(pronoms));
+    eventHTML.appendChild(pronounsSpan);
+
+    let eventDetails = document.createElement("div");
+    eventDetails.classList.add("eventDetails");
+
+    let timeDiv = document.createElement("div");
+
+    let eventStartTime = document.createElement("p");
+    // eventStartTime.classList.add("eventStartTime");
+    eventStartTime.appendChild(document.createTextNode(horaireDebut));
+    timeDiv.appendChild(eventStartTime);
+
+    let eventEndTime = document.createElement("p");
+    // eventEndTime.classList.add("eventEndTime");
+    eventEndTime.appendChild(document.createTextNode(horaireFin));
+    timeDiv.appendChild(eventEndTime);
+
+    eventDetails.appendChild(timeDiv);
+
+    let eventConseiller = document.createElement("div");
+    eventConseiller.classList.add("eventConseiller");
+    eventConseiller.classList.add(conseillerColor);
+
+    let userTieIcon = document.createElement("i");
+    userTieIcon.classList.add("fa-solid", "fa-user-tie");
+    eventConseiller.appendChild(userTieIcon);
+    eventConseiller.appendChild(document.createTextNode(conseiller));
+
+    eventDetails.appendChild(eventConseiller);
+
+    eventHTML.appendChild(eventDetails);
+
+    return eventHTML;
+}
+
+/** generate a single filter button, and returns it designed to be used in the generateFilters() function */
+function generateSingleFilter(name, colorClass) {
+    let filterBtn = document.createElement("button");
+    filterBtn.classList.add("filterBtn", "inactive", colorClass);
+
+    filterBtn.setAttribute("onclick", "filterToggle(this)");
+    filterBtn.setAttribute("title", "Selectionner " + name);
+
+    let icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-circle")
+
+    filterBtn.textContent
+
+    filterBtn.appendChild(icon)
+    filterBtn.appendChild(document.createTextNode(name));
+
+    filterBtn.dataset.conseiller = name;
+
+    return filterBtn;
+} 
+
+/** generates the filters, must be called AFTER the events are all stored in the board */ 
+function generateFilters (){
+    let filterWrapper = document.createElement("div");
+    filterWrapper.classList.add("filterWrapper");
+
+    conseillers.forEach((conseiller) => {
+        let filterBtn = generateSingleFilter(conseiller.key, conseiller.value);
+        filterWrapper.appendChild(filterBtn);
+    })
+    document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
+}
+
+function filterToggle(filterBtn) {
+    let icon = filterBtn.childNodes[0];
+    if (filterBtn.classList.value.includes("inactive")) {
+
+        filterBtn.setAttribute("title", "Deselectionner " + filterBtn.textContent);
+
+        filterBtn.classList.add("active");
+        filterBtn.classList.remove("inactive");
+
+        icon.classList.add("fa-circle-dot")
+        icon.classList.remove("fa-circle")
+    }
+    else {
+        filterBtn.setAttribute("title", "Selectionner " + filterBtn.textContent);
+
+        filterBtn.classList.add("inactive");
+        filterBtn.classList.remove("active");
+
+        icon.classList.add("fa-circle")
+        icon.classList.remove("fa-user-circle-dot")
+    }
+}
+
+function filterEvents(toKeep) {
+    toKeep.forEach((conseiller) => {
+        
+    })
+}
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Signature de Contrat",
+    "Harold Hemmingway",
+    "Mr",
+    "Il/Lui",
+    "09h45",
+    "10h30",
+    "turquoise-cyan",
+    "Eleanor"
+))
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Fermeture de livret-A",
+    "Akira Mashima",
+    "Mr",
+    "Il/Lui",
+    "14h30",
+    "16h30",
+    "berry-red",
+    "Ernest"
+))
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Signature du Contrat d'Assurance",
+    "Ornella Dupré",
+    "Mme",
+    "Elle/elle",
+    "17h30",
+    "18h00",
+    "lavender",
+    "Eleanor"
+))
+
+generateFilters()
+
 </script>
 </body>
 </html>
-<!--                     <div class="event">
+<!--                <div class="event">
                         <h2>Ouverture de Compte</h2>
                         <p>Mx Elise Johansson</p>
                         <span class="pronounsSpan">elle/elle</span>
