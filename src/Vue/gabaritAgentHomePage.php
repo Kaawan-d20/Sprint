@@ -122,12 +122,214 @@
     </div>
 </div>
 <script>
-    // let rendezVous = <?php echo json_encode($content); ?>;
-    console.log(rendezVous);
+
+
+let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
+let conseillersDict = [];
+let selectedFilters = [];
+
+
+/** create an event div, with every field filled then returns it */ 
+function createEvent(motif = "Ouverture de compte bancaire", 
+                    client = "Elise Johansson", 
+                    civilitee="Mx", 
+                    pronoms="elle/elle",
+                    horaireDebut="12:40",
+                    horaireFin="13:40",
+                    conseillerColor="lush-green",
+                    conseiller="Alexander"
+                ) {
+    let eventHTML = document.createElement("div");
+    eventHTML.classList.add("event");
+
+    eventHTML.dataset.conseiller = conseiller
+    
+
+
+    if (!(conseillersArray.includes(conseiller))) {
+        conseillersArray.push(conseiller);
+        conseillersDict.push({
+            key: conseiller,
+            value: conseillerColor,
+        });
+    }
+
+    console.log(conseillersArray)
+
+    let eventTitle = document.createElement("h2");
+    eventTitle.appendChild(document.createTextNode(motif));
+    eventHTML.appendChild(eventTitle);
+
+    let eventClient = document.createElement("p");
+    eventClient.appendChild(document.createTextNode(civilitee + " " + client));
+    eventHTML.appendChild(eventClient);
+
+    let pronounsSpan = document.createElement("span");
+    pronounsSpan.classList.add("pronounsSpan");
+    pronounsSpan.appendChild(document.createTextNode(pronoms));
+    eventHTML.appendChild(pronounsSpan);
+
+    let eventDetails = document.createElement("div");
+    eventDetails.classList.add("eventDetails");
+
+    let timeDiv = document.createElement("div");
+
+    let eventStartTime = document.createElement("p");
+    // eventStartTime.classList.add("eventStartTime");
+    eventStartTime.appendChild(document.createTextNode(horaireDebut));
+    timeDiv.appendChild(eventStartTime);
+
+    let eventEndTime = document.createElement("p");
+    // eventEndTime.classList.add("eventEndTime");
+    eventEndTime.appendChild(document.createTextNode(horaireFin));
+    timeDiv.appendChild(eventEndTime);
+
+    eventDetails.appendChild(timeDiv);
+
+    let eventConseiller = document.createElement("div");
+    eventConseiller.classList.add("eventConseiller");
+    eventConseiller.classList.add(conseillerColor);
+
+    let userTieIcon = document.createElement("i");
+    userTieIcon.classList.add("fa-solid", "fa-user-tie");
+    eventConseiller.appendChild(userTieIcon);
+    eventConseiller.appendChild(document.createTextNode(conseiller));
+
+    eventDetails.appendChild(eventConseiller);
+
+    eventHTML.appendChild(eventDetails);
+
+    return eventHTML;
+}
+
+/** generate a single filter button, and returns it designed to be used in the generateFilters() function */
+function generateSingleFilter(name, colorClass) {
+    let filterBtn = document.createElement("button");
+    filterBtn.classList.add("filterBtn", "inactive", colorClass);
+
+    filterBtn.setAttribute("onclick", "filterToggle(this)");
+    filterBtn.setAttribute("title", "Selectionner " + name);
+
+    let icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-square")
+
+    filterBtn.appendChild(icon)
+    filterBtn.appendChild(document.createTextNode(name));
+
+    filterBtn.dataset.conseiller = name;
+
+    return filterBtn;
+} 
+
+/** generates the filters, must be called AFTER the events are all stored in the board */ 
+function generateFilters (){
+    let filterWrapper = document.createElement("div");
+    filterWrapper.classList.add("filterWrapper");
+
+    conseillersDict.forEach((conseiller) => {
+        let filterBtn = generateSingleFilter(conseiller.key, conseiller.value);
+        filterWrapper.appendChild(filterBtn);
+    })
+    document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
+}
+
+function filterToggle(filterBtn) {
+    let icon = filterBtn.childNodes[0];
+    if (filterBtn.classList.value.includes("inactive")) {
+
+        filterBtn.setAttribute("title", "Deselectionner " + filterBtn.textContent);
+
+        filterBtn.classList.add("active");
+        filterBtn.classList.remove("inactive");
+
+        icon.classList.add("fa-square-check")
+        icon.classList.remove("fa-square")
+
+        selectedFilters.push(filterBtn.dataset.conseiller);
+    }
+    else {
+        filterBtn.setAttribute("title", "Selectionner " + filterBtn.textContent);
+
+        filterBtn.classList.add("inactive");
+        filterBtn.classList.remove("active");
+
+        icon.classList.add("fa-square")
+        icon.classList.remove("fa-user-square-check")
+
+        selectedFilters = selectedFilters.filter(item => item !== filterBtn.dataset.conseiller) // GOD THIS IS UGLY
+        // This is basically selectedFilters.remove(filterBtn.dataset.conseiller), I hate that this is not an option
+    }
+
+    filterEvents();  
+}
+
+function hide (eventHTML) {
+    console.log(eventHTML, "is now hidden");
+    eventHTML.classList.add("hidden")
+}
+
+function show (eventHTML) {
+    console.log(eventHTML, "is now shown");
+    eventHTML.classList.remove("hidden");
+}
+
+function filterEvents() {
+    if (selectedFilters.length == 0) {
+        // No button selected, show everything
+        document.querySelectorAll(".event.hidden").forEach((event) => {
+            show(event);
+        })
+    }
+    else {
+        document.querySelectorAll(".event").forEach((event) => {
+            if (selectedFilters.includes(event.dataset.conseiller)) {
+                show(event);
+            } else {
+                hide(event);
+            }
+        })
+    }
+}
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Signature de Contrat",
+    "Harold Hemmingway",
+    "Mr",
+    "Il/Lui",
+    "09h45",
+    "10h30",
+    "turquoise-cyan",
+    "Eleanor"
+))
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Fermeture de livret-A",
+    "Akira Mashima",
+    "Mx",
+    "Iel/Iel",
+    "14h30",
+    "16h30",
+    "berry-red",
+    "Ernest"
+))
+
+document.querySelector(".tuesday .events").appendChild(createEvent(
+    "Signature du Contrat d'Assurance",
+    "Ornella Dupré",
+    "Mme",
+    "Elle/elle",
+    "17h30",
+    "18h00",
+    "lavender",
+    "Jorjor"
+))
+
+generateFilters()
+
 </script>
 </body>
 </html>
-<!--                     <div class="event">
+<!--                <div class="event">
                         <h2>Ouverture de Compte</h2>
                         <p>Mx Elise Johansson</p>
                         <span class="pronounsSpan">elle/elle</span>
