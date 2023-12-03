@@ -23,7 +23,7 @@ function vueDisplayHomeConseiller(){
  */
 function vueDisplayHomeAgent(){
     $content="";
-    require_once('gabaritAccueilHomePage.php');
+    require_once('gabaritAgentHomePage.php');
 }
 /**
  * Fonction qui affiche la page de login
