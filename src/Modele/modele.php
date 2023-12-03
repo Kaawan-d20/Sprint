@@ -91,3 +91,38 @@ function modGetAdminConseiller($logi) {
     $prepared -> closeCursor();
     return $prepared;
 }
+
+function modDebit($idA,$sum) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE TABLE Compte SET solde=solde-:sum WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
+    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+function modCredit($idA,$sum) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE TABLE Compte SET decouvert=decouvert-:sum WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+function modGetDecouvert($idA) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT decouvert FROM Compte WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> closeCursor();
+    return $prepared;
+}
