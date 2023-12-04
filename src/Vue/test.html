@@ -130,15 +130,7 @@ let selectedFilters = [];
 
 
 /** create an event div, with every field filled then returns it */ 
-function createEvent(motif = "Ouverture de compte bancaire", 
-                    client = "Elise Johansson", 
-                    civilitee="Mx", 
-                    pronoms="elle/elle",
-                    horaireDebut="12:40",
-                    horaireFin="13:40",
-                    conseillerColor="lush-green",
-                    conseiller="Alexander"
-                ) {
+function createEvent(motif, client, civilitee, pronoms, horaireDebut, horaireFin, conseillerColor, conseiller) {
     let eventHTML = document.createElement("div");
     eventHTML.classList.add("event");
 
@@ -193,7 +185,9 @@ function createEvent(motif = "Ouverture de compte bancaire",
     let userTieIcon = document.createElement("i");
     userTieIcon.classList.add("fa-solid", "fa-user-tie");
     eventConseiller.appendChild(userTieIcon);
+
     eventConseiller.appendChild(document.createTextNode(conseiller));
+    
 
     eventDetails.appendChild(eventConseiller);
 
@@ -239,7 +233,7 @@ function filterToggle(filterBtn) {
 
         filterBtn.setAttribute("title", "Deselectionner " + filterBtn.textContent);
 
-        filterBtn.classList.add("active");
+        // filterBtn.classList.add("active");
         filterBtn.classList.remove("inactive");
 
         icon.classList.add("fa-square-check")
@@ -251,7 +245,7 @@ function filterToggle(filterBtn) {
         filterBtn.setAttribute("title", "Selectionner " + filterBtn.textContent);
 
         filterBtn.classList.add("inactive");
-        filterBtn.classList.remove("active");
+        // filterBtn.classList.remove("active");
 
         icon.classList.add("fa-square")
         icon.classList.remove("fa-user-square-check")
@@ -302,7 +296,7 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
     "Eleanor"
 ))
 
-document.querySelector(".tuesday .events").appendChild(createEvent(
+document.querySelector(".monday .events").appendChild(createEvent(
     "Fermeture de livret-A",
     "Akira Mashima",
     "Mx",
@@ -321,7 +315,7 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
     "17h30",
     "18h00",
     "lavender",
-    "Jorjor"
+    "Eleanor"
 ))
 
 generateFilters()

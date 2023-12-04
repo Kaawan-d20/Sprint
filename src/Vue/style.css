@@ -2,12 +2,14 @@
 :root {
     --night: #0f0f0fff;
     --jet: #2d2e2eff;
-    --dim-gray: #716969ff;
-    --rose-quartz: #bcabaeff;
+    --dim-gray: #696969ff;
+    /* --rose-quartz: #bcabaeff; */
+    --mid-gray: #bababaff;
     --light-gray: #d3cfd0ff;
     --white: #fbfbfbff;
     --dark-spring-green: #306b34ff;
     --sunset-orange: #ff9f1cff;
+    --lush-green: #9eff1cff;
     --validation-green: #94e8b4;
     --invalid-red: #d52941;      
 
@@ -16,7 +18,8 @@
     --display-font: 'IBM Plex Sans', sans-serif;
     --mono-font: 'Space Mono', monospace;
 
-    --small-font-size: .75em;
+    --smaller-font-size: .75em;
+    --small-font-size: .85em;
     --classic-font-size: 1em;
     --big-font-size: 1.25em;
     --bigger-font-size: 2em;
@@ -25,11 +28,12 @@
     --text: var(--night);
     --text-secondary: var(--jet);
     --mid-text: var(--dim-gray);
-    --mid-back: var(--rose-quartz);
+    --mid-back: var(--mid-gray);
     --background-secondary: var(--light-gray);
     --background: var(--white);
     /* --cta: var(--dark-spring-green); */
     --cta: var(--sunset-orange);
+    /* --cta: var(--lush-green); */
 }
 
 /* GENERIC */
@@ -175,7 +179,7 @@ nav {
 
 .searchButton, .advancedSearchButton {
     padding: 0 1em;
-    background-color: var(--background-secondary);
+    background-color: var(--background);
     color: var(--text);
     font-size: var(--big-font-size);
 }
@@ -187,7 +191,7 @@ nav {
 }
 
 .searchButton:hover, .searchButton:focus, .advancedSearchButton:focus, .advancedSearchButton:hover {
-    background-color: var(--cta);
+    background-color: var(--background-secondary);
 }
 
 .advancedSearchButton {
@@ -207,7 +211,7 @@ nav {
 .accountButton {
     padding: 0 1.5em;
     border: 1px solid var(--text-secondary);
-    background-color: var(--background-secondary);
+    background-color: var(--background);
     color: var(--text);
     font-size: var(--classic-font-size);
     border-radius: 5px;
@@ -228,8 +232,8 @@ nav {
 }
 
 .dropdown:hover .dropdownContent {
-    padding-top: 5px;
-    margin-top: -5px;
+    /* padding-top: 5px;
+    margin-top: -5px; */
     border: 1px solid var(--text-secondary);
     border-top: none;
     border-radius: 0 0 5px 5px;
@@ -238,7 +242,9 @@ nav {
 }
 
 .dropdown:hover .accountButton {
-    background-color: var(--cta);
+    background-color: var(--background-secondary);
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid var(--mid-back);
 }
 
 .dropdownButton {
@@ -266,7 +272,7 @@ nav {
 }
 
 .agentWrapper .calendarWrapper {
-    margin: 1em 2em;
+    margin: 1em;
 }
 
 /* CALENDAR */
@@ -294,8 +300,8 @@ nav {
 .dateBlock {
     display: flex;
     align-items: baseline;
-    gap: 1em;
-    padding: 1em;
+    gap: .5em;
+    padding: 1em 2em 1em 1em;
 }
 
 .dateBlock h1 {
@@ -358,7 +364,7 @@ nav {
 
 .dayCell {
     display: flex;
-    gap: 1em;
+    gap: .5em;
     align-items: baseline;
     justify-content: center;
     border-bottom: 1px solid var(--text-secondary);
@@ -370,7 +376,7 @@ nav {
 
 .pronounsSpan {
     color: var(--mid-text);
-    font-size: var(--small-font-size);
+    font-size: var(--smaller-font-size);
 }
 
 .events {
@@ -394,8 +400,9 @@ nav {
 .eventDetails {
     padding: .5em 0;
     display: flex;
-    gap: 1em;
+    gap: .5em;
     align-items: center;
+    margin : 0 -.5em;
     
 }
 
@@ -403,8 +410,9 @@ nav {
     border-bottom: 1px solid var(--mid-text);
 }
 
-.eventTime {
+.eventDetails p {
     font-family: var(--mono-font);
+    font-size: var(--small-font-size);
 }
 
 .eventConseiller {
@@ -413,7 +421,8 @@ nav {
     border-radius: 5px;
     border: 1px solid var(--text-secondary);
     display: flex;
-    gap: 1em;
+    gap: .5em;
+    align-items: center;
 }
 
 .event:hover {
@@ -438,14 +447,6 @@ nav {
     align-items: baseline;
 }
 
-.inactive {
-    background-color: var(--background-background) !important;
-}
-
-.active {
-    background-color: transparent;
-}
-
 .filterWrapper {
     flex-grow: 1;
     display: flex;
@@ -458,10 +459,10 @@ nav {
 
 .cta {
     background-color: var(--cta);
-    border: none;
+    border: 1px solid var(--text-secondary);
     flex-grow: 1;
     border-radius: 5px;
-    color: var(--background);
+    color: var(--text);
     font-size: var(--big-font-size);
 }
 
@@ -525,6 +526,17 @@ nav {
     display: none;
 }
 
+.inactive:hover {
+    background-color: var(--background-secondary);
+}
+
+.inactive {
+    background-color: var(--background);
+}
+
+/* .active {
+    background-color: transparent;
+} */
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 1200px) {
@@ -545,7 +557,7 @@ nav {
     }
 
     .filterBtn {
-        font-size: var(--small-font-size);
+        font-size: var(--smaller-font-size);
     }
 }
 
