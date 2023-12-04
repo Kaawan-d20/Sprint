@@ -34,13 +34,6 @@ function ctlHome (){
  * @throws isEmptyException si le login ou le mot de passe est vide
  */
 function ctlLogin ($username, $password) {
-    //shunter la connexion
-    $_SESSION["active"] = true; 
-    $_SESSION["login"] = 3;
-    $_SESSION["type"] = 3;
-    ctlHome();
-    return null;
-    //fin shunter
     if ($username == '' || $password == '') {
         throw new estVideException();
     }
