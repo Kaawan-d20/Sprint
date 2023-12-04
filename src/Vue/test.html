@@ -72,49 +72,49 @@
             <div class="day monday">
                 <div class="dayCell">
                     <h1>Lundi</h1>
-                    <span>27</span>
+                    <span>01</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day tuesday">
                 <div class="dayCell">
                     <h1>Mardi</h1>
-                    <span>28</span>
+                    <span>02</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day wednesday">
                 <div class="dayCell">
                     <h1>Mercredi</h1>
-                    <span>29</span>
+                    <span>03</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day thursday">
                 <div class="dayCell">
                     <h1>Jeudi</h1>
-                    <span>30</span>
+                    <span>04</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
                     <h1>Vendredi</h1>
-                    <span>01</span>
+                    <span>05</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day saturday">
                 <div class="dayCell">
                     <h1>Samedi</h1>
-                    <span>02</span>
+                    <span>06</span>
                 </div>
                 <div class="events"></div>
             </div>
             <div class="day sunday">
                 <div class="dayCell">
                     <h1>Dimanche</h1>
-                    <span>03</span>
+                    <span>07</span>
                 </div>
                 <div class="events"></div>
             </div>
@@ -285,6 +285,16 @@ function filterEvents() {
     }
 }
 
+/** takes in a week array of seven string, corresponding to the number of each day of the week. /!\ week start on monday because we are in france */ 
+function setdayCellSpan (week) {
+    console.log("Yes")
+    let spanToFill = document.querySelectorAll(".day .dayCell span")
+    for (let i = 0; i < 7; i++) {
+        spanToFill[i].textContent = week[i]
+    }
+}
+
+
 document.querySelector(".tuesday .events").appendChild(createEvent(
     "Signature de Contrat",
     "Harold Hemmingway",
@@ -315,10 +325,11 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
     "17h30",
     "18h00",
     "lavender",
-    "Eleanor"
+    "Eliza"
 ))
 
 generateFilters()
+setdayCellSpan(["04", "05", "06", "07", "08", "09", "10"])
 
 </script>
 </body>
