@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
 </head>
 <body>
-    <h1>Synthese</h1>
-    <?php $content ?>
+    <h1>Calendar</h1>
+    <h1>Recherche Client</h1>
 </body>
 </html>
