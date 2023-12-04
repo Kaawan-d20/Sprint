@@ -1,6 +1,6 @@
 <?php
-require_once 'modele/token.php';
-require_once 'token.php';
+require_once('modele/token.php');
+require_once('token.php');
 
 function modGetSalt($login) {
     $connection = Connection::getInstance()->getConnection();
@@ -9,8 +9,9 @@ function modGetSalt($login) {
     $prepared -> bindParam(":logi", $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modConnect($login, $password) {
@@ -21,8 +22,9 @@ function modConnect($login, $password) {
     $prepared -> bindParam(':pass',$password,PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetClientFromId($idClient) {
@@ -32,7 +34,9 @@ function modGetClientFromId($idClient) {
     $prepared -> bindParam(':idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
+    return $result;
 }
 
 function modGetAccounts($idClient) {
@@ -42,8 +46,9 @@ function modGetAccounts($idClient) {
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetTypeStaff($logi) {
@@ -53,21 +58,23 @@ function modGetTypeStaff($logi) {
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modAdvancedSearchClient($sname,$fname,$bdate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM client WHERE nom=:sname AND prenom=:fname AND dateNaissance=:bdate';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:sname AND prenom=:fname AND dateNaissance=:bdate';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
     $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
     $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetAppointmentConseiller($logi) {
@@ -77,8 +84,9 @@ function modGetAppointmentConseiller($logi) {
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetAdminConseiller($logi) {
@@ -88,32 +96,35 @@ function modGetAdminConseiller($logi) {
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modDebit($idA,$sum) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE TABLE Compte SET solde=solde-:sum WHERE idCompte=:idA';
+    $query = 'UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modCredit($idA,$sum) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE TABLE Compte SET decouvert=decouvert-:sum WHERE idCompte=:idA';
+    $query = 'UPDATE Compte SET decouvert=decouvert-:sum WHERE idCompte=:idA';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetDecouvert($idA) {
@@ -123,6 +134,7 @@ function modGetDecouvert($idA) {
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }

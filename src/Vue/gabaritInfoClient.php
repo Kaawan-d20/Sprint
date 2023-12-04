@@ -7,6 +7,19 @@
 </head>
 <body>
     <h1>Synthese</h1>
-    <?php echo $content; ?>
+    <div>
+        <p>Identifiant du client : <?php echo $idClient; ?></p>
+        <p>Nom du conseiller : <?php echo $nameConseiller; ?></p>
+        <p>Nom : <?php echo $nameClient; ?></p>
+        <p>Date de naissance : <?php echo $naissance; ?></p>
+        <p>Date de création : <?php echo $creation; ?></p>
+        <p>Prenom : <?php echo $firstNameClient; ?></p>
+        <p>Adresse : <?php echo $addressClient; ?></p>
+        <p>Telephone : <?php echo $phoneClient; ?></p>
+        <p>Email : <?php echo $emailClient; ?></p>
+        <p>Profession : <?php echo $profession; ?></p>
+        <p>Situtation familliale : <?php echo $situation; ?></p>
+        <p>Civilité : <?php echo $civi; ?></p>
+    </div>
 </body>
 </html>
