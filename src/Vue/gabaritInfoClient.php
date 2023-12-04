@@ -6,16 +6,19 @@
     <title>Info</title>
 </head>
 <body>
-    
+    <!--Message pour Nathan
+    Cette partie est a afficher en php dans la vue, car si le client n'a pas de compte, il ne faut pas afficher cette partie
+    Mais je te la laisse ici pour que tu puisse faire le css
+    -->
     <div>
-        <h1>Débit / Crédit</h1>
+        <h1>Débit / Crédit</h1> 
         <form action="index.php" method="post">
             <select name="debitAccountSelector" id="">
                 <?php
                     echo $optionSelect;
                 ?>
             </select>
-            <input type="number" name="amountInput" id="">
+            <input type="number" name="amountInput" id="" required>
             <input type="submit" value="Débit" name="debitBtn">
             <input type="submit" value="Crédit" name="creditBtn">
         </form>
