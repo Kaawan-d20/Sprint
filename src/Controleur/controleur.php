@@ -35,7 +35,7 @@ function ctlHome (){
  */
 function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {
-        throw new estVideException();
+        throw new isEmptyException();
     }
     $resultConnnect = modConnect($username, $password);
     if (empty($resutatConnnect)){
