@@ -6,6 +6,7 @@ require_once('vue/vue.php');
 if(session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 /**
  * Fonction qui affiche la page d'accueil en fonction de la catégorie de l'utilisateur
  * si l'utilisateur n'est pas connecté, affiche la page de login
@@ -77,7 +78,7 @@ function ctrSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client);
+            vueDisplayInfoClient($client, ctrGetAccount($idClient));
         }
     }
 }
@@ -115,14 +116,48 @@ function ctlCalendarConseiller($loginEmploye){
     vueDisplayAgendaConseiller($appointment, $admin);
 }
 */
+/**
+ * Fonction qui permet d'obtenir la liste des compte d'un client
+ * @param int $idClient c'est l'id du client
+ * @return array c'est la liste des comptes du client (c'est un tableau d'objet)
+ */
 function ctrGetAccount($idClient){
     $account = modGetAccounts($idClient);
-    echo $account;
+    return $account;
 }
 
+/**
+ * Fonction qui permet de débiter un compte
+ * @param int $idAccount c'est l'id du compte
+ * @param int $amount c'est le montant à débiter
+ * @throws Exception si le montant est supérieur au solde et au découvert
+ */
+function ctlDebit($idAccount, $amount){
+    $decouvert = modGetDecouvert($idAccount)->decouvert;
+    $solde = modGetSolde($idAccount)->solde;
+    if ($amount > $solde + $decouvert){
+        throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
+    }
+    modDebit($idAccount, $amount);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+}
+/**
+ * Fonction qui permet de créditer un compte
+ * @param int $idAccount c'est l'id du compte
+ * @param int $amount c'est le montant à créditer
+*/
+function ctlCredit($idAccount, $amount){
+    modCredit($idAccount, $amount);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+}
 
 /**
  * Fonction qui permet d'afficher les erreurs
+ * @param string $error c'est le message d'erreur
  */
 function ctlError($error) {
     vueDisplayError($error);
