@@ -20,6 +20,7 @@
         <p>Profession : <?php echo $profession; ?></p>
         <p>Situtation familliale : <?php echo $situation; ?></p>
         <p>Civilité : <?php echo $civi; ?></p>
+        <p>++rdv client, debit/credit UI</p>
     </div>
 </body>
 </html>
