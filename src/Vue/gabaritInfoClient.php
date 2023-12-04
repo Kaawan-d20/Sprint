@@ -6,8 +6,22 @@
     <title>Info</title>
 </head>
 <body>
-    <h1>Synthese</h1>
+    
     <div>
+        <h1>Débit / Crédit</h1>
+        <form action="index.php" method="post">
+            <select name="debitAccountSelector" id="">
+                <?php
+                    echo $optionSelect;
+                ?>
+            </select>
+            <input type="number" name="amountInput" id="">
+            <input type="submit" value="Débit" name="debitBtn">
+            <input type="submit" value="Crédit" name="creditBtn">
+        </form>
+    </div>
+    <div>
+        <h1>Synthese</h1>
         <p>Identifiant du client : <?php echo $idClient; ?></p>
         <p>Nom du conseiller : <?php echo $nameConseiller; ?></p>
         <p>Nom : <?php echo $nameClient; ?></p>
@@ -20,6 +34,9 @@
         <p>Profession : <?php echo $profession; ?></p>
         <p>Situtation familliale : <?php echo $situation; ?></p>
         <p>Civilité : <?php echo $civi; ?></p>
+    </div>
+    <div>
+        <h1>Liste des RDV du client</h1>
     </div>
 </body>
 </html>

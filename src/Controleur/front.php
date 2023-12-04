@@ -31,6 +31,16 @@ try {
     elseif (isset($_POST['disconnection'])){
         ctlLogout();
     }
+    elseif (isset($_POST['debitBtn'])){
+        $idAccount = $_POST['debitAccountSelector'];
+        $amount = $_POST['amountInput'];
+        ctlDebit($idAccount, $amount);
+    }
+    elseif (isset($_POST['creditBtn'])){
+        $idAccount = $_POST['debitAccountSelector'];
+        $amount = $_POST['amountInput'];
+        ctlCredit($idAccount, $amount);
+    }
     else{
         ctlHome();
     }

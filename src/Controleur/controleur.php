@@ -77,7 +77,7 @@ function ctrSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client);
+            vueDisplayInfoClient($client, ctrGetAccount($idClient));
         }
     }
 }
@@ -117,9 +117,28 @@ function ctlCalendarConseiller($loginEmploye){
 */
 function ctrGetAccount($idClient){
     $account = modGetAccounts($idClient);
-    echo $account;
+    return $account;
 }
 
+
+function ctlDebit($idAccount, $amount){
+    $decouvert = modGetDecouvert($idAccount)->decouvert;
+    $solde = modGetSolde($idAccount)->solde;
+    if ($amount > $solde + $decouvert){
+        throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
+    }
+    modDebit($idAccount, $amount);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+}
+
+function ctlCredit($idAccount, $amount){
+    modCredit($idAccount, $amount);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+}
 
 /**
  * Fonction qui permet d'afficher les erreurs

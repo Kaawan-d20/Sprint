@@ -40,7 +40,14 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client){
+function vueDisplayInfoClient($client, $listAccounts){
+
+    // pour faire le select pour le débit / crédit
+    $optionSelect = "";
+    foreach ($listAccounts as $account) {
+        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule."</option>";
+    }
+    // pour faire la synthèse
     $idClient = $client->IDCLIENT;
     $nameConseiller = $client->LOGIN;
     $nameClient = $client->NOM;
