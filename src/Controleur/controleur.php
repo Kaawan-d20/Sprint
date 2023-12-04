@@ -1,6 +1,7 @@
 <?php
-require_once 'modele/modele.php';
-require_once 'vue/vue.php';
+require_once('modele/modele.php');
+require_once('vue/vue.php');
+//require_once('exception.php');
 
 if(session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -30,21 +31,21 @@ function ctlHome (){
  * C'est ici que l'on initialise la session 
  * @param string $username c'est le nom d'utilisateur qui est le login dans la base de données
  * @param string $password c'est le mot de passe de l'utilisateur mais il est hashé et salé
- * @throws incorrectLoginException si le login ou le mot de passe est incorrect
- * @throws isEmptyException si le login ou le mot de passe est vide
+ * @throws Exception si le login ou le mot de passe est incorrect
+ * @throws Exception si le login ou le mot de passe est vide
  */
 function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {
-        throw new isEmptyException();
+        throw new Exception("Veuillez remplir tous les champs");
     }
     $resultConnnect = modConnect($username, $password);
-    if (empty($resutatConnnect)){
-        throw new incorrectLoginException();
+    if (empty($resultConnnect)){
+        throw new Exception('Nom d\'utilisateur ou mot de passe incorrect');
     }
     else{
         $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
-        $_SESSION["login"] = $resultConnnect;
-        $_SESSION["type"] = modGetTypeStaff($resultConnnect);
+        $_SESSION["login"] = $resultConnnect->LOGIN;
+        $_SESSION["type"] = modGetTypeStaff($_SESSION["login"])->idCategorie;
         ctlHome();
     }
 }
@@ -63,17 +64,17 @@ function ctlLogout() {
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
  * @param int $idClient c'est l'id du client
- * @throws isEmptyException si l'id est vide
- * @throws notFoundClientException si aucun client n'est trouvé
+ * @throws Exception si l'id est vide
+ * @throws Exception si aucun client n'est trouvé
  */
 function ctrSearchIdClient($idClient){
     if ($idClient == '') {
-        throw new isEmptyException('Veuillez entrer un ID');
+        throw new Exception('Veuillez entrer un ID');
     }
     else{
-        $client = 'test';//modGetClientFromId($idClient);
+        $client = modGetClientFromId($idClient);
         if (empty($client)){
-            throw new notFoundClientException();
+            throw new Exception('Aucun client trouvé');
         }
         else{
             vueDisplayInfoClient($client);
@@ -85,17 +86,17 @@ function ctrSearchIdClient($idClient){
  * @param string $nomClient c'est le nom du client
  * @param string $prenomClient c'est le prénom du client
  * @param string $dateNaissance c'est la date de naissance du client
- * @throws isEmptyException si un des champs est vide
- * @throws notFoundClientException si aucun client n'est trouvé
+ * @throws Exception si un des champs est vide
+ * @throws Exception si aucun client n'est trouvé
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     if ($nameClient == '' | $firstNameClient == '' | $dateOfBirth == '') {
-        throw new isEmptyException();
+        throw new Exception('Veuillez remplir tous les champs');
     }
     else{
-        $listClient = $firstNameClient;//modAdvancedSearchClient($nameClient, $firstNameClient, $dateOfBirth);
+        $listClient = modAdvancedSearchClient($nameClient, $firstNameClient, $dateOfBirth);
         if (empty($listClient)){
-            throw new notFoundClientException();
+            throw new Exception('Aucun client trouvé');
         }
         else{
             vueDisplayAdvanceSearchClient($listClient);
@@ -107,12 +108,13 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * pas encore tester
  * @param int $loginEmploye c'est login du conseiller
  */
+/*
 function ctlCalendarConseiller($loginEmploye){
     $appointment = modGetAppointmentConseiller($loginEmploye);
     $admin = modGetAdminConseiller($loginEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
-
+*/
 function ctrGetAccount($idClient){
     $account = modGetAccounts($idClient);
     echo $account;
@@ -123,5 +125,5 @@ function ctrGetAccount($idClient){
  * Fonction qui permet d'afficher les erreurs
  */
 function ctlError($error) {
-    vueAfficherErreur($error) ;
+    vueDisplayError($error);
 }

@@ -1,0 +1,1 @@
+s:46:"Serialization of 'PDOStatement' is not allowed";s:46:"Serialization of 'PDOStatement' is not allowed";

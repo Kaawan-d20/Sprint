@@ -41,8 +41,18 @@ function vueDisplayLogin(){
  * @param string $client c'est les données du client
  */
 function vueDisplayInfoClient($client){
-    $content= '';
-    $content .= $client;
+    $idClient = $client->IDCLIENT;
+    $nameConseiller = $client->LOGIN;
+    $nameClient = $client->NOM;
+    $naissance = $client->DATENAISSANCE;
+    $creation = $client->DATECREATION;
+    $firstNameClient = $client->PRENOM;
+    $addressClient = $client->ADRESSE;
+    $phoneClient = $client->NUMTEL;
+    $emailClient = $client->EMAIL;
+    $profession = $client->PROFESSION;
+    $situation = $client->SITUATIONFAMILIALE;
+    $civi = $client->CIVILITEE;
     require_once('gabaritInfoClient.php');
 }
 /**
@@ -51,13 +61,16 @@ function vueDisplayInfoClient($client){
  * @param array $listClient c'est la liste des clients
  */
 function vueDisplayAdvanceSearchClient($listClient="") {
-    /*$content="<table>";
-    foreach ($listeClient as $client) {
-        $content .= "<tr><td>".$client['id']."</td><td>".$client['nom']."</td><td>".$client['prenom']."</td><td>".$client['dateNaissance']."</td>";
+    
+    
+    if ($listClient == "") {
+        $content = "";
     }
-    $content .= "</table>";*/
-    $content = $listClient;
-    $content .= "test avancée";
+    else{
+        $content="<table>";
+        $content .= "<tr><td>".$listClient->idClient."</td><td>".$listClient->nom."</td><td>".$listClient->prenom."</td><td>".$listClient->dateNaissance."</td>";
+        $content .= "</table>";
+    }
     require_once('gabaritRechercheClient.php');
 }
 
@@ -73,11 +86,6 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 
 
 
-function vueDisplayAgendaConseiller($appointment, $admin){
-
-}
-
-
 
 /**
  * Fonction qui affiche la page d'erreur
@@ -86,5 +94,5 @@ function vueDisplayAgendaConseiller($appointment, $admin){
  */
 function vueDisplayError ($error) {
     $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
-    require_once('gabaritLanding.php');
+    require_once('gabaritErreur.php');
 }
