@@ -7,6 +7,7 @@
  */
 function vueDisplayHomeDirecteur(){
     $content="";
+    $stat = ctlGetStats();
     require_once('gabaritDirecteurHomePage.php');
 }
 
@@ -99,20 +100,6 @@ function vueDisplayAdvanceSearchClient($listClient="") {
     }
     require_once('gabaritRechercheClient.php');
 }
-
-
-
-function stats(){
-    $content="";
-    require_once('gabaritDirecteurHomePage.php');
-}
-
-
-
-
-
-
-
 
 
 
