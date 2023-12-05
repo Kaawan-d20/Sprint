@@ -24,6 +24,7 @@
         </form>
     </div>
     <div>
+        
         <h1>Synthese</h1>
         <p>Identifiant du client : <?php echo $idClient; ?></p>
         <p>Nom du conseiller : <?php echo $nameConseiller; ?></p>
