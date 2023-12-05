@@ -457,6 +457,12 @@ nav {
 
 /* INFO CLIENT */
 
+.contactAndRDVWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}
+
 .nameWrapper {
     display: flex;
     align-items: baseline;
@@ -468,14 +474,6 @@ nav {
     flex-direction: column;
     gap: 1em;
     margin: 1em;
-}
-
-.nameWrapper h2 {
-    margin: 0;
-}
-
-.contactWrapper h2 {
-    margin: 0;
 }
 
 .idDiv {
@@ -522,7 +520,7 @@ nav {
     padding: .5em;
 }
 
-.contactContent {
+.contactContent, .infoContent {
     font-family: var(--mono-font);
 }
 
@@ -533,9 +531,52 @@ nav {
     border-radius: 5px;
 }
 
-.syntheseWrapper h1 {
+.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1, .nameWrapper h1, .nameWrapper h2 {
     margin: 0;
 }
+
+.RDVWrapper {
+    border-radius: 5px;
+    border: 1px solid var(--text);
+}
+
+.debitCreditWrapper {
+    margin-top: 1em;
+}
+
+.debitAccountSelector {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitCreditBtn {
+    border: 1px solid var(--text);
+    padding: .5em;
+    background-color: var(--background);
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitCreditBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.debitCreditWrapper form input[type="number"] {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-size: 1em;
+}
+
+/* .debitCreditWrapper form input[type="number"]:focus {
+    outline: 2px inset var(--cta);
+} */
+
 
 /* UTILITY */
 
@@ -564,13 +605,18 @@ nav {
 }
 
 .searchField {
+    border: none;
+}
+
+input[type="number"] {
     appearance: textfield;
     font-family: var(--mono-font);
     font-size: var(--classic-font-size);
     background-color: var(--background);
     color: var(--text-secondary);
-    border: none;
 }
+
+
 
 .searchField:focus {
     outline: none;
