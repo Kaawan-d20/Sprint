@@ -45,6 +45,9 @@ try {
         $idClient = $_POST['idClient'];
         ctrSearchIdClient($idClient);
     }
+    elseif (isset($_POST['GestionPersonnelBtn'])){
+        GestionPersonnel();
+    }
     else{
         ctlHome();
     }

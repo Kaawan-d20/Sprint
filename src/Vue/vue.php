@@ -101,7 +101,19 @@ function vueDisplayAdvanceSearchClient($listClient="") {
     require_once('gabaritRechercheClient.php');
 }
 
+function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
+    if ($mode == 'display') {
+        $content="";
+        foreach ($listEmployee as $employee) {
+            $content .= "<p>Nom de l'employé : ".$employee->nom." Prénom de l'employé : ".$employee->prenom." Login de l'employé : ".$employee->login." <input type=\"hidden\" name=\"".$employee->login ."\"><input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\"></p>";
+        }
+    }
+    else{
+        $content="<h1>Modifier info employé</h1><form action=\"index.php\" method=\"post\"><p><input type=\"text\" name=\"nameEmployee\" value=\"$listEmployee->NOM\"><input type=\"text\" name=\"firstNameEmployee\" value=\"$listEmployee->PRENOM\"><input type=\"text\" name=\"loginEmployee\" value=\"$listEmployee->login\"><input type=\"text\" name=\"passwordEmployee\" value=\"$listEmployee->password\"><input type=\"submit\" value=\"Valider modification\"></p></form>";
+    }
+    require_once('gabaritGestionPersonnel.php');
 
+}
 
 /**
  * Fonction qui affiche la page d'erreur

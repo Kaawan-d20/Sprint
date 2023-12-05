@@ -20,6 +20,11 @@
         <p>Nombre de comptes à découvert : <?php echo $stat['nbAccountDecouvert'] ?></p>
         <p>Nombre de comptes non à découvert : <?php echo $stat['nbAccoutNonDecouvert'] ?></p>-->
     </div>
-    
+    <div>
+        <h1>Gestion du Personnel</h1>
+        <form action="index.php" method="post">
+            <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
+        </form>
+    </div>
 </body>
 </html>

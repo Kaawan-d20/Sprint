@@ -218,3 +218,8 @@ function ctlGetStats(){
     //$stat['nbAccoutNonDecouvert'] = modGetNumberCompteNonDecouvert();
     return $stat;
 }
+
+function GestionPersonnel(){
+    $listEmploye = "test"; //modGetAllEmploye();
+    vueDisplayGestionPersonnel($listEmploye);
+}
