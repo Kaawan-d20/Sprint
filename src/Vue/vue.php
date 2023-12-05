@@ -102,7 +102,10 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 
 
 
-
+function stats(){
+    $content="";
+    require_once('gabaritDirecteurHomePage.php');
+}
 
 
 

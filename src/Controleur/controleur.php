@@ -199,3 +199,7 @@ function ctlCredit($idAccount, $amount){
 function ctlError($error) {
     vueDisplayError($error);
 }
+
+function ctlGetStat(){
+    $stat = new ArrayObject();
+}
