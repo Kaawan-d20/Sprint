@@ -64,12 +64,87 @@ function modGetTypeStaff($logi) {
     return $result->idCategorie;
 }
 
-function modAdvancedSearchClient($sname,$fname,$bdate) {
+function modAdvancedSearchClientABC($sname,$fname,$bdate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:sname AND prenom=:fname AND dateNaissance=:bdate';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
     $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientAB($sname,$fname) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname AND prenom=:fname';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientBC($fname,$bdate) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:fname AND dateNaissance=:bdate';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientAC($sname,$bdate) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname AND dateNaissance=:bdate';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientA($sname) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientB($fname) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:fname';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modAdvancedSearchClientC($bdate) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE dateNaissance=:bdate';
+    $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
