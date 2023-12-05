@@ -82,7 +82,7 @@ function ctrSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
         }
     }
 }
@@ -96,29 +96,29 @@ function ctrSearchIdClient($idClient){
  * @throws Exception si aucun client n'est trouvé
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
-    if ($nameClient == '' && $firstNameClient == '' && $dateOfBirth == '') { // aucun champ rempli
+    if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // aucun champ rempli
         throw new Exception('Veuillez remplir tous les champs');
     }
-    elseif ($nameClient != '' && $firstNameClient != '' && $dateOfBirth != ''){ // il y a tout de rempli
-        $listClient=modAdvanceSearchClientABC($nameClient, $firstNameClient, $dateOfBirth);
+    elseif (!empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // il y a tout de rempli
+        $listClient=modAdvancedSearchClientABC($nameClient, $firstNameClient, $dateOfBirth);
     }
-    elseif ($nameClient != '' && $firstNameClient != '' && $dateOfBirth == ''){ // il y a que le nom et le prénom
-        $listClient=modAdvanceSearchClientAB($nameClient, $firstNameClient);
+    elseif (!empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom et le prénom
+        $listClient=modAdvancedSearchClientAB($nameClient, $firstNameClient);
     }
-    elseif ($nameClient != '' && $firstNameClient == '' && $dateOfBirth != ''){ // il y a que le nom et la date de naissance
-        $listClient=modAdvanceSearchClientAC($nameClient, $dateOfBirth);
+    elseif (!empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que le nom et la date de naissance
+        $listClient=modAdvancedSearchClientAC($nameClient, $dateOfBirth);
     }
-    elseif ($nameClient = '' && $firstNameClient != '' && $dateOfBirth != ''){ // il y a que le prénom et la date de naissance
-        $listClient=modAdvanceSearchClientBC($firstNameClient, $dateOfBirth);
+    elseif (empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que le prénom et la date de naissance
+        $listClient=modAdvancedSearchClientBC($firstNameClient, $dateOfBirth);
     }
-    elseif ($nameClient != '' && $firstNameClient == '' && $dateOfBirth == ''){ // il y a que le nom
-        $listClient=modAdvanceSearchClientA($nameClient);
+    elseif (!empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom
+        $listClient=modAdvancedSearchClientA("Staline");
     }
-    elseif ($nameClient == '' && $firstNameClient != '' && $dateOfBirth == ''){ // il y a que le prénom
-        $listClient=modAdvanceSearchClientB($firstNameClient);
+    elseif (empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le prénom
+        $listClient=modAdvancedSearchClientB($firstNameClient);
     }
-    elseif ($nameClient == '' && $firstNameClient == '' && $dateOfBirth != ''){ // il y a que la date de naissance
-        $listClient=modAdvanceSearchClientC($dateOfBirth);
+    elseif (empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que la date de naissance
+        $listClient=modAdvancedSearchClientC($dateOfBirth);
     }
     if (empty($listClient)){
         throw new Exception('Aucun client trouvé');
@@ -151,6 +151,16 @@ function ctrGetAccount($idClient){
 }
 
 /**
+ * Fonction qui permet d'obtenir la liste des contrat d'un client
+ * @param int $idClient c'est l'id du client
+ * @return array c'est la liste des contrat du client (c'est un tableau d'objet)
+ */
+function ctrGetContracts($idClient){
+    $contracts = modGetContracts($idClient);
+    return $contracts;
+}
+
+/**
  * Fonction qui permet de débiter un compte
  * @param int $idAccount c'est l'id du compte
  * @param string $amount c'est le montant à débiter
@@ -166,7 +176,7 @@ function ctlDebit($idAccount, $amount){
     modDebit($idAccount, $amount);
     $idClient = modGetIdClientFromAccount($idAccount)->idClient;
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -178,7 +188,7 @@ function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
     $idClient = modGetIdClientFromAccount($idAccount)->idClient;
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient));
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
 }
 
 /**

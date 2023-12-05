@@ -68,7 +68,6 @@ function modGetAccounts($idClient) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
-    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -333,4 +332,33 @@ function modGetSolde($idA) {
     $prepared -> closeCursor();
     return $result->solde;
 
+}
+/**
+ * renvoie la somme des soldes de tous les comptes
+ */
+function modSumAllSolde() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT SUM(solde) FROM Compte';
+    $result = $connection -> query($query);
+    $result -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $result -> fetch();
+    $result -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie tous les contrats du client dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idClient l'id du client
+ */
+function modGetContracts($idClient) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT contrat.idContrat,idTypeContrat,intitule,tarifmensuel,dateouverture FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat WHERE idClient=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
 }

@@ -44,7 +44,7 @@
         <p>Profession : <?php echo $profession; ?></p>
         <p>Situtation familliale : <?php echo $situation; ?></p>
         <p>Civilité : <?php echo $civi; ?></p>
-    </div> -->
+    </div>
     <div>
         <h1>Synthese</h1>
         <div class="nameWrapper">
@@ -52,6 +52,18 @@
             <span class="pronounsSpan">Il/Lui</span>
         </div>
          <!-- CHANGE TO A VAR -->
+    </div>
+    <div>
+        <h1>Liste des comptes du client</h1>
+        <?php
+            echo $listA;
+        ?>
+    </div>
+    <div>
+        <h1>Liste des contrat</h1>
+        <?php
+            echo $listC;
+        ?>
     </div>
     <div>
         <h1>Liste des RDV du client</h1>
