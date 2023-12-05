@@ -362,3 +362,20 @@ function modGetContracts($idClient) {
     $prepared -> closeCursor();
     return $result;
 }
+
+/**
+ * renvoie l'intitule du motif dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $id l'id du motif
+ */
+function modGetIntituleMotif($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT intitule FROM Motif WHERE idMotif=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
