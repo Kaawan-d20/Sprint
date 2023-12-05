@@ -301,7 +301,8 @@ function modGetDecouvert($idA) {
 }
 
 /**
- * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre
+ * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
  * @param int $idAccount l'id du compte
  */
 function modGetIdClientFromAccount($idAccount){
@@ -316,7 +317,11 @@ function modGetIdClientFromAccount($idAccount){
     return $result->decouvert;
 }
 
-
+/**
+ * renvoie le solde du compte dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idA l'id du compte
+ */
 function modGetSolde($idA) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT solde FROM Compte WHERE idCompte=:idA';
