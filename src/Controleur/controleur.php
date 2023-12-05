@@ -9,8 +9,9 @@ if(session_status() === PHP_SESSION_NONE) {
 
 /**
  * Fonction qui affiche la page d'accueil en fonction de la catégorie de l'utilisateur
- * si l'utilisateur n'est pas connecté, affiche la page de login
+ * Si l'utilisateur n'est pas connecté, affiche la page de login
  * Ne prend pas de paramètres et ne retourne rien
+ * @return void
  */
 function ctlHome (){
     if (!isset($_SESSION["type"])){
@@ -34,6 +35,7 @@ function ctlHome (){
  * @param string $password c'est le mot de passe de l'utilisateur mais il est hashé et salé
  * @throws Exception si le login ou le mot de passe est incorrect
  * @throws Exception si le login ou le mot de passe est vide
+ * @return void
  */
 function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {
@@ -54,6 +56,7 @@ function ctlLogin ($username, $password) {
 /**
  * Fonction qui permet de se déconnecter
  * Ne prend pas de paramètres et ne retourne rien
+ * @return void
  */
 function ctlLogout() {
     session_destroy();
@@ -67,6 +70,7 @@ function ctlLogout() {
  * @param int $idClient c'est l'id du client
  * @throws Exception si l'id est vide
  * @throws Exception si aucun client n'est trouvé
+ * @return void
  */
 function ctrSearchIdClient($idClient){
     if ($idClient == '') {
@@ -82,28 +86,48 @@ function ctrSearchIdClient($idClient){
         }
     }
 }
+
 /**
  * Fonction qui permet de chercher un client en fonction de son nom, prénom et date de naissance
- * @param string $nomClient c'est le nom du client
- * @param string $prenomClient c'est le prénom du client
- * @param string $dateNaissance c'est la date de naissance du client
- * @throws Exception si un des champs est vide
+ * @param string $nameClient c'est le nom du client
+ * @param string $firstNameClient c'est le prénom du client
+ * @param string $dateOfBirth c'est la date de naissance du client
+ * @throws Exception si tous les champs sont vides
  * @throws Exception si aucun client n'est trouvé
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
-    if ($nameClient == '' | $firstNameClient == '' | $dateOfBirth == '') {
+    if ($nameClient == '' && $firstNameClient == '' && $dateOfBirth == '') { // aucun champ rempli
         throw new Exception('Veuillez remplir tous les champs');
     }
+    elseif ($nameClient != '' && $firstNameClient != '' && $dateOfBirth != ''){ // il y a tout de rempli
+        $listClient=modAdvanceSearchClientABC($nameClient, $firstNameClient, $dateOfBirth);
+    }
+    elseif ($nameClient != '' && $firstNameClient != '' && $dateOfBirth == ''){ // il y a que le nom et le prénom
+        $listClient=modAdvanceSearchClientAB($nameClient, $firstNameClient);
+    }
+    elseif ($nameClient != '' && $firstNameClient == '' && $dateOfBirth != ''){ // il y a que le nom et la date de naissance
+        $listClient=modAdvanceSearchClientAC($nameClient, $dateOfBirth);
+    }
+    elseif ($nameClient = '' && $firstNameClient != '' && $dateOfBirth != ''){ // il y a que le prénom et la date de naissance
+        $listClient=modAdvanceSearchClientBC($firstNameClient, $dateOfBirth);
+    }
+    elseif ($nameClient != '' && $firstNameClient == '' && $dateOfBirth == ''){ // il y a que le nom
+        $listClient=modAdvanceSearchClientA($nameClient);
+    }
+    elseif ($nameClient == '' && $firstNameClient != '' && $dateOfBirth == ''){ // il y a que le prénom
+        $listClient=modAdvanceSearchClientB($firstNameClient);
+    }
+    elseif ($nameClient == '' && $firstNameClient == '' && $dateOfBirth != ''){ // il y a que la date de naissance
+        $listClient=modAdvanceSearchClientC($dateOfBirth);
+    }
+    if (empty($listClient)){
+        throw new Exception('Aucun client trouvé');
+    }
     else{
-        $listClient = modAdvancedSearchClient($nameClient, $firstNameClient, $dateOfBirth);
-        if (empty($listClient)){
-            throw new Exception('Aucun client trouvé');
-        }
-        else{
-            vueDisplayAdvanceSearchClient($listClient);
-        }
+        vueDisplayAdvanceSearchClient($listClient);
     }
 }
+
 /**
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
@@ -129,8 +153,9 @@ function ctrGetAccount($idClient){
 /**
  * Fonction qui permet de débiter un compte
  * @param int $idAccount c'est l'id du compte
- * @param int $amount c'est le montant à débiter
+ * @param string $amount c'est le montant à débiter
  * @throws Exception si le montant est supérieur au solde et au découvert
+ * @return void
  */
 function ctlDebit($idAccount, $amount){
     $decouvert = modGetDecouvert($idAccount);
@@ -146,7 +171,8 @@ function ctlDebit($idAccount, $amount){
 /**
  * Fonction qui permet de créditer un compte
  * @param int $idAccount c'est l'id du compte
- * @param int $amount c'est le montant à créditer
+ * @param string $amount c'est le montant à créditer
+ * @return void
 */
 function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
@@ -158,6 +184,7 @@ function ctlCredit($idAccount, $amount){
 /**
  * Fonction qui permet d'afficher les erreurs
  * @param string $error c'est le message d'erreur
+ * @return void
  */
 function ctlError($error) {
     vueDisplayError($error);
