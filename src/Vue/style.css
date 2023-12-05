@@ -455,6 +455,14 @@ nav {
     flex-wrap: wrap;
 }
 
+/* INFO CLIENT */
+
+.nameWrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 1em;
+}
+
 /* UTILITY */
 
 .cta {
