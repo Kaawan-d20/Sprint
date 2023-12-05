@@ -19,10 +19,16 @@ function vueDisplayHomeConseiller(){
 }
 /**
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
- * Ne prend pas de paramètres et ne retourne rien
+ * Ne retourne rien
+ * @param string $firstName prénom de l'Agent
+ * @param string $lastName nom de famille de l'Agent
+ * @param array $rendezVous liste des Rendez Vous de la semaine
+ * @param array $adminTasks liste des tâches admins de la semaine
  */
-function vueDisplayHomeAgent(){
-    $content="";
+// function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
+function vueDisplayHomeAgent() {
+    // $username = $firstName . $lastName;
+    // $appointements = array_merge($rendezVous, $adminTasks);
     require_once('gabaritAgentHomePage.php');
 }
 /**
@@ -40,7 +46,14 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client){
+function vueDisplayInfoClient($client, $listAccounts){
+
+    // pour faire le select pour le débit / crédit
+    $optionSelect = "";
+    foreach ($listAccounts as $account) {
+        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule."</option>";
+    }
+    // pour faire la synthèse
     $idClient = $client->IDCLIENT;
     $nameConseiller = $client->LOGIN;
     $nameClient = $client->NOM;

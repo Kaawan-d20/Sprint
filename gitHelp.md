@@ -10,6 +10,7 @@ Pour remettre son espace local à jour avec le Github
 git branch -d <nom de branch>
 ```
 Pour prendre le code d'une autre branch
+
 ```
 git rebase <nom de branch>
 ```

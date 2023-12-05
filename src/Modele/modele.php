@@ -41,11 +41,12 @@ function modGetClientFromId($idClient) {
 
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idCompte,idTypeCompte,intitule,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte WHERE idClient=:idC';
+    $query = 'SELECT compte.idCompte,idTypeCompte,intitule,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
     $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
@@ -115,7 +116,7 @@ function modDebit($idA,$sum) {
 
 function modCredit($idA,$sum) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE Compte SET decouvert=decouvert-:sum WHERE idCompte=:idA';
+    $query = 'UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idA';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
@@ -135,4 +136,30 @@ function modGetDecouvert($idA) {
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
     return $result->decouvert;
+}
+
+function modGetIdClientFromAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->decouvert;
+}
+
+
+function modGetSolde($idA) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT solde FROM Compte WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+
 }
