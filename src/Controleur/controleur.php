@@ -46,7 +46,7 @@ function ctlLogin ($username, $password) {
     else{
         $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
         $_SESSION["login"] = $resultConnnect->LOGIN;
-        $_SESSION["type"] = modGetTypeStaff($_SESSION["login"])->idCategorie;
+        $_SESSION["type"] = modGetTypeStaff($_SESSION["login"]);
         ctlHome();
     }
 }
@@ -133,8 +133,8 @@ function ctrGetAccount($idClient){
  * @throws Exception si le montant est supérieur au solde et au découvert
  */
 function ctlDebit($idAccount, $amount){
-    $decouvert = modGetDecouvert($idAccount)->decouvert;
-    $solde = modGetSolde($idAccount)->solde;
+    $decouvert = modGetDecouvert($idAccount);
+    $solde = modGetSolde($idAccount);
     if ($amount > $solde + $decouvert){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }

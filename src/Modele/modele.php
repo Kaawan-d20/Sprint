@@ -11,7 +11,7 @@ function modGetSalt($login) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->salt;
 }
 
 function modConnect($login, $password) {
@@ -47,6 +47,7 @@ function modGetAccounts($idClient) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -60,7 +61,7 @@ function modGetTypeStaff($logi) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->idCategorie;
 }
 
 function modAdvancedSearchClient($sname,$fname,$bdate) {
@@ -72,7 +73,7 @@ function modAdvancedSearchClient($sname,$fname,$bdate) {
     $prepared -> bindParam(':bdate', $bdate, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -84,7 +85,7 @@ function modGetAppointmentConseiller($logi) {
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -96,7 +97,7 @@ function modGetAdminConseiller($logi) {
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -111,7 +112,6 @@ function modDebit($idA,$sum) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
 }
 
 function modCredit($idA,$sum) {
@@ -124,7 +124,6 @@ function modCredit($idA,$sum) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
 }
 
 function modGetDecouvert($idA) {
@@ -136,7 +135,7 @@ function modGetDecouvert($idA) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->decouvert;
 }
 
 function modGetIdClientFromAccount($idAccount){
@@ -148,7 +147,7 @@ function modGetIdClientFromAccount($idAccount){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->decouvert;
 }
 
 
@@ -161,6 +160,6 @@ function modGetSolde($idA) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->solde;
 
 }
