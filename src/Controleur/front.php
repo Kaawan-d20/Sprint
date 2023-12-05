@@ -9,7 +9,7 @@ if(session_status() === PHP_SESSION_NONE) {
 
 
 
-try { 
+try {
     if (isset($_POST['landingSubmitBtn'])){
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
@@ -40,6 +40,10 @@ try {
         $idAccount = $_POST['debitAccountSelector'];
         $amount = $_POST['amountInput'];
         ctlCredit($idAccount, $amount);
+    }
+    elseif (isset($_POST['infoClientFromAdvancedBtn'])){
+        $idClient = $_POST['idClient'];
+        ctrSearchIdClient($idClient);
     }
     else{
         ctlHome();
