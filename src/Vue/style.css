@@ -463,6 +463,80 @@ nav {
     gap: 1em;
 }
 
+.syntheseWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 1em;
+}
+
+.nameWrapper h2 {
+    margin: 0;
+}
+
+.contactWrapper h2 {
+    margin: 0;
+}
+
+.idDiv {
+    font-family: var(--mono-font);
+    margin: 0;
+    padding: .5em;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+}
+
+.infoContent:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+
+.contactContent:not(:last-child) {
+    border-bottom: 1px solid var(--text);
+}
+
+.contactHeaderWrapper, .contactContentWrapper {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.contactContent, .contactHeader {
+    justify-content: center;
+}
+
+.infoWrapper {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.infoHeaderWrapper, .infoContentWrapper {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.infoHeader, .contactHeader {
+    background-color: var(--text);
+    color: var(--background);
+}
+
+.infoHeader, .infoContent, .contactHeader, .contactContent {
+    padding: .5em;
+}
+
+.contactContent {
+    font-family: var(--mono-font);
+}
+
+.contactTableWrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.syntheseWrapper h1 {
+    margin: 0;
+}
+
 /* UTILITY */
 
 .cta {
@@ -572,5 +646,22 @@ nav {
 @media screen and (max-width:1800px) {
     .dayCell h1 {
         font-size: var(--big-font-size);
+    }
+}
+
+@media screen and (max-width:400px) {
+    .infoHeaderWrapper, .infoContentWrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
+
+    .infoWrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .infoContent:not(:last-child) {
+        border-bottom: 1px solid var(--text);
+        border-right: none;
     }
 }
