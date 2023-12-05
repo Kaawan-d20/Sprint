@@ -346,6 +346,7 @@ function modSumAllSolde() {
     return $result;
 }
 
+
 /**
  * renvoie tous les contrats du client dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
@@ -362,6 +363,33 @@ function modGetContracts($idClient) {
     $prepared -> closeCursor();
     return $result;
 }
+
+/**
+ * renvoie le nombre de contrats
+ */
+function modGetNumberContracts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) FROM contrat';
+    $result = $connection -> query($query);
+    $result -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $result -> fetch();
+    $result -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie le nombre de comptes
+ */
+function modGetNumberComptes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) FROM compte';
+    $result = $connection -> query($query);
+    $result -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $result -> fetch();
+    $result -> closeCursor();
+    return $result;
+}
+
 
 /**
  * renvoie l'intitule du motif dont l'id est en paramètre,
