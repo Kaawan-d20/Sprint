@@ -133,13 +133,13 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * pas encore tester
  * @param int $loginEmploye c'est login du conseiller
  */
-/*
+
 function ctlCalendarConseiller($loginEmploye){
     $appointment = modGetAppointmentConseiller($loginEmploye);
     $admin = modGetAdminConseiller($loginEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
-*/
+
 /**
  * Fonction qui permet d'obtenir la liste des compte d'un client
  * @param int $idClient c'est l'id du client

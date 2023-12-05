@@ -128,6 +128,16 @@ let conseillersArray = []; // this is bullshit, this is juste every conseiller i
 let conseillersDict = [];
 let selectedFilters = [];
 
+let correspondingDay = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday"
+]
+
 
 /** create an event div, with every field filled then returns it */ 
 function createEvent(motif, client, civilitee, pronoms, horaireDebut, horaireFin, conseillerColor, conseiller) {
