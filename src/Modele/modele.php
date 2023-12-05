@@ -2,6 +2,11 @@
 require_once('modele/token.php');
 require_once('token.php');
 
+/**
+ * renvoie le salt correspondant au login passé en paramètre, 
+ * rien si ce login n'est pas présent dans la base de données.
+ * @param string $login le login de l'employé 
+ */
 function modGetSalt($login) {
     $connection = Connection::getInstance()->getConnection();
     $query = $connection -> prepare("SELECT salt FROM employe WHERE login=:logi");
@@ -14,6 +19,12 @@ function modGetSalt($login) {
     return $result->salt;
 }
 
+/**
+ * renvoie toutes les infos de l'employe dont le login et password sont en paramètres,
+ * rien si celui-ci n'est pas présent dans la base de données.
+ * @param string $login le login de l'employé
+ * @param string $password le password salé de l'employé 
+ */
 function modConnect($login, $password) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM employe WHERE login=:logi AND password=:pass';
@@ -27,6 +38,11 @@ function modConnect($login, $password) {
     return $result;
 }
 
+/**
+ * renvoie toutes les infos du client dont l'id est en paramètre, 
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idClient l'id du client
+ */
 function modGetClientFromId($idClient) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM client WHERE idClient=:idC';
@@ -39,6 +55,11 @@ function modGetClientFromId($idClient) {
     return $result;
 }
 
+/**
+ * renvoie tous les comptes du client dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idClient l'id du client
+ */
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT compte.idCompte,idTypeCompte,intitule,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte WHERE idClient=:idC';
@@ -52,6 +73,11 @@ function modGetAccounts($idClient) {
     return $result;
 }
 
+/**
+ * renvoie l'id de la catégorie à laquelle appartient l'employé dont le login est passé en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $logi le login de l'employé
+ */
 function modGetTypeStaff($logi) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idCategorie FROM employe WHERE login=:logi';
@@ -64,6 +90,13 @@ function modGetTypeStaff($logi) {
     return $result->idCategorie;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $sname le nom du client
+ * @param string $fname le prénom du client
+ * @param string $bdate la date de naissance du client
+ */
 function modAdvancedSearchClientABC($sname,$fname,$bdate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:sname AND prenom=:fname AND dateNaissance=:bdate';
@@ -78,6 +111,12 @@ function modAdvancedSearchClientABC($sname,$fname,$bdate) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $sname le nom du client
+ * @param string $fname le prénom du client
+ */
 function modAdvancedSearchClientAB($sname,$fname) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname AND prenom=:fname';
@@ -91,6 +130,12 @@ function modAdvancedSearchClientAB($sname,$fname) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $fname le prénom du client
+ * @param string $bdate la date de naissance du client
+ */
 function modAdvancedSearchClientBC($fname,$bdate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:fname AND dateNaissance=:bdate';
@@ -104,6 +149,12 @@ function modAdvancedSearchClientBC($fname,$bdate) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $sname le nom du client
+ * @param string $bdate la date de naissance du client
+ */
 function modAdvancedSearchClientAC($sname,$bdate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname AND dateNaissance=:bdate';
@@ -117,6 +168,11 @@ function modAdvancedSearchClientAC($sname,$bdate) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $sname le nom du client
+ */
 function modAdvancedSearchClientA($sname) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:sname';
@@ -129,6 +185,11 @@ function modAdvancedSearchClientA($sname) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $fname le prénom du client
+ */
 function modAdvancedSearchClientB($fname) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:fname';
@@ -141,6 +202,11 @@ function modAdvancedSearchClientB($fname) {
     return $result;
 }
 
+/**
+ * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $bdate la date de naissance du client
+ */
 function modAdvancedSearchClientC($bdate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE dateNaissance=:bdate';
@@ -153,6 +219,11 @@ function modAdvancedSearchClientC($bdate) {
     return $result;
 }
 
+/**
+ * renvoie l'id du RDV, celui du motif et celui du client ainsi que le login de l'employé et l'horaire de tous les RDV de l'employé dont le login est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $logi le login de l'employé 
+ */
 function modGetAppointmentConseiller($logi) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idRDV,idMotif,idClient,login,horaire FROM rdv NATURAL JOIN employe WHERE login=:logi';
@@ -165,9 +236,14 @@ function modGetAppointmentConseiller($logi) {
     return $result;
 }
 
+/**
+ * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont le login est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param string $logi le login de l'employé
+ */
 function modGetAdminConseiller($logi) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idTa,login,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE login=:logi';
+    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE login=:logi';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
     $prepared -> execute();
@@ -177,6 +253,11 @@ function modGetAdminConseiller($logi) {
     return $result;
 }
 
+/**
+ * débite le compte dont l'id est en paramètre de la somme (positive) en paramètre
+ * @param int $idA id du compte à débiter
+ * @param string $sum la somme à débiter
+ */
 function modDebit($idA,$sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA';
@@ -184,11 +265,14 @@ function modDebit($idA,$sum) {
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
     $prepared -> closeCursor();
 }
 
+/**
+ * crédite le compte dont l'id est en paramètre de la somme en paramètre 
+ * @param int $idA id du compte à créditer
+ * @param string $sum somme à créditer
+ */
 function modCredit($idA,$sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idA';
@@ -196,11 +280,14 @@ function modCredit($idA,$sum) {
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
     $prepared -> closeCursor();
 }
 
+/**
+ * renvoie le découvert du compte dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idA l'id du compte
+ */
 function modGetDecouvert($idA) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT decouvert FROM Compte WHERE idCompte=:idA';
@@ -213,6 +300,10 @@ function modGetDecouvert($idA) {
     return $result->decouvert;
 }
 
+/**
+ * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre
+ * @param int $idAccount l'id du compte
+ */
 function modGetIdClientFromAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idA';
