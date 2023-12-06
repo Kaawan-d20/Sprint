@@ -238,6 +238,23 @@ CREATE  INDEX I_FK_COMPTE_TYPECOMPTE
      ON COMPTE (IDTYPECOMPTE ASC);
 
 # -----------------------------------------------------------------------------
+#       TABLE : OPERATION
+# -----------------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS OPERATION
+  (
+    IDOPERATION INTEGER(8) NOT NULL AUTO_INCREMENT ,
+    IDCOMPTE INTEGER(8) NOT NULL ,
+    SOURCE VARCHAR(32) NOT NULL ,
+    LIBELLE VARCHAR(64) NOT NULL ,
+    DATEOPERATION DATETIME NOT NULL ,
+    MONTANT DECIMAL(5,2) ,
+    ISCREDIT BOOL,
+    PRIMARY KEY (IDOPERATION)
+  )
+
+
+# -----------------------------------------------------------------------------
 #       TABLE : POSSEDECONTRAT
 # -----------------------------------------------------------------------------
 
@@ -391,3 +408,6 @@ ALTER TABLE POSSEDECOMPTE
   ADD FOREIGN KEY FK_POSSEDECOMPTE_CLIENT (IDCLIENT)
       REFERENCES CLIENT (IDCLIENT) ;
 
+ALTER TABLE OPERATION
+  ADD FOREIGN KEY FK_OPERATION_COMPTE (IDCOMPTE)
+      REFERENCES COMPTE (IDCOMPTE);
