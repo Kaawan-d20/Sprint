@@ -73,15 +73,15 @@ function modGetAccounts($idClient) {
 }
 
 /**
- * renvoie l'id de la catégorie à laquelle appartient l'employé dont le login est passé en paramètre,
+ * renvoie l'id de la catégorie à laquelle appartient l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetTypeStaff($logi) {
+function modGetTypeStaff($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idCategorie FROM employe WHERE login=:logi';
+    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -219,15 +219,15 @@ function modAdvancedSearchClientC($bdate) {
 }
 
 /**
- * renvoie l'id du RDV, celui du motif et celui du client ainsi que le login de l'employé et l'horaire de tous les RDV de l'employé dont le login est en paramètre,
+ * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire de tous les RDV de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé 
+ * @param string $id l'id de l'employé 
  */
-function modGetAppointmentConseiller($logi) {
+function modGetAppointmentConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idRDV,idMotif,idClient,login,horaire FROM rdv NATURAL JOIN employe WHERE login=:logi';
+    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horaire FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -236,15 +236,15 @@ function modGetAppointmentConseiller($logi) {
 }
 
 /**
- * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont le login est en paramètre,
+ * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetAdminConseiller($logi) {
+function modGetAdminConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE login=:logi';
+    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -369,25 +369,25 @@ function modGetContracts($idClient) {
  */
 function modGetNumberContracts() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbContrat FROM contrat';
+    $query = 'SELECT COUNT(*) AS nbContracts FROM contrat';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->nbContrat;
+    return $result->nbContracts;
 }
 
 /**
  * renvoie le nombre de comptes
  */
-function modGetNumberComptes() {
+function modGetNumberAccounts() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbCompte FROM compte';
+    $query = 'SELECT COUNT(*) AS nbAccounts FROM compte';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->nbCompte;
+    return $result->nbAccounts;
 }
 
 
@@ -409,18 +409,216 @@ function modGetIntituleMotif($id) {
 }
 
 /**
- * renvoie toutes les infos de l'employé dont le login est en paramètre,
+ * renvoie toutes les infos de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données
- * @param string $login le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetEmployeFromLogin($login) {
+function modGetEmployeFromId($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM employe WHERE login=:login';
+    $query = 'SELECT * FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie toutes les infos de tous les employés
+ */
+function modGetAllEmployes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie le nombre de clients
+ */
+function modGetNumberClients() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbClients FROM client';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbClients;
+}
+
+/**
+ * renvoie le nombre de conseillers
+ */
+function modGetNumberCounselors() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbCounselors FROM employe WHERE idCategorie=2';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbCounselors;
+}
+
+/**
+ * renvoie le nombre d'agents
+ */
+function modGetNumberAgents() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbAgents FROM employe WHERE idCategorie=3';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbAgents;
+}
+
+/**
+ * renvoie le nombre de types de contrat
+ */
+function modGetNumberContractTypes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbContractTypes FROM typeContrat';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbContractTypes;
+}
+
+/**
+ * renvoie le nombre de types de compte
+ */
+function modGetNumberAccountTypes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbAccountTypes FROM typeCompte';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbAccountTypes;
+}
+
+/**
+ * renvoie le nombre de comptes actifs
+ */
+function modGetNumberActiveAccounts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbAciveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=1)';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbActiveAccounts;
+}
+
+/**
+ * renvoie le nombre de comptes inactifs
+ */
+function modGetNumberInactiveAccounts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbInaciveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=0)';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbInactiveAccounts;
+}
+
+/**
+ * renvoie le nombre de contrats actifs
+ */
+function modGetNumberActiveContracts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbAciveContracts FROM contrat WHERE idTypeContrat IN (SELECT idTypeContrat FROM typeContrat WHERE actif=1)';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbActiveContracts;
+}
+
+/**
+ * renvoie le nombre de contrats inactifs
+ */
+function modGetNumberInactiveContracts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbInactiveContracts FROM contrat WHERE idTypeContrat IN (SELECT idTypeContrat FROM typeContrat WHERE actif=0';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbInactiveContracts;
+}
+
+/**
+ * renvoie le nombre de comptes étant à découvert (dont le solde est négatif)
+ */
+function modGetNumberOverdraftAccounts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbOverdraftAccounts FROM compte WHERE solde<0';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbOverdraftAccounts;
+}
+
+/**
+ * renvoie le nombre de comptes n'étant pas à découvert (dont le solde est positif ou nul)
+ */
+function modGetNomberNonOverdraftAccounts() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbNonOverdraftAccounts FROM compte WHERE solde>=0';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbNonOverdraftAccounts;
+}
+
+/**
+ * renvoie toutes les infos de tous les types de compte
+ */
+function modGetAllAccountTypes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typeCompte';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie toutes les informations de tous les types de contrat
+ */
+function modGetAllContractTypes() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typeContrat';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie le ou les client(s) dont la somme des soldes des comptes est la plus élevée,
+ */
+function modGetRichestClient() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'CREATE OR REPLACE VIEW totalIndividualWealth(idClient,totalWealth) AS
+                SELECT idClient,SUM(solde) 
+	            FROM Client NATURAL JOIN PossedeCompte NATURAL JOIN Compte;
+            SELECT * FROM client WHERE idClient IN (SELECT idClient FROM totalInvidualWealth WHERE totalWealth=(SELECT MAX(totalWealth) FROM totalIndividualWealth));';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
