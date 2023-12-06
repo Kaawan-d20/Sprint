@@ -218,7 +218,20 @@ function ctlGetStats(){
     return $stat;
 }
 
-function GestionPersonnel(){
+function ctlGestionPersonnel(){
     $listEmploye = "test"; //modGetAllEmploye();
     vueDisplayGestionPersonnel($listEmploye);
+}
+
+
+
+
+/**
+ * Fonction qui renvoie les informations d'un employé
+ * @param int $idEmploye c'est l'id de l'employé
+ * @return object $employee c'est les informations de l'employé
+ */
+function ctlGetInfoEmploye($idEmploye) {
+    $employee = modGetInfoEmploye($idEmploye);
+    return $employee;
 }

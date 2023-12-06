@@ -424,3 +424,15 @@ function modGetEmployeFromId($idEmploye) {
     $prepared -> closeCursor();
     return $result;
 }
+
+function modGetInfoEmploye($idEmploye){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe WHERE idEmploye=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $idEmploye, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
