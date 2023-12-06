@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS RDV
    IDMOTIF INTEGER(2) NOT NULL  ,
    IDCLIENT INTEGER(4) NOT NULL  ,
    IDEMPLOYE INTEGER(4) NOT NULL  ,
-   HORAIRE DATETIME NULL  
+   HORAIRE DATETIME NULL ,
    , PRIMARY KEY (IDRDV) 
  ) 
  comment = "";
@@ -38,7 +38,8 @@ CREATE  INDEX I_FK_RDV_EMPLOYE
 CREATE TABLE IF NOT EXISTS MOTIF
  (
    IDMOTIF INTEGER(2) NOT NULL AUTO_INCREMENT ,
-   INTITULE VARCHAR(32) NULL  
+   INTITULE VARCHAR(32) NULL ,
+   DOCUMENT VARCHAR(128)
    , PRIMARY KEY (IDMOTIF) 
  ) 
  comment = "";
@@ -140,18 +141,6 @@ CREATE TABLE IF NOT EXISTS CLIENT
 
 CREATE  INDEX I_FK_CLIENT_EMPLOYE
      ON CLIENT (IDEMPLOYE ASC);
-
-# -----------------------------------------------------------------------------
-#       TABLE : DOCUMENT
-# -----------------------------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS DOCUMENT
- (
-   IDDOCUMENT INTEGER(4) NOT NULL AUTO_INCREMENT ,
-   INTITULE VARCHAR(32) NULL  
-   , PRIMARY KEY (IDDOCUMENT) 
- ) 
- comment = "";
 
 # -----------------------------------------------------------------------------
 #       TABLE : CATEGORIE
@@ -278,29 +267,6 @@ CREATE  INDEX I_FK_POSSEDECONTRAT_CONTRAT
      ON POSSEDECONTRAT (IDCONTRAT ASC);
 
 # -----------------------------------------------------------------------------
-#       TABLE : DOITAPPORTER
-# -----------------------------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS DOITAPPORTER
- (
-   IDMOTIF INTEGER(2) NOT NULL  ,
-   IDDOCUMENT INTEGER(4) NOT NULL  
-   , PRIMARY KEY (IDMOTIF,IDDOCUMENT) 
- ) 
- comment = "";
-
-# -----------------------------------------------------------------------------
-#       INDEX DE LA TABLE DOITAPPORTER
-# -----------------------------------------------------------------------------
-
-
-CREATE  INDEX I_FK_DOITAPPORTER_MOTIF
-     ON DOITAPPORTER (IDMOTIF ASC);
-
-CREATE  INDEX I_FK_DOITAPPORTER_DOCUMENT
-     ON DOITAPPORTER (IDDOCUMENT ASC);
-
-# -----------------------------------------------------------------------------
 #       TABLE : POSSEDECOMPTE
 # -----------------------------------------------------------------------------
 
@@ -387,16 +353,6 @@ ALTER TABLE POSSEDECONTRAT
 ALTER TABLE POSSEDECONTRAT 
   ADD FOREIGN KEY FK_POSSEDECONTRAT_CONTRAT (IDCONTRAT)
       REFERENCES CONTRAT (IDCONTRAT) ;
-
-
-ALTER TABLE DOITAPPORTER 
-  ADD FOREIGN KEY FK_DOITAPPORTER_MOTIF (IDMOTIF)
-      REFERENCES MOTIF (IDMOTIF) ;
-
-
-ALTER TABLE DOITAPPORTER 
-  ADD FOREIGN KEY FK_DOITAPPORTER_DOCUMENT (IDDOCUMENT)
-      REFERENCES DOCUMENT (IDDOCUMENT) ;
 
 
 ALTER TABLE POSSEDECOMPTE 
