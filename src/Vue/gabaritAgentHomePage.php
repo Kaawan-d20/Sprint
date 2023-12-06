@@ -304,6 +304,13 @@ function setdayCellSpan (week) {
     }
 }
 
+/** day is of format mm dd yyyy */ 
+function updateCalendar (day="10 06 2014") {
+    let currentDate = Date(day);
+    console.log(currentDate.getDay())
+    console.log(correspondingDay[currentDate.getDay()])
+}
+
 
 document.querySelector(".tuesday .events").appendChild(createEvent(
     "Signature de Contrat",
@@ -340,6 +347,8 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
 
 generateFilters()
 setdayCellSpan(["04", "05", "06", "07", "08", "09", "10"])
+updateCalendar()
+
 
 </script>
 </body>
