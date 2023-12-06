@@ -662,3 +662,23 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
     $prepared -> execute();
     $prepared -> closeCursor();
 }
+
+/**
+ * renvoie tous les rdv entre la première et la deuxième date mises en paramètres,
+ * rien si il n'y en a pas dans la base de données
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
+ */
+function modGetAllAppoinmentsBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM rdv WHERE horaire>:d1 AND horaire<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
