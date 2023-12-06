@@ -265,3 +265,12 @@ function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetInfoEmploye($idEmploye);
     return $employee;
 }
+
+function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
+    // TODO : faire ca
+    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
+    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    vueDisplayRDVBetween($listRDV);
+}

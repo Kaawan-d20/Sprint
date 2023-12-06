@@ -30,8 +30,10 @@ function vueDisplayHomeConseiller(){
  */
 // function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
 function vueDisplayHomeAgent() {
+    // TODO : set $username, $appointements and $dateOfWeek
     // $username = $firstName . $lastName;
     // $appointements = array_merge($rendezVous, $adminTasks);
+    // $dateOfWeek = "2023-12-06";
     require_once('gabaritAgentHomePage.php');
 }
 /**
