@@ -369,12 +369,12 @@ function modGetContracts($idClient) {
  */
 function modGetNumberContracts() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) FROM contrat';
-    $result = $connection -> query($query);
-    $result -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $result -> fetch();
-    $result -> closeCursor();
-    return $result;
+    $query = 'SELECT COUNT(*) AS nbContrat FROM contrat';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbContrat;
 }
 
 /**
@@ -382,12 +382,12 @@ function modGetNumberContracts() {
  */
 function modGetNumberComptes() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) FROM compte';
-    $result = $connection -> query($query);
-    $result -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $result -> fetch();
-    $result -> closeCursor();
-    return $result;
+    $query = 'SELECT COUNT(*) AS nbCompte FROM compte';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->nbCompte;
 }
 
 

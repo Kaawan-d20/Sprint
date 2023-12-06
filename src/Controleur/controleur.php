@@ -199,3 +199,27 @@ function ctlCredit($idAccount, $amount){
 function ctlError($error) {
     vueDisplayError($error);
 }
+/**
+ * Fonction qui permet d'afficher les statistiques
+ * @return array c'est un tableau (map) avec les statistiques
+ */
+function ctlGetStats(){
+    $stat = array();
+    //$stat['nbClient'] = modGetNumberClients();
+    $stat['nbAccount'] = modGetNumberComptes();
+    $stat['nbContract'] = modGetNumberContracts();
+    //$stat['nbConseiller'] = modGetNumberConseiller();
+    //$stat['nbAgent'] = modGetNumberAgent();
+    //$stat['nbTypeAccount'] = modGetNumberTypeCompte();
+    //$stat['nbTypeContract'] = modGetNumberTypeContrat();
+    //$stat['nbAccountActive'] = modGetNumberCompteActif();
+    //$stat['nbAccountInactif'] = modGetNumberCompteInactif();
+    //$stat['nbAccountDecouvert'] = modGetNumberCompteDecouvert();
+    //$stat['nbAccoutNonDecouvert'] = modGetNumberCompteNonDecouvert();
+    return $stat;
+}
+
+function GestionPersonnel(){
+    $listEmploye = "test"; //modGetAllEmploye();
+    vueDisplayGestionPersonnel($listEmploye);
+}
