@@ -121,14 +121,18 @@
         </div>
     </div>
 </div>
+<form action="index.php" method="post" class="hidden">
+    <input type="text" name="DateRDV" id="">
+    <input type="submit" name="DateRDVBtn" id="">
+</form>
 <script>
 
 
 let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
 let conseillersDict = [];
 let selectedFilters = [];
-// let globalCurrentDate = new Date(Date.now())
-let globalCurrentDate = new Date("12 04 2023")
+let globalCurrentDate = new Date(Date.now())
+// let globalCurrentDate = new Date("12 04 2023")
 
 let correspondingDay = [
     "sunday",
@@ -351,7 +355,7 @@ function updateCurrentDate(newCurrentDate) {
 function attemptUpdate() {
     let weekSelectorInput = document.getElementById("weekSelectorDateField");
     let attemptedDate = new Date(weekSelectorInput.value);
-    if (attemptedDate.getFullYear() >= 1990 && attemptedDate.getFullYear() <= 3000) {
+    if (attemptedDate.getFullYear() >= 1800 && attemptedDate.getFullYear() <= 3000) {
         updateCurrentDate(attemptedDate);
     }
 }
