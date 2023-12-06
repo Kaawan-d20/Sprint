@@ -26,5 +26,23 @@
             <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
         </form>
     </div>
+    <div>
+        <h1>Gestion des Services</h1>
+        <form action="index.php" method="post">
+            <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
+        </form>
+    </div>
+    <div>
+        <h1>Gestion des documents</h1>
+        <form action="index.php" method="post">
+            <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
+        </form>
+    </div>
+    <div>
+        <h1>Gestion des motifs</h1>
+        <form action="index.php" method="post">
+            <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
+        </form>
+    </div>
 </body>
 </html>
