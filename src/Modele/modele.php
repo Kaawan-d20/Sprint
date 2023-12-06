@@ -73,15 +73,15 @@ function modGetAccounts($idClient) {
 }
 
 /**
- * renvoie l'id de la catégorie à laquelle appartient l'employé dont le login est passé en paramètre,
+ * renvoie l'id de la catégorie à laquelle appartient l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetTypeStaff($logi) {
+function modGetTypeStaff($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idCategorie FROM employe WHERE login=:logi';
+    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -219,15 +219,15 @@ function modAdvancedSearchClientC($bdate) {
 }
 
 /**
- * renvoie l'id du RDV, celui du motif et celui du client ainsi que le login de l'employé et l'horaire de tous les RDV de l'employé dont le login est en paramètre,
+ * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire de tous les RDV de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé 
+ * @param string $id l'id de l'employé 
  */
-function modGetAppointmentConseiller($logi) {
+function modGetAppointmentConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idRDV,idMotif,idClient,login,horaire FROM rdv NATURAL JOIN employe WHERE login=:logi';
+    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horaire FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -236,15 +236,15 @@ function modGetAppointmentConseiller($logi) {
 }
 
 /**
- * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont le login est en paramètre,
+ * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $logi le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetAdminConseiller($logi) {
+function modGetAdminConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE login=:logi';
+    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':logi', $logi, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -409,15 +409,15 @@ function modGetIntituleMotif($id) {
 }
 
 /**
- * renvoie toutes les infos de l'employé dont le login est en paramètre,
+ * renvoie toutes les infos de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données
- * @param string $login le login de l'employé
+ * @param string $id l'id de l'employé
  */
-function modGetEmployeFromLogin($login) {
+function modGetEmployeFromId($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM employe WHERE login=:login';
+    $query = 'SELECT * FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
