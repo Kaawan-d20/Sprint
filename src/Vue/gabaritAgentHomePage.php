@@ -162,8 +162,6 @@ function createEvent(motif, client, civilitee, pronoms, horaireDebut, horaireFin
     eventHTML.classList.add("event");
 
     eventHTML.dataset.conseiller = conseiller
-    
-
 
     if (!(conseillersArray.includes(conseiller))) {
         conseillersArray.push(conseiller);
