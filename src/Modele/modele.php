@@ -436,3 +436,26 @@ function modGetInfoEmploye($idEmploye){
     $prepared -> closeCursor();
     return $result;
 }
+
+function modGetAllEmploye(){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe';
+    $prepared = $connection -> prepare($query);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modGetIntituleCategorie($idCategorie){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT libellecategorie FROM categorie WHERE idCategorie=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $idCategorie, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->libellecategorie;
+}

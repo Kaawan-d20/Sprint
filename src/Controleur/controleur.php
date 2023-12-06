@@ -71,7 +71,7 @@ function ctlLogout() {
  * @throws Exception si aucun client n'est trouvé
  * @return void
  */
-function ctrSearchIdClient($idClient){
+function ctlSearchIdClient($idClient){
     if ($idClient == '') {
         throw new Exception('Veuillez entrer un ID');
     }
@@ -218,12 +218,26 @@ function ctlGetStats(){
     return $stat;
 }
 
-function ctlGestionPersonnel(){
-    $listEmploye = "test"; //modGetAllEmploye();
-    vueDisplayGestionPersonnel($listEmploye);
+function ctlGestionPersonnel($mode="display", $idEmploye= ""){
+    if ($mode == "display"){
+        $listEmploye = modGetAllEmploye();
+        vueDisplayGestionPersonnel($listEmploye);
+    }
+    else {
+        $listEmploye = modGetInfoEmploye($idEmploye);
+        vueDisplayGestionPersonnel($listEmploye, $mode);
+    }
 }
 
+function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
+    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
+    ctlGestionPersonnel();
+}
 
+function ctlGetIntituleCategorie($idCategorie){
+    $intitule = modGetIntituleCategorie($idCategorie);
+    return $intitule;
+}
 
 
 /**
