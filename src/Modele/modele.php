@@ -508,7 +508,7 @@ function modGetNumberAccountTypes() {
  */
 function modGetNumberActiveAccounts() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbAciveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=1)';
+    $query = 'SELECT COUNT(*) AS nbActiveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=1)';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -521,7 +521,7 @@ function modGetNumberActiveAccounts() {
  */
 function modGetNumberInactiveAccounts() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbInaciveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=0)';
+    $query = 'SELECT COUNT(*) AS nbInactiveAccounts FROM compte WHERE idTypeCompte IN (SELECT idTypeCompte FROM typeCompte WHERE actif=0)';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -630,14 +630,14 @@ function modGetRichestClient() {
  */
 function modGetIntituleCategorie($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT intitule FROM Categorie WHERE idCategorie=:id';
+    $query = 'SELECT libellecategorie FROM Categorie WHERE idCategorie=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->libellecategorie;
 }
 
 /**
@@ -661,4 +661,15 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
     $prepared -> bindParam(':idCat', $idCat, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
+}
+
+function modGetInfoEmploye($idEmploye){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe WHERE idEmploye=:idE';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idEmploye, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
 }
