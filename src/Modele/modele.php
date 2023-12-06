@@ -75,13 +75,13 @@ function modGetAccounts($idClient) {
 /**
  * renvoie l'id de la catégorie à laquelle appartient l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé
+ * @param string $idEmploye l'id de l'employé
  */
-function modGetTypeStaff($id) {
+function modGetTypeStaff($idEmploye) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $idEmploye, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -221,13 +221,13 @@ function modAdvancedSearchClientC($bdate) {
 /**
  * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire de tous les RDV de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé 
+ * @param string $idEmploye l'id de l'employé 
  */
-function modGetAppointmentConseiller($id) {
+function modGetAppointmentConseiller($idEmploye) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horaire FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $idEmploye, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -238,13 +238,13 @@ function modGetAppointmentConseiller($id) {
 /**
  * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé
+ * @param string $idEmploye l'id de l'employé
  */
-function modGetAdminConseiller($id) {
+function modGetAdminConseiller($idEmploye) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $idEmploye, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -394,13 +394,13 @@ function modGetNumberComptes() {
 /**
  * renvoie l'intitule du motif dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
- * @param int $id l'id du motif
+ * @param int $idMotif l'id du motif
  */
-function modGetIntituleMotif($id) {
+function modGetIntituleMotif($idMotif) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT intitule FROM Motif WHERE idMotif=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> bindParam(':id', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -411,13 +411,13 @@ function modGetIntituleMotif($id) {
 /**
  * renvoie toutes les infos de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données
- * @param string $id l'id de l'employé
+ * @param string $idEmploye l'id de l'employé
  */
-function modGetEmployeFromId($id) {
+function modGetEmployeFromId($idEmploye) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $idEmploye, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();

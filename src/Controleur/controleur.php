@@ -46,9 +46,8 @@ function ctlLogin ($username, $password) {
         throw new Exception('Nom d\'utilisateur ou mot de passe incorrect');
     }
     else{
-        $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
-        $_SESSION["login"] = $resultConnnect->LOGIN;
-        $_SESSION["type"] = modGetTypeStaff($_SESSION["login"]);
+        $_SESSION["idEmploye"] = $resultConnnect->idEmploye;
+        $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
         ctlHome();
     }
 }
@@ -131,12 +130,12 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
 /**
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
- * @param int $loginEmploye c'est login du conseiller
+ * @param int $idEmploye c'est login du conseiller
  */
 
-function ctlCalendarConseiller($loginEmploye){
-    $appointment = modGetAppointmentConseiller($loginEmploye);
-    $admin = modGetAdminConseiller($loginEmploye);
+function ctlCalendarConseiller($idEmploye){
+    $appointment = modGetAppointmentConseiller($idEmploye);
+    $admin = modGetAdminConseiller($idEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
 
