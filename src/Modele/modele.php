@@ -657,3 +657,29 @@ function modGetRichestClient() {
     $prepared -> closeCursor();
     return $result;
 }
+
+function midGetIntituleCategorie($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT intitule FROM Categorie WHERE idCategorie=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE employe set nom=:sname, prenom=:fname, login=:login, password=:password, idCategorie=:idCat WHERE idEmploye=:idE';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
+    $prepared -> bindParam(':idCat', $idCat, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
