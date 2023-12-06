@@ -64,7 +64,8 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract){
     }
     // pour faire la synthèse
     $idClient = $client->IDCLIENT;
-    $nameConseiller = $client->LOGIN;
+    $infoConseiller = ctlGetInfoEmploye($client->IDEMPLOYE);
+    $nameConseiller = $infoConseiller->NOM." ".$infoConseiller->PRENOM;
     $nameClient = $client->NOM;
     $naissance = $client->DATENAISSANCE;
     $creation = $client->DATECREATION;
@@ -105,7 +106,7 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
     if ($mode == 'display') {
         $content="";
         foreach ($listEmployee as $employee) {
-            $content .= "<p>Nom de l'employé : ".$employee->nom." Prénom de l'employé : ".$employee->prenom." Login de l'employé : ".$employee->login." <input type=\"hidden\" name=\"".$employee->login ."\"><input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\"></p>";
+            $content .= "<p>Id de l'employe : ".$employee->idEmploye."Nom de l'employé : ".$employee->nom." Prénom de l'employé : ".$employee->prenom." Login de l'employé : ".$employee->login." <input type=\"hidden\" name=\"".$employee->idEmploye ."\"><input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\"></p>";
         }
     }
     else{
@@ -114,6 +115,11 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
     require_once('gabaritGestionPersonnel.php');
 
 }
+
+
+
+
+
 
 /**
  * Fonction qui affiche la page d'erreur
