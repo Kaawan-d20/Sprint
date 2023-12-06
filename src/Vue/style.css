@@ -457,11 +457,126 @@ nav {
 
 /* INFO CLIENT */
 
+.contactAndRDVWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+}
+
 .nameWrapper {
     display: flex;
     align-items: baseline;
     gap: 1em;
 }
+
+.syntheseWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 1em;
+}
+
+.idDiv {
+    font-family: var(--mono-font);
+    margin: 0;
+    padding: .5em;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+}
+
+.infoContent:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+
+.contactContent:not(:last-child) {
+    border-bottom: 1px solid var(--text);
+}
+
+.contactHeaderWrapper, .contactContentWrapper {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.contactContent, .contactHeader {
+    justify-content: center;
+}
+
+.infoWrapper {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.infoHeaderWrapper, .infoContentWrapper {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.infoHeader, .contactHeader {
+    background-color: var(--text);
+    color: var(--background);
+}
+
+.infoHeader, .infoContent, .contactHeader, .contactContent {
+    padding: .5em;
+}
+
+.contactContent, .infoContent {
+    font-family: var(--mono-font);
+}
+
+.contactTableWrapper {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1, .nameWrapper h1, .nameWrapper h2 {
+    margin: 0;
+}
+
+.RDVWrapper {
+    border-radius: 5px;
+    border: 1px solid var(--text);
+}
+
+.debitCreditWrapper {
+    margin-top: 1em;
+}
+
+.debitAccountSelector {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitCreditBtn {
+    border: 1px solid var(--text);
+    padding: .5em;
+    background-color: var(--background);
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitCreditBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.debitCreditWrapper form input[type="number"] {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-size: 1em;
+}
+
+/* .debitCreditWrapper form input[type="number"]:focus {
+    outline: 2px inset var(--cta);
+} */
+
 
 /* UTILITY */
 
@@ -490,13 +605,18 @@ nav {
 }
 
 .searchField {
+    border: none;
+}
+
+input[type="number"] {
     appearance: textfield;
     font-family: var(--mono-font);
     font-size: var(--classic-font-size);
     background-color: var(--background);
     color: var(--text-secondary);
-    border: none;
 }
+
+
 
 .searchField:focus {
     outline: none;
@@ -572,5 +692,22 @@ nav {
 @media screen and (max-width:1800px) {
     .dayCell h1 {
         font-size: var(--big-font-size);
+    }
+}
+
+@media screen and (max-width:400px) {
+    .infoHeaderWrapper, .infoContentWrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
+
+    .infoWrapper {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .infoContent:not(:last-child) {
+        border-bottom: 1px solid var(--text);
+        border-right: none;
     }
 }

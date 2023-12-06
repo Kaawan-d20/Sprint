@@ -407,3 +407,20 @@ function modGetIntituleMotif($id) {
     $prepared -> closeCursor();
     return $result;
 }
+
+/**
+ * renvoie toutes les infos de l'employé dont le login est en paramètre,
+ * rien si il n'est pas présent dans la base de données
+ * @param string $login le login de l'employé
+ */
+function modGetEmployeFromLogin($login) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe WHERE login=:login';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
