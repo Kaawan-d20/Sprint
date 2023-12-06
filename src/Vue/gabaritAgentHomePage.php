@@ -122,7 +122,7 @@
     </div>
 </div>
 <form action="index.php" method="post" class="hidden">
-    <input type="text" name="DateRDV" id="">
+    <input type="text" name="DateRDV" id="DateRDV">
     <input type="submit" name="DateRDVBtn" id="">
 </form>
 <script>
@@ -131,8 +131,7 @@
 let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
 let conseillersDict = [];
 let selectedFilters = [];
-// let globalCurrentDate = new Date(Date.now())
-let globalCurrentDate = new Date("12 04 2023")
+let globalCurrentDate = new Date("2023-12-06");
 
 let correspondingDay = [
     "sunday",
@@ -320,19 +319,13 @@ function setdayCellSpan (week) {
 }
 
 function updateDateTitle(currentDate) {
+    // console.log(currentDate instanceof Date)
     document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
     document.querySelector(".dateBlock span").textContent = currentDate.getFullYear();
 }
 
 function updateCalendar (currentDate) {
     updateDateTitle(currentDate);
-    // let weekSelectorInput = document.getElementById("weekSelectorDateField");
-    // let weekSelectorNewValue = weekSelectorInput.getFullYear()
-    //     + "-" + ((weekSelectorInput.getMonth().toString().length < 2) ? '0' + weekSelectorInput.getMonth().toString() : weekSelectorInput.getMonth().toString())
-    //     + "-" + ((weekSelectorInput.getDate().toString().length < 2) ? '0' + weekSelectorInput.getDate().toString() : weekSelectorInput.getDate().toString());
-
-    // weekSelectorInput.textContent =weekSelectorNewValue;
-
     while (currentDate.getDay() != 1) {
         currentDate.setDate(currentDate.getDate() - 1);
     }
@@ -359,16 +352,12 @@ function attemptUpdate() {
 }
 
 function nextWeek() {
-    console.log("next")
     globalCurrentDate.setDate(globalCurrentDate.getDate() + 1);
-    console.log(globalCurrentDate);
     updateCurrentDate(globalCurrentDate);
 }
 
 function previousWeek() {
-    console.log("previous")
     globalCurrentDate.setDate(globalCurrentDate.getDate() - 14);
-    console.log(globalCurrentDate);
     updateCurrentDate(globalCurrentDate);
 }
 
@@ -406,8 +395,8 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
     "Eliza"
 ))
 
-generateFilters()
-updateCalendar(globalCurrentDate)
+generateFilters();
+updateCalendar(globalCurrentDate);
 
 
 </script>
