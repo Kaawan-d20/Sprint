@@ -346,7 +346,7 @@ function updateCurrentDate(newCurrentDate) {
 function attemptUpdate() {
     let weekSelectorInput = document.getElementById("weekSelectorDateField");
     let attemptedDate = new Date(weekSelectorInput.value);
-    if (attemptedDate.getFullYear() >= 1990 && attemptedDate.getFullYear() <= 3000) {
+    if (attemptedDate.getFullYear() >= 1800 && attemptedDate.getFullYear() <= 3000) {
         updateCurrentDate(attemptedDate);
     }
 }

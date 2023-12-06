@@ -42,3 +42,6 @@ INSERT INTO RDV (IDMOTIF,IDCLIENT,IDEMPLOYE,HORAIRE) VALUES (1,1,2,"2023-12-01 1
 INSERT INTO RDV (IDMOTIF,IDCLIENT,IDEMPLOYE,HORAIRE) VALUES (3,2,2,"2023-12-01 13:00:00");
 
 INSERT INTO TACHEADMIN (IDEMPLOYE,HORAIRE,LIBELLE) VALUES (2,"2023-12-01 10:00:00","Plan Invasion Pologne");
+
+INSERT INTO OPERATION (idCompte,source,libelle,dateoperation,montant,iscredit) VALUES (1,"Timmy","Remboursement McDo","2023-12-01 09:33:00",10,1);
+INSERT INTO OPERATION (idCompte,source,libelle,dateoperation,montant,iscredit) VALUES (1,"Netflix","Abonnement","2023-11-30 12:00:00",19.99,0);
