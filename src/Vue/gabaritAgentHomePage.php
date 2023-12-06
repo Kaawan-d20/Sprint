@@ -121,6 +121,10 @@
         </div>
     </div>
 </div>
+<form action="index.php" method="post" class="hidden">
+    <input type="text" name="DateRDV" id="">
+    <input type="submit" name="DateRDVBtn" id="">
+</form>
 <script>
 
 
