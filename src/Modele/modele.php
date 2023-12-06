@@ -662,14 +662,3 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
     $prepared -> execute();
     $prepared -> closeCursor();
 }
-
-function modGetInfoEmploye($idEmploye){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM employe WHERE idEmploye=:idE';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idEmploye, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    return $result;
-}
