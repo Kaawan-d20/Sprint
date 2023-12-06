@@ -55,15 +55,15 @@
         <div class="calendarNavWrapper">
             <div class="dateBlock">
                 <h1>Decembre</h1>
-                <span>03</span>
+                <span>1812</span>
             </div>
             <div class="weekSelector">
-                <button class="previous" title="Semaine Precedente">
+                <button class="previous" title="Semaine Precedente" onclick="previousWeek()">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine">
-                <button class="next" title="Semaine Suivante">
+                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onchange="attemptUpdate()">
+                <button class="next" title="Semaine Suivante" onclick="nextWeek()">
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -127,6 +127,8 @@
 let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
 let conseillersDict = [];
 let selectedFilters = [];
+// let globalCurrentDate = new Date(Date.now())
+let globalCurrentDate = new Date("12 04 2023")
 
 let correspondingDay = [
     "sunday",
@@ -136,7 +138,22 @@ let correspondingDay = [
     "thursday",
     "friday",
     "saturday"
-]
+];
+
+let correspondingMonth = [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+];
 
 
 /** create an event div, with every field filled then returns it */ 
@@ -156,7 +173,6 @@ function createEvent(motif, client, civilitee, pronoms, horaireDebut, horaireFin
         });
     }
 
-    console.log(conseillersArray)
 
     let eventTitle = document.createElement("h2");
     eventTitle.appendChild(document.createTextNode(motif));
@@ -268,12 +284,10 @@ function filterToggle(filterBtn) {
 }
 
 function hide (eventHTML) {
-    console.log(eventHTML, "is now hidden");
     eventHTML.classList.add("hidden")
 }
 
 function show (eventHTML) {
-    console.log(eventHTML, "is now shown");
     eventHTML.classList.remove("hidden");
 }
 
@@ -297,18 +311,63 @@ function filterEvents() {
 
 /** takes in a week array of seven string, corresponding to the number of each day of the week. /!\ week start on monday because we are in france */ 
 function setdayCellSpan (week) {
-    console.log("Yes")
     let spanToFill = document.querySelectorAll(".day .dayCell span")
     for (let i = 0; i < 7; i++) {
         spanToFill[i].textContent = week[i]
     }
 }
 
-/** day is of format mm dd yyyy */ 
-function updateCalendar (day="10 06 2014") {
-    let currentDate = Date(day);
-    console.log(currentDate.getDay())
-    console.log(correspondingDay[currentDate.getDay()])
+function updateDateTitle(currentDate) {
+    document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
+    document.querySelector(".dateBlock span").textContent = currentDate.getFullYear();
+}
+
+function updateCalendar (currentDate) {
+    updateDateTitle(currentDate);
+    // let weekSelectorInput = document.getElementById("weekSelectorDateField");
+    // let weekSelectorNewValue = weekSelectorInput.getFullYear()
+    //     + "-" + ((weekSelectorInput.getMonth().toString().length < 2) ? '0' + weekSelectorInput.getMonth().toString() : weekSelectorInput.getMonth().toString())
+    //     + "-" + ((weekSelectorInput.getDate().toString().length < 2) ? '0' + weekSelectorInput.getDate().toString() : weekSelectorInput.getDate().toString());
+
+    // weekSelectorInput.textContent =weekSelectorNewValue;
+
+    while (currentDate.getDay() != 1) {
+        currentDate.setDate(currentDate.getDate() - 1);
+    }
+    let week = []
+    for (let i = 0; i < 7; i++) {
+        let currentday = currentDate.getDate().toString()
+        week.push((currentday.length < 2) ? '0' + currentday :currentday);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setdayCellSpan(week);
+}
+
+function updateCurrentDate(newCurrentDate) {
+    globalCurrentDate = newCurrentDate;
+    updateCalendar(globalCurrentDate);
+}
+
+function attemptUpdate() {
+    let weekSelectorInput = document.getElementById("weekSelectorDateField");
+    let attemptedDate = new Date(weekSelectorInput.value);
+    if (attemptedDate.getFullYear() >= 1990 && attemptedDate.getFullYear() <= 3000) {
+        updateCurrentDate(attemptedDate);
+    }
+}
+
+function nextWeek() {
+    console.log("next")
+    globalCurrentDate.setDate(globalCurrentDate.getDate() + 1);
+    console.log(globalCurrentDate);
+    updateCurrentDate(globalCurrentDate);
+}
+
+function previousWeek() {
+    console.log("previous")
+    globalCurrentDate.setDate(globalCurrentDate.getDate() - 14);
+    console.log(globalCurrentDate);
+    updateCurrentDate(globalCurrentDate);
 }
 
 
@@ -346,8 +405,7 @@ document.querySelector(".tuesday .events").appendChild(createEvent(
 ))
 
 generateFilters()
-setdayCellSpan(["04", "05", "06", "07", "08", "09", "10"])
-updateCalendar()
+updateCalendar(globalCurrentDate)
 
 
 </script>

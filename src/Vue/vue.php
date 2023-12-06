@@ -130,3 +130,11 @@ function vueDisplayError ($error) {
     $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
     require_once('gabaritErreur.php');
 }
+
+
+function vueDisplayAgendaConseiller($appointment, $admin){
+    $bla = json_encode($appointment);
+    echo json_encode($admin);
+    ctlError($bla);
+    require_once('gabaritAgentHomePage.php');
+}

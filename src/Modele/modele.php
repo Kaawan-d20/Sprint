@@ -405,7 +405,7 @@ function modGetIntituleMotif($idMotif) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result;
+    return $result->intitule;
 }
 
 /**

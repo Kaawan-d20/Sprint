@@ -133,9 +133,25 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * @param int $idEmploye c'est login du conseiller
  */
 
-function ctlCalendarConseiller($idEmploye){
-    $appointment = modGetAppointmentConseiller($idEmploye);
-    $admin = modGetAdminConseiller($idEmploye);
+ function ctlCalendarConseiller($loginEmploye="GayBoi"){
+    $appointment = modGetAppointmentConseiller($loginEmploye);
+    $rdv = new ArrayObject();
+    foreach ($appointment as $event) {
+        $thisRDV = new ArrayObject();
+        $thisRDV->append(modGetIntituleMotif($event->idMotif));
+        $infoClient = modGetClientFromId($event->idClient);
+        $thisRDV->append($infoClient->NOM);
+        $thisRDV->append($infoClient->PRENOM);
+        $thisRDV->append($infoClient->CIVILITEE);
+        $employe = modGetEmployeFromLogin($event->login);
+        $thisRDV->append($employe->PRENOM);
+        $date = new DateTime($event->date);
+        $thisRDV->append($date->format('Y/m/d'));
+        $thisRDV->append($date->format('H:i'));
+
+
+    }
+    $admin = modGetAdminConseiller($loginEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
 
