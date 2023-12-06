@@ -46,9 +46,8 @@ function ctlLogin ($username, $password) {
         throw new Exception('Nom d\'utilisateur ou mot de passe incorrect');
     }
     else{
-        $_SESSION["active"] = true; // voir si avec un session_close() on peut pas faire un truc
-        $_SESSION["login"] = $resultConnnect->LOGIN;
-        $_SESSION["type"] = modGetTypeStaff($_SESSION["login"]);
+        $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
+        $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
         ctlHome();
     }
 }
@@ -72,7 +71,7 @@ function ctlLogout() {
  * @throws Exception si aucun client n'est trouvé
  * @return void
  */
-function ctrSearchIdClient($idClient){
+function ctlSearchIdClient($idClient){
     if ($idClient == '') {
         throw new Exception('Veuillez entrer un ID');
     }
@@ -131,11 +130,27 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
 /**
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
- * @param int $loginEmploye c'est login du conseiller
+ * @param int $idEmploye c'est login du conseiller
  */
 
-function ctlCalendarConseiller($loginEmploye){
+ function ctlCalendarConseiller($loginEmploye="GayBoi"){
     $appointment = modGetAppointmentConseiller($loginEmploye);
+    $rdv = new ArrayObject();
+    foreach ($appointment as $event) {
+        $thisRDV = new ArrayObject();
+        $thisRDV->append(modGetIntituleMotif($event->idMotif));
+        $infoClient = modGetClientFromId($event->idClient);
+        $thisRDV->append($infoClient->NOM);
+        $thisRDV->append($infoClient->PRENOM);
+        $thisRDV->append($infoClient->CIVILITEE);
+        $employe = modGetEmployeFromLogin($event->login);
+        $thisRDV->append($employe->PRENOM);
+        $date = new DateTime($event->date);
+        $thisRDV->append($date->format('Y/m/d'));
+        $thisRDV->append($date->format('H:i'));
+
+
+    }
     $admin = modGetAdminConseiller($loginEmploye);
     vueDisplayAgendaConseiller($appointment, $admin);
 }
@@ -219,7 +234,34 @@ function ctlGetStats(){
     return $stat;
 }
 
-function GestionPersonnel(){
-    $listEmploye = "test"; //modGetAllEmploye();
-    vueDisplayGestionPersonnel($listEmploye);
+function ctlGestionPersonnel($mode="display", $idEmploye= ""){
+    if ($mode == "display"){
+        $listEmploye = modGetAllEmploye();
+        vueDisplayGestionPersonnel($listEmploye);
+    }
+    else {
+        $listEmploye = modGetInfoEmploye($idEmploye);
+        vueDisplayGestionPersonnel($listEmploye, $mode);
+    }
+}
+
+function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
+    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
+    ctlGestionPersonnel();
+}
+
+function ctlGetIntituleCategorie($idCategorie){
+    $intitule = modGetIntituleCategorie($idCategorie);
+    return $intitule;
+}
+
+
+/**
+ * Fonction qui renvoie les informations d'un employé
+ * @param int $idEmploye c'est l'id de l'employé
+ * @return object $employee c'est les informations de l'employé
+ */
+function ctlGetInfoEmploye($idEmploye) {
+    $employee = modGetInfoEmploye($idEmploye);
+    return $employee;
 }
