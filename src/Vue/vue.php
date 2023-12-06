@@ -64,7 +64,8 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract){
     }
     // pour faire la synthèse
     $idClient = $client->IDCLIENT;
-    $nameConseiller = $client->idEmploye;
+    $infoConseiller = ctlGetInfoEmploye($client->IDEMPLOYE);
+    $nameConseiller = $infoConseiller->NOM." ".$infoConseiller->PRENOM;
     $nameClient = $client->NOM;
     $naissance = $client->DATENAISSANCE;
     $creation = $client->DATECREATION;

@@ -46,7 +46,7 @@ function ctlLogin ($username, $password) {
         throw new Exception('Nom d\'utilisateur ou mot de passe incorrect');
     }
     else{
-        $_SESSION["idEmploye"] = $resultConnnect->idEmploye;
+        $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
         ctlHome();
     }
