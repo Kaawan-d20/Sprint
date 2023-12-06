@@ -17,7 +17,7 @@ try {
     }
     elseif (isset($_POST['searchClientBtn'])){
         $idClient = $_POST['searchClientByIdField'];
-        ctrSearchIdClient($idClient);
+        ctlSearchIdClient($idClient);
     }
     elseif (isset($_POST['advancedSearchBtn'])){
         vueDisplayAdvanceSearchClient();
