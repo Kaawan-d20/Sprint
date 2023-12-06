@@ -71,7 +71,7 @@ function ctlLogout() {
  * @throws Exception si aucun client n'est trouvé
  * @return void
  */
-function ctrSearchIdClient($idClient){
+function ctlSearchIdClient($idClient){
     if ($idClient == '') {
         throw new Exception('Veuillez entrer un ID');
     }
@@ -220,26 +220,40 @@ function ctlError($error) {
  */
 function ctlGetStats(){
     $stat = array();
-    //$stat['nbClient'] = modGetNumberClients();
-    $stat['nbAccount'] = modGetNumberComptes();
+    $stat['nbClient'] = modGetNumberClients();
+    $stat['nbAccount'] = modGetNumberAccounts();
     $stat['nbContract'] = modGetNumberContracts();
-    //$stat['nbConseiller'] = modGetNumberConseiller();
-    //$stat['nbAgent'] = modGetNumberAgent();
-    //$stat['nbTypeAccount'] = modGetNumberTypeCompte();
-    //$stat['nbTypeContract'] = modGetNumberTypeContrat();
-    //$stat['nbAccountActive'] = modGetNumberCompteActif();
-    //$stat['nbAccountInactif'] = modGetNumberCompteInactif();
-    //$stat['nbAccountDecouvert'] = modGetNumberCompteDecouvert();
-    //$stat['nbAccoutNonDecouvert'] = modGetNumberCompteNonDecouvert();
+    $stat['nbConseiller'] = modGetNumberCounselors();
+    $stat['nbAgent'] = modGetNumberAgents();
+    $stat['nbTypeAccount'] = modGetNumberAccountTypes();
+    $stat['nbTypeContract'] = modGetNumberContractTypes();
+    $stat['nbAccountActive'] = modGetNumberActiveAccounts();
+    $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
+    $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNomberNonOverdraftAccounts();
     return $stat;
 }
 
-function ctlGestionPersonnel(){
-    $listEmploye = "test"; //modGetAllEmploye();
-    vueDisplayGestionPersonnel($listEmploye);
+function ctlGestionPersonnel($mode="display", $idEmploye= ""){
+    if ($mode == "display"){
+        $listEmploye = modGetAllEmployes();
+        vueDisplayGestionPersonnel($listEmploye);
+    }
+    else {
+        $listEmploye = modGetInfoEmploye($idEmploye);
+        vueDisplayGestionPersonnel($listEmploye, $mode);
+    }
 }
 
+function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
+    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
+    ctlGestionPersonnel();
+}
 
+function ctlGetIntituleCategorie($idCategorie){
+    $intitule = modGetIntituleCategorie($idCategorie);
+    return $intitule;
+}
 
 
 /**

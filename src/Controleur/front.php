@@ -17,7 +17,7 @@ try {
     }
     elseif (isset($_POST['searchClientBtn'])){
         $idClient = $_POST['searchClientByIdField'];
-        ctrSearchIdClient($idClient);
+        ctlSearchIdClient($idClient);
     }
     elseif (isset($_POST['advancedSearchBtn'])){
         vueDisplayAdvanceSearchClient();
@@ -43,10 +43,14 @@ try {
     }
     elseif (isset($_POST['infoClientFromAdvancedBtn'])){
         $idClient = $_POST['idClient'];
-        ctrSearchIdClient($idClient);
+        ctlSearchIdClient($idClient);
     }
     elseif (isset($_POST['GestionPersonnelBtn'])){
-        GestionPersonnel();
+        ctlGestionPersonnel();
+    }
+    elseif (isset($_POST['modfiEmployeeBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        ctlGestionPersonnel("mofid", $idEmployee);
     }
     else{
         ctlHome();

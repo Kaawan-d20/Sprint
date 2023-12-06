@@ -94,7 +94,12 @@ function vueDisplayAdvanceSearchClient($listClient="") {
         foreach ($listClient as $client) {
             $content="<form action=\"index.php\" method=\"post\">";
             $content .= "<input type=\"number\" name=\"idClient\" value=\"".$client->idClient."\" class=\"hidden\">";
-            $content .= "<tr><td name=\"idClient\">".$client->idClient."</td><td>".$client->nom."</td><td>".$client->prenom."</td><td>".$client->dateNaissance."</td><td><input type=\"submit\" name=\"infoClientFromAdvancedBtn\" value=\"Synthèse\"></td></tr>";
+            $content .= "<tr>
+                            <td name=\"idClient\">".$client->idClient."</td>
+                            <td>".$client->nom."</td><td>".$client->prenom."</td>
+                            <td>".$client->dateNaissance."</td>
+                            <td><input type=\"submit\" name=\"infoClientFromAdvancedBtn\" value=\"Synthèse\"></td>
+                        </tr>";
             $content .= "</form>";
         }
         $content .= "</table>";
@@ -106,11 +111,38 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
     if ($mode == 'display') {
         $content="";
         foreach ($listEmployee as $employee) {
-            $content .= "<p>Id de l'employe : ".$employee->idEmploye."Nom de l'employé : ".$employee->nom." Prénom de l'employé : ".$employee->prenom." Login de l'employé : ".$employee->login." <input type=\"hidden\" name=\"".$employee->idEmploye ."\"><input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\"></p>";
+            $content .= "<form action=\"index.php\" method=\"post\">
+                            <p>
+                                Id de l'employe : ".$employee->IDEMPLOYE.", 
+                                Type d'employe : ".ctlGetIntituleCategorie($employee->IDCATEGORIE).", 
+                                Nom de l'employé : ".$employee->NOM.", 
+                                Prénom de l'employé : ".$employee->PRENOM.",  
+                                Login de l'employé : ".$employee->LOGIN." 
+                                <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
+                                <input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\">
+                            </p>
+                        </form>";
         }
     }
     else{
-        $content="<h1>Modifier info employé</h1><form action=\"index.php\" method=\"post\"><p><input type=\"text\" name=\"nameEmployee\" value=\"$listEmployee->NOM\"><input type=\"text\" name=\"firstNameEmployee\" value=\"$listEmployee->PRENOM\"><input type=\"text\" name=\"loginEmployee\" value=\"$listEmployee->login\"><input type=\"text\" name=\"passwordEmployee\" value=\"$listEmployee->password\"><input type=\"submit\" value=\"Valider modification\"></p></form>";
+        $etat1=$listEmployee->IDCATEGORIE==1 ? "selected": "";
+        $etat2=$listEmployee->IDCATEGORIE==2 ? "selected": "";
+        $etat3=$listEmployee->IDCATEGORIE==3 ? "selected": "";
+        $content="<h1>Modifier info employé</h1>
+                    <form action=\"index.php\" method=\"post\">
+                        <p>
+                            <select name=\"idCategorie\" >
+                                <option value=\"1\" ".$etat1." >Directeur</option>
+                                <option value=\"2\" ".$etat2." >Conseiller</option>
+                                <option value=\"3\" ".$etat3." >Agent d'acceuil</option>
+                            </select>
+                            <input type=\"text\" name=\"nameEmployee\" value=\"$listEmployee->NOM\">
+                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$listEmployee->PRENOM\">
+                            <input type=\"text\" name=\"loginEmployee\" value=\"$listEmployee->LOGIN\">
+                            <input type=\"text\" name=\"passwordEmployee\" value=\"$listEmployee->PASSWORD\">
+                            <input type=\"submit\" value=\"Valider modification\">
+                        </p>
+                    </form>";
     }
     require_once('gabaritGestionPersonnel.php');
 
