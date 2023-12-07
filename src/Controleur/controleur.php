@@ -148,7 +148,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $thisRDV->append($infoClient->NOM);
         $thisRDV->append($infoClient->PRENOM);
         $thisRDV->append($infoClient->CIVILITEE);
-        $employe = modGetEmployeFromLogin($event->login);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
         $thisRDV->append($employe->PRENOM);
         $date = new DateTime($event->date);
         $thisRDV->append($date->format('Y/m/d'));
@@ -235,24 +235,22 @@ function ctlGetStats(){
     $stat['nbAccountActive'] = modGetNumberActiveAccounts();
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
-    $stat['nbAccoutNonDecouvert'] = modGetNomberNonOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
     return $stat;
 }
 
-function ctlGestionPersonnel($mode="display", $idEmploye= ""){
-    if ($mode == "display"){
-        $listEmploye = modGetAllEmployes();
-        vueDisplayGestionPersonnel($listEmploye);
-    }
-    else {
-        $listEmploye = modGetInfoEmploye($idEmploye);
-        vueDisplayGestionPersonnel($listEmploye, $mode);
-    }
+function ctlGestionPersonnelAll(){
+    $listEmploye = modGetAllEmployes();
+    vueDisplayGestionPersonnelAll($listEmploye);
+}
+function ctlGestionPersonnelOne($idEmploye){
+    $employee = modGetEmployeFromId($idEmploye);
+    vueDisplayGestionPersonnelOne($employee);
 }
 
-function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
-    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
-    ctlGestionPersonnel();
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
+    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
+    ctlGestionPersonnelAll();
 }
 
 function ctlGetIntituleCategorie($idCategorie){
@@ -267,7 +265,7 @@ function ctlGetIntituleCategorie($idCategorie){
  * @return object $employee c'est les informations de l'employé
  */
 function ctlGetInfoEmploye($idEmploye) {
-    $employee = modGetInfoEmploye($idEmploye);
+    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
@@ -275,7 +273,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     // TODO : faire ca
     $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
     $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
+    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
     $nameConseiller = $identy->NOM." ".$identy->PRENOM;
     $array = new ArrayObject();
     $array->append($listRDV);

@@ -26,7 +26,7 @@
     <div>
         <h1>Gestion du Personnel</h1>
         <form action="index.php" method="post">
-            <input type="submit" name="GestionPersonnelBtn" value="Gestion du Personnel">
+            <input type="submit" name="GestionPersonnelAllBtn" value="Gestion du Personnel">
         </form>
     </div>
     <div>
