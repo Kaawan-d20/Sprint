@@ -127,13 +127,17 @@
     <!-- TODO: assign date of format 2023-12-06 -->
     <input type="submit" name="DateRDVBtn" id="">
 </form>
+<?php $dateOfWeek = "2023-12-07" 
+// TODO remove this bullsh*t
+?>
+
 <script>
 
 
 let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
 let conseillersDict = [];
 let selectedFilters = [];
-// let globalCurrentDate = new Date("2023-12-06");
+// let globalCurrentDate = new Date("2023-12-07");
 let globalCurrentDate = new Date( <?php echo($dateOfWeek); ?> );
 
 let isLightTheme = true;
