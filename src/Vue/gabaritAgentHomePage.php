@@ -121,8 +121,10 @@
         </div>
     </div>
 </div>
-<form action="index.php" method="post" class="hidden">
-    <input type="text" name="DateRDV" id="DateRDV">
+<form action="index.php" method="post" class="hidden" id="DateRDVForm">
+    <input type="text" name="dateStartOfWeek" id="dateStartOfWeek">
+    <input type="text" name="dateEndOfWeek" id="dateEndOfWeek">
+    <!-- TODO: assign date of format 2023-12-06 -->
     <input type="submit" name="DateRDVBtn" id="">
 </form>
 <script>
@@ -131,7 +133,8 @@
 let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
 let conseillersDict = [];
 let selectedFilters = [];
-let globalCurrentDate = new Date("2023-12-06");
+// let globalCurrentDate = new Date("2023-12-06");
+let globalCurrentDate = new Date( <?php echo($dateOfWeek); ?> );
 
 let isLightTheme = true;
 
@@ -342,21 +345,41 @@ function updateDateTitle(currentDate) {
 
 function updateCalendar (currentDate) {
     updateDateTitle(currentDate);
+    setdayCellSpan(getWeekArray(currentDate));
+}
+
+function getSunday(mondayDate) {
+    let sundayDate = new Date(mondayDate);
+    sundayDate.setDate(sundayDate.getDate() + 6);
+    return sundayDate;
+}
+
+function getWeekArray(mondayDate) {
+    let weekArray = [];
+    for (let i = 0; i < 7; i++) {
+        let currentday = currentDate.getDate().toString();
+        weekArray.push((currentday.length < 2) ? '0' + currentday :currentday);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return (weekArray);
+}
+
+/** 
+ * Met a jour un formulaire avec 
+ * la date du lundi et du dimanche de la semaine 
+ * ciblée pour l'appel PhP, puis submit().
+ *  */ 
+function updateCurrentDate(currentDate) {
+    let weekArray = []
+    globalCurrentDate =currentDate;
     while (currentDate.getDay() != 1) {
         currentDate.setDate(currentDate.getDate() - 1);
     }
-    let week = []
-    for (let i = 0; i < 7; i++) {
-        let currentday = currentDate.getDate().toString()
-        week.push((currentday.length < 2) ? '0' + currentday :currentday);
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-    setdayCellSpan(week);
-}
-
-function updateCurrentDate(newCurrentDate) {
-    globalCurrentDate = newCurrentDate;
-    updateCalendar(globalCurrentDate);
+    document.getElementById("dateStartOfWeek").textContent =currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
+    currentDate = getSunday(currentDate);
+    document.getElementById("dateEndOfWeek").textContent =currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
+    // updateCalendar(globalCurrentDate, weekArray);
+    document.getElementById(DateRDVForm).submit();
 }
 
 function attemptUpdate() {

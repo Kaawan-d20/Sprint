@@ -52,6 +52,11 @@ try {
         $idEmployee = $_POST['idEmployee'];
         ctlGestionPersonnel("mofid", $idEmployee);
     }
+    elseif (isset($_POST['DateRDVBtn'])){
+        $dateStartOfWeek=$_POST['dateStartOfWeek'];
+        $dateEndOfWeek=$_POST['dateEndOfWeek'];
+        ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    }
     else{
         ctlHome();
     }

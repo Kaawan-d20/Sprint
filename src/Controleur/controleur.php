@@ -18,12 +18,17 @@ function ctlHome (){
         vueDisplayLogin();
     }
     elseif ($_SESSION["type"] == 1){
-        vueDisplayHomeDirecteur();
+        $stat = ctlGetStats();
+        vueDisplayHomeDirecteur($stat);
     }
     elseif ($_SESSION["type"] == 2){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
+        /*
+        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
+        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
+        */
         vueDisplayHomeAgent();
     }
     
@@ -264,4 +269,17 @@ function ctlGetIntituleCategorie($idCategorie){
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetInfoEmploye($idEmploye);
     return $employee;
+}
+
+function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
+    // TODO : faire ca
+    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
+    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    $array = new ArrayObject();
+    $array->append($listRDV);
+    $array->append($listTA);
+    $array->append($nameConseiller);
+    return $array;
 }

@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <form action="index.php" method="post">
+        <input type="submit" name="disconnection" value="Déconnexion">
+    </form>
     <div>
         <h1>Stats.</h1>
         <p>Nombre de clients : <?php echo $stat['nbClient'] ?></p>
