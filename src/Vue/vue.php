@@ -22,17 +22,44 @@ function vueDisplayHomeConseiller(){
 /**
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
  * Ne retourne rien
- * @param string $firstName prénom de l'Agent
- * @param string $lastName nom de famille de l'Agent
- * @param array $rendezVous liste des Rendez Vous de la semaine
- * @param array $adminTasks liste des tâches admins de la semaine
+ * @param array $appointements liste des Rendez Vous de la semaine
+ * @param array $TA liste des tâches admins de la semaine
+ * @param string $dateOfWeek string de la date de reference de la semaine, 
+ * @param string $username nom de l'Agent
+ * par défaut aujourd'hui, format "yyyy-mm-dd";
  */
-// function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
-
-function vueDisplayHomeAgent() {
-    // liste des para $appointments, $TA, $username, $dateOfWee=new date.today()
+function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
+    $weekEvents = array("", "", "", "", "", "", "");
+    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
+    foreach ($appointments as $appointment) {
+        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIRE);
+        $weekNumber = date_format($appointmentDate, "N");
+        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
+    }
+    debug($username);
     require_once('gabaritAgentHomePage.php');
 }
+/**  */ 
+function vueGenerateAppointementHTML($appointment) {
+    $heureDebut = (substr($appointment->HORAIRE, 11, 5));
+    $heureFin = (substr($appointment->HORAIRE, 11, 5)); // TODO ADD THE F*CKING END TIME IN THE DB.
+    // TODO : AND THE COLOR OF THE CONSEILLER
+    return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
+        <h2>'. $appointment->INTITULE .'</h2>
+        <p>'. $appointment->identiteClient .'</p>
+        <div class="eventDetails">
+            <div>
+                <p class="eventStartTime">'. $heureDebut .'</p>
+                <p class="eventEndTime">'. $heureFin .'</p>
+            </div>
+            <div class="eventConseiller lush-green">
+                <i class="fa-solid fa-user-tie"></i>
+                '. $appointment->identiteEmploye .'
+            </div>
+        </div>
+    </div>';
+}
+
 /**
  * Fonction qui affiche la page de login
  * Ne prend pas de paramètres et ne retourne rien
@@ -199,16 +226,4 @@ function vueDisplayAgendaConseiller($appointment, $admin){
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
-}
-
-
-
-
-
-
-
-
-
-function vueDisplayRDVBetween(){
-
 }
