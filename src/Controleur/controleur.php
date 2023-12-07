@@ -270,8 +270,8 @@ function ctlGetInfoEmploye($idEmploye) {
 /**
  * Fonction qui prend en entrée deux dates et renvoie la liste des RDV & TA entre ces deux dates */ 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek, $dateEndOfWeek);
-    $listTA = modGetAllTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $listRDV = modGetAllAppoinmentsBetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
+    $listTA = modGetAllTABetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
@@ -280,8 +280,11 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
 }
 
 function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
-    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
-    $username = $identity->NOM." ".$identity->PRENOM;
     $array = ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    vueDisplayHomeAgent($array[0], $array[1], $username, $array[2]);
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
+    vueDisplayHomeAgent($array[0], $array[1], $array[2], $identity);
+}
+
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
 }
