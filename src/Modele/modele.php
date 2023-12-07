@@ -219,13 +219,13 @@ function modAdvancedSearchClientC($bdate) {
 }
 
 /**
- * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire de tous les RDV de l'employé dont l'id est en paramètre,
+ * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire (début et fin) de tous les RDV de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param string $id l'id de l'employé 
  */
 function modGetAppointmentConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horaire FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
+    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horairedebut,horairefin FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
@@ -236,13 +236,13 @@ function modGetAppointmentConseiller($id) {
 }
 
 /**
- * renvoie id de la tache admin, l'horaire et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
+ * renvoie id de la tache admin, l'horaire (début et fin) et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param string $id l'id de l'employé
  */
 function modGetAdminConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idTa,horaire,libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
+    $query = 'SELECT idTa,horairedebut, horairefin ,libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
@@ -685,7 +685,7 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
  */
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT rdv.IDRDV, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, rdv.idemploye, CONCAT(client.CIVILITEE," ",client.PRENOM," ",client.NOM) AS identiteClient, rdv.idclient, motif.INTITULE, rdv.HORAIRE FROM rdv JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE JOIN client ON rdv.IDCLIENT=client.IDCLIENT JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF WHERE horaire>:d1 AND horaire<:d2; ';
+    $query = 'SELECT rdv.IDRDV, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, rdv.idemploye, CONCAT(client.CIVILITEE," ",client.PRENOM," ",client.NOM) AS identiteClient, rdv.idclient, motif.INTITULE, rdv.HORAIREDEBUT, rdv.HORAIREFIN FROM rdv JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE JOIN client ON rdv.IDCLIENT=client.IDCLIENT JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF WHERE horairedebut>:d1 AND horairedebut<:d2; ';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1',  $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2',  $date2, PDO::PARAM_STR);
@@ -697,7 +697,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
 }
 function modGetAllTABetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT tacheadmin.IDTA, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, tacheadmin.idemploye, tacheadmin.LIBELLE, tacheadmin.HORAIRE FROM tacheadmin JOIN employe ON tacheadmin.IDEMPLOYE=employe.IDEMPLOYE WHERE horaire>:d1 AND horaire<:d2; ';
+    $query = 'SELECT tacheadmin.IDTA, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, tacheadmin.idemploye, tacheadmin.LIBELLE, tacheadmin.HORAIREDEBUT, tacheadmin.HORAIREFIN FROM tacheadmin JOIN employe ON tacheadmin.IDEMPLOYE=employe.IDEMPLOYE WHERE horairedebut>:d1 AND horairedebut<:d2; ';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);

@@ -32,7 +32,7 @@ function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
-        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIRE);
+        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
@@ -41,8 +41,8 @@ function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
 }
 /**  */ 
 function vueGenerateAppointementHTML($appointment) {
-    $heureDebut = (substr($appointment->HORAIRE, 11, 5));
-    $heureFin = (substr($appointment->HORAIRE, 11, 5)); // TODO ADD THE F*CKING END TIME IN THE DB.
+    $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
+    $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); // TODO ADD THE F*CKING END TIME IN THE DB.
     // TODO : AND THE COLOR OF THE CONSEILLER
     return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
         <h2>'. $appointment->INTITULE .'</h2>
