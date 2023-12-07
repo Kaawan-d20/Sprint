@@ -231,24 +231,22 @@ function ctlGetStats(){
     $stat['nbAccountActive'] = modGetNumberActiveAccounts();
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
-    $stat['nbAccoutNonDecouvert'] = modGetNomberNonOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
     return $stat;
 }
 
-function ctlGestionPersonnel($mode="display", $idEmploye= ""){
-    if ($mode == "display"){
-        $listEmploye = modGetAllEmployes();
-        vueDisplayGestionPersonnel($listEmploye);
-    }
-    else {
-        $listEmploye = modGetEmployeFromId($idEmploye);
-        vueDisplayGestionPersonnel($listEmploye, $mode);
-    }
+function ctlGestionPersonnelAll(){
+    $listEmploye = modGetAllEmployes();
+    vueDisplayGestionPersonnelAll($listEmploye);
+}
+function ctlGestionPersonnelOne($idEmploye){
+    $employee = modGetEmployeFromId($idEmploye);
+    vueDisplayGestionPersonnelOne($employee);
 }
 
-function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
-    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
-    ctlGestionPersonnel();
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
+    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
+    ctlGestionPersonnelAll();
 }
 
 function ctlGetIntituleCategorie($idCategorie){
@@ -264,15 +262,17 @@ function ctlGetIntituleCategorie($idCategorie){
  */
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
-    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
 /**
  * Fonction qui prend en entrée deux dates et renvoie la liste des RDV & TA entre ces deux dates */ 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    $listRDV = modGetAllAppoinmentsBetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
-    $listTA = modGetAllTABetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
+    // TODO : faire ca
+    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
+    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);

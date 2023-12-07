@@ -585,7 +585,7 @@ function modGetNumberOverdraftAccounts() {
 /**
  * renvoie le nombre de comptes n'étant pas à découvert (dont le solde est positif ou nul)
  */
-function modGetNomberNonOverdraftAccounts() {
+function modGetNumberNonOverdraftAccounts() {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbNonOverdraftAccounts FROM compte WHERE solde>=0';
     $prepared = $connection -> query($query);

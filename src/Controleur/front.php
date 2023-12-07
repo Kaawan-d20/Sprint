@@ -10,11 +10,13 @@ if(session_status() === PHP_SESSION_NONE) {
 
 
 try {
+    // ------------------------------------------------------- Landing Page -------------------------------------------------------
     if (isset($_POST['landingSubmitBtn'])){
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
         ctlLogin($username, $password);
     }
+    // ------------------------------------------------------- General -------------------------------------------------------
     elseif (isset($_POST['searchClientBtn'])){
         $idClient = $_POST['searchClientByIdField'];
         ctlSearchIdClient($idClient);
@@ -45,18 +47,32 @@ try {
         $idClient = $_POST['idClient'];
         ctlSearchIdClient($idClient);
     }
-    elseif (isset($_POST['GestionPersonnelBtn'])){
-        ctlGestionPersonnel();
-    }
-    elseif (isset($_POST['modfiEmployeeBtn'])){
-        $idEmployee = $_POST['idEmployee'];
-        ctlGestionPersonnel("mofid", $idEmployee);
-    }
     elseif (isset($_POST['DateRDVBtn'])){
         $dateStartOfWeek=$_POST['dateStartOfWeek'];
         $dateEndOfWeek=$_POST['dateEndOfWeek'];
         ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek);
     }
+    // ------------------------------------------------------- Directeur -------------------------------------------------------
+    elseif (isset($_POST['GestionPersonnelAllBtn'])){
+        ctlGestionPersonnelAll();
+    }
+    elseif (isset($_POST['GestionPersonnelOneBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        ctlGestionPersonnelOne($idEmployee);
+    }
+    elseif (isset($_POST['ModifPersonnelOneBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        $name = $_POST['nameEmployee'];
+        $firstName = $_POST['firstNameEmployee'];
+        $login = $_POST['loginEmployee'];
+        $password = $_POST['passwordEmployee'];
+        $category = $_POST['idCategorie'];
+        ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category);
+    }
+    // ------------------------------------------------------- Conseiller -------------------------------------------------------
+    // ------------------------------------------------------- Agent -------------------------------------------------------
+    // ------------------------------------------------------- Client -------------------------------------------------------
+    // ------------------------------------------------------- Default -------------------------------------------------------
     else{
         ctlHome();
     }

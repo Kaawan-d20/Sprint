@@ -155,37 +155,42 @@ function vueDisplayAdvanceSearchClient($listClient="") {
     require_once('gabaritRechercheClient.php');
 }
 
-function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
-    if ($mode == 'display') {
-        $content="";
-        foreach ($listEmployee as $employee) {
-            if ($employee->IDCATEGORIE == 1) {
-                $category = "Directeur";
-            }
-            elseif ($employee->IDCATEGORIE == 2) {
-                $category = "Conseiller";
-            }
-            elseif ($employee->IDCATEGORIE == 3) {
-                $category = "Agent d'acceuil";
-            }
-            
-            $content .= "<form action=\"index.php\" method=\"post\">
-                            <p>
-                                Id de l'employe : ".$employee->IDEMPLOYE.", 
-                                Type d'employe : ".$category.", 
-                                Nom de l'employé : ".$employee->NOM.", 
-                                Prénom de l'employé : ".$employee->PRENOM.",  
-                                Login de l'employé : ".$employee->LOGIN." 
-                                <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
-                                <input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\">
-                            </p>
-                        </form>";
+function vueDisplayGestionPersonnelAll($listEmployee) {
+    $content="";
+    foreach ($listEmployee as $employee) {
+        if ($employee->IDCATEGORIE == 1) {
+            $category = "Directeur";
         }
+        elseif ($employee->IDCATEGORIE == 2) {
+            $category = "Conseiller";
+        }
+        elseif ($employee->IDCATEGORIE == 3) {
+            $category = "Agent d'acceuil";
+        }
+        
+        $content .= "<form action=\"index.php\" method=\"post\">
+                        <p>
+                            Id de l'employe : ".$employee->IDEMPLOYE.", 
+                            Type d'employe : ".$category.", 
+                            Nom de l'employé : ".$employee->NOM.", 
+                            Prénom de l'employé : ".$employee->PRENOM.",  
+                            Login de l'employé : ".$employee->LOGIN." 
+                            <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
+                            <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
+                        </p>
+                    </form>";
     }
-    else{
-        $etat1=$listEmployee->IDCATEGORIE==1 ? "selected": "";
-        $etat2=$listEmployee->IDCATEGORIE==2 ? "selected": "";
-        $etat3=$listEmployee->IDCATEGORIE==3 ? "selected": "";
+    
+    require_once('gabaritGestionPersonnel.php');
+
+}
+
+
+function vueDisplayGestionPersonnelOne($employee) {
+    
+        $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
+        $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
+        $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
         $content="<h1>Modifier info employé</h1>
                     <form action=\"index.php\" method=\"post\">
                         <p>
@@ -194,20 +199,18 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
                                 <option value=\"2\" ".$etat2." >Conseiller</option>
                                 <option value=\"3\" ".$etat3." >Agent d'acceuil</option>
                             </select>
-                            <input type=\"text\" name=\"nameEmployee\" value=\"$listEmployee->NOM\">
-                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$listEmployee->PRENOM\">
-                            <input type=\"text\" name=\"loginEmployee\" value=\"$listEmployee->LOGIN\">
-                            <input type=\"text\" name=\"passwordEmployee\" value=\"$listEmployee->PASSWORD\">
-                            <input type=\"submit\" value=\"Valider modification\">
+                            <input type=\"hidden\" name=\"idEmployee\" value=\"$employee->IDEMPLOYE\">
+                            <input type=\"text\" name=\"nameEmployee\" value=\"$employee->NOM\">
+                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$employee->PRENOM\">
+                            <input type=\"text\" name=\"loginEmployee\" value=\"$employee->LOGIN\">
+                            <input type=\"text\" name=\"passwordEmployee\" value=\"$employee->PASSWORD\">
+                            <input type=\"submit\" name=\"ModifPersonnelOneBtn\" value=\"Valider modification\">
                         </p>
                     </form>";
-    }
+    
     require_once('gabaritGestionPersonnel.php');
 
 }
-
-
-
 
 
 
