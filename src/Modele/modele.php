@@ -681,4 +681,16 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     $prepared -> closeCursor();
     return $prepared;
 }
+function modGetAllTABetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM tacheadmin WHERE horaire>:d1 AND horaire<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $prepared;
+}
 

@@ -25,11 +25,7 @@ function ctlHome (){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
-        /*
-        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
-        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
-        */
-        vueDisplayHomeAgent();
+        ctlUpdateCalendar(new DateTime('monday this week'), new DateTime('sunday this week'));
     }
     
 }
@@ -267,19 +263,25 @@ function ctlGetIntituleCategorie($idCategorie){
  * @return object $employee c'est les informations de l'employé
  */
 function ctlGetInfoEmploye($idEmploye) {
-    $employee = modGetInfoEmploye($idEmploye);
+    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
+/**
+ * Fonction qui prend en entrée deux dates et renvoie la liste des RDV & TA entre ces deux dates */ 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    // TODO : faire ca
-    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
-    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek, $dateEndOfWeek);
+    $listTA = modGetAllTABetween($dateStartOfWeek, $dateEndOfWeek);
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
-    $array->append($nameConseiller);
+    $array->append(date_format($dateStartOfWeek, 'Y-m-d'));
     return $array;
+}
+
+function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
+    $username = $identity->NOM." ".$identity->PRENOM;
+    $array = ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    vueDisplayHomeAgent($array[0], $array[1], $username, $array[2]);
 }
