@@ -45,7 +45,7 @@ function modConnect($login, $password) {
  */
 function modGetClientFromId($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM client WHERE idClient=:idC';
+    $query = 'SELECT IDCLIENT, client.NOM, client.PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, employe.NOM AS NOMCONSEILLER, employe.PRENOM AS PRENOMCONSEILLER FROM client JOIN employe ON client.IDEMPLOYE=employe.IDEMPLOYE WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
