@@ -327,7 +327,7 @@ function modGetIdClientFromAccount($idAccount){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->decouvert;
+    return $result->idClient;
 }
 
 /**
