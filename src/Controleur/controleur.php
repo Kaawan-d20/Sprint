@@ -82,7 +82,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient),ctlGetOperation($idClient));
         }
     }
 }
@@ -144,7 +144,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $thisRDV->append($infoClient->NOM);
         $thisRDV->append($infoClient->PRENOM);
         $thisRDV->append($infoClient->CIVILITEE);
-        $employe = modGetEmployeFromLogin($event->login);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
         $thisRDV->append($employe->PRENOM);
         $date = new DateTime($event->date);
         $thisRDV->append($date->format('Y/m/d'));
@@ -190,9 +190,9 @@ function ctlDebit($idAccount, $amount){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
     modDebit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    modInsertOperation($idAccount,"Banque","Retrait",date("Y-m-d H:i:s"), $amount, 0);
+    $idClient = modGetIdClientFromAccount($idAccount);
+    ctlSearchIdClient($idClient);
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -202,9 +202,9 @@ function ctlDebit($idAccount, $amount){
 */
 function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    modInsertOperation($idAccount,"Banque","Depôt",date("Y-m-d H:i:s"), $amount, 1);
+    $idClient = modGetIdClientFromAccount($idAccount);
+    ctlSearchIdClient($idClient);
 }
 
 /**
@@ -241,7 +241,7 @@ function ctlGestionPersonnel($mode="display", $idEmploye= ""){
         vueDisplayGestionPersonnel($listEmploye);
     }
     else {
-        $listEmploye = modGetInfoEmploye($idEmploye);
+        $listEmploye = modGetEmployeFromId($idEmploye);
         vueDisplayGestionPersonnel($listEmploye, $mode);
     }
 }
@@ -263,6 +263,7 @@ function ctlGetIntituleCategorie($idCategorie){
  * @return object $employee c'est les informations de l'employé
  */
 function ctlGetInfoEmploye($idEmploye) {
+    $employee = modGetEmployeFromId($idEmploye);
     $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }

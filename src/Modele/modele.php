@@ -267,6 +267,20 @@ function modDebit($idA,$sum) {
     $prepared -> closeCursor();
 }
 
+function modInsertOperation($idA,$source,$label,$dateO,$sum,$iscredit) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO OPERATION (idCompte,source,libelle,dateoperation,montant,iscredit) VALUES (:idA,:source,:label,:dateO,:sum,:iscredit);';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> bindParam(':source', $source, PDO::PARAM_STR);
+    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateO', $dateO, PDO::PARAM_STR);
+    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
+    $prepared -> bindParam(':iscredit', $iscredit, PDO::PARAM_BOOL);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
 /**
  * crédite le compte dont l'id est en paramètre de la somme en paramètre 
  * @param int $idA id du compte à créditer
@@ -313,7 +327,7 @@ function modGetIdClientFromAccount($idAccount){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->decouvert;
+    return $result->idClient;
 }
 
 /**
@@ -687,6 +701,21 @@ function modGetAllTABetween($date1,$date2) {
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie les opérations du compte dont l'id est en paramètre
+ */
+function modGetOperations($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM operation WHERE idCompte=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();

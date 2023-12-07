@@ -4,7 +4,7 @@ INSERT INTO CATEGORIE (libellecategorie) VALUES ('Agent');
 
 INSERT INTO MOTIF (INTITULE,DOCUMENT) VALUES ("Coup d'Etat (autre)","Déclaration n'indépendance");
 INSERT INTO MOTIF (INTITULE,DOCUMENT) VALUES ("Netflix & Chill (contrat)","Magna Carta");
-INSERT INTO MOTIF (INTITULE,DOCUMENT) VALUES ("Aquaponey (compte)",,"Malleus Maleficarum");
+INSERT INTO MOTIF (INTITULE,DOCUMENT) VALUES ("Aquaponey (compte)","Malleus Maleficarum");
 
 INSERT INTO TYPECONTRAT (IDMOTIF,NOM,ACTIF) VALUES (2,"Pacte de sang",1);
 
