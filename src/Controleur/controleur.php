@@ -18,7 +18,8 @@ function ctlHome (){
         vueDisplayLogin();
     }
     elseif ($_SESSION["type"] == 1){
-        vueDisplayHomeDirecteur();
+        $stat = ctlGetStats();
+        vueDisplayHomeDirecteur($stat);
     }
     elseif ($_SESSION["type"] == 2){
         vueDisplayHomeConseiller();

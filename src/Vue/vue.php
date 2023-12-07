@@ -5,9 +5,8 @@
  * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
-function vueDisplayHomeDirecteur(){
+function vueDisplayHomeDirecteur($stat){
     $content="";
-    $stat = ctlGetStats();
     require_once('gabaritDirecteurHomePage.php');
 }
 
@@ -64,10 +63,10 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract){
     foreach ($listContract as $contract) {
         $listC .= "<p>".$contract->intitule." : ".$contract->tarifmensuel."€</p>";
     }
+
     // pour faire la synthèse
     $idClient = $client->IDCLIENT;
-    $infoConseiller = ctlGetInfoEmploye($client->IDEMPLOYE);
-    $nameConseiller = $infoConseiller->NOM." ".$infoConseiller->PRENOM;
+    $nameConseiller = $client->NOMCONSEILLER." ".$client->PRENOMCONSEILLER;
     $nameClient = $client->NOM;
     $naissance = $client->DATENAISSANCE;
     $creation = $client->DATECREATION;
@@ -113,10 +112,20 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
     if ($mode == 'display') {
         $content="";
         foreach ($listEmployee as $employee) {
+            if ($employee->IDCATEGORIE == 1) {
+                $category = "Directeur";
+            }
+            elseif ($employee->IDCATEGORIE == 2) {
+                $category = "Conseiller";
+            }
+            elseif ($employee->IDCATEGORIE == 3) {
+                $category = "Agent d'acceuil";
+            }
+            
             $content .= "<form action=\"index.php\" method=\"post\">
                             <p>
                                 Id de l'employe : ".$employee->IDEMPLOYE.", 
-                                Type d'employe : ".ctlGetIntituleCategorie($employee->IDCATEGORIE).", 
+                                Type d'employe : ".$category.", 
                                 Nom de l'employé : ".$employee->NOM.", 
                                 Prénom de l'employé : ".$employee->PRENOM.",  
                                 Login de l'employé : ".$employee->LOGIN." 
@@ -169,6 +178,5 @@ function vueDisplayError ($error) {
 function vueDisplayAgendaConseiller($appointment, $admin){
     $bla = json_encode($appointment);
     echo json_encode($admin);
-    ctlError($bla);
     require_once('gabaritAgentHomePage.php');
 }
