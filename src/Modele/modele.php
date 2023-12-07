@@ -687,13 +687,13 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
  */
 function modGetOperations($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM operations WHERE idCompte=:id';
+    $query = 'SELECT * FROM operation WHERE idCompte=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 

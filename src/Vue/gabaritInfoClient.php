@@ -77,10 +77,72 @@
    
     </div>
     <div>
+        
         <?php
             echo $content;
         ?>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+function displayOperations() {
+    if (typeof accountSelected == 'undefined'){
+        previous = "1";
+    }
+    else{
+        previous = accountSelected;
+    }
+    console.log(previous)
+    accountSelected = document.getElementById('comptes').value;
+    console.log(document.getElementById('comptes').value)
+    document.getElementById(previous).classList.add("hidden");
+    document.getElementById(accountSelected).classList.remove("hidden");
+
+}
+window.setTimeout(displayOperations(),0);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script>
 
         /** create an event div, with every field filled then returns it */ 

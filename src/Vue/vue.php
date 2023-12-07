@@ -48,7 +48,7 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperations){
+function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
 
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
@@ -77,23 +77,26 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $civi = $client->CIVILITEE;
     //Pour l'afficher des comptes avec les opérations
     $chteumeul = "<select id='comptes' onchange='displayOperations()'>";
-    $div = "";
+    $cht = "";
+    $compteur = 1;
     foreach ($listAccounts as $account) {
-        $chteumeul .= "<option value=\"".$account->IDCOMPTE."\">".$account->INTITULE." : ".$account->SOLDE."</option>";
-        $div = "<div id=\"".$account->IDCOMPTE."\" >";
+        $chteumeul .= "<option value=\"".$compteur."\">".$account->intitule." : ".$account->solde."</option>";
+        $cht .= "<div id=\"".$compteur."\" class='hidden'>";
+        $listOperations = $listOperationsAccount["$account->idCompte"];
         foreach ($listOperations as $operation) {
-            $div .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
+            $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
             if ($operation->ISCREDIT == 0) {
-                $div .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
+                $cht .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
             } else {
-                $div .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
+                $cht .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
             }
-            $div .= "<span>".$operation->MONTANT."</span></div>";
+            $cht .= "<span>".$operation->MONTANT."</span></div>";
         }
-        $div .= "</div>";
+        $cht .= "</div>";
+        $compteur+=1;
     }
     $chteumeul .= "</select>";
-    $content=$chteumeul.$div;
+    $content = $chteumeul.$cht;
     require_once('gabaritInfoClient.php');
 }
 /**
