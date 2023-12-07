@@ -76,79 +76,145 @@
         </div>
    
     </div>
-    
+    <div>
+        
+        <?php
+            echo $content;
+        ?>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-
-    /** create an event div, with every field filled then returns it */ 
-    function createEvent(motif, date, horaireDebut, horaireFin, conseillerColor, conseiller) {
-        let eventHTML = document.createElement("div");
-        eventHTML.classList.add("event");
-        
-        let eventTitle = document.createElement("h2");
-        eventTitle.appendChild(document.createTextNode(motif));
-        eventHTML.appendChild(eventTitle);
-
-        let eventDate = document.createElement("p");
-        eventDate.appendChild(document.createTextNode(date));
-        eventHTML.appendChild(eventDate)
-    
-        let eventDetails = document.createElement("div");
-        eventDetails.classList.add("eventDetails");
-    
-        let timeDiv = document.createElement("div");
-    
-        let eventStartTime = document.createElement("p");
-        // eventStartTime.classList.add("eventStartTime");
-        eventStartTime.appendChild(document.createTextNode(horaireDebut));
-        timeDiv.appendChild(eventStartTime);
-    
-        let eventEndTime = document.createElement("p");
-        // eventEndTime.classList.add("eventEndTime");
-        eventEndTime.appendChild(document.createTextNode(horaireFin));
-        timeDiv.appendChild(eventEndTime);
-    
-        eventDetails.appendChild(timeDiv);
-    
-        let eventConseiller = document.createElement("div");
-        eventConseiller.classList.add("eventConseiller");
-        eventConseiller.classList.add(conseillerColor);
-    
-        let userTieIcon = document.createElement("i");
-        userTieIcon.classList.add("fa-solid", "fa-user-tie");
-        eventConseiller.appendChild(userTieIcon);
-    
-        eventConseiller.appendChild(document.createTextNode(conseiller));
-        
-    
-        eventDetails.appendChild(eventConseiller);
-    
-        eventHTML.appendChild(eventDetails);
-    
-        return eventHTML;
+function displayOperations() {
+    if (typeof accountSelected == 'undefined'){
+        previous = "1";
     }
-
-    // Will need to be updated
-    function addAllEvents(eventsArray) {
-        if (eventsArray.length <= 0) {
-            document.querySelector(".RDVSectionWrapper").classList.add("hidden")
-            document.getElementById("contactAndRDVWrapper").classList.remove("contactAndRDVWrapper")
-        } else {
-            eventsArray.forEach(event => {
-                let motif = event[0];
-                let date =event[1];
-                let horaireDebut =event[2];
-                let horaireFin = event[3];
-                let conseillerColor =event[4];
-                let conseillerName =event[5];
-                document.querySelector(".RDVWrapper").appendChild(createEvent(motif, date,horaireDebut, horaireFin, conseillerColor, conseillerName))     
-            });
-        }
+    else{
+        previous = accountSelected;
     }
+    console.log(previous)
+    accountSelected = document.getElementById('comptes').value;
+    console.log(document.getElementById('comptes').value)
+    document.getElementById(previous).classList.add("hidden");
+    document.getElementById(accountSelected).classList.remove("hidden");
 
-    let eventsArray = <?php echo json_encode($events); ?>;
-    // let eventsArray = [];
-    console.log(eventsArray);
-    addAllEvents(eventsArray);
+}
+window.setTimeout(displayOperations(),0);
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+
+        /** create an event div, with every field filled then returns it */ 
+        function createEvent(motif, date, horaireDebut, horaireFin, conseillerColor, conseiller) {
+            let eventHTML = document.createElement("div");
+            eventHTML.classList.add("event");
+            
+            let eventTitle = document.createElement("h2");
+            eventTitle.appendChild(document.createTextNode(motif));
+            eventHTML.appendChild(eventTitle);
+
+            let eventDate = document.createElement("p");
+            eventDate.appendChild(document.createTextNode(date));
+            eventHTML.appendChild(eventDate)
+        
+            let eventDetails = document.createElement("div");
+            eventDetails.classList.add("eventDetails");
+        
+            let timeDiv = document.createElement("div");
+        
+            let eventStartTime = document.createElement("p");
+            // eventStartTime.classList.add("eventStartTime");
+            eventStartTime.appendChild(document.createTextNode(horaireDebut));
+            timeDiv.appendChild(eventStartTime);
+        
+            let eventEndTime = document.createElement("p");
+            // eventEndTime.classList.add("eventEndTime");
+            eventEndTime.appendChild(document.createTextNode(horaireFin));
+            timeDiv.appendChild(eventEndTime);
+        
+            eventDetails.appendChild(timeDiv);
+        
+            let eventConseiller = document.createElement("div");
+            eventConseiller.classList.add("eventConseiller");
+            eventConseiller.classList.add(conseillerColor);
+        
+            let userTieIcon = document.createElement("i");
+            userTieIcon.classList.add("fa-solid", "fa-user-tie");
+            eventConseiller.appendChild(userTieIcon);
+        
+            eventConseiller.appendChild(document.createTextNode(conseiller));
+            
+        
+            eventDetails.appendChild(eventConseiller);
+        
+            eventHTML.appendChild(eventDetails);
+        
+            return eventHTML;
+        }
+
+        // Will need to be updated
+        function addAllEvents(eventsArray) {
+            if (eventsArray.length <= 0) {
+                document.querySelector(".RDVSectionWrapper").classList.add("hidden")
+                document.getElementById("contactAndRDVWrapper").classList.remove("contactAndRDVWrapper")
+            } else {
+                eventsArray.forEach(event => {
+                    let motif = event[0];
+                    let date =event[1];
+                    let horaireDebut =event[2];
+                    let horaireFin = event[3];
+                    let conseillerColor =event[4];
+                    let conseillerName =event[5];
+                    document.querySelector(".RDVWrapper").appendChild(createEvent(motif, date,horaireDebut, horaireFin, conseillerColor, conseillerName))     
+                });
+            }
+        }
+
+        let eventsArray = <?php echo json_encode($events); ?>;
+        // let eventsArray = [];
+        console.log(eventsArray);
+        addAllEvents(eventsArray);
+    </script>
 </body>
 </html>

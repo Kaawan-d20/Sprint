@@ -86,7 +86,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient),ctlGetOperation($idClient));
         }
     }
 }
@@ -148,7 +148,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $thisRDV->append($infoClient->NOM);
         $thisRDV->append($infoClient->PRENOM);
         $thisRDV->append($infoClient->CIVILITEE);
-        $employe = modGetEmployeFromLogin($event->login);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
         $thisRDV->append($employe->PRENOM);
         $date = new DateTime($event->date);
         $thisRDV->append($date->format('Y/m/d'));
@@ -195,8 +195,7 @@ function ctlDebit($idAccount, $amount){
     }
     modDebit($idAccount, $amount);
     $idClient = modGetIdClientFromAccount($idAccount)->idClient;
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    ctlSearchIdClient($idClient);
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -207,8 +206,7 @@ function ctlDebit($idAccount, $amount){
 function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
     $idClient = modGetIdClientFromAccount($idAccount)->idClient;
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    ctlSearchIdClient($idClient);
 }
 
 /**
@@ -245,7 +243,7 @@ function ctlGestionPersonnel($mode="display", $idEmploye= ""){
         vueDisplayGestionPersonnel($listEmploye);
     }
     else {
-        $listEmploye = modGetInfoEmploye($idEmploye);
+        $listEmploye = modGetEmployeFromId($idEmploye);
         vueDisplayGestionPersonnel($listEmploye, $mode);
     }
 }
@@ -267,7 +265,7 @@ function ctlGetIntituleCategorie($idCategorie){
  * @return object $employee c'est les informations de l'employé
  */
 function ctlGetInfoEmploye($idEmploye) {
-    $employee = modGetInfoEmploye($idEmploye);
+    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
@@ -275,11 +273,27 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     // TODO : faire ca
     $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
     $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
+    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
     $nameConseiller = $identy->NOM." ".$identy->PRENOM;
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
     $array->append($nameConseiller);
     return $array;
+}
+
+
+
+
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
+    }
+    return $array;
+}
+
+function debug($a){
+    echo "<script>console.log(".json_encode($a).")</script>";
 }

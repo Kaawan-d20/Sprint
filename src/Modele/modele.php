@@ -682,3 +682,18 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     return $prepared;
 }
 
+/**
+ * renvoie les opérations du compte dont l'id est en paramètre
+ */
+function modGetOperations($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM operation WHERE idCompte=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
