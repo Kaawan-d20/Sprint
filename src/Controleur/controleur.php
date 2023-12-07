@@ -145,6 +145,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $thisRDV->append($infoClient->PRENOM);
         $thisRDV->append($infoClient->CIVILITEE);
         $employe = modGetEmployeFromId($event->IDEMPLOYE);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
         $thisRDV->append($employe->PRENOM);
         $date = new DateTime($event->date);
         $thisRDV->append($date->format('Y/m/d'));
