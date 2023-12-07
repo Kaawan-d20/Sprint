@@ -28,8 +28,8 @@
                 </form>
                 <div class="dropdown">
                     <button class="accountButton">
-                            <?php $username?>
                         <i class="fa-solid fa-user"></i>
+                        <?php echo $username;?>
                     </button>
                     <div class="dropdownContent">
                         <form action="index.php" method="post">

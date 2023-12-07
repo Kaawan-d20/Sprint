@@ -205,4 +205,3 @@ function vueDisplayAgendaConseiller($appointment, $admin){
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
 }
-
