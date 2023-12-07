@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
     <title>Accueil</title>
 </head>
-<body>
+<body class="light">
 <div class="agentWrapper">
     <div class="navWrapper">
         <nav>
@@ -33,7 +33,7 @@
                     </button>
                     <div class="dropdownContent">
                         <form action="index.php" method="post">
-                            <button class="dropdownButton">
+                            <button class="dropdownButton" onclick="toggleTheme()" type="button">
                                 Theme
                                 <i class="fa-solid fa-moon"></i>
                             </button>
@@ -41,7 +41,7 @@
                                 Parametres
                                 <i class="fa-solid fa-user-gear"></i>
                             </button>
-                            <button class="dropdownButton" name="disconnection">
+                            <button class="dropdownButton disconnectionBtn" name="disconnection">
                                 Se deconnecter
                                 <i class="fa-solid fa-right-from-bracket"></i>
                             </button>
@@ -133,6 +133,8 @@ let conseillersDict = [];
 let selectedFilters = [];
 let globalCurrentDate = new Date("2023-12-06");
 
+let isLightTheme = true;
+
 let correspondingDay = [
     "sunday",
     "monday",
@@ -158,6 +160,20 @@ let correspondingMonth = [
     "Décembre"
 ];
 
+
+function toggleTheme() {
+    console.log(isLightTheme);
+    if (isLightTheme) {
+        document.body.classList.add("light");
+        document.body.classList.remove("dark");
+        isLightTheme = false;
+    } else {
+        document.body.classList.add("dark");
+        document.body.classList.remove("light");
+        isLightTheme = true;
+    }
+    console.log(isLightTheme);
+}
 
 /** create an event div, with every field filled then returns it */ 
 function createEvent(motif, client, civilitee, pronoms, horaireDebut, horaireFin, conseillerColor, conseiller) {

@@ -25,18 +25,37 @@
     --bigger-font-size: 2em;
 
 
-    --text: var(--night);
+    /* --text: var(--night);
     --text-secondary: var(--jet);
     --mid-text: var(--dim-gray);
     --mid-back: var(--mid-gray);
     --background-secondary: var(--light-gray);
-    --background: var(--white);
+    --background: var(--white); */
+
     /* --cta: var(--dark-spring-green); */
     --cta: var(--sunset-orange);
     /* --cta: var(--lush-green); */
 }
 
 /* GENERIC */
+
+.light {
+    --text: var(--night);
+    --text-secondary: var(--jet);
+    --mid-text: var(--dim-gray);
+    --mid-back: var(--mid-gray);
+    --background-secondary: var(--light-gray);
+    --background: var(--white);
+}
+
+.dark {
+    --text: var(--white);
+    --text-secondary: var(--light-gray);
+    --mid-text: var(--mid-gray);
+    --mid-back: var(--dim-gray);
+    --background-secondary: var(--jet);
+    --background: var(--night);
+}
 
 body {
     background-color: var(--background);
@@ -53,6 +72,9 @@ h1 {
     font-family: var(--heading-font);
 }
 
+button {
+    color: var(--text);
+} 
 
 /* LOGIN SPECIFIC */
 
@@ -137,7 +159,7 @@ h1 {
 }
 
 nav {
-    padding: 1em 2em;
+    padding: 1em;
     display: flex;
     align-items: center;
     gap: 1em;
@@ -148,7 +170,7 @@ nav {
     flex-grow: 1;
     padding-left: 1em;
     border: 1px solid var(--text-secondary);
-    background-color: var(--white);
+    background-color: var(--background);
     border-radius: 5px
 }
 
@@ -268,7 +290,7 @@ nav {
 
 .dropdownButton:last-child:hover {
     background-color: var(--invalid-red);
-    color: var(--background);
+    color: var(--white);
 }
 
 .agentWrapper .calendarWrapper {
@@ -344,6 +366,7 @@ nav {
 .weekSelectorDateField {
     border: none;
     background-color: var(--background);
+    color: var(--text);
     font-family: var(--mono-font);
 }
 
@@ -419,7 +442,8 @@ nav {
     padding: .5em;
     flex-grow: 1;
     border-radius: 5px;
-    border: 1px solid var(--text-secondary);
+    border: 1px solid var(--jet);
+    color: var(--night);
     display: flex;
     gap: .5em;
     align-items: center;
