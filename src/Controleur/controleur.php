@@ -194,7 +194,8 @@ function ctlDebit($idAccount, $amount){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
     modDebit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modInsertOperation($idAccount,"Banque","Retrait",date("Y-m-d H:i:s"), $amount, 0);
+    $idClient = modGetIdClientFromAccount($idAccount);
     ctlSearchIdClient($idClient);
 }
 /**
@@ -205,7 +206,8 @@ function ctlDebit($idAccount, $amount){
 */
 function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modInsertOperation($idAccount,"Banque","Depôt",date("Y-m-d H:i:s"), $amount, 1);
+    $idClient = modGetIdClientFromAccount($idAccount);
     ctlSearchIdClient($idClient);
 }
 
