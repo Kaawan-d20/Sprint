@@ -245,6 +245,7 @@ function ctlGestionPersonnelOne($idEmploye){
     vueDisplayGestionPersonnelOne($employee);
 }
 
+
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
     ctlGestionPersonnelAll();
