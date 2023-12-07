@@ -145,6 +145,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $thisRDV->append($infoClient->PRENOM);
         $thisRDV->append($infoClient->CIVILITEE);
         $employe = modGetEmployeFromId($event->IDEMPLOYE);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
         $thisRDV->append($employe->PRENOM);
         $date = new DateTime($event->date);
         $thisRDV->append($date->format('Y/m/d'));
@@ -232,6 +233,7 @@ function ctlGetStats(){
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
     return $stat;
 }
 
@@ -242,8 +244,18 @@ function ctlGestionPersonnelAll(){
 function ctlGestionPersonnelOne($idEmploye){
     $employee = modGetEmployeFromId($idEmploye);
     vueDisplayGestionPersonnelOne($employee);
+function ctlGestionPersonnelAll(){
+    $listEmploye = modGetAllEmployes();
+    vueDisplayGestionPersonnelAll($listEmploye);
+}
+function ctlGestionPersonnelOne($idEmploye){
+    $employee = modGetEmployeFromId($idEmploye);
+    vueDisplayGestionPersonnelOne($employee);
 }
 
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
+    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
+    ctlGestionPersonnelAll();
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
     ctlGestionPersonnelAll();
@@ -262,6 +274,7 @@ function ctlGetIntituleCategorie($idCategorie){
  */
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
+    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
@@ -271,6 +284,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     // TODO : faire ca
     $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
     $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
     $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
     $nameConseiller = $identy->NOM." ".$identy->PRENOM;
     $array = new ArrayObject();
@@ -299,3 +313,4 @@ function ctlGetOperation($idClient){
     }
     return $array;
 }
+
