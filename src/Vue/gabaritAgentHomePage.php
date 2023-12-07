@@ -33,9 +33,9 @@
                     </button>
                     <div class="dropdownContent">
                         <form action="index.php" method="post">
-                            <button class="dropdownButton" onclick="toggleTheme()" type="button">
+                            <button class="dropdownButton" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">
                                 Theme
-                                <i class="fa-solid fa-moon"></i>
+                                <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
                             </button>
                             <button class="dropdownButton">
                                 Parametres
@@ -163,13 +163,23 @@ let correspondingMonth = [
 
 function toggleTheme() {
     console.log(isLightTheme);
+    let icon = document.getElementById("themeSwitcherIcon");
+    let btn = document.getElementById("themeSwitcherBtn");
     if (isLightTheme) {
-        document.body.classList.add("light");
-        document.body.classList.remove("dark");
-        isLightTheme = false;
-    } else {
         document.body.classList.add("dark");
         document.body.classList.remove("light");
+        icon.classList.add("fa-sun")
+        icon.classList.remove("fa-moon")
+        btn.setAttribute("title", "Activer le thème Clair")
+
+        isLightTheme = false;
+    } else {
+        document.body.classList.add("light");
+        document.body.classList.remove("dark");
+        icon.classList.add("fa-moon")
+        icon.classList.remove("fa-sun")
+        btn.setAttribute("title", "Activer le thème Sombre")
+
         isLightTheme = true;
     }
     console.log(isLightTheme);
