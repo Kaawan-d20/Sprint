@@ -685,15 +685,27 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
  */
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM rdv WHERE horaire>:d1 AND horaire<:d2';
+    $query = 'SELECT rdv.IDRDV, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, rdv.idemploye, CONCAT(client.CIVILITEE," ",client.PRENOM," ",client.NOM) AS identiteClient, rdv.idclient, motif.INTITULE, rdv.HORAIRE FROM rdv JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE JOIN client ON rdv.IDCLIENT=client.IDCLIENT JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF WHERE horaire>:d1 AND horaire<:d2; ';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1',  $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2',  $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+function modGetAllTABetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT tacheadmin.IDTA, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, tacheadmin.idemploye, tacheadmin.LIBELLE, tacheadmin.HORAIRE FROM tacheadmin JOIN employe ON tacheadmin.IDEMPLOYE=employe.IDEMPLOYE WHERE horaire>:d1 AND horaire<:d2; ';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 /**

@@ -25,11 +25,7 @@ function ctlHome (){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
-        /*
-        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
-        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
-        */
-        vueDisplayHomeAgent();
+        ctlUpdateCalendar(new DateTime('monday this week'), new DateTime('sunday this week'));
     }
     
 }
@@ -268,34 +264,28 @@ function ctlGetIntituleCategorie($idCategorie){
  */
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
+    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
+/**
+ * Fonction qui prend en entrée deux dates et renvoie la liste des RDV & TA entre ces deux dates */ 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    // TODO : faire ca
-    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
-    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    $listRDV = modGetAllAppoinmentsBetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
+    $listTA = modGetAllTABetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
-    $array->append($nameConseiller);
+    $array->append(date_format($dateStartOfWeek, 'Y-m-d'));
     return $array;
 }
 
-
-
-
-function ctlGetOperation($idClient){
-    $accounts=modGetAccounts($idClient);
-    $array = array();
-    foreach ($accounts as $account){
-        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
-    }
-    return $array;
+function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
+    $array = ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
+    vueDisplayHomeAgent($array[0], $array[1], $array[2], $identity);
 }
 
-function debug($a){
-    echo "<script>console.log(".json_encode($a).")</script>";
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
 }
