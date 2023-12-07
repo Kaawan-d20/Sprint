@@ -86,7 +86,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient),ctlGetOperation($idClient));
         }
     }
 }
@@ -281,5 +281,17 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $array->append($listRDV);
     $array->append($listTA);
     $array->append($nameConseiller);
+    return $array;
+}
+
+
+
+
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->IDCOMPTE"]=(modGetOperations($account->IDCOMPTE));
+    }
     return $array;
 }

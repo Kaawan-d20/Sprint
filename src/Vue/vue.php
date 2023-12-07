@@ -48,7 +48,7 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract){
+function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperations){
 
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
@@ -75,6 +75,25 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract){
     $profession = $client->PROFESSION;
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
+    //Pour l'afficher des comptes avec les opérations
+    $chteumeul = "<select id='comptes' onchange='displayOperations()'>";
+    $div = "";
+    foreach ($listAccounts as $account) {
+        $chteumeul .= "<option value=\"".$account->IDCOMPTE."\">".$account->INTITULE." : ".$account->SOLDE."</option>";
+        $div = "<div id=\"".$account->IDCOMPTE."\" >";
+        foreach ($listOperations as $operation) {
+            $div .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
+            if ($operation->ISCREDIT == 0) {
+                $div .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
+            } else {
+                $div .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
+            }
+            $div .= "<span>".$operation->MONTANT."</span></div>";
+        }
+        $div .= "</div>";
+    }
+    $chteumeul .= "</select>";
+    $content=$chteumeul.$div;
     require_once('gabaritInfoClient.php');
 }
 /**
