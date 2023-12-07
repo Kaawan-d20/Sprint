@@ -289,3 +289,13 @@ function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }
+
+
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
+    }
+    return $array;
+}
