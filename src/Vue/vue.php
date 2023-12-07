@@ -28,11 +28,9 @@ function vueDisplayHomeConseiller(){
  * @param array $adminTasks liste des tâches admins de la semaine
  */
 // function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
+
 function vueDisplayHomeAgent() {
-    // TODO : set $username, $appointements and $dateOfWeek
-    // $username = $firstName . $lastName;
-    // $appointements = array_merge($rendezVous, $adminTasks);
-    // $dateOfWeek = "2023-12-06";
+    // liste des para $appointments, $TA, $username, $dateOfWee=new date.today()
     require_once('gabaritAgentHomePage.php');
 }
 /**
@@ -179,4 +177,16 @@ function vueDisplayAgendaConseiller($appointment, $admin){
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
+}
+
+
+
+
+
+
+
+
+
+function vueDisplayRDVBetween(){
+
 }

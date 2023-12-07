@@ -25,6 +25,10 @@ function ctlHome (){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
+        /*
+        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
+        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
+        */
         vueDisplayHomeAgent();
     }
     
@@ -273,5 +277,9 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
     $identy = modGetInfoEmploye($_SESSION["idEmploye"]);
     $nameConseiller = $identy->NOM." ".$identy->PRENOM;
-    vueDisplayRDVBetween($listRDV);
+    $array = new ArrayObject();
+    $array->append($listRDV);
+    $array->append($listTA);
+    $array->append($nameConseiller);
+    return $array;
 }
