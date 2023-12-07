@@ -22,44 +22,17 @@ function vueDisplayHomeConseiller(){
 /**
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
  * Ne retourne rien
- * @param array $appointements liste des Rendez Vous de la semaine
- * @param array $TA liste des tâches admins de la semaine
- * @param string $dateOfWeek string de la date de reference de la semaine, 
- * @param string $username nom de l'Agent
- * par défaut aujourd'hui, format "yyyy-mm-dd";
+ * @param string $firstName prénom de l'Agent
+ * @param string $lastName nom de famille de l'Agent
+ * @param array $rendezVous liste des Rendez Vous de la semaine
+ * @param array $adminTasks liste des tâches admins de la semaine
  */
-function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
-    $weekEvents = array("", "", "", "", "", "", "");
-    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
-    foreach ($appointments as $appointment) {
-        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
-        $weekNumber = date_format($appointmentDate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
-    }
-    debug($username);
+// function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
+
+function vueDisplayHomeAgent() {
+    // liste des para $appointments, $TA, $username, $dateOfWee=new date.today()
     require_once('gabaritAgentHomePage.php');
 }
-/**  */ 
-function vueGenerateAppointementHTML($appointment) {
-    $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
-    $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); // TODO ADD THE F*CKING END TIME IN THE DB.
-    // TODO : AND THE COLOR OF THE CONSEILLER
-    return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
-        <h2>'. $appointment->INTITULE .'</h2>
-        <p>'. $appointment->identiteClient .'</p>
-        <div class="eventDetails">
-            <div>
-                <p class="eventStartTime">'. $heureDebut .'</p>
-                <p class="eventEndTime">'. $heureFin .'</p>
-            </div>
-            <div class="eventConseiller lush-green">
-                <i class="fa-solid fa-user-tie"></i>
-                '. $appointment->identiteEmploye .'
-            </div>
-        </div>
-    </div>';
-}
-
 /**
  * Fonction qui affiche la page de login
  * Ne prend pas de paramètres et ne retourne rien
@@ -75,7 +48,7 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
+function vueDisplayInfoClient($client, $listAccounts, $listContract){
 
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
@@ -102,28 +75,6 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $profession = $client->PROFESSION;
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
-    //Pour l'afficher des comptes avec les opérations
-    $chteumeul = "<select id='comptes' onchange='displayOperations()'>";
-    $cht = "";
-    $compteur = 1;
-    foreach ($listAccounts as $account) {
-        $chteumeul .= "<option value=\"".$compteur."\">".$account->intitule." : ".$account->solde."</option>";
-        $cht .= "<div id=\"".$compteur."\" class='hidden'>";
-        $listOperations = $listOperationsAccount["$account->idCompte"];
-        foreach ($listOperations as $operation) {
-            $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
-            if ($operation->ISCREDIT == 0) {
-                $cht .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
-            } else {
-                $cht .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
-            }
-            $cht .= "<span>".$operation->MONTANT."</span></div>";
-        }
-        $cht .= "</div>";
-        $compteur+=1;
-    }
-    $chteumeul .= "</select>";
-    $content = $chteumeul.$cht;
     require_once('gabaritInfoClient.php');
 }
 /**
@@ -229,4 +180,16 @@ function vueDisplayAgendaConseiller($appointment, $admin){
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
+}
+
+
+
+
+
+
+
+
+
+function vueDisplayRDVBetween(){
+
 }

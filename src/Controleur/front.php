@@ -50,7 +50,7 @@ try {
     elseif (isset($_POST['DateRDVBtn'])){
         $dateStartOfWeek=$_POST['dateStartOfWeek'];
         $dateEndOfWeek=$_POST['dateEndOfWeek'];
-        ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek);
+        ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
     }
     // ------------------------------------------------------- Directeur -------------------------------------------------------
     elseif (isset($_POST['GestionPersonnelAllBtn'])){
