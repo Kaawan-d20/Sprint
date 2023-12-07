@@ -127,7 +127,8 @@
     <!-- TODO: assign date of format 2023-12-06 -->
     <input type="submit" name="DateRDVBtn" id="">
 </form>
-<?php $dateOfWeek = "2023-12-07" 
+<?php 
+$dateOfWeek = "2023-12-07";
 // TODO remove this bullsh*t
 ?>
 
@@ -138,7 +139,8 @@ let conseillersArray = []; // this is bullshit, this is juste every conseiller i
 let conseillersDict = [];
 let selectedFilters = [];
 // let globalCurrentDate = new Date("2023-12-07");
-let globalCurrentDate = new Date( <?php echo($dateOfWeek); ?> );
+let globalCurrentDate = new Date( "<?php echo($dateOfWeek); ?>" );
+console.log(globalCurrentDate);
 
 let isLightTheme = true;
 
@@ -370,6 +372,7 @@ function getSunday(mondayDate) {
 
 function getWeekArray(mondayDate) {
     let weekArray = [];
+    let currentDate =mondayDate;
     for (let i = 0; i < 7; i++) {
         let currentday = currentDate.getDate().toString();
         weekArray.push((currentday.length < 2) ? '0' + currentday :currentday);
