@@ -34,15 +34,15 @@
                     <div class="dropdownContent">
                         <form action="index.php" method="post">
                             <button class="dropdownButton" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">
-                                Theme
+                                Thème
                                 <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
                             </button>
                             <button class="dropdownButton">
-                                Parametres
+                                Paramètres
                                 <i class="fa-solid fa-user-gear"></i>
                             </button>
                             <button class="dropdownButton disconnectionBtn" name="disconnection">
-                                Se deconnecter
+                                Se déconnecter
                                 <i class="fa-solid fa-right-from-bracket"></i>
                             </button>
                         </form>
