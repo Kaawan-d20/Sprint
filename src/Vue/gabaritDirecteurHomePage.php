@@ -32,19 +32,13 @@
     <div>
         <h1>Gestion des Services</h1>
         <form action="index.php" method="post">
-            <input type="submit" name="GestionServicesBtn" value="Gestion des services">
-        </form>
-    </div>
-    <div>
-        <h1>Gestion des documents</h1>
-        <form action="index.php" method="post">
-            <input type="submit" name="GestionDocumentBtn" value="Gestion des documents">
+            <input type="submit" name="GestionServicesAllBtn" value="Gestion des services">
         </form>
     </div>
     <div>
         <h1>Gestion des motifs</h1>
         <form action="index.php" method="post">
-            <input type="submit" name="GestionMotifBtn" value="Gestion des motifs">
+            <input type="submit" name="GestionMotifAllBtn" value="Gestion des motifs">
         </form>
     </div>
 </body>

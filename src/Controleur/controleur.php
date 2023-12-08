@@ -248,10 +248,80 @@ function ctlGestionPersonnelOne($idEmploye){
     vueDisplayGestionPersonnelOne($employee);
 }
 
-function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category){
-    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category);
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
+    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
+
+
+function ctlGestionServiceslAll(){
+    $listTypeAccount = modGetAllAccountTypes();
+    $listTypeContract = modGetAllContractTypes();
+    vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
+}
+
+
+function ctlGestionAccountOne($idAccount){
+    $account = modGetTypeAccount($idAccount);
+    vueDisplayGestionAccountOne($account);
+}
+
+
+
+function ctlGestionContractOne($idContract){
+    $contract = modGetContractFromId($idContract);
+    vueDisplayGestionContractOne($contract);
+}
+
+function ctlGestionAccountOneSubmit($idAccount, $name, $active){
+    modModifTypeAccount($idAccount, $name, $active);
+    ctlGestionServiceslAll();
+}
+
+function ctlGestionContractOneSubmit($idContract, $name, $active){
+    modModifTypeContract($idContract, $name, $active);
+    ctlGestionServiceslAll();
+}
+
+
+function ctlGestionMotifAll(){
+    $listMotif = modGetAllMotif();
+    vueDisplayGestionMotifAll($listMotif);
+}
+
+function ctlGestionMotifOne($idMotif){
+    $motif = modGetMotifFromId($idMotif);
+    vueDisplayGestionMotifOne($motif);
+}
+
+function ctlGestionMotifOneSubmit($idMotif, $name, $document){
+    modModifMotif($idMotif, $name, $document);
+    ctlGestionMotifAll();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function ctlGetIntituleCategorie($idCategorie){
     $intitule = modGetIntituleCategorie($idCategorie);

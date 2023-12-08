@@ -607,6 +607,82 @@ function modGetAllContractTypes() {
     return $result;
 }
 
+function modGetAllMotif() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM motif';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modGetTypeAccount($idTypeAccount) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecompte WHERE idtypecompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+function modGetContractFromId($idContractType) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecontrat WHERE idtypecontrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContractType, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+
+function modGetMotifFromId($idMotif) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM motif WHERE idmotif=:idM';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+
+function modModifTypeAccount($idAccount, $name, $active){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modModifTypeContract($idContract, $name, $active){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modModifMotif($idMotif, $intitule, $document) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE motif SET intitule=:intitule, document=:document WHERE idmotif=:idM';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':intitule', $intitule, PDO::PARAM_STR);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
 /**
  * renvoie le ou les client(s) dont la somme des soldes des comptes est la plus élevée,
  */
@@ -649,9 +725,9 @@ function modGetIntituleCategorie($id) {
  * @param string $password le password (salé) de l'employé
  * @param int $idCat l'id de la catégorie de l'employé
  */
-function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
+function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat, $color) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE employe set nom=:sname, prenom=:fname, login=:login, password=:password, idCategorie=:idCat WHERE idEmploye=:idE';
+    $query = 'UPDATE employe set nom=:sname, prenom=:fname, login=:login, password=:password, idCategorie=:idCat, color=:color WHERE idEmploye=:idE';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
     $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
@@ -659,6 +735,7 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
     $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
     $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
     $prepared -> bindParam(':idCat', $idCat, PDO::PARAM_INT);
+    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
