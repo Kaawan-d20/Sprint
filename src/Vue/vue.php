@@ -125,15 +125,14 @@ function vueDisplayGestionPersonnelAll($listEmployee) {
                             Type d'employe : ".$category.", 
                             Nom de l'employé : ".$employee->NOM.", 
                             Prénom de l'employé : ".$employee->PRENOM.",  
-                            Login de l'employé : ".$employee->LOGIN." 
+                            Login de l'employé : ".$employee->LOGIN.",
+                            Couleur de l'employé : ".$employee->COULEUR.", 
                             <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
                             <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
                         </p>
                     </form>";
     }
-    
     require_once('gabaritGestionPersonnel.php');
-
 }
 
 
