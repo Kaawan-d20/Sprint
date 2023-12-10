@@ -759,3 +759,37 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     return $prepared;
 }
 
+function modGetNumberAppointmentsBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbAppointments FROM rdv WHERE horaire>:d1 AND horaire<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result->nbAppointments;
+}
+
+function modGetNumberContractsBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>:d1 AND dateouverture<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result->nbContracts;
+}
+
+function modGetNumberClientsAt($date){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<:d';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d', $date, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result->nbClients;
+}
