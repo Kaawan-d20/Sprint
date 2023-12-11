@@ -47,13 +47,6 @@ try {
         $idClient = $_POST['idClient'];
         ctlSearchIdClient($idClient);
     }
-    elseif (isset($_POST['GestionPersonnelBtn'])){
-        ctlGestionPersonnel();
-    }
-    elseif (isset($_POST['modfiEmployeeBtn'])){
-        $idEmployee = $_POST['idEmployee'];
-        ctlGestionPersonnel("modif", $idEmployee);
-    }
     elseif (isset($_POST['weekSelectorPrevious'])){
         ctlUpdateCalendar($_POST['previousWeekDate']);
     }
@@ -62,6 +55,73 @@ try {
     }
     elseif (isset($_POST["weekSelectorDateField"])){
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
+    }
+     // ------------------------------------------------------- Directeur -------------------------------------------------------
+    // ------------------------------------------------------- Statistique -------------------------------------------------------
+    elseif (isset($_POST['seachStatClient'])){
+        $dateStart=$_POST['datedebut'];
+        $dateEnd=$_POST['datefin'];
+        ctlStatClientBetween($dateStart, $dateEnd);
+    }
+    // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
+    elseif (isset($_POST['GestionPersonnelAllBtn'])){
+        ctlGestionPersonnelAll();
+    }
+    elseif (isset($_POST['GestionPersonnelOneBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        ctlGestionPersonnelOne($idEmployee);
+    }
+    elseif (isset($_POST['ModifPersonnelOneBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        $name = $_POST['nameEmployee'];
+        $firstName = $_POST['firstNameEmployee'];
+        $login = $_POST['loginEmployee'];
+        $password = $_POST['passwordEmployee'];
+        $category = $_POST['idCategorie'];
+        $color = $_POST['colorEmployee'];
+        ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color);
+    }
+    // ------------------------------------------------------- Gestion Services -------------------------------------------------------
+    elseif (isset($_POST['GestionServicesAllBtn'])){
+        ctlGestionServiceslAll();
+    }
+    elseif (isset($_POST['GestionAccountOneBtn'])){
+        $idAccount = $_POST['idAccount'];
+        ctlGestionAccountOne($idAccount);
+    }
+    elseif (isset($_POST['ModifAccountOneBtn'])){
+        $idAccount = $_POST['idAccount'];
+        $name = $_POST['nameAccount'];
+        if (isset($_POST['activeAccount'])) {
+            $active = 1;
+        }
+        else {
+            $active = 0;
+        }
+        ctlGestionAccountOneSubmit($idAccount, $name, $active);
+    }
+    elseif (isset($_POST["GestionContractOneBtn"])){
+        $idContract = $_POST['idContract'];
+        ctlGestionContractOne($idContract);
+    }
+    elseif (isset($_POST['ModifContractOneBtn'])){
+        $idContract = $_POST['idContract'];
+        $name = $_POST['nameContract'];
+        if (isset($_POST['activeContract'])) {
+            $active = 1;
+        }
+        else {
+            $active = 0;
+        }
+        ctlGestionContractOneSubmit($idContract, $name, $active);
+    }
+    // ------------------------------------------------------- Gestion Motif -------------------------------------------------------
+    elseif (isset($_POST['GestionMotifAllBtn'])){
+        ctlGestionMotifAll();
+    }
+    elseif (isset($_POST['GestionMotifOneBtn'])){
+        $idMotif = $_POST['idMotif'];
+        ctlGestionMotifOne($idMotif);
     }
     elseif (isset($_POST['ModifMotifOneBtn'])){
         $idMotif = $_POST['idMotif'];

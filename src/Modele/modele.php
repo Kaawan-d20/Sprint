@@ -257,12 +257,14 @@ function modGetAdminConseiller($id) {
  * @param int $idA id du compte à débiter
  * @param string $sum la somme à débiter
  */
-function modDebit($idA,$sum) {
+function modDebit($idA,$sum,$date) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA';
+    $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA;
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idA,'Banque','Debit',:date,:sum,0)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -272,12 +274,14 @@ function modDebit($idA,$sum) {
  * @param int $idA id du compte à créditer
  * @param string $sum somme à créditer
  */
-function modCredit($idA,$sum) {
+function modCredit($idA,$sum,$date) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idA';
+    $query = "UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idA;
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idA,'Banque','Crédit',:date,:sum,1)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
+    $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -313,7 +317,7 @@ function modGetIdClientFromAccount($idAccount){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->decouvert;
+    return $result->idClient;
 }
 
 /**
@@ -803,4 +807,17 @@ function modGetNumberClientsAt($date){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     return $result->nbClients;
+}
+
+
+function modGetOperations($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM operation WHERE idCompte=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
 }

@@ -82,7 +82,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient), ctlGetOperation($idClient));
         }
     }
 }
@@ -189,10 +189,10 @@ function ctlDebit($idAccount, $amount){
     if ($amount > $solde + $decouvert){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
-    modDebit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient), ctlGetOperation($idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -201,10 +201,10 @@ function ctlDebit($idAccount, $amount){
  * @return void
 */
 function ctlCredit($idAccount, $amount){
-    modCredit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient), ctlGetOperation($idClient));
 }
 
 /**
@@ -375,6 +375,94 @@ function getSundayOfWeek($date) {
         return $sundayOfWeek;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
+    }
+    return $array;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function debug($what = "debugString") {
