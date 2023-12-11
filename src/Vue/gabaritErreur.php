@@ -7,10 +7,6 @@
 </head>
 <body>
     <h1>erreur</h1>
-    <?php 
-        echo("test");
-        echo $content;
-    ?>
-    
+    <?php echo $content; ?>
 </body>
 </html>

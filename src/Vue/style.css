@@ -397,10 +397,10 @@ nav {
     font-family: var(--mono-font);
 }
 
-/* .pronounsSpan { no more pronouns :(
+.pronounsSpan {
     color: var(--mid-text);
     font-size: var(--smaller-font-size);
-} */
+}
 
 .events {
     display: flex;
@@ -414,7 +414,6 @@ nav {
 
 .event h2 {
     margin: 0;
-    font-size: var(--big-font-size);
 }
 
 .event p {

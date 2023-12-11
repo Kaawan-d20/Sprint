@@ -22,44 +22,17 @@ function vueDisplayHomeConseiller(){
 /**
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
  * Ne retourne rien
- * @param array $appointements liste des Rendez Vous de la semaine
- * @param array $TA liste des tâches admins de la semaine
- * @param string $dateOfWeek string de la date de reference de la semaine, 
- * @param string $username nom de l'Agent
- * par défaut aujourd'hui, format "yyyy-mm-dd";
+ * @param string $firstName prénom de l'Agent
+ * @param string $lastName nom de famille de l'Agent
+ * @param array $rendezVous liste des Rendez Vous de la semaine
+ * @param array $adminTasks liste des tâches admins de la semaine
  */
-function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
-    $weekEvents = array("", "", "", "", "", "", "");
-    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
-    foreach ($appointments as $appointment) {
-        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
-        $weekNumber = date_format($appointmentDate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
-    }
-    debug($username);
+// function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
+
+function vueDisplayHomeAgent() {
+    // liste des para $appointments, $TA, $username, $dateOfWee=new date.today()
     require_once('gabaritAgentHomePage.php');
 }
-/**  */ 
-function vueGenerateAppointementHTML($appointment) {
-    $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
-    $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); // TODO ADD THE F*CKING END TIME IN THE DB.
-    // TODO : AND THE COLOR OF THE CONSEILLER
-    return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
-        <h2>'. $appointment->INTITULE .'</h2>
-        <p>'. $appointment->identiteClient .'</p>
-        <div class="eventDetails">
-            <div>
-                <p class="eventStartTime">'. $heureDebut .'</p>
-                <p class="eventEndTime">'. $heureFin .'</p>
-            </div>
-            <div class="eventConseiller lush-green">
-                <i class="fa-solid fa-user-tie"></i>
-                '. $appointment->identiteEmploye .'
-            </div>
-        </div>
-    </div>';
-}
-
 /**
  * Fonction qui affiche la page de login
  * Ne prend pas de paramètres et ne retourne rien
@@ -75,7 +48,7 @@ function vueDisplayLogin(){
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
+function vueDisplayInfoClient($client, $listAccounts, $listContract){
 
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
@@ -102,28 +75,6 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $profession = $client->PROFESSION;
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
-    //Pour l'afficher des comptes avec les opérations
-    $chteumeul = "<select id='comptes' onchange='displayOperations()'>";
-    $cht = "";
-    $compteur = 1;
-    foreach ($listAccounts as $account) {
-        $chteumeul .= "<option value=\"".$compteur."\">".$account->intitule." : ".$account->solde."</option>";
-        $cht .= "<div id=\"".$compteur."\" class='hidden'>";
-        $listOperations = $listOperationsAccount["$account->idCompte"];
-        foreach ($listOperations as $operation) {
-            $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
-            if ($operation->ISCREDIT == 0) {
-                $cht .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
-            } else {
-                $cht .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
-            }
-            $cht .= "<span>".$operation->MONTANT."</span></div>";
-        }
-        $cht .= "</div>";
-        $compteur+=1;
-    }
-    $chteumeul .= "</select>";
-    $content = $chteumeul.$cht;
     require_once('gabaritInfoClient.php');
 }
 /**
@@ -155,37 +106,42 @@ function vueDisplayAdvanceSearchClient($listClient="") {
     require_once('gabaritRechercheClient.php');
 }
 
-function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
-    if ($mode == 'display') {
-        $content="";
-        foreach ($listEmployee as $employee) {
-            if ($employee->IDCATEGORIE == 1) {
-                $category = "Directeur";
-            }
-            elseif ($employee->IDCATEGORIE == 2) {
-                $category = "Conseiller";
-            }
-            elseif ($employee->IDCATEGORIE == 3) {
-                $category = "Agent d'acceuil";
-            }
-            
-            $content .= "<form action=\"index.php\" method=\"post\">
-                            <p>
-                                Id de l'employe : ".$employee->IDEMPLOYE.", 
-                                Type d'employe : ".$category.", 
-                                Nom de l'employé : ".$employee->NOM.", 
-                                Prénom de l'employé : ".$employee->PRENOM.",  
-                                Login de l'employé : ".$employee->LOGIN." 
-                                <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
-                                <input type=\"submit\" value=\"Modifier l'employe.\" name=\"modfiEmployeeBtn\">
-                            </p>
-                        </form>";
+function vueDisplayGestionPersonnelAll($listEmployee) {
+    $content="<h1>Gestion du Personnel</h1>
+                <h2>Liste des employers</h2>";
+    foreach ($listEmployee as $employee) {
+        if ($employee->IDCATEGORIE == 1) {
+            $category = "Directeur";
         }
+        elseif ($employee->IDCATEGORIE == 2) {
+            $category = "Conseiller";
+        }
+        elseif ($employee->IDCATEGORIE == 3) {
+            $category = "Agent d'acceuil";
+        }
+        
+        $content .= "<form action=\"index.php\" method=\"post\">
+                        <p>
+                            Id de l'employe : ".$employee->IDEMPLOYE.", 
+                            Type d'employe : ".$category.", 
+                            Nom de l'employé : ".$employee->NOM.", 
+                            Prénom de l'employé : ".$employee->PRENOM.",  
+                            Login de l'employé : ".$employee->LOGIN.",
+                            Couleur de l'employé : ".$employee->COLOR.", 
+                            <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
+                            <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
+                        </p>
+                    </form>";
     }
-    else{
-        $etat1=$listEmployee->IDCATEGORIE==1 ? "selected": "";
-        $etat2=$listEmployee->IDCATEGORIE==2 ? "selected": "";
-        $etat3=$listEmployee->IDCATEGORIE==3 ? "selected": "";
+    require_once('gabaritGestion.php');
+}
+
+
+function vueDisplayGestionPersonnelOne($employee) {
+    
+        $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
+        $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
+        $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
         $content="<h1>Modifier info employé</h1>
                     <form action=\"index.php\" method=\"post\">
                         <p>
@@ -194,17 +150,117 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
                                 <option value=\"2\" ".$etat2." >Conseiller</option>
                                 <option value=\"3\" ".$etat3." >Agent d'acceuil</option>
                             </select>
-                            <input type=\"text\" name=\"nameEmployee\" value=\"$listEmployee->NOM\">
-                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$listEmployee->PRENOM\">
-                            <input type=\"text\" name=\"loginEmployee\" value=\"$listEmployee->LOGIN\">
-                            <input type=\"text\" name=\"passwordEmployee\" value=\"$listEmployee->PASSWORD\">
-                            <input type=\"submit\" value=\"Valider modification\">
+                            <input type=\"hidden\" name=\"idEmployee\" value=\"$employee->IDEMPLOYE\">
+                            <input type=\"text\" name=\"nameEmployee\" value=\"$employee->NOM\">
+                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$employee->PRENOM\">
+                            <input type=\"text\" name=\"loginEmployee\" value=\"$employee->LOGIN\">
+                            <input type=\"text\" name=\"passwordEmployee\" value=\"$employee->PASSWORD\">
+                            <input type=\"text\" name=\"colorEmployee\" value=\"$employee->COLOR\">
+                            <input type=\"submit\" name=\"ModifPersonnelOneBtn\" value=\"Valider modification\">
+                        </p>
+                    </form>";
+    
+    require_once('gabaritGestion.php');
+
+}
+
+
+function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
+    $content ="<h1>Gestion des services</h1>
+                <h2>Liste des type de compte</h2>";
+    foreach ($listTypeAccount as $typeAccount) {
+        $content .= "<form action=\"index.php\" method=\"post\">
+                        <p>
+                            Intitulé du type de compte : ".$typeAccount->NOM.",
+                            Actif : ".$typeAccount->ACTIF.",
+                            <input type=\"hidden\" name=\"idAccount\" value=\"".$typeAccount->IDTYPECOMPTE."\">
+                            <input type=\"submit\" value=\"Modifier le type de compte.\" name=\"GestionAccountOneBtn\">
                         </p>
                     </form>";
     }
-    require_once('gabaritGestionPersonnel.php');
-
+    $content .="<h2>Liste des type de Contrat</h2>";
+    foreach ($listTypeContract as $typeContract) {
+        $content .= "<form action=\"index.php\" method=\"post\">
+                        <p>
+                            Intitulé du type de contrat : ".$typeContract->NOM.",
+                            Actif : ".$typeContract->ACTIF.",
+                            <input type=\"hidden\" name=\"idContract\" value=\"".$typeContract->IDTYPECONTRAT."\">
+                            <input type=\"submit\" value=\"Modifier le type de contrat.\" name=\"GestionContractOneBtn\">
+                        </p>
+                    </form>";
+    }
+    require_once('gabaritGestion.php');
 }
+
+function vueDisplayGestionAccountOne($account) {
+    $etat=$account->ACTIF==1 ? "checked": "";
+    $content="<h1>Modifier info type compte</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <input type=\"text\" name=\"nameAccount\" value=\"".$account->NOM."\">
+                        <input type=\"checkbox\" name=\"activeAccount\" ". $etat ."  >
+                        <input type=\"hidden\" name=\"idAccount\" value=\"".$account->IDTYPECOMPTE."\">
+                        <input type=\"submit\" name=\"ModifAccountOneBtn\" value=\"Valider modification\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+function vueDisplayGestionContractOne($contract) {
+    $etat=$contract->ACTIF==1 ? "checked": "";
+    $content="<h1>Modifier info type contrat</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <input type=\"text\" name=\"nameContract\" value=\"".$contract->NOM."\">
+                        <input type=\"checkbox\" name=\"activeContract\" ".$etat.">
+                        <input type=\"hidden\" name=\"idContract\" value=\"".$contract->IDTYPECONTRAT."\">
+                        <input type=\"submit\" name=\"ModifContractOneBtn\" value=\"Valider modification\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+function vueDisplayGestionMotifAll($listMotif) {
+    $content="<h1>Gestion des motif</h1>
+                <h2>Liste des motif</h2>";
+    foreach ($listMotif as $motif) {
+        $content .= "<form action=\"index.php\" method=\"post\">
+                        <p>
+                            Intitulé du motif : ".$motif->INTITULE.",
+                            Document : ".$motif->DOCUMENT.",
+                            <input type=\"hidden\" name=\"idMotif\" value=\"".$motif->IDMOTIF."\">
+                            <input type=\"submit\" value=\"Modifier le motif.\" name=\"GestionMotifOneBtn\">
+                        </p>
+                    </form>";
+    }
+    require_once('gabaritGestion.php');
+}
+
+function vueDisplayGestionMotifOne($motif) {
+    $content="<h1>Modifier info motif</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <input type=\"text\" name=\"intituleMotif\" value=\"".$motif->INTITULE."\">
+                        <input type=\"text\" name=\"documentMotif\" value=\"".$motif->DOCUMENT."\">
+                        <input type=\"hidden\" name=\"idMotif\" value=\"".$motif->IDMOTIF."\">
+                        <input type=\"submit\" name=\"ModifMotifOneBtn\" value=\"Valider modification\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -226,4 +282,16 @@ function vueDisplayAgendaConseiller($appointment, $admin){
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
+}
+
+
+
+
+
+
+
+
+
+function vueDisplayRDVBetween(){
+
 }

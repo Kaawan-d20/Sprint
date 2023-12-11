@@ -25,7 +25,11 @@ function ctlHome (){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
-        ctlUpdateCalendar(new DateTime('monday this week'), new DateTime('sunday this week'));
+        /*
+        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
+        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
+        */
+        vueDisplayHomeAgent();
     }
     
 }
@@ -82,7 +86,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient),ctlGetOperation($idClient));
+            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
         }
     }
 }
@@ -190,9 +194,9 @@ function ctlDebit($idAccount, $amount){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
     modDebit($idAccount, $amount);
-    modInsertOperation($idAccount,"Banque","Retrait",date("Y-m-d H:i:s"), $amount, 0);
-    $idClient = modGetIdClientFromAccount($idAccount);
-    ctlSearchIdClient($idClient);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -202,9 +206,9 @@ function ctlDebit($idAccount, $amount){
 */
 function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount);
-    modInsertOperation($idAccount,"Banque","Depôt",date("Y-m-d H:i:s"), $amount, 1);
-    $idClient = modGetIdClientFromAccount($idAccount);
-    ctlSearchIdClient($idClient);
+    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
 }
 
 /**
@@ -231,25 +235,93 @@ function ctlGetStats(){
     $stat['nbAccountActive'] = modGetNumberActiveAccounts();
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
-    $stat['nbAccoutNonDecouvert'] = modGetNomberNonOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
     return $stat;
 }
 
-function ctlGestionPersonnel($mode="display", $idEmploye= ""){
-    if ($mode == "display"){
-        $listEmploye = modGetAllEmployes();
-        vueDisplayGestionPersonnel($listEmploye);
-    }
-    else {
-        $listEmploye = modGetEmployeFromId($idEmploye);
-        vueDisplayGestionPersonnel($listEmploye, $mode);
-    }
+function ctlGestionPersonnelAll(){
+    $listEmploye = modGetAllEmployes();
+    vueDisplayGestionPersonnelAll($listEmploye);
+}
+function ctlGestionPersonnelOne($idEmploye){
+    $employee = modGetEmployeFromId($idEmploye);
+    vueDisplayGestionPersonnelOne($employee);
 }
 
-function ctlModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie){
-    modModifEmploye($idEmploye, $nom, $prenom, $login, $password, $idCategorie);
-    ctlGestionPersonnel();
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
+    modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
+    ctlGestionPersonnelAll();
 }
+
+
+function ctlGestionServiceslAll(){
+    $listTypeAccount = modGetAllAccountTypes();
+    $listTypeContract = modGetAllContractTypes();
+    vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
+}
+
+
+function ctlGestionAccountOne($idAccount){
+    $account = modGetTypeAccount($idAccount);
+    vueDisplayGestionAccountOne($account);
+}
+
+
+
+function ctlGestionContractOne($idContract){
+    $contract = modGetContractFromId($idContract);
+    vueDisplayGestionContractOne($contract);
+}
+
+function ctlGestionAccountOneSubmit($idAccount, $name, $active){
+    modModifTypeAccount($idAccount, $name, $active);
+    ctlGestionServiceslAll();
+}
+
+function ctlGestionContractOneSubmit($idContract, $name, $active){
+    modModifTypeContract($idContract, $name, $active);
+    ctlGestionServiceslAll();
+}
+
+
+function ctlGestionMotifAll(){
+    $listMotif = modGetAllMotif();
+    vueDisplayGestionMotifAll($listMotif);
+}
+
+function ctlGestionMotifOne($idMotif){
+    $motif = modGetMotifFromId($idMotif);
+    vueDisplayGestionMotifOne($motif);
+}
+
+function ctlGestionMotifOneSubmit($idMotif, $name, $document){
+    modModifMotif($idMotif, $name, $document);
+    ctlGestionMotifAll();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function ctlGetIntituleCategorie($idCategorie){
     $intitule = modGetIntituleCategorie($idCategorie);
@@ -264,38 +336,18 @@ function ctlGetIntituleCategorie($idCategorie){
  */
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
-    $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
-/**
- * Fonction qui prend en entrée deux dates et renvoie la liste des RDV & TA entre ces deux dates */ 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    $listRDV = modGetAllAppoinmentsBetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
-    $listTA = modGetAllTABetween(date_format($dateStartOfWeek, 'Y-m-d H:i:s'), date_format($dateEndOfWeek, 'Y-m-d H:i:s'));
+    // TODO : faire ca
+    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
+    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
+    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
-    $array->append(date_format($dateStartOfWeek, 'Y-m-d'));
-    return $array;
-}
-
-function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
-    $array = ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
-    vueDisplayHomeAgent($array[0], $array[1], $array[2], $identity);
-}
-
-function debug($what = "debugString") {
-    echo("<script>console.log(". json_encode($what) .")</script>");
-}
-
-
-function ctlGetOperation($idClient){
-    $accounts=modGetAccounts($idClient);
-    $array = array();
-    foreach ($accounts as $account){
-        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
-    }
+    $array->append($nameConseiller);
     return $array;
 }
