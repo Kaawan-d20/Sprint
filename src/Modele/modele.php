@@ -759,6 +759,11 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     return $prepared;
 }
 
+/**
+ * renvoie le nombre de rdv après la date1 mais avant la date2
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
+ */
 function modGetNumberAppointmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbAppointments FROM rdv WHERE horaire>:d1 AND horaire<:d2';
@@ -771,6 +776,11 @@ function modGetNumberAppointmentsBetween($date1,$date2) {
     return $result->nbAppointments;
 }
 
+/**
+ * renvoie le nombre de contrats créés après la date1 mais avant la date2
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
+ */
 function modGetNumberContractsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>:d1 AND dateouverture<:d2';
@@ -783,13 +793,35 @@ function modGetNumberContractsBetween($date1,$date2) {
     return $result->nbContracts;
 }
 
+/**
+ * renvoie le nombre de clients à la date en paramètre
+ * @param string $date la date
+ */
 function modGetNumberClientsAt($date){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<:d';
+    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<=:d';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d', $date, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     return $result->nbClients;
+}
+
+/**
+ * cree un nouvea u rdv
+ * @param int $idM l'id du motif
+ * @param int $idC l'id du client
+ * @param int $idE l'id de l'employe
+ * @param string $time la date et l'heure 
+ */
+function modAddAppointment($idM,$idC,$idE,$time) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaire) VALUES (:idM,:idC,:idE,:dt)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':dt', $time, PDO::PARAM_STR);
+    $prepared -> execute();
 }
