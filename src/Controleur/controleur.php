@@ -25,7 +25,7 @@ function ctlHome (){
         vueDisplayHomeConseiller();
     }
     elseif ($_SESSION["type"] == 3){
-        ctlUpdateCalendar(new DateTime('monday this week'), new DateTime('sunday this week'));
+        ctlUpdateCalendar(new DateTime("now"));
     }
     
 }
@@ -280,11 +280,37 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     return $array;
 }
 
-function ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek) {
-    $array = ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+function ctlUpdateCalendar($targetDate) {
+    $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
+    debug("ctlUpdateCalendar(".json_encode($targetDate).")");
+    $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
     vueDisplayHomeAgent($array[0], $array[1], $array[2], $identity);
 }
+
+
+function getMondayOfWeek($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+    $dayOfWeek = date_format($date, 'N');
+    if ($dayOfWeek == 1) {
+        return $date;
+    } else {
+        $mondayOfWeek = date_create(date('Y-m-d', strtotime('previous monday', $date->getTimestamp())));
+        return $mondayOfWeek;
+    }
+}
+
+function getSundayOfWeek($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+    $dayOfWeek = date_format($date, 'N');
+    if ($dayOfWeek == 7) {
+        return $date;
+    } else {
+        $sundayOfWeek = date_create(date('Y-m-d', strtotime('next sunday', $date->getTimestamp())));
+        return $sundayOfWeek;
+    }
+}
+
 
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");

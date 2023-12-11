@@ -29,6 +29,7 @@ function vueDisplayHomeConseiller(){
  * par défaut aujourd'hui, format "yyyy-mm-dd";
  */
 function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
+    debug(json_encode($appointments) ." ". json_encode($TA)." ". $dateOfWeek." ". $username);
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -36,7 +37,6 @@ function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
         $weekNumber = date_format($appointmentDate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
-    debug($username);
     require_once('gabaritAgentHomePage.php');
 }
 /**  */ 
@@ -205,11 +205,6 @@ function vueDisplayGestionPersonnel($listEmployee,$mode= 'display') {
     require_once('gabaritGestionPersonnel.php');
 
 }
-
-
-
-
-
 
 /**
  * Fonction qui affiche la page d'erreur

@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
     <title>Accueil</title>
 </head>
-<body class="light">
+<body class="dark">
 <div class="agentWrapper">
     <div class="navWrapper">
         <nav>
@@ -54,18 +54,27 @@
     <div class="calendarWrapper">
         <div class="calendarNavWrapper">
             <div class="dateBlock">
-                <h1>Decembre</h1>
+                <h1>Novembre</h1>
                 <span>1812</span>
             </div>
             <div class="weekSelector">
-                <button class="previous" title="Semaine Precedente" onclick="previousWeek()" type="button">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onchange="attemptUpdate()">
-                <button class="next" title="Semaine Suivante" onclick="nextWeek()" type="button">
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                <form action="index.php" method="post" id="previousWeekForm">
+                    <button class="previous" name="weekSelectorPrevious" id="weekSelectorPrevious" title="Semaine Precedente" type="submit">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <input type="date" name="previousWeekDate" id="previousWeekDate" class="hidden">
+                </form>
+                <form action="index.php" method="post" id="weekSelectorForm">
+                    <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
+                    <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
+                    <input type="submit" name="weekSelectorDateBtn" id="weekSelectorDateBtn" class="hidden">
+                </form>
+                <form action="index.php" method="post">
+                    <button class="next" name="weekSelectorNext" title="Semaine Suivante" type="submit" value="next">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <input type="date" name="nextWeekDate" id="nextWeekDate" class="hidden">
+                </form>
             </div>
         </div>
         <div class="weekWrapper">
@@ -121,18 +130,22 @@
         </div>
     </div>
 </div>
-<form action="index.php" method="post" class="hidden" id="DateRDVForm">
-    <input type="text" name="dateStartOfWeek" id="dateStartOfWeek">
-    <input type="text" name="dateEndOfWeek" id="dateEndOfWeek">
-    <!-- TODO: assign date of format 2023-12-06 -->
-    <input type="submit" name="DateRDVBtn" id="">
-</form>
 <script>
 
 let selectedFilters = [];
 let globalCurrentDate = new Date( "<?php echo($dateOfWeek); ?>" );
+document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
+console.log(globalCurrentDate);
 
-let isLightTheme = true;
+let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+document.getElementById("previousWeekDate").value =dateToString(datePreviousWeek);
+
+let dateNextWeek = console.log(new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
+document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
+
+globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+
+let isLightTheme = false;
 
 let correspondingMonth = [
     "Janvier",
@@ -172,6 +185,13 @@ function toggleTheme() {
         isLightTheme = true;
     }
     console.log(isLightTheme);
+}
+/** returns a Date as a string "yyyy-mm-dd" */ 
+function dateToString(date) {
+    return (globalCurrentDate.getFullYear() 
+    + "-" + ((globalCurrentDate.getMonth() <= 8) ? "0" : "") 
+    + (globalCurrentDate.getMonth() + 1) + "-" 
+    + ((globalCurrentDate.getDate() <= 9) ? "0" : "") + globalCurrentDate.getDate());
 }
 
 /** generate a single filter button, and returns it designed to be used in the generateFilters() function */
@@ -292,13 +312,6 @@ function updateCalendar(currentDate) {
     setdayCellSpan(getWeekArray(currentDate));
 }
 
-
-function getSunday(mondayDate) {
-    let sundayDate = new Date(mondayDate);
-    sundayDate.setDate(sundayDate.getDate() + 6);
-    return sundayDate;
-}
-
 function getWeekArray(mondayDate) {
     let weekArray = [];
     let currentDate =mondayDate;
@@ -310,40 +323,27 @@ function getWeekArray(mondayDate) {
     return (weekArray);
 }
 
-/** 
- * Met a jour un formulaire avec 
- * la date du lundi et du dimanche de la semaine 
- * ciblée pour l'appel PhP, puis submit().
- */ 
-function updateCurrentDate(currentDate) {
-    let weekArray = []
-    globalCurrentDate =currentDate;
-    while (currentDate.getDay() != 1) {
-        currentDate.setDate(currentDate.getDate() - 1);
-    }
-    document.getElementById("dateStartOfWeek").textContent = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
-    currentDate = getSunday(currentDate);
-    document.getElementById("dateEndOfWeek").textContent = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate();
-    document.getElementById("DateRDVForm").submit();
-}
+/** when is a string taking "next|previous|get" */ 
+// function updateCurrentDate(when) {
+//     if (when === "get")
+
+// }
 
 function attemptUpdate() {
     let weekSelectorInput = document.getElementById("weekSelectorDateField");
     let attemptedDate = new Date(weekSelectorInput.value);
-    if (attemptedDate.getFullYear() >= 1800 && attemptedDate.getFullYear() <= 3000) {
-        updateCurrentDate(attemptedDate);
+    if (attemptedDate.getFullYear() > 200 && attemptedDate.getFullYear() < 20000) {
+        document.getElementById("weekSelectorForm").submit();
     }
 }
 
-function nextWeek() {
-    globalCurrentDate.setDate(globalCurrentDate.getDate() + 1);
-    updateCurrentDate(globalCurrentDate);
-}
+// function nextWeek() {
+//     updateCurrentDate();
+// }
 
-function previousWeek() {
-    globalCurrentDate.setDate(globalCurrentDate.getDate() - 14);
-    updateCurrentDate(globalCurrentDate);
-}
+// function previousWeek() {
+//     updateCurrentDate();
+// }
 
 generateFilters();
 updateCalendar(globalCurrentDate);

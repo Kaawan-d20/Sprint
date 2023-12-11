@@ -50,12 +50,18 @@ try {
     }
     elseif (isset($_POST['modfiEmployeeBtn'])){
         $idEmployee = $_POST['idEmployee'];
-        ctlGestionPersonnel("mofid", $idEmployee);
+        ctlGestionPersonnel("modif", $idEmployee);
     }
-    elseif (isset($_POST['DateRDVBtn'])){
-        $dateStartOfWeek=$_POST['dateStartOfWeek'];
-        $dateEndOfWeek=$_POST['dateEndOfWeek'];
-        ctlUpdateCalendar($dateStartOfWeek, $dateEndOfWeek);
+    elseif (isset($_POST['weekSelectorPrevious'])){
+        debug("previous");
+        ctlUpdateCalendar($_POST['previousWeekDate']);
+    }
+    elseif (isset($_POST['weekSelectorNext'])){
+        debug("next");
+        ctlUpdateCalendar($_POST['nextWeekDate']);
+    }
+    elseif (isset($_POST["weekSelectorDateField"])){
+        ctlUpdateCalendar($_POST['weekSelectorDateField']);
     }
     else{
         ctlHome();
