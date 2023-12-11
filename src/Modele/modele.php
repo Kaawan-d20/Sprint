@@ -20,7 +20,7 @@ function modGetSalt($login) {
 }
 
 /**
- * renvoie toutes les infos de l'employe dont le login et password sont en paramètres,
+ * renvoie toutes les infos de l'employé dont le login et password sont en paramètres,
  * rien si celui-ci n'est pas présent dans la base de données.
  * @param string $login le login de l'employé
  * @param string $password le password salé de l'employé 
@@ -760,6 +760,25 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
 }
 
 /**
+ * renvoie toutes les ta entre la première et la deuxième date mises en paramètres,
+ * rien si il n'y en a pas dans la base de données
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
+ */
+function modGetAllAdminBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM tacheAdmin WHERE horaire>:d1 AND horaire<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+/**
  * renvoie le nombre de rdv après la date1 mais avant la date2
  * @param string $date1 date de début
  * @param string $date2 date de fin
@@ -837,5 +856,51 @@ function modSetDecouvert($idC,$deco) {
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
     $prepared -> bindParam(':deco', $deco, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+function modCreateMotive($label,$doc) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO motif(intitule,document) VALUES (:label,:doc)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> bindParam(':doc', $doc, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+function modCreateTypeAccount($idM,$name) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO typeCompte(idMotif,nom) VALUES (:idM,:nameA)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':nameA', $name, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+function modCreateTypeContract($idM,$name) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO typeContrat(idMotif,nom) VALUES (:idM,:nameA)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':nameA', $name, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE client SET idEmploye=:idE, nom=:sname, prenom=:fname, dateNaissance=:dob, dateCreation=:dc, adresse=:adr, numTel=:num, email=:email, profession=:job, situationFamiliale=:fam, civilite=:civ WHERE idClient=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':dob', $dob, PDO::PARAM_STR);
+    $prepared -> bindParam(':dc', $dc, PDO::PARAM_STR);
+    $prepared -> bindParam(':adr', $adr, PDO::PARAM_STR);
+    $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
+    $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
+    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
+    $prepared -> bindParam(':fam', $fam, PDO::PARAM_STR);
+    $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
     $prepared -> execute();
 }
