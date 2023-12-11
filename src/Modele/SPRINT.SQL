@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS OPERATION
     ISCREDIT INTEGER(1),
     PRIMARY KEY (IDOPERATION)
   )
-
+ comment = "";
 
 # -----------------------------------------------------------------------------
 #       TABLE : POSSEDECONTRAT
