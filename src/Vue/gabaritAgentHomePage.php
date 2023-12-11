@@ -133,14 +133,14 @@
 <script>
 
 let selectedFilters = [];
-let globalCurrentDate = new Date( "<?php echo($dateOfWeek); ?>" );
+let globalCurrentDate = new Date("<?php echo($dateOfWeek->format('Y-m-d')); ?>");
+console.log("current " + globalCurrentDate);
 document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
-console.log(globalCurrentDate);
 
 let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
-document.getElementById("previousWeekDate").value =dateToString(datePreviousWeek);
+document.getElementById("previousWeekDate").value = dateToString(datePreviousWeek);
 
-let dateNextWeek = console.log(new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
+let dateNextWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
 document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
 
 globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
@@ -187,7 +187,7 @@ function toggleTheme() {
     console.log(isLightTheme);
 }
 /** returns a Date as a string "yyyy-mm-dd" */ 
-function dateToString(date) {
+function dateToString(globalCurrentDate) {
     return (globalCurrentDate.getFullYear() 
     + "-" + ((globalCurrentDate.getMonth() <= 8) ? "0" : "") 
     + (globalCurrentDate.getMonth() + 1) + "-" 
@@ -323,12 +323,6 @@ function getWeekArray(mondayDate) {
     return (weekArray);
 }
 
-/** when is a string taking "next|previous|get" */ 
-// function updateCurrentDate(when) {
-//     if (when === "get")
-
-// }
-
 function attemptUpdate() {
     let weekSelectorInput = document.getElementById("weekSelectorDateField");
     let attemptedDate = new Date(weekSelectorInput.value);
@@ -336,14 +330,6 @@ function attemptUpdate() {
         document.getElementById("weekSelectorForm").submit();
     }
 }
-
-// function nextWeek() {
-//     updateCurrentDate();
-// }
-
-// function previousWeek() {
-//     updateCurrentDate();
-// }
 
 generateFilters();
 updateCalendar(globalCurrentDate);

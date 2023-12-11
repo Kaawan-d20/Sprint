@@ -748,7 +748,18 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat, $color
  */
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM rdv WHERE horaire>:d1 AND horaire<:d2';
+    $query = 'SELECT rdv.IDEMPLOYE,
+    CONCAT(employe.PRENOM," ", employe.NOM) AS identiteEmploye,
+    employe.COLOR,
+    rdv.IDCLIENT,
+    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    rdv.HORAIREDEBUT,
+    rdv.HORAIREFIN,
+    motif.INTITULE
+    FROM rdv
+    JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
+    JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
+    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horaire>:d1 AND horaire<:d2';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
@@ -756,6 +767,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
+    debug($result);
     return $result;
 }
 
