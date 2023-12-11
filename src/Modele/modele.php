@@ -859,6 +859,11 @@ function modSetDecouvert($idC,$deco) {
     $prepared -> execute();
 }
 
+/**
+ * cree un motif avec le libelle et le(s) document(s) en paramètres
+ * @param string $label le libelle
+ * @param string $doc le(s) document(s) 
+ */
 function modCreateMotive($label,$doc) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO motif(intitule,document) VALUES (:label,:doc)';
@@ -868,6 +873,11 @@ function modCreateMotive($label,$doc) {
     $prepared -> execute();
 }
 
+/**
+ * cree un type de compte avec l'id de motif et le nom en paramètres
+ * @param int $idM l'id du motif
+ * @param string $name le nom du compte
+ */
 function modCreateTypeAccount($idM,$name) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO typeCompte(idMotif,nom) VALUES (:idM,:nameA)';
@@ -877,6 +887,11 @@ function modCreateTypeAccount($idM,$name) {
     $prepared -> execute();
 }
 
+/**
+ * cree un type de contrat avec l'id de motif et le nom en paramètres
+ * @param int $idM l'id du motif
+ * @param string $name le nom du contrat
+ */
 function modCreateTypeContract($idM,$name) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO typeContrat(idMotif,nom) VALUES (:idM,:nameA)';
@@ -886,6 +901,21 @@ function modCreateTypeContract($idM,$name) {
     $prepared -> execute();
 }
 
+/**
+ * modifie les infos du client dont l'id est en paramètre
+ * @param int $idC l'id du client
+ * @param int $idE l'id du conseiller
+ * @param string $sname le nom
+ * @param string $fname le prenom
+ * @param string $dob la date de naissance
+ * @param string $dc la date de creation
+ * @param string $adr l'adresse
+ * @param string $num le numero de tel
+ * @param string $email l'adresse mail
+ * @param string $job la profession
+ * @param string $fam la situation familiale
+ * @param string $civ la civilite
+ */
 function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'UPDATE client SET idEmploye=:idE, nom=:sname, prenom=:fname, dateNaissance=:dob, dateCreation=:dc, adresse=:adr, numTel=:num, email=:email, profession=:job, situationFamiliale=:fam, civilite=:civ WHERE idClient=:idC';
