@@ -19,16 +19,9 @@ function vueDisplayHomeConseiller(){
     $content="";
     require_once('gabaritConseillerHomePage.php');
 }
-/**
- * Fonction qui affiche la page d'accueil de l'agent d'accueil
- * Ne retourne rien
- * @param string $firstName prénom de l'Agent
- * @param string $lastName nom de famille de l'Agent
- * @param array $rendezVous liste des Rendez Vous de la semaine
- * @param array $adminTasks liste des tâches admins de la semaine
- */
+
 function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
-    debug(json_encode($appointments) ." ". json_encode($TA)." ". $dateOfWeek." ". $username);
+    debug(json_encode($appointments) ." ". json_encode($TA)." ". json_encode($dateOfWeek)." ". $username);
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -45,6 +38,25 @@ function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
 function vueDisplayLogin(){
     $content="";
     require_once('gabaritLanding.php');
+}
+
+function vueGenerateAppointementHTML($appointment) {
+    $heureDebut = (substr($appointment->HORAIRE, 11, 5));
+    $heureFin = (substr($appointment->HORAIRE, 11, 5)); 
+        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
+        <h2>'. $appointment->INTITULE .'</h2>
+        <p>'. $appointment->identiteClient .'</p>
+        <div class="eventDetails">
+            <div>
+                <p class="eventStartTime">'. $heureDebut .'</p>
+                <p class="eventEndTime">'. $heureFin .'</p>
+            </div>
+            <div class="eventConseiller lush-green">
+                <i class="fa-solid fa-user-tie"></i>
+                '. $appointment->identiteEmploye .'
+            </div>
+        </div>
+    </div>';
 }
 
 

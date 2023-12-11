@@ -336,15 +336,13 @@ function ctlGetInfoEmploye($idEmploye) {
 }
 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    // TODO : faire ca
-    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
-    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
+    // $listTA = modGetAllAdminBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
     $array = new ArrayObject();
     $array->append($listRDV);
-    $array->append($listTA);
-    $array->append($nameConseiller);
+    // $array->append($listTA);
+    $array->append([]);
+    $array->append($dateStartOfWeek);
     return $array;
 }
 

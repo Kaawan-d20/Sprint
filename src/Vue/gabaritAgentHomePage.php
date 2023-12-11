@@ -28,8 +28,8 @@
                 </form>
                 <div class="dropdown">
                     <button class="accountButton">
-                            <!-- <?php $user?> -->
                         <i class="fa-solid fa-user"></i>
+                        <?php echo $username;?>
                     </button>
                     <div class="dropdownContent">
                         <form action="index.php" method="post">
@@ -83,58 +83,55 @@
                     <h1>Lundi</h1>
                     <span>01</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[0]); ?></div>
             </div>
             <div class="day tuesday">
                 <div class="dayCell">
                     <h1>Mardi</h1>
                     <span>02</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[1]); ?></div>
             </div>
             <div class="day wednesday">
                 <div class="dayCell">
                     <h1>Mercredi</h1>
                     <span>03</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[2]); ?></div>
             </div>
             <div class="day thursday">
                 <div class="dayCell">
                     <h1>Jeudi</h1>
                     <span>04</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[3]); ?></div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
                     <h1>Vendredi</h1>
                     <span>05</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[4]); ?></div>
             </div>
             <div class="day saturday">
                 <div class="dayCell">
                     <h1>Samedi</h1>
                     <span>06</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[5]); ?></div>
             </div>
             <div class="day sunday">
                 <div class="dayCell">
                     <h1>Dimanche</h1>
                     <span>07</span>
                 </div>
-                <div class="events"></div>
+                <div class="events"><?php echo( $weekEvents[6]); ?></div>
             </div>
         </div>
     </div>
 </div>
 <script>
 
-
-let conseillersArray = []; // this is bullshit, this is juste every conseiller in form of an array, because JS is bullshit (no it's not, I just dont know it that well)
-let conseillersDict = [];
 let selectedFilters = [];
 let globalCurrentDate = new Date( "<?php echo($dateOfWeek); ?>" );
 document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
@@ -165,7 +162,7 @@ let correspondingMonth = [
     "Décembre"
 ];
 
-
+/** switch beetween light and dark theme */ 
 function toggleTheme() {
     console.log(isLightTheme);
     let icon = document.getElementById("themeSwitcherIcon");
@@ -217,17 +214,24 @@ function generateSingleFilter(name, colorClass) {
 } 
 
 /** generates the filters, must be called AFTER the events are all stored in the board */ 
-function generateFilters (){
+function generateFilters () {
     let filterWrapper = document.createElement("div");
     filterWrapper.classList.add("filterWrapper");
-
+    let conseillersDict = [];
+    document.querySelectorAll(".event").forEach(event => {
+        if (! conseillersDict.includes(event.dataset.conseiller)) {
+            conseillersDict.push(event.dataset.conseiller);
+        }
+    })
+    console.log(conseillersDict);
     conseillersDict.forEach((conseiller) => {
-        let filterBtn = generateSingleFilter(conseiller.key, conseiller.value);
+        let filterBtn = generateSingleFilter(conseiller, "lush-green"); // TODO :ajouter la couleur correct et pas le shuntage
         filterWrapper.appendChild(filterBtn);
     })
     document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
 }
 
+/** called by the filterBtn dynamically created above, will toggle the filter mode for each type */ 
 function filterToggle(filterBtn) {
     let icon = filterBtn.childNodes[0];
     if (filterBtn.classList.value.includes("inactive")) {
@@ -258,14 +262,17 @@ function filterToggle(filterBtn) {
     filterEvents();  
 }
 
+/** used to hide the events that are filtered out */ 
 function hide (eventHTML) {
     eventHTML.classList.add("hidden")
 }
 
+/** used to dehide the events that are filtered in again (yes it's callded show, but technically it de-hide.) */ 
 function show (eventHTML) {
     eventHTML.classList.remove("hidden");
 }
 
+/** used to hide and dehide the events that are filtered in or out */ 
 function filterEvents() {
     if (selectedFilters.length == 0) {
         // No button selected, show everything
@@ -292,19 +299,22 @@ function setdayCellSpan (week) {
     }
 }
 
+/** called during the updating of the title to setup the month and year label */ 
 function updateDateTitle(currentDate) {
     // console.log(currentDate instanceof Date)
     document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
     document.querySelector(".dateBlock span").textContent = currentDate.getFullYear();
 }
 
-function updateCalendar (currentDate) {
+
+function updateCalendar(currentDate) {
     updateDateTitle(currentDate);
     setdayCellSpan(getWeekArray(currentDate));
 }
 
 function getWeekArray(mondayDate) {
     let weekArray = [];
+    let currentDate =mondayDate;
     for (let i = 0; i < 7; i++) {
         let currentday = currentDate.getDate().toString();
         weekArray.push((currentday.length < 2) ? '0' + currentday :currentday);
@@ -338,22 +348,6 @@ function attemptUpdate() {
 generateFilters();
 updateCalendar(globalCurrentDate);
 
-
 </script>
 </body>
 </html>
-<!--                <div class="event">
-                        <h2>Ouverture de Compte</h2>
-                        <p>Mx Elise Johansson</p>
-                        <span class="pronounsSpan">elle/elle</span>
-                        <div class="eventDetails">
-                            <div>
-                                <p class="eventStartTime">12:40</p>
-                                <p class="eventEndTime">13:40</p>
-                            </div>
-                            <div class="eventConseiller" style="background-color: #F2542D;">
-                                <i class="fa-solid fa-user-tie"></i>
-                                Alexander
-                            </div>
-                        </div>
-                    </div> -->

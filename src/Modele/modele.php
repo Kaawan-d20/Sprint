@@ -754,9 +754,9 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $prepared -> fetchAll();
+    $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
-    return $prepared;
+    return $result;
 }
 
 function modGetNumberAppointmentsBetween($date1,$date2) {
