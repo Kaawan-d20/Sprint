@@ -27,10 +27,15 @@ function vueDisplayHomeConseiller(){
  * @param array $rendezVous liste des Rendez Vous de la semaine
  * @param array $adminTasks liste des tâches admins de la semaine
  */
-// function vueDisplayHomeAgent($firstName, $lastName, $rendezVous, $adminTasks){
-
-function vueDisplayHomeAgent() {
-    // liste des para $appointments, $TA, $username, $dateOfWee=new date.today()
+function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
+    debug(json_encode($appointments) ." ". json_encode($TA)." ". $dateOfWeek." ". $username);
+    $weekEvents = array("", "", "", "", "", "", "");
+    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
+    foreach ($appointments as $appointment) {
+        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIRE);
+        $weekNumber = date_format($appointmentDate, "N");
+        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
+    }
     require_once('gabaritAgentHomePage.php');
 }
 /**
@@ -250,17 +255,6 @@ function vueDisplayGestionMotifOne($motif) {
                 </form>";
     require_once('gabaritGestion.php');
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
