@@ -267,20 +267,6 @@ function modDebit($idA,$sum) {
     $prepared -> closeCursor();
 }
 
-function modInsertOperation($idA,$source,$label,$dateO,$sum,$iscredit) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO OPERATION (idCompte,source,libelle,dateoperation,montant,iscredit) VALUES (:idA,:source,:label,:dateO,:sum,:iscredit);';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
-    $prepared -> bindParam(':source', $source, PDO::PARAM_STR);
-    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
-    $prepared -> bindParam(':dateO', $dateO, PDO::PARAM_STR);
-    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
-    $prepared -> bindParam(':iscredit', $iscredit, PDO::PARAM_BOOL);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
-
 /**
  * crédite le compte dont l'id est en paramètre de la somme en paramètre 
  * @param int $idA id du compte à créditer
@@ -327,7 +313,7 @@ function modGetIdClientFromAccount($idAccount){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->idClient;
+    return $result->decouvert;
 }
 
 /**
@@ -585,7 +571,7 @@ function modGetNumberOverdraftAccounts() {
 /**
  * renvoie le nombre de comptes n'étant pas à découvert (dont le solde est positif ou nul)
  */
-function modGetNomberNonOverdraftAccounts() {
+function modGetNumberNonOverdraftAccounts() {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbNonOverdraftAccounts FROM compte WHERE solde>=0';
     $prepared = $connection -> query($query);
@@ -620,6 +606,82 @@ function modGetAllContractTypes() {
     $prepared -> closeCursor();
     return $result;
 }
+
+function modGetAllMotif() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM motif';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+function modGetTypeAccount($idTypeAccount) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecompte WHERE idtypecompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+function modGetContractFromId($idContractType) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecontrat WHERE idtypecontrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContractType, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+
+function modGetMotifFromId($idMotif) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM motif WHERE idmotif=:idM';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result;
+}
+
+function modModifTypeAccount($idAccount, $name, $active){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modModifTypeContract($idContract, $name, $active){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modModifMotif($idMotif, $intitule, $document) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE motif SET intitule=:intitule, document=:document WHERE idmotif=:idM';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':intitule', $intitule, PDO::PARAM_STR);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
 
 /**
  * renvoie le ou les client(s) dont la somme des soldes des comptes est la plus élevée,
@@ -663,9 +725,9 @@ function modGetIntituleCategorie($id) {
  * @param string $password le password (salé) de l'employé
  * @param int $idCat l'id de la catégorie de l'employé
  */
-function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
+function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat, $color) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE employe set nom=:sname, prenom=:fname, login=:login, password=:password, idCategorie=:idCat WHERE idEmploye=:idE';
+    $query = 'UPDATE employe set nom=:sname, prenom=:fname, login=:login, password=:password, idCategorie=:idCat, color=:color WHERE idEmploye=:idE';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
     $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
@@ -673,6 +735,7 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
     $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
     $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
     $prepared -> bindParam(':idCat', $idCat, PDO::PARAM_INT);
+    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -685,41 +748,48 @@ function modModifEmploye($idE, $sname, $fname, $login, $password, $idCat) {
  */
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT rdv.IDRDV, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, rdv.idemploye, CONCAT(client.CIVILITEE," ",client.PRENOM," ",client.NOM) AS identiteClient, rdv.idclient, motif.INTITULE, rdv.HORAIRE FROM rdv JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE JOIN client ON rdv.IDCLIENT=client.IDCLIENT JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF WHERE horaire>:d1 AND horaire<:d2; ';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':d1',  $date1, PDO::PARAM_STR);
-    $prepared -> bindParam(':d2',  $date2, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
-function modGetAllTABetween($date1,$date2) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT tacheadmin.IDTA, CONCAT(employe.PRENOM," ",employe.NOM) AS identiteEmploye, tacheadmin.idemploye, tacheadmin.LIBELLE, tacheadmin.HORAIRE FROM tacheadmin JOIN employe ON tacheadmin.IDEMPLOYE=employe.IDEMPLOYE WHERE horaire>:d1 AND horaire<:d2; ';
+    $query = 'SELECT * FROM rdv WHERE horaire>:d1 AND horaire<:d2';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
+    $prepared -> fetchAll();
     $prepared -> closeCursor();
-    return $result;
+    return $prepared;
 }
 
-/**
- * renvoie les opérations du compte dont l'id est en paramètre
- */
-function modGetOperations($id) {
+function modGetNumberAppointmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM operation WHERE idCompte=:id';
+    $query = 'SELECT COUNT(*) AS nbAppointments FROM rdv WHERE horaire>:d1 AND horaire<:d2';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
+    $result = $prepared -> fetch();
+    return $result->nbAppointments;
 }
 
+function modGetNumberContractsBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>:d1 AND dateouverture<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result->nbContracts;
+}
+
+function modGetNumberClientsAt($date){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<:d';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d', $date, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    return $result->nbClients;
+}
