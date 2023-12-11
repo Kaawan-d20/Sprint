@@ -809,7 +809,7 @@ function modGetNumberClientsAt($date){
 }
 
 /**
- * cree un nouvea u rdv
+ * cree un nouveau rdv
  * @param int $idM l'id du motif
  * @param int $idC l'id du client
  * @param int $idE l'id de l'employe
@@ -823,5 +823,19 @@ function modAddAppointment($idM,$idC,$idE,$time) {
     $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
     $prepared -> bindParam(':dt', $time, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * modifie le decouvert du compte dont l'id est en paramètre
+ * @param int $idC l'id du compte
+ * @param string $deco le découvert
+ */
+function modSetDecouvert($idC,$deco) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE compte SET decouvert=:deco WHERE idCompte=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':deco', $deco, PDO::PARAM_STR);
     $prepared -> execute();
 }
