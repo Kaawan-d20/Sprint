@@ -365,7 +365,6 @@ nav {
 
 
 .weekSelectorDateField {
-    padding: 1em;
     border: none;
     background-color: var(--background);
     color: var(--text);
@@ -472,6 +471,10 @@ nav {
     display: flex;
     gap: 1em;
     align-items: baseline;
+}
+
+.filterBtn:not(.inactive) {
+    color: var(--night);
 }
 
 .filterWrapper {
@@ -689,9 +692,6 @@ input[type="number"] {
     background-color: var(--background);
 }
 
-/* .active {
-    background-color: transparent;
-} */
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 1200px) {

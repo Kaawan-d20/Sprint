@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script> -->
     <title>Accueil</title>
 </head>
 <body class="dark">
@@ -134,7 +134,6 @@
 
 let selectedFilters = [];
 let globalCurrentDate = new Date("<?php echo($dateOfWeek->format('Y-m-d')); ?>");
-console.log("current " + globalCurrentDate);
 document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
 
 let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
@@ -164,7 +163,6 @@ let correspondingMonth = [
 
 /** switch beetween light and dark theme */ 
 function toggleTheme() {
-    console.log(isLightTheme);
     let icon = document.getElementById("themeSwitcherIcon");
     let btn = document.getElementById("themeSwitcherBtn");
     if (isLightTheme) {
@@ -184,7 +182,6 @@ function toggleTheme() {
 
         isLightTheme = true;
     }
-    console.log(isLightTheme);
 }
 /** returns a Date as a string "yyyy-mm-dd" */ 
 function dateToString(globalCurrentDate) {
@@ -223,7 +220,6 @@ function generateFilters () {
             conseillersDict.push(event.dataset.conseiller);
         }
     })
-    console.log(conseillersDict);
     conseillersDict.forEach((conseiller) => {
         let filterBtn = generateSingleFilter(conseiller, "lush-green"); // TODO :ajouter la couleur correct et pas le shuntage
         filterWrapper.appendChild(filterBtn);
@@ -301,7 +297,6 @@ function setdayCellSpan (week) {
 
 /** called during the updating of the title to setup the month and year label */ 
 function updateDateTitle(currentDate) {
-    // console.log(currentDate instanceof Date)
     document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
     document.querySelector(".dateBlock span").textContent = currentDate.getFullYear();
 }

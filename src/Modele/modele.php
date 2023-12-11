@@ -767,7 +767,6 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
-    debug($result);
     return $result;
 }
 

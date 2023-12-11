@@ -55,11 +55,9 @@ try {
         ctlGestionPersonnel("modif", $idEmployee);
     }
     elseif (isset($_POST['weekSelectorPrevious'])){
-        debug("previous");
         ctlUpdateCalendar($_POST['previousWeekDate']);
     }
     elseif (isset($_POST['weekSelectorNext'])){
-        debug("next");
         ctlUpdateCalendar($_POST['nextWeekDate']);
     }
     elseif (isset($_POST["weekSelectorDateField"])){
