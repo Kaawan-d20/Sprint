@@ -170,9 +170,15 @@ function vueDisplayGestionPersonnelAll($listEmployee) {
                             Couleur de l'employé : ".$employee->COLOR.", 
                             <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
                             <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
+                            <input type=\"submit\" value=\"Supprimer l'employe.\" name=\"GestionPersonnelDeleteBtn\">
                         </p>
                     </form>";
     }
+    $content .= "<form action=\"index.php\" method=\"post\">
+                    <p>
+                        <input type=\"submit\" value=\"Ajouter un employé.\" name=\"GestionPersonnelAddBtn\">
+                    </p>
+                </form>";
     require_once('gabaritGestion.php');
 }
 
@@ -205,6 +211,36 @@ function vueDisplayGestionPersonnelOne($employee) {
 }
 
 
+
+
+function vueDisplayGestionPersonnelAdd(){
+    $content="<h1>Ajouter un employé</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <select name=\"idCategorie\" >
+                            <option value=\"1\" >Directeur</option>
+                            <option value=\"2\" >Conseiller</option>
+                            <option value=\"3\" >Agent d'acceuil</option>
+                        </select>
+                        <input type=\"text\" name=\"nameEmployee\" placeholder=\"Nom\">
+                        <input type=\"text\" name=\"firstNameEmployee\" placeholder=\"Prénom\">
+                        <input type=\"text\" name=\"loginEmployee\" placeholder=\"Login\">
+                        <input type=\"text\" name=\"passwordEmployee\" placeholder=\"Mot de passe\">
+                        <input type=\"text\" name=\"colorEmployee\" placeholder=\"Couleur\">
+                        <input type=\"submit\" name=\"AddPersonnelSubmitBtn\" value=\"Valider ajout\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+
+
+
+
+
+
+
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
     $content ="<h1>Gestion des services</h1>
                 <h2>Liste des type de compte</h2>";
@@ -213,8 +249,11 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                         <p>
                             Intitulé du type de compte : ".$typeAccount->NOM.",
                             Actif : ".$typeAccount->ACTIF.",
+                            Document : ".$typeAccount->DOCUMENT."
                             <input type=\"hidden\" name=\"idAccount\" value=\"".$typeAccount->IDTYPECOMPTE."\">
                             <input type=\"submit\" value=\"Modifier le type de compte.\" name=\"GestionAccountOneBtn\">
+                            <input type=\"submit\" value=\"Supprimer le type de contrat.\" name=\"GestionAccountDeleteBtn\">
+
                         </p>
                     </form>";
     }
@@ -224,11 +263,36 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                         <p>
                             Intitulé du type de contrat : ".$typeContract->NOM.",
                             Actif : ".$typeContract->ACTIF.",
+                            Document : ".$typeContract->DOCUMENT."
                             <input type=\"hidden\" name=\"idContract\" value=\"".$typeContract->IDTYPECONTRAT."\">
                             <input type=\"submit\" value=\"Modifier le type de contrat.\" name=\"GestionContractOneBtn\">
+                            <input type=\"submit\" value=\"Supprimer le type de contrat.\" name=\"GestionContractDeleteBtn\">
                         </p>
                     </form>";
     }
+    $content .= "<form action=\"index.php\" method=\"post\">
+                    <p>
+                        <input type=\"submit\" value=\"Ajouter un Service.\" name=\"GestionServicesAddBtn\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+function vueDisplayGestionServicesAdd(){
+    $content="<h1>Ajouter un service</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <select name=\"typeService\" >
+                            <option value=\"1\" >Type de compte</option>
+                            <option value=\"2\" >Type de contrat</option>
+                        </select>
+                        <input type=\"text\" name=\"nameService\" placeholder=\"Nom\">
+                        <input type=\"text\" name=\"documentService\" placeholder=\"Document\">
+                        <input type=\"checkbox\" name=\"activeService\" >
+                        <input type=\"submit\" name=\"AddServiceSubmitBtn\" value=\"Valider ajout\">
+                    </p>
+                </form>";
     require_once('gabaritGestion.php');
 }
 
@@ -238,8 +302,11 @@ function vueDisplayGestionAccountOne($account) {
                 <form action=\"index.php\" method=\"post\">
                     <p>
                         <input type=\"text\" name=\"nameAccount\" value=\"".$account->NOM."\">
+                        <input type=\"text\" name=\"documentAccount\" value=\"".$account->DOCUMENT."\">
                         <input type=\"checkbox\" name=\"activeAccount\" ". $etat ."  >
                         <input type=\"hidden\" name=\"idAccount\" value=\"".$account->IDTYPECOMPTE."\">
+                        <input type=\"hidden\" name=\"idMotif\" value=\"".$account->IDMOTIF."\">
+
                         <input type=\"submit\" name=\"ModifAccountOneBtn\" value=\"Valider modification\">
                     </p>
                 </form>";
@@ -253,45 +320,16 @@ function vueDisplayGestionContractOne($contract) {
                 <form action=\"index.php\" method=\"post\">
                     <p>
                         <input type=\"text\" name=\"nameContract\" value=\"".$contract->NOM."\">
+                        <input type=\"text\" name=\"documentContract\" value=\"".$contract->DOCUMENT."\">
                         <input type=\"checkbox\" name=\"activeContract\" ".$etat.">
                         <input type=\"hidden\" name=\"idContract\" value=\"".$contract->IDTYPECONTRAT."\">
+                        <input type=\"hidden\" name=\"idMotif\" value=\"".$contract->IDMOTIF."\">
+
                         <input type=\"submit\" name=\"ModifContractOneBtn\" value=\"Valider modification\">
                     </p>
                 </form>";
     require_once('gabaritGestion.php');
 }
-
-
-function vueDisplayGestionMotifAll($listMotif) {
-    $content="<h1>Gestion des motif</h1>
-                <h2>Liste des motif</h2>";
-    foreach ($listMotif as $motif) {
-        $content .= "<form action=\"index.php\" method=\"post\">
-                        <p>
-                            Intitulé du motif : ".$motif->INTITULE.",
-                            Document : ".$motif->DOCUMENT.",
-                            <input type=\"hidden\" name=\"idMotif\" value=\"".$motif->IDMOTIF."\">
-                            <input type=\"submit\" value=\"Modifier le motif.\" name=\"GestionMotifOneBtn\">
-                        </p>
-                    </form>";
-    }
-    require_once('gabaritGestion.php');
-}
-
-function vueDisplayGestionMotifOne($motif) {
-    $content="<h1>Modifier info motif</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <input type=\"text\" name=\"intituleMotif\" value=\"".$motif->INTITULE."\">
-                        <input type=\"text\" name=\"documentMotif\" value=\"".$motif->DOCUMENT."\">
-                        <input type=\"hidden\" name=\"idMotif\" value=\"".$motif->IDMOTIF."\">
-                        <input type=\"submit\" name=\"ModifMotifOneBtn\" value=\"Valider modification\">
-                    </p>
-                </form>";
-    require_once('gabaritGestion.php');
-}
-
-
 
 
 

@@ -249,11 +249,49 @@ function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $p
     ctlGestionPersonnelAll();
 }
 
+function ctlGestionPersonnelAdd(){
+    vueDisplayGestionPersonnelAdd();
+}
+
+function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color){
+    modAddEmploye($category, $name, $firstName, $login, $password, $color);
+    ctlGestionPersonnelAll();
+}
+
+function ctlGestionPersonnelDelete($idEmployee){
+    modDeleteEmploye($idEmployee);
+    ctlGestionPersonnelAll();
+}
+
+
+
+
+
+
+
+
+
+
 
 function ctlGestionServiceslAll(){
     $listTypeAccount = modGetAllAccountTypes();
     $listTypeContract = modGetAllContractTypes();
     vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
+}
+
+
+function ctlGestionServicesAdd(){
+    vueDisplayGestionServicesAdd();
+}
+
+function ctlGestionServicesAddSubmit($name, $type, $active, $document){
+    if ($type == 1){
+        modAddTypeAccount($name, $active, $document);
+    }
+    elseif ($type == 2){
+        modAddTypeContract($name, $active, $document);
+    }
+    ctlGestionServiceslAll();
 }
 
 
@@ -269,47 +307,28 @@ function ctlGestionContractOne($idContract){
     vueDisplayGestionContractOne($contract);
 }
 
-function ctlGestionAccountOneSubmit($idAccount, $name, $active){
-    modModifTypeAccount($idAccount, $name, $active);
+function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
+    modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
-function ctlGestionContractOneSubmit($idContract, $name, $active){
-    modModifTypeContract($idContract, $name, $active);
+function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
+    modModifTypeContract($idContract, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
 
-function ctlGestionMotifAll(){
-    $listMotif = modGetAllMotif();
-    vueDisplayGestionMotifAll($listMotif);
+
+
+function ctlGestionAccountDelete($idAccount){
+    modDeleteTypeAccount($idAccount);
+    ctlGestionServiceslAll();
 }
 
-function ctlGestionMotifOne($idMotif){
-    $motif = modGetMotifFromId($idMotif);
-    vueDisplayGestionMotifOne($motif);
+function ctlGestionContractDelete($idContract){
+    modDeleteTypeContract($idContract);
+    ctlGestionServiceslAll();
 }
-
-function ctlGestionMotifOneSubmit($idMotif, $name, $document){
-    modModifMotif($idMotif, $name, $document);
-    ctlGestionMotifAll();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

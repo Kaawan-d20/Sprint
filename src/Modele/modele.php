@@ -590,7 +590,7 @@ function modGetNumberNonOverdraftAccounts() {
  */
 function modGetAllAccountTypes() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typeCompte';
+    $query = 'SELECT * FROM typeCompte NATURAL JOIN motif';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -603,7 +603,7 @@ function modGetAllAccountTypes() {
  */
 function modGetAllContractTypes() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typeContrat';
+    $query = 'SELECT * FROM typeContrat NATURAL JOIN motif';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -623,7 +623,7 @@ function modGetAllMotif() {
 
 function modGetTypeAccount($idTypeAccount) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecompte WHERE idtypecompte=:idA';
+    $query = 'SELECT * FROM typecompte NATURAL JOIN motif WHERE idtypecompte=:idA';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idA', $idTypeAccount, PDO::PARAM_INT);
     $prepared -> execute();
@@ -633,7 +633,7 @@ function modGetTypeAccount($idTypeAccount) {
 }
 function modGetContractFromId($idContractType) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecontrat WHERE idtypecontrat=:idC';
+    $query = 'SELECT * FROM typecontrat NATURAL JOIN motif WHERE idtypecontrat=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idC', $idContractType, PDO::PARAM_INT);
     $prepared -> execute();
@@ -653,24 +653,30 @@ function modGetMotifFromId($idMotif) {
     return $result;
 }
 
-function modModifTypeAccount($idAccount, $name, $active){
+function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idA';
+    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idA;
+                UPDATE motif SET document=:document WHERE idmotif=:idM';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
 
-function modModifTypeContract($idContract, $name, $active){
+function modModifTypeContract($idContract, $name, $active, $document, $idMotif){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idC';
+    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idC;
+                UPDATE motif SET document=:document WHERE idmotif=:idM';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -820,4 +826,99 @@ function modGetOperations($id) {
     $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
+}
+
+function modAddEmploye($idCategorie, $name, $firstName, $login, $password, $color){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO employe(idCategorie, nom, prenom, login, password, color) VALUES (:idCategorie, :name, :firstName, :login, :password, :color)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idCategorie', $idCategorie, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
+    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modDeleteEmploye($idEmployee){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM employe WHERE idEmploye=:idEmployee';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idEmployee', $idEmployee, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modAddTypeAccount($name, $active, $document){
+    $connection = Connection::getInstance()->getConnection();
+    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES ('Gestion de :name',:document);
+    INSERT INTO `typecompte`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
+function modAddTypeContract($name, $active, $document){
+    $connection = Connection::getInstance()->getConnection();
+    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES ('Gestion de :name',:document);
+    INSERT INTO `typecontrat`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
+    $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modDeleteTypeAccount($idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    
+    // Récupérer l'idmotif
+    $query = 'SELECT idmotif FROM typecompte WHERE idtypecompte=:idTypeAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $idMotif = $prepared->fetchColumn();
+    $prepared -> closeCursor();
+
+    // Supprimer les entrées
+    $query = 'DELETE FROM typecompte WHERE idTypeCompte=:idTypeAccount;
+              DELETE FROM motif WHERE idmotif = :idMotif';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
+function modDeleteTypeContract($idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    
+    // Récupérer l'idmotif
+    $query = 'SELECT idmotif FROM typecontrat WHERE idtypecontrat=:idTypeContract';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContract', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $idMotif = $prepared->fetchColumn();
+    $prepared -> closeCursor();
+
+    // Supprimer les entrées
+    $query = 'DELETE FROM typecontrat WHERE idTypecontrat=:idTypeContract;
+              DELETE FROM motif WHERE idmotif = :idMotif';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContract', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
 }
