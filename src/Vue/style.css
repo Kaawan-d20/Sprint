@@ -363,13 +363,15 @@ nav {
     border-radius: 0 5px 5px 0;
 }
 
+.weekSelectorForm {
+    display: flex;
+}
 
 .weekSelectorDateField {
     border: none;
     background-color: var(--background);
     color: var(--text);
     font-family: var(--mono-font);
-    height: 100%;
 }
 
 .weekSelectorDateField:focus, .weekSelectorDateField:hover {

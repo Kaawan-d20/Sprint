@@ -64,7 +64,7 @@
                     </button>
                     <input type="date" name="previousWeekDate" id="previousWeekDate" class="hidden">
                 </form>
-                <form action="index.php" method="post" id="weekSelectorForm">
+                <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
                     <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
                     <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
                     <input type="submit" name="weekSelectorDateBtn" id="weekSelectorDateBtn" class="hidden">
