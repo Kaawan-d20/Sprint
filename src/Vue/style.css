@@ -263,7 +263,7 @@ nav {
     flex-direction: column;
 }
 
-.dropdown:hover .accountButton {
+.dropdown:hover .accountButton, .dropdown:focus .accountButton {
     background-color: var(--background-secondary);
     border-radius: 5px 5px 0 0;
     border-bottom: 1px solid var(--mid-back);
@@ -280,7 +280,7 @@ nav {
     flex-grow: 1;
 }
 
-.dropdownButton:hover {
+.dropdownButton:hover, .dropdownButton:focus {
     background-color: var(--background-secondary);
 }
 
@@ -288,7 +288,7 @@ nav {
     border-radius: 0 0 5px 5px;
 }
 
-.dropdownButton:last-child:hover {
+.dropdownButton:last-child:hover, .dropdownButton:last-child:focus {
     background-color: var(--invalid-red);
     color: var(--white);
 }
@@ -491,7 +491,7 @@ nav {
 
 .contactAndRDVWrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
     gap: 1em;
 }
 
@@ -609,6 +609,12 @@ nav {
     font-size: 1em;
 }
 
+.debitCreditWrapper form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5em;
+}
+
 /* .debitCreditWrapper form input[type="number"]:focus {
     outline: 2px inset var(--cta);
 } */
@@ -704,7 +710,7 @@ input[type="number"] {
 
     /* CALENDAR */
 
-    .weekWrapper {
+    .weekWrapper, .contactAndRDVWrapper {
         grid-auto-flow: row;
     }
 
