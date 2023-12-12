@@ -58,10 +58,14 @@ try {
     }
      // ------------------------------------------------------- Directeur -------------------------------------------------------
     // ------------------------------------------------------- Statistique -------------------------------------------------------
-    elseif (isset($_POST['seachStatClient'])){
+    elseif (isset($_POST['searchStatClient2'])){
         $dateStart=$_POST['datedebut'];
         $dateEnd=$_POST['datefin'];
-        ctlStatClientBetween($dateStart, $dateEnd);
+        ctlStatsDisplay($dateStart, $dateEnd);
+    }
+    elseif (isset($_POST['searchStatClient1'])){
+        $dateStart=$_POST['date'];
+        ctlStatsDisplay($date);
     }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
     elseif (isset($_POST['GestionPersonnelAllBtn'])){

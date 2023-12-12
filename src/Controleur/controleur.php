@@ -219,7 +219,16 @@ function ctlError($error) {
  * Fonction qui permet d'afficher les statistiques
  * @return array c'est un tableau (map) avec les statistiques
  */
-function ctlGetStats(){
+function ctlGetStats($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
     $stat = array();
     $stat['nbClient'] = modGetNumberClients();
     $stat['nbAccount'] = modGetNumberAccounts();
@@ -232,13 +241,25 @@ function ctlGetStats(){
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
-    $monday = (new DateTime('monday this week'))->format('Y-M-d');
-    $sunday = (new DateTime('sunday this week'))->format('Y-M-d');
-    $today = (new DateTime('today'))->format('Y-M-d');
-    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($monday, $sunday);
-    $stat['ContractBetween'] = modGetNumberContractsBetween($monday, $sunday);
-    $stat['nbClientAt'] = modGetNumberClientsAt($today);
+    debug($date);
+    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
+    $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
+    $stat['nbClientAt'] = modGetNumberClientsAt($date);
     return $stat;
+}
+
+function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
+    $stat = ctlGetStats($dateStart, $dateEnd, $date);
+    vueDisplayHomeDirecteur($stat);
 }
 
 function ctlGestionPersonnelAll(){

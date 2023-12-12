@@ -22,6 +22,20 @@
         <p>Nombre de comptes inactifs : <?php echo $stat['nbAccountInactif'] ?></p>
         <p>Nombre de comptes à découvert : <?php echo $stat['nbAccountDecouvert'] ?></p>
         <p>Nombre de comptes non à découvert : <?php echo $stat['nbAccoutNonDecouvert'] ?></p>
+        <form action="index.php" method="post">
+            <label >Date de début </label><input type="date" name="datedebut">
+            <label > Date de fin </label><input type="date" name="datefin">
+            <input type="submit" name='searchStatClient2'value="Rechercher">
+            <p>Nombre de RDV entre deux dates : <?php echo $stat['AppoinmentBetween'] ?></p>
+            <p>Nombre de Contrat souscrit entre deux dates : <?php echo $stat['ContractBetween'] ?></p>
+        </form>
+        <form action="index.php" method="post">
+            <label >Date de fin </label>
+            <input type="date" name="date">
+            <input type="submit" value="searchStatClient1">
+            <p>Nombre de Client à une date <?php echo $stat['nbClientAt'] ?></p>
+
+        </form>
     </div>
     <div>
         <h1>Gestion du Personnel</h1>

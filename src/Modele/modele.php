@@ -806,7 +806,7 @@ function modGetNumberContractsBetween($date1,$date2) {
 
 function modGetNumberClientsAt($date){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<:d';
+    $query = 'SELECT COUNT(*) AS nbClients FROM client WHERE datecreation<=:d';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d', $date, PDO::PARAM_STR);
     $prepared -> execute();
