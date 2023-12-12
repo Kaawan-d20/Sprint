@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Info</title>
 </head>
-<body>
-    <!--Message pour Nathan
-    Cette partie est a afficher en php dans la vue, car si le client n'a pas de compte, il ne faut pas afficher cette partie
-    Mais je te la laisse ici pour que tu puisse faire le css
-    -->
+<body class="light"> <!-- TODO: use session to choose beetween light or dark -->
     <?php 
         $events = [["Ouverture Compte", "28/12/2023", "14h30", "15h30", "lush-green", "Bertrand"], ["Signature Contrat", "28/12/2023","15h30", "15h45", "lush-green", "Bertrand"]]
     ?>
@@ -56,7 +52,7 @@
                 <div class="debitCreditWrapper">
                     <h1>Débit / Crédit</h1> 
                     <form action="index.php" method="post">
-                        <select name="debitAccountSelector" id="" class="debitAccountSelector">
+                        <select name="debitAccountSelector" id="debitAccountSelector" class="debitAccountSelector">
                             <?php
                                 echo $optionSelect;
                             ?>
@@ -82,19 +78,6 @@
             echo $content;
         ?>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
 function displayOperations() {
     if (typeof accountSelected == 'undefined'){

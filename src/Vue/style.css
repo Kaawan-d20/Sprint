@@ -585,6 +585,10 @@ nav {
     font-size: var(--classic-font-size);
 }
 
+.debitAccountSelector:hover {
+    background-color: var(--text-secondary);
+}
+
 .debitCreditBtn {
     border: 1px solid var(--text);
     padding: .5em;
