@@ -537,6 +537,7 @@ nav {
 .infoWrapper {
     border: 1px solid var(--text);
     border-radius: 5px;
+    margin-top: .5em;
 }
 
 .infoHeaderWrapper, .infoContentWrapper {
@@ -555,6 +556,26 @@ nav {
 
 .contactContent, .infoContent {
     font-family: var(--mono-font);
+    background-color: var(--background);
+    border: none;
+    outline: none;
+}
+
+.infoContent:first-child {
+    border-radius: 0 0 0 5px;
+}
+.infoContent:last-child {
+    border-radius: 0 0 5px 0;
+}
+.contactContent:first-child {
+    border-radius: 0 5px 0 0;
+}
+.contactContent:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.contactContent:hover, .infoContent:hover {
+    background-color: var(--background-secondary);
 }
 
 .contactTableWrapper {
@@ -718,6 +739,27 @@ input[type="number"] {
     .contactTableWrapper {
         grid-template-columns: 1fr 2fr;
     }
+    .infoHeaderWrapper, .infoContentWrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
+
+    .infoWrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+    .infoContent:first-child {
+        border-radius: 0 5px 0 0;
+    }
+    .infoContent:last-child {
+        border-radius: 0 0 5px 0;
+    }
+
+    .infoContent:not(:last-child) {
+        border-bottom: 1px solid var(--text);
+        border-right: none;
+    }
+
 
     .day {
         border-right: none;
@@ -736,22 +778,5 @@ input[type="number"] {
 @media screen and (max-width:1800px) {
     .dayCell h1 {
         font-size: var(--big-font-size);
-    }
-}
-
-@media screen and (max-width:400px) {
-    .infoHeaderWrapper, .infoContentWrapper {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
-    }
-
-    .infoWrapper {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-    }
-
-    .infoContent:not(:last-child) {
-        border-bottom: 1px solid var(--text);
-        border-right: none;
     }
 }

@@ -11,6 +11,7 @@
         $events = [["Ouverture Compte", "28/12/2023", "14h30", "15h30", "lush-green", "Bertrand"], ["Signature Contrat", "28/12/2023","15h30", "15h45", "lush-green", "Bertrand"]]
     ?>
     <div class="syntheseWrapper">
+    <form action="index.php" method="post">
         <h1>Synthese</h1>
         <div class="nameWrapper">
             <h2><?php echo $civi; ?> <?php echo $firstNameClient; ?> <?php echo $nameClient; ?></h2>
@@ -26,10 +27,10 @@
                 <div class="infoHeader">Client·e depuis</div>
             </div>
             <div class="infoContentWrapper">
-                <div class="infoContent"><?php echo $naissance; ?></div>
-                <div class="infoContent"><?php echo $profession; ?></div>
-                <div class="infoContent"><?php echo $situation; ?></div>
-                <div class="infoContent"><?php echo $creation; ?></div>
+                <input type="date" class="infoContent" id="naissance" name="naissance" value="<?php echo $naissance; ?>">
+                <input type="text" class="infoContent" id="profession" name="profession" value="<?php echo $profession; ?>">
+                <input type="text" class="infoContent" id="situation" name="situation" value="<?php echo $situation; ?>">
+                <input type="date" class="infoContent" id="creation" name="creation" value="<?php echo $creation; ?>">
             </div>
         </div>
         <div id="contactAndRDVWrapper" class="contactAndRDVWrapper">
@@ -43,10 +44,10 @@
                         <div class="contactHeader">Conseiller : </div>
                     </div>
                     <div class="contactContentWrapper">
-                        <div class="contactContent"><?php echo $addressClient; ?></div>
-                        <div class="contactContent"><?php echo $phoneClient; ?></div>
-                        <div class="contactContent"><?php echo $emailClient; ?></div>
-                        <div class="contactContent"><?php echo $nameConseiller; ?></div>
+                         <input type="text" class="contactContent" name="addressClient" id="addressClient" value="<?php echo $addressClient; ?>">
+                        <input type="tel" class="contactContent" name="phoneClient" id="phoneClient" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" value="<?php echo $phoneClient; ?>">
+                        <input type="email" class="contactContent" name="emailClient" id="emailClient" value="<?php echo $emailClient; ?>">
+                        <input type="text" class="contactContent" name="nameConseiller" id="nameConseiller" value="<?php echo $nameConseiller; ?>">
                     </div>
                 </div>
                 <div class="debitCreditWrapper">
@@ -57,7 +58,7 @@
                                 echo $optionSelect;
                             ?>
                         </select>
-                        <input type="number" name="amountInput" id="" min="0" required>
+                        <input type="number" name="amountInput" id="amountInput" class="amountInput" min="0" required>
                         <input type="submit" value="Débit" name="debitBtn" min="0" class="debitCreditBtn">
                         <input type="submit" value="Crédit" name="creditBtn" class="debitCreditBtn">
                     </form>
@@ -70,7 +71,7 @@
                 </div>
             </div>
         </div>
-   
+    </form>
     </div>
     <div>
         
