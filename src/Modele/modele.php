@@ -62,11 +62,11 @@ function modGetClientFromId($idClient) {
  * renvoie tous les comptes du client dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param int $idClient l'id du client
- * @return array les comptes du client (IDCOMPTE, IDTYPECOMPTE, INTITULE, SOLDE, DECOUVERT, DATECREATION) (tableau d'objets)
+ * @return array les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION) (tableau d'objets)
  */
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT compte.idCompte,idTypeCompte,intitule,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte WHERE idClient=:idC';
+    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte NATURAL JOIN typecompte WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
@@ -377,11 +377,11 @@ function modSumAllSolde() {
  * renvoie tous les contrats du client dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param int $idClient l'id du client
- * @return array les contrats du client (IDCONTRAT, IDTYPECONTRAT, INTITULE, TARIFMENSUEL, DATEOUVERTURE) (tableau d'objets)
+ * @return array les contrats du client (IDCONTRAT, IDTYPECONTRAT, TARIFMENSUEL, DATEOUVERTURE) (tableau d'objets)
  */
 function modGetContracts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT contrat.idContrat,idTypeContrat,intitule,tarifmensuel,dateouverture FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat WHERE idClient=:idC';
+    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();

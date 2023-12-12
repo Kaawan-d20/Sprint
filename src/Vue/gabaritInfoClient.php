@@ -61,7 +61,7 @@
                                 echo $optionSelect;
                             ?>
                         </select>
-                        <input type="number" name="amountInput" id="" min="0" required>
+                        <input type="number" name="amountInput" id="" min="0" step="0.01" required>
                         <input type="submit" value="Débit" name="debitBtn" min="0" class="debitCreditBtn">
                         <input type="submit" value="Crédit" name="creditBtn" class="debitCreditBtn">
                     </form>

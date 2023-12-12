@@ -70,8 +70,8 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $optionSelect = "";
     $listA="";
     foreach ($listAccounts as $account) {
-        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule."</option>";
-        $listA .= "<p>".$account->intitule." : ".$account->solde."€</p>";
+        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->NOM."</option>";
+        $listA .= "<p>".$account->NOM." : ".$account->solde."€</p>";
     }
     $listC="";
     foreach ($listContract as $contract) {
@@ -96,7 +96,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $cht = "";
     $compteur = 1;
     foreach ($listAccounts as $account) {
-        $chteumeul .= "<option value=\"".$compteur."\">".$account->intitule." : ".$account->solde."</option>";
+        $chteumeul .= "<option value=\"".$compteur."\">".$account->NOM." : ".$account->solde."</option>";
         $cht .= "<div id=\"".$compteur."\" class='hidden'>";
         $listOperations = $listOperationsAccount["$account->idCompte"];
         foreach ($listOperations as $operation) {
