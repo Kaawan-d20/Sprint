@@ -102,9 +102,9 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         foreach ($listOperations as $operation) {
             $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
             if ($operation->ISCREDIT == 0) {
-                $cht .= "<i class='fa-solid fa-arrow-up-from-bracket'></i>";
+                $cht .= "<i class='fa-solid fa-minus'></i>";
             } else {
-                $cht .= "<i class='fa-solid fa-arrow-right-to-bracket' style='transform: rotate(90deg);'></i>";
+                $cht .= "<i class='fa-solid fa-plus'></i>";
             }
             $cht .= "<span>".$operation->MONTANT."</span></div>";
         }

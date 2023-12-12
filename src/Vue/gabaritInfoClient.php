@@ -30,7 +30,7 @@
                 <input type="date" class="infoContent" id="naissance" name="naissance" value="<?php echo $naissance; ?>">
                 <input type="text" class="infoContent" id="profession" name="profession" value="<?php echo $profession; ?>">
                 <input type="text" class="infoContent" id="situation" name="situation" value="<?php echo $situation; ?>">
-                <input type="date" class="infoContent" id="creation" name="creation" value="<?php echo $creation; ?>">
+                <input type="date" class="infoContent" id="creation" name="creation" disabled="disabled" value="<?php echo $creation; ?>">
             </div>
         </div>
         <div id="contactAndRDVWrapper" class="contactAndRDVWrapper">

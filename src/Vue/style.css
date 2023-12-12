@@ -521,6 +521,10 @@ nav {
     border-right: 1px solid var(--text);
 }
 
+.infoContent:disabled {
+    color: var(--text);
+}
+
 .contactContent:not(:last-child) {
     border-bottom: 1px solid var(--text);
 }
@@ -537,7 +541,7 @@ nav {
 .infoWrapper {
     border: 1px solid var(--text);
     border-radius: 5px;
-    margin-top: .5em;
+    margin: .5em 0;
 }
 
 .infoHeaderWrapper, .infoContentWrapper {
@@ -624,7 +628,7 @@ nav {
     background-color: var(--background-secondary);
 }
 
-.debitCreditWrapper form input[type="number"] {
+.amountInput {
     border: 1px solid var(--text);
     border-radius: 5px;
     padding: .5em;
