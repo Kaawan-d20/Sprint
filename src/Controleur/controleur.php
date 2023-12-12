@@ -232,6 +232,12 @@ function ctlGetStats(){
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    $monday = (new DateTime('monday this week'))->format('Y-M-d');
+    $sunday = (new DateTime('sunday this week'))->format('Y-M-d');
+    $today = (new DateTime('today'))->format('Y-M-d');
+    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($monday, $sunday);
+    $stat['ContractBetween'] = modGetNumberContractsBetween($monday, $sunday);
+    $stat['nbClientAt'] = modGetNumberClientsAt($today);
     return $stat;
 }
 
