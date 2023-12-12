@@ -82,7 +82,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient), ctlGetOperation($idClient));
+            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient));
         }
     }
 }
@@ -94,6 +94,7 @@ function ctlSearchIdClient($idClient){
  * @param string $dateOfBirth c'est la date de naissance du client
  * @throws Exception si tous les champs sont vides
  * @throws Exception si aucun client n'est trouvé
+ * @return void
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // aucun champ rempli
@@ -132,6 +133,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
  * @param int $idEmploye c'est login du conseiller
+ * @return void
  */
 
  function ctlCalendarConseiller($loginEmploye="GayBoi"){
@@ -161,7 +163,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * @param int $idClient c'est l'id du client
  * @return array c'est la liste des comptes du client (c'est un tableau d'objet)
  */
-function ctrGetAccount($idClient){
+function ctlGetAccount($idClient){
     $account = modGetAccounts($idClient);
     return $account;
 }
@@ -171,7 +173,7 @@ function ctrGetAccount($idClient){
  * @param int $idClient c'est l'id du client
  * @return array c'est la liste des contrat du client (c'est un tableau d'objet)
  */
-function ctrGetContracts($idClient){
+function ctlGetContracts($idClient){
     $contracts = modGetContracts($idClient);
     return $contracts;
 }
@@ -192,7 +194,7 @@ function ctlDebit($idAccount, $amount){
     modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
     $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient), ctlGetOperation($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -204,7 +206,7 @@ function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
     $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient), ctlGetOperation($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
 }
 
 /**
