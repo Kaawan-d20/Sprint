@@ -401,10 +401,10 @@ nav {
     font-family: var(--mono-font);
 }
 
-.pronounsSpan {
+/* .pronounsSpan {
     color: var(--mid-text);
     font-size: var(--smaller-font-size);
-}
+} */
 
 .events {
     display: flex;
@@ -492,6 +492,7 @@ nav {
 .contactAndRDVWrapper {
     display: grid;
     grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     gap: 1em;
 }
 
@@ -586,7 +587,7 @@ nav {
 }
 
 .debitAccountSelector:hover {
-    background-color: var(--text-secondary);
+    background-color: var(--background-secondary);
 }
 
 .debitCreditBtn {
@@ -714,6 +715,10 @@ input[type="number"] {
         grid-auto-flow: row;
     }
 
+    .contactTableWrapper {
+        grid-template-columns: 1fr 2fr;
+    }
+
     .day {
         border-right: none;
     }
@@ -742,7 +747,7 @@ input[type="number"] {
 
     .infoWrapper {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 2fr;
     }
 
     .infoContent:not(:last-child) {

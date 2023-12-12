@@ -14,8 +14,6 @@
         <h1>Synthese</h1>
         <div class="nameWrapper">
             <h2><?php echo $civi; ?> <?php echo $firstNameClient; ?> <?php echo $nameClient; ?></h2>
-            <span class="pronounsSpan">Il/Lui</span>
-            <!-- CHANGE TO A VAR -->
             <div class="idDiv">
                 ID: <?php echo $idClient; ?>
             </div>
@@ -42,11 +40,13 @@
                         <div class="contactHeader">Addresse : </div>
                         <div class="contactHeader">N° : </div>
                         <div class="contactHeader">Email : </div>
+                        <div class="contactHeader">Conseiller : </div>
                     </div>
                     <div class="contactContentWrapper">
                         <div class="contactContent"><?php echo $addressClient; ?></div>
                         <div class="contactContent"><?php echo $phoneClient; ?></div>
                         <div class="contactContent"><?php echo $emailClient; ?></div>
+                        <div class="contactContent"><?php echo $nameConseiller; ?></div>
                     </div>
                 </div>
                 <div class="debitCreditWrapper">
