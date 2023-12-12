@@ -934,3 +934,51 @@ function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$
     $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
     $prepared -> execute();
 }
+
+/**
+ * cree une ta avec l'id d'employé, l'horaire et le libelle en paramètre
+ * @param int $idE l'id de l'employé
+ * @param string $h l'horaire
+ * @param string $label le libelle
+ */
+function modCreateAdmin($idE,$h,$label) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO tacheAdmin(idEmploye,horaire,libelle) VALUES (:idE,:h,:label)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':h', $h, PDO::PARAM_STR);
+    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree un client avec les infos en paramètre
+ * @param int $idE l'id du conseiller
+ * @param string $sname le nom
+ * @param string $fname le prenom
+ * @param string $dob la date de naissance
+ * @param string $dc la date de creation
+ * @param string $adr l'adresse
+ * @param string $num le numero de tel
+ * @param string $email l'adresse mail
+ * @param string $job la profession
+ * @param string $fam la situation familiale
+ * @param string $civ la civilite
+ */
+function modCreateClient($idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,situationFamiliate,civilite) VALUES (:idE,:sname,:fname,:dob,:dc,:adr,:num,:email,:job,:fam,:civ)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':dob', $dob, PDO::PARAM_STR);
+    $prepared -> bindParam(':dc', $dc, PDO::PARAM_STR);
+    $prepared -> bindParam(':adr', $adr, PDO::PARAM_STR);
+    $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
+    $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
+    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
+    $prepared -> bindParam(':fam', $fam, PDO::PARAM_STR);
+    $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
+    $prepared -> execute();
+}
