@@ -51,6 +51,11 @@
             </div>
         </nav>
     </div>
+    <div>
+        <form action="index.php" method="post">
+            <input type="submit" name="addClientBtn" value="Ajouter Client">
+        </form>
+    </div>
     <div class="calendarWrapper">
         <div class="calendarNavWrapper">
             <div class="dateBlock">
