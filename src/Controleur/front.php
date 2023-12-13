@@ -170,6 +170,22 @@ try {
     }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
     // ------------------------------------------------------- Agent -------------------------------------------------------
+    elseif (isset($_POST['addClientBtn'])){
+        ctlDisplayNewClientForm();
+    }
+    elseif (isset($_POST['createClientBtn'])){
+        $civilite = $_POST['civiClient'];
+        $name = $_POST['nameClient'];
+        $firstName = $_POST['firstNameClient'];
+        $dateOfBirth = $_POST['dateOfBirthClient'];
+        $address = $_POST['adressClient'];
+        $phone = $_POST['phoneClient'];
+        $email = $_POST['emailClient'];
+        $profession = $_POST['professionClient'];
+        $situation = $_POST['situationClient'];
+        $idEmployee = $_POST['idEmployee'];
+        ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
+    }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{

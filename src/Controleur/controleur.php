@@ -22,7 +22,8 @@ function ctlHome (){
         vueDisplayHomeDirecteur($stat);
     }
     elseif ($_SESSION["type"] == 2){
-        vueDisplayHomeConseiller();
+        $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
+        vueDisplayHomeConseiller($identity);
     }
     elseif ($_SESSION["type"] == 3){
         ctlUpdateCalendar(new DateTime("now"));
@@ -113,7 +114,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $listClient=modAdvancedSearchClientBC($firstNameClient, $dateOfBirth);
     }
     elseif (!empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom
-        $listClient=modAdvancedSearchClientA("Staline");
+        $listClient=modAdvancedSearchClientA($nameClient);
     }
     elseif (empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le prénom
         $listClient=modAdvancedSearchClientB($firstNameClient);
@@ -429,11 +430,6 @@ function getSundayOfWeek($date) {
 
 
 
-
-
-
-
-
 function ctlGetOperation($idClient){
     $accounts=modGetAccounts($idClient);
     $array = array();
@@ -446,70 +442,15 @@ function ctlGetOperation($idClient){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function ctlDisplayNewClientForm()  {
+    vueDisplayCreateClient(modGetAllConseiller());
+}
+
+
+function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
+    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, date("Y-m-d"), $address, $phone, $email, $profession, $situation,$civilite);
+    ctlHome();
+}
 
 
 
