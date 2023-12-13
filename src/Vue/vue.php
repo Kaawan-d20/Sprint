@@ -71,11 +71,14 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $listA="";
     foreach ($listAccounts as $account) {
         $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule.': '. $account->solde ."€</option>";
-        $listA .= "<p>".$account->intitule." : ".$account->solde."€</p>";
+        $listA .= '<div class="accountCell content">'.$account->intitule.'</div>
+            <div class="accountCell content">'.$account->solde.'</div>
+            <div class="accountCell content">'.$account->decouvert.'</div>';
     }
     $listC="";
     foreach ($listContract as $contract) {
-        $listC .= "<p>".$contract->intitule." : ".$contract->tarifmensuel."€</p>";
+        $listC .= '<div class="contractCell content">'.$contract->intitule.'</div>
+            <div class="contractCell content">'.$contract->tarifmensuel.'</div>';
     }
 
     // pour faire la synthèse

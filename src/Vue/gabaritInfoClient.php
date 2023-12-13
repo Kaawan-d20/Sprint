@@ -76,27 +76,16 @@
                     <div class="accountCell header">Compte</div>
                     <div class="accountCell header">Solde</div>
                     <div class="accountCell header">Decouvert </div>
-                    <!-- <?php echo $listA ?> -->
-                    <div class="accountCell content">$account->intitule</div>
-                    <div class="accountCell content">$account->solde</div>
-                    <div class="accountCell content">$account->decouvert</div>
-
-                    <div class="accountCell content">$account->intitule</div>
-                    <div class="accountCell content">$account->solde</div>
-                    <div class="accountCell content">$account->decouvert</div>
-
-                    <div class="accountCell content">$account->intitule</div>
-                    <div class="accountCell content">$account->solde</div>
-                    <div class="accountCell content">$account->decouvert</div>
-
-                    <div class="accountCell content">$account->intitule</div>
-                    <div class="accountCell content">$account->solde</div>
-                    <div class="accountCell content">$account->decouvert</div>
-                </div>
+                    <?php echo $listA ?>
+            </div>
         </div>
         <div class="contractSection">
             <h1>Contrats:</h1>
-            <?php echo($listC); ?>
+            <div class="contractTableWrapper">
+                    <div class="accountCell header">Contrat</div>
+                    <div class="accountCell header">Tarif Mensuel</div>
+                    <?php echo $listC ?>
+            </div>
         </div>
 
     </div>

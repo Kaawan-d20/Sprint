@@ -550,6 +550,12 @@ nav {
 .accountCell.content:not(:nth-last-child(-n+3)) {
     border-bottom: 1px solid var(--text);
 }
+.contractCell.content:not(:nth-child(2n)) {
+    border-right: 1px solid var(--text);
+}
+.contractCell.content:not(:nth-last-child(-n+3)) {
+    border-bottom: 1px solid var(--text);
+}
 .infoCell.content:nth-last-child(4) {
     border-radius: 0 0 0 5px;
 }
@@ -568,8 +574,14 @@ nav {
 .accountCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
+.contractCell.content:nth-last-child(2) {
+    border-radius: 0 0 0 5px;
+}
+.contractCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
 
-.contactTableWrapper, .infoTableWrapper, .accountTableWrapper {
+.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper {
     border: 1px solid var(--text);
     display: grid;
     border-radius: 5px;
@@ -584,7 +596,12 @@ nav {
 }
 
 .accountTableWrapper {
+    margin-top: .5em;
     grid-template-columns: 1fr 1fr 1fr;
+}
+
+.contractTableWrapper {
+    grid-template-columns: 1fr 1fr;
 }
 
 .syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
@@ -639,12 +656,6 @@ nav {
     gap: 1em;
 }
 
-.accountSection {
-}
-
-.contractSection {
-}
-
 .amountInput {
     border: none;
     background-color: var(--background);
@@ -661,15 +672,6 @@ nav {
     flex-grow: 1;
     display: flex;
     align-items: baseline;
-}
-
-.accountTableWrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.accountHeader {
-
 }
 
 .debitCreditWrapper {
@@ -790,7 +792,4 @@ input[type="number"] {
     .dayCell h1 {
         font-size: var(--big-font-size);
     }
-}
-
-@media screen and (max-width:700px) { 
 }
