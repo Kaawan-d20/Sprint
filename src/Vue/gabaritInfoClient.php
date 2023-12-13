@@ -87,10 +87,12 @@
                     <?php echo $listC ?>
             </div>
         </div>
-
     </div>
     <div class="releveCompte">
-        <?php echo $content; ?>
+        <!-- <?php echo $content; ?> -->
+        <div class="">
+
+        </div>
     </div>
 </div>
 <script>

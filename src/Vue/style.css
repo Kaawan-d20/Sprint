@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Sans&family=Oswald:wght@400;700&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Mono&display=swap');
 :root {
     --night: #0f0f0fff;
     --jet: #2d2e2eff;
@@ -14,8 +14,7 @@
     --invalid-red: #d52941;      
 
     --heading-font: 'Dela Gothic One', sans-serif;
-    --subheading-font: 'Oswald', sans-serif;
-    --display-font: 'IBM Plex Sans', sans-serif;
+    --display-font: 'system-ui', sans-serif;
     --mono-font: 'Space Mono', monospace;
 
     --smaller-font-size: .75em;
@@ -681,7 +680,7 @@ nav {
 }
 
 .releveCompte {
-    display: none;
+    display: flex;
 }
 
 /* UTILITY */
