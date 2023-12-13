@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script> -->
     <title>Accueil</title>
 </head>
-<body class="dark">
+<body class="light">
 <div class="agentWrapper">
     <div class="navWrapper">
         <nav>
@@ -69,7 +69,7 @@
                     </button>
                     <input type="date" name="previousWeekDate" id="previousWeekDate" class="hidden">
                 </form>
-                <form action="index.php" method="post" id="weekSelectorForm">
+                <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
                     <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
                     <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
                     <input type="submit" name="weekSelectorDateBtn" id="weekSelectorDateBtn" class="hidden">

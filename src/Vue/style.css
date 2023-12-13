@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=IBM+Plex+Sans&family=Oswald:wght@400;700&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Mono&display=swap');
 :root {
     --night: #0f0f0fff;
     --jet: #2d2e2eff;
@@ -14,8 +14,7 @@
     --invalid-red: #d52941;      
 
     --heading-font: 'Dela Gothic One', sans-serif;
-    --subheading-font: 'Oswald', sans-serif;
-    --display-font: 'IBM Plex Sans', sans-serif;
+    --display-font: 'system-ui', sans-serif;
     --mono-font: 'Space Mono', monospace;
 
     --smaller-font-size: .75em;
@@ -180,10 +179,6 @@ nav {
     gap: 1em;
 }
 
-/* .searchWrapper:has(*:focus), .searchWrapper:hover, .advancedSearchButton:focus, .advancedSearchButton:hover{
-    border: 1px solid var(--cta);
-} */
-
 .searchWrapper form {
     gap: 1em;
     display: flex;
@@ -263,7 +258,7 @@ nav {
     flex-direction: column;
 }
 
-.dropdown:hover .accountButton {
+.dropdown:hover .accountButton, .dropdown:focus .accountButton {
     background-color: var(--background-secondary);
     border-radius: 5px 5px 0 0;
     border-bottom: 1px solid var(--mid-back);
@@ -280,7 +275,7 @@ nav {
     flex-grow: 1;
 }
 
-.dropdownButton:hover {
+.dropdownButton:hover, .dropdownButton:focus {
     background-color: var(--background-secondary);
 }
 
@@ -288,7 +283,7 @@ nav {
     border-radius: 0 0 5px 5px;
 }
 
-.dropdownButton:last-child:hover {
+.dropdownButton:last-child:hover, .dropdownButton:last-child:focus {
     background-color: var(--invalid-red);
     color: var(--white);
 }
@@ -363,13 +358,15 @@ nav {
     border-radius: 0 5px 5px 0;
 }
 
+.weekSelectorForm {
+    display: flex;
+}
 
 .weekSelectorDateField {
     border: none;
     background-color: var(--background);
     color: var(--text);
     font-family: var(--mono-font);
-    height: 100%;
 }
 
 .weekSelectorDateField:focus, .weekSelectorDateField:hover {
@@ -399,10 +396,10 @@ nav {
     font-family: var(--mono-font);
 }
 
-.pronounsSpan {
+/* .pronounsSpan {
     color: var(--mid-text);
     font-size: var(--smaller-font-size);
-}
+} */
 
 .events {
     display: flex;
@@ -489,13 +486,8 @@ nav {
 
 .contactAndRDVWrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1em;
-}
-
-.nameWrapper {
-    display: flex;
-    align-items: baseline;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
     gap: 1em;
 }
 
@@ -506,6 +498,13 @@ nav {
     margin: 1em;
 }
 
+.nameWrapper {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 .idDiv {
     font-family: var(--mono-font);
     margin: 0;
@@ -514,64 +513,103 @@ nav {
     border-radius: 5px;
 }
 
-.infoContent:not(:last-child) {
-    border-right: 1px solid var(--text);
-}
-
-.contactContent:not(:last-child) {
-    border-bottom: 1px solid var(--text);
-}
-
-.contactHeaderWrapper, .contactContentWrapper {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-}
-
-.contactContent, .contactHeader {
-    justify-content: center;
-}
-
-.infoWrapper {
-    border: 1px solid var(--text);
-    border-radius: 5px;
-}
-
-.infoHeaderWrapper, .infoContentWrapper {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-}
-
-.infoHeader, .contactHeader {
+.header {
     background-color: var(--text);
     color: var(--background);
 }
 
-.infoHeader, .infoContent, .contactHeader, .contactContent {
+.header, .content {
     padding: .5em;
 }
 
-.contactContent, .infoContent {
+.content {
     font-family: var(--mono-font);
+    background-color: var(--background);
+    border: none;
+    outline: none;
 }
 
-.contactTableWrapper {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+.content:hover {
+    background-color: var(--background-secondary);
+}
+
+.content:disabled {
+    color: var(--text-secondary);
+}
+
+.infoCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+.contactCell.content:not(:last-child) {
+    border-bottom: 1px solid var(--text);
+}
+.accountCell.content:not(:nth-child(3n)) {
+    border-right: 1px solid var(--text);
+}
+.accountCell.content:not(:nth-last-child(-n+3)) {
+    border-bottom: 1px solid var(--text);
+}
+.contractCell.content:not(:nth-child(2n)) {
+    border-right: 1px solid var(--text);
+}
+.contractCell.content:not(:nth-last-child(-n+3)) {
+    border-bottom: 1px solid var(--text);
+}
+.infoCell.content:nth-last-child(4) {
+    border-radius: 0 0 0 5px;
+}
+.infoCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.contactCell.content:nth-child(2) {
+    border-radius: 0 5px 0 0;
+}
+.contactCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.accountCell.content:nth-last-child(3) {
+    border-radius: 0 0 0 5px;
+}
+.accountCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.contractCell.content:nth-last-child(2) {
+    border-radius: 0 0 0 5px;
+}
+.contractCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper {
     border: 1px solid var(--text);
+    display: grid;
     border-radius: 5px;
 }
 
-.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1, .nameWrapper h1, .nameWrapper h2 {
+.contactTableWrapper {
+    grid-template-columns: 1fr 3fr;
+}
+
+.infoTableWrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.accountTableWrapper {
+    margin-top: .5em;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.contractTableWrapper {
+    grid-template-columns: 1fr 1fr;
+}
+
+.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
     margin: 0;
 }
 
 .RDVWrapper {
     border-radius: 5px;
     border: 1px solid var(--text);
-}
-
-.debitCreditWrapper {
-    margin-top: 1em;
 }
 
 .debitAccountSelector {
@@ -581,6 +619,15 @@ nav {
     padding: .5em;
     font-family: var(--mono-font);
     font-size: var(--classic-font-size);
+}
+
+.debitAccountSelector:hover {
+    background-color: var(--background-secondary);
+}
+
+.debitCreditBtnWrapper {
+    display: flex;
+    gap: .5em;
 }
 
 .debitCreditBtn {
@@ -596,17 +643,45 @@ nav {
     background-color: var(--background-secondary);
 }
 
-.debitCreditWrapper form input[type="number"] {
+.accountSelectorWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accountAndContractWrapper {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: 1em;
+}
+
+.amountInput {
+    border: none;
+    background-color: var(--background);
+    outline: none;
+    flex-grow: 1;
+}
+
+.amountInputWrapper {
     border: 1px solid var(--text);
     border-radius: 5px;
     padding: .5em;
     font-size: 1em;
+    color: var(--text-secondary);
+    flex-grow: 1;
+    display: flex;
+    align-items: baseline;
 }
 
-/* .debitCreditWrapper form input[type="number"]:focus {
-    outline: 2px inset var(--cta);
-} */
+.debitCreditWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
 
+.releveCompte {
+    display: flex;
+}
 
 /* UTILITY */
 
@@ -695,13 +770,9 @@ input[type="number"] {
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 1200px) {
-
-    /* CALENDAR */
-
-    .weekWrapper {
+    .weekWrapper, .contactAndRDVWrapper, .accountAndContractWrapper {
         grid-auto-flow: row;
     }
-
     .day {
         border-right: none;
     }
@@ -719,22 +790,5 @@ input[type="number"] {
 @media screen and (max-width:1800px) {
     .dayCell h1 {
         font-size: var(--big-font-size);
-    }
-}
-
-@media screen and (max-width:400px) {
-    .infoHeaderWrapper, .infoContentWrapper {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, 1fr);
-    }
-
-    .infoWrapper {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .infoContent:not(:last-child) {
-        border-bottom: 1px solid var(--text);
-        border-right: none;
     }
 }

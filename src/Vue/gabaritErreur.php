@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERREUR</title>
 </head>
-<body>
+<body class="light">
     <h1>erreur</h1>
     <?php echo $content; ?>
 </body>
