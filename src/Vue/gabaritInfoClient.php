@@ -32,13 +32,15 @@
                 <h1>Contact:</h1>
                 <div class="contactTableWrapper">
                     <div class="contactCell header">Adresse : </div>
-                    <div class="contactCell header">N° : </div>
-                    <div class="contactCell header">Email : </div>
-                    <div class="contactCell header">Conseiller : </div>
+                    <input type="text" class="contactCell content specialBorder" name="addressClient" id="addressClient" value="<?php echo $addressClient; ?>">
                     
-                    <input type="text" class="contactCell content" name="addressClient" id="addressClient" value="<?php echo $addressClient; ?>">
+                    <div class="contactCell header">N° : </div>
                     <input type="tel" class="contactCell content" name="phoneClient" id="phoneClient" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" value="<?php echo $phoneClient; ?>">
+                    
+                    <div class="contactCell header">Email : </div>
                     <input type="email" class="contactCell content" name="emailClient" id="emailClient" value="<?php echo $emailClient; ?>">
+                    
+                    <div class="contactCell header">Conseiller : </div>
                     <input type="text" class="contactCell content" name="nameConseiller" id="nameConseiller" value="<?php echo $nameConseiller; ?>">
                 </div>
             </div>
@@ -71,10 +73,18 @@
                 </div>
             </form>
             <div class="accountTableWrapper">
-                    <div class="accountCell Header">Compte</div>
-                    <div class="accountCell Header">Solde</div>
-                    <div class="accountCell Header">Decouvert </div>
+                    <div class="accountCell header">Compte</div>
+                    <div class="accountCell header">Solde</div>
+                    <div class="accountCell header">Decouvert </div>
                     <!-- <?php echo $listA ?> -->
+                    <div class="accountCell content">$account->intitule</div>
+                    <div class="accountCell content">$account->solde</div>
+                    <div class="accountCell content">$account->decouvert</div>
+
+                    <div class="accountCell content">$account->intitule</div>
+                    <div class="accountCell content">$account->solde</div>
+                    <div class="accountCell content">$account->decouvert</div>
+
                     <div class="accountCell content">$account->intitule</div>
                     <div class="accountCell content">$account->solde</div>
                     <div class="accountCell content">$account->decouvert</div>
