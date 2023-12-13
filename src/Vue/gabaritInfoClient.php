@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Info</title>
 </head>
-<body class="light"> <!-- TODO: use session to choose beetween light or dark -->
-    <?php 
-        $events = [["Ouverture Compte", "28/12/2023", "14h30", "15h30", "lush-green", "Bertrand"], ["Signature Contrat", "28/12/2023","15h30", "15h45", "lush-green", "Bertrand"]]
-    ?>
+<body class="light">
 <div class="syntheseWrapper">
         <div class="nameWrapper">
             <h1><?php echo $civi; ?> <?php echo $firstNameClient; ?> <?php echo $nameClient; ?></h1>
@@ -65,7 +61,7 @@
                 </div>
                 <div class="debitCreditBtnWrapper">
                     <div class="amountInputWrapper">
-                        <input type="number" name="amountInput" id="amountInput" class="amountInput" min="0" required>
+                        <input type="number" placeholder="Entrez un montant" name="amountInput" id="amountInput" class="amountInput" min="0" required>
                         €
                     </div>
                     <input type="submit" value="- Débit" name="debitBtn" min="0" class="debitCreditBtn">
@@ -88,29 +84,36 @@
             </div>
         </div>
     </div>
-    <div class="releveCompte">
-        <!-- <?php echo $content; ?> -->
-        <div class="">
-
+    <div class="accountOperationsWrapper">
+        <div class="filterWrapper" id="operationsFilterWrapper">
+            <?php echo $filterBtns; ?>
         </div>
+        <?php echo $operationDisplay; ?>
     </div>
 </div>
 <script>
-function displayOperations() {
-    if (typeof accountSelected == 'undefined'){
-        previous = "1";
-    }
-    else{
-        previous = accountSelected;
-    }
-    console.log(previous)
-    accountSelected = document.getElementById('comptes').value;
-    console.log(document.getElementById('comptes').value)
-    document.getElementById(previous).classList.add("hidden");
-    document.getElementById(accountSelected).classList.remove("hidden");
+let currentFilter = document.getElementById("operationsFilterWrapper").children[0];
+toggleFilter(currentFilter);
 
+function toggleFilter(filterBtn) {
+    let oldIcon =currentFilter.children[0];
+    let icon = filterBtn.children[0];
+
+    oldIcon.classList.remove("fa-circle-dot");
+    oldIcon.classList.add("fa-circle");
+    currentFilter.classList.add("inactive");
+
+    icon.classList.remove("fa-circle");
+    icon.classList.add("fa-circle-dot");
+    filterBtn.classList.remove("inactive");
+
+    let oldWrapper = document.getElementById("account"+currentFilter.dataset.id);
+    oldWrapper.classList.add("hidden");
+    let newWrapper = document.getElementById("account"+filterBtn.dataset.id);
+    newWrapper.classList.remove("hidden");
+
+    currentFilter = filterBtn;
 }
-displayOperations();
 </script>
 </body>
 </html>

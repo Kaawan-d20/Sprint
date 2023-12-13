@@ -679,8 +679,42 @@ nav {
     gap: .5em;
 }
 
-.releveCompte {
+.operationCard {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
     display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+.operationCard div {
+    display: flex;
+    gap: .5em;
+    align-items: baseline;
+}
+
+.operationCard div h2 {
+    margin: 0;
+}
+
+.operationCard .date {
+    color: var(--text-secondary);
+}
+
+.fa-plus {
+    color: var(--dark-spring-green);
+}
+.fa-minus {
+    color: var(--invalid-red);
+}
+.operationsListWrapper {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
 }
 
 /* UTILITY */
@@ -721,10 +755,12 @@ input[type="number"] {
     color: var(--text-secondary);
 }
 
-
-
 .searchField:focus {
     outline: none;
+}
+
+.number {
+    font-family: var(--mono-font);
 }
 
 .sunny-orange {

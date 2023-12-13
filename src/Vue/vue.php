@@ -65,7 +65,6 @@ function vueGenerateAppointementHTML($appointment) {
  * @param string $client c'est les données du client
  */
 function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
-
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
     $listA="";
@@ -94,37 +93,46 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $profession = $client->PROFESSION;
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
+
     //Pour l'afficher des comptes avec les opérations
-    $selectHTML = "<select id='comptes' onchange='displayOperations()'>";
-    $cht = "";
-    $compteur = 1;
+    $filterBtns = "";
+    $operationDisplay = "";
     foreach ($listAccounts as $account) {
-        $selectHTML .= '<option value="'.$compteur.'">'.$account->NOM." : ".$account->solde."</option>";
-        $cht .= '<div id="'.$compteur.'" class="hidden">';
+        $filterBtns .= vueGenerateAccountFilterBtnHTML($account);
+        $operationDisplay .= '<div class="operationsListWrapper hidden" id="account'. $account->idCompte .'">';
         $listOperations = $listOperationsAccount["$account->idCompte"];
+        // Pour afficher les opérations dans l'ordre chronologique inverse
+        $operationsHTML = "";
         foreach ($listOperations as $operation) {
-            $cht .= vueGenerateAccountOperationHTML($operation);
+            $operationsHTML = vueGenerateAccountOperationHTML($operation) . $operationsHTML;
         }
-        $cht .= "</div>";
-        $compteur+=1;
+        
+        $operationDisplay .= $operationsHTML. "</div>";
+        debug($operationDisplay);
     }
-    $selectHTML .= "</select>";
-    $content = $selectHTML.$cht;
     require_once('gabaritInfoClient.php');
 }
 
 function vueGenerateAccountOperationHTML ($operation) {
-    $cht = "";
-    $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
-    if ($operation->ISCREDIT == 0) {
-        $cht .= "<i class='fa-solid fa-minus'></i>";
-    } else {
-        $cht .= "<i class='fa-solid fa-plus'></i>";
-    }
-    $cht .= "<span>".$operation->MONTANT."</span></div>";
-    return $cht;
+    $sign = ($operation->ISCREDIT == 0) ? "minus" : "plus";
+    $operationHTML ='<div class="operationCard">
+                        <div>
+                            <h2>'.$operation->LIBELLE.':</h2>
+                            <span class="number">
+                                <i class="fa-solid fa-'.$sign.'"></i>
+                                '.$operation->MONTANT.'€
+                            </span>
+                        </div>
+                        <span class="date">'.$operation->DATEOPERATION.'</span>
+                    </div>';
+    return $operationHTML;
 }
-
+function vueGenerateAccountFilterBtnHTML ($account) {
+    return '<button class="filterBtn lush-green inactive" id="btn'.$account->idCompte.'" data-id="'.$account->idCompte.'" onclick="toggleFilter(this)">
+                <i class="fa-regular fa-circle"></i>'.
+                $account->NOM.': '.$account->solde.'€'. 
+            '</button>';
+}
 
 /**
  * Fonction qui affiche la page de resultat de recherche d'un client
@@ -370,7 +378,6 @@ function vueDisplayCreateClient($listConseiller) {
         $optionSelect .= "<option value=\"".$conseiller->idEmploye."\">".$conseiller->identiteEmploye."</option>";
     }
     $optionSelect .= "</select>";
-    debug($optionSelect);
     $content = "<h1>Création d'un client</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>
