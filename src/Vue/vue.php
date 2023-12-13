@@ -70,7 +70,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $optionSelect = "";
     $listA="";
     foreach ($listAccounts as $account) {
-        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule."</option>";
+        $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->intitule.': '. $account->solde ."€</option>";
         $listA .= "<p>".$account->intitule." : ".$account->solde."€</p>";
     }
     $listC="";
@@ -92,28 +92,34 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
     //Pour l'afficher des comptes avec les opérations
-    $chteumeul = "<select id='comptes' onchange='displayOperations()'>";
+    $selectHTML = "<select id='comptes' onchange='displayOperations()'>";
     $cht = "";
     $compteur = 1;
     foreach ($listAccounts as $account) {
-        $chteumeul .= "<option value=\"".$compteur."\">".$account->intitule." : ".$account->solde."</option>";
-        $cht .= "<div id=\"".$compteur."\" class='hidden'>";
+        $selectHTML .= '<option value="'.$compteur.'">'.$account->intitule." : ".$account->solde."</option>";
+        $cht .= '<div id="'.$compteur.'" class="hidden">';
         $listOperations = $listOperationsAccount["$account->idCompte"];
         foreach ($listOperations as $operation) {
-            $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
-            if ($operation->ISCREDIT == 0) {
-                $cht .= "<i class='fa-solid fa-minus'></i>";
-            } else {
-                $cht .= "<i class='fa-solid fa-plus'></i>";
-            }
-            $cht .= "<span>".$operation->MONTANT."</span></div>";
+            $cht .= vueGenerateAccountOperationHTML($operation);
         }
         $cht .= "</div>";
         $compteur+=1;
     }
-    $chteumeul .= "</select>";
-    $content = $chteumeul.$cht;
+    $selectHTML .= "</select>";
+    $content = $selectHTML.$cht;
     require_once('gabaritInfoClient.php');
+}
+
+function vueGenerateAccountOperationHTML ($operation) {
+    $cht = "";
+    $cht .= "<div><span>".$operation->DATEOPERATION."</span><h2>".$operation->LIBELLE."</h2><span>".$operation->IDOPERATION."</span><span>".$operation->SOURCE."</span>";
+    if ($operation->ISCREDIT == 0) {
+        $cht .= "<i class='fa-solid fa-minus'></i>";
+    } else {
+        $cht .= "<i class='fa-solid fa-plus'></i>";
+    }
+    $cht .= "<span>".$operation->MONTANT."</span></div>";
+    return $cht;
 }
 
 

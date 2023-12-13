@@ -180,10 +180,6 @@ nav {
     gap: 1em;
 }
 
-/* .searchWrapper:has(*:focus), .searchWrapper:hover, .advancedSearchButton:focus, .advancedSearchButton:hover{
-    border: 1px solid var(--cta);
-} */
-
 .searchWrapper form {
     gap: 1em;
     display: flex;
@@ -496,17 +492,17 @@ nav {
     gap: 1em;
 }
 
-.nameWrapper {
-    display: flex;
-    align-items: baseline;
-    gap: 1em;
-}
-
 .syntheseWrapper {
     display: flex;
     flex-direction: column;
     gap: 1em;
     margin: 1em;
+}
+
+.nameWrapper {
+    display: flex;
+    gap: 1em;
+    align-items: center;
 }
 
 .idDiv {
@@ -517,89 +513,68 @@ nav {
     border-radius: 5px;
 }
 
-.infoContent:not(:last-child) {
-    border-right: 1px solid var(--text);
-}
-
-.infoContent:disabled {
-    color: var(--text);
-}
-
-.contactContent:not(:last-child) {
-    border-bottom: 1px solid var(--text);
-}
-
-.contactHeaderWrapper, .contactContentWrapper {
-    display: grid;
-    grid-template-rows: repeat(3, 1fr);
-}
-
-.contactContent, .contactHeader {
-    justify-content: center;
-}
-
-.infoWrapper {
-    border: 1px solid var(--text);
-    border-radius: 5px;
-    margin: .5em 0;
-}
-
-.infoHeaderWrapper, .infoContentWrapper {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-}
-
-.infoHeader, .contactHeader {
+.header {
     background-color: var(--text);
     color: var(--background);
 }
 
-.infoHeader, .infoContent, .contactHeader, .contactContent {
+.header, .content {
     padding: .5em;
 }
 
-.contactContent, .infoContent {
+.content {
     font-family: var(--mono-font);
     background-color: var(--background);
     border: none;
     outline: none;
 }
 
-.infoContent:first-child {
-    border-radius: 0 0 0 5px;
-}
-.infoContent:last-child {
-    border-radius: 0 0 5px 0;
-}
-.contactContent:first-child {
-    border-radius: 0 5px 0 0;
-}
-.contactContent:last-child {
-    border-radius: 0 0 5px 0;
-}
-
-.contactContent:hover, .infoContent:hover {
+.content:hover {
     background-color: var(--background-secondary);
 }
 
+.infoCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+.contactCell.content:not(:last-child) {
+    border-bottom: 1px solid var(--text);
+}
+
+.infoCell.Content:first-of-type {
+    border-radius: 0 0 0 5px;
+}
+.infoCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.contactCell.content:first-child {
+    border-radius: 0 5px 0 0;
+}
+.contactCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
 .contactTableWrapper {
+    border: 1px solid var(--text);
     display: grid;
     grid-template-columns: 1fr 3fr;
-    border: 1px solid var(--text);
     border-radius: 5px;
 }
 
-.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1, .nameWrapper h1, .nameWrapper h2 {
+.infoTableWrapper {
+    border: 1px solid var(--text);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    border-radius: 5px;
+}
+
+.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
     margin: 0;
 }
 
 .RDVWrapper {
     border-radius: 5px;
     border: 1px solid var(--text);
-}
-
-.debitCreditWrapper {
-    margin-top: 1em;
 }
 
 .debitAccountSelector {
@@ -615,6 +590,11 @@ nav {
     background-color: var(--background-secondary);
 }
 
+.debitCreditBtnWrapper {
+    display: flex;
+    gap: .5em;
+}
+
 .debitCreditBtn {
     border: 1px solid var(--text);
     padding: .5em;
@@ -628,23 +608,60 @@ nav {
     background-color: var(--background-secondary);
 }
 
+.accountSelectorWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accountAndContractWrapper {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: 1em;
+}
+
+.accountSection {
+}
+
+.contractSection {
+}
+
 .amountInput {
+    border: none;
+    background-color: var(--background);
+    outline: none;
+    flex-grow: 1;
+}
+
+.amountInputWrapper {
     border: 1px solid var(--text);
     border-radius: 5px;
     padding: .5em;
     font-size: 1em;
+    color: var(--text-secondary);
+    flex-grow: 1;
+    display: flex;
+    align-items: baseline;
 }
 
-.debitCreditWrapper form {
+.accountTableWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.accountHeader {
+
+}
+
+.debitCreditWrapper {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: .5em;
 }
 
-/* .debitCreditWrapper form input[type="number"]:focus {
-    outline: 2px inset var(--cta);
-} */
-
+.releveCompte {
+    display: none;
+}
 
 /* UTILITY */
 
@@ -733,10 +750,7 @@ input[type="number"] {
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 1200px) {
-
-    /* CALENDAR */
-
-    .weekWrapper, .contactAndRDVWrapper {
+    .weekWrapper, .contactAndRDVWrapper, .accountAndContractWrapper {
         grid-auto-flow: row;
     }
 
