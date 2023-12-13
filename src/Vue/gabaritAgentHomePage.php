@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script> -->
     <title>Accueil</title>
 </head>
-<body class="dark">
+<body class="light">
 <div class="agentWrapper">
     <div class="navWrapper">
         <nav>

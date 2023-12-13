@@ -6,7 +6,7 @@
     <!-- <link rel="stylesheet" href="style.css"> -->
     <title>Document</title>
 </head>
-<body>
+<body class="light">
     <form action="index.php" method="post">
         <input type="submit" name="disconnection" value="Déconnexion">
     </form>
