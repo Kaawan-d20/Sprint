@@ -15,7 +15,7 @@ function vueDisplayHomeDirecteur($stat){
  * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
-function vueDisplayHomeConseiller(){
+function vueDisplayHomeConseiller($username){
     $content="";
     require_once('gabaritConseillerHomePage.php');
 }
@@ -364,10 +364,32 @@ function vueDisplayAgendaConseiller($appointment, $admin){
 
 
 
-
-
-
-
-function vueDisplayRDVBetween(){
-
+function vueDisplayCreateClient($listConseiller) {
+    $optionSelect = "<select name=\"idEmployee\">";
+    foreach ($listConseiller as $conseiller) {
+        $optionSelect .= "<option value=\"".$conseiller->idEmploye."\">".$conseiller->identiteEmploye."</option>";
+    }
+    $optionSelect .= "</select>";
+    debug($optionSelect);
+    $content = "<h1>Création d'un client</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        <select name=\"civiClient\" >
+                            <option value=\"M.\" >M.</option>
+                            <option value=\"Mme.\" >Mme.</option>
+                            <option value=\"Other\" >Other</option>
+                        </select>
+                        <input type=\"text\" name=\"nameClient\" placeholder=\"Nom\">
+                        <input type=\"text\" name=\"firstNameClient\" placeholder=\"Prénom\">
+                        <input type=\"date\" name=\"dateOfBirthClient\" placeholder=\"Date de naissance\">
+                        <input type=\"text\" name=\"adressClient\" placeholder=\"Adresse\">
+                        <input type=\"text\" name=\"phoneClient\" placeholder=\"Numéro de téléphone\">
+                        <input type=\"text\" name=\"emailClient\" placeholder=\"Email\">
+                        <input type=\"text\" name=\"professionClient\" placeholder=\"Profession\">
+                        <input type=\"text\" name=\"situationClient\" placeholder=\"Situation familiale\">
+                         ".$optionSelect."
+                        <input type=\"submit\" name=\"createClientBtn\" value=\"Valider création\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
 }
