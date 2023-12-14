@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body class="light">
+    <?php echo $navbar; ?>
     <?php echo $content ?>
 </body>
 </html>

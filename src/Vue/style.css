@@ -711,6 +711,41 @@ nav {
     gap: .5em;
 }
 
+.clientCreationWrapper {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clientCreationForm {
+    /* padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px; */
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.clientCreationForm div {
+    display: flex;
+    gap: .5em;
+}
+
+.clientCreationForm input, .clientCreationForm select {
+    /* background-color: var(--background); */
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.clientCreationForm input:not(.cta), .clientCreationForm select:not(.cta) {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
 /* UTILITY */
 
 .cta {

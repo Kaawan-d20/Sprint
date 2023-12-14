@@ -436,31 +436,41 @@ function vueDisplayAgendaConseiller($appointment, $admin){
 
 
 function vueDisplayCreateClient($listConseiller) {
-    $optionSelect = "<select name=\"idEmployee\">";
+    $navbar = vueGenerateNavBar();
+    $optionSelect = '<label for="idEmployee" class="visually-hidden">Conseiller</label><select name="idEmployee" id="idEmployee" required>';
     foreach ($listConseiller as $conseiller) {
         $optionSelect .= "<option value=\"".$conseiller->idEmploye."\">".$conseiller->identiteEmploye."</option>";
     }
     $optionSelect .= "</select>";
-    $content = "<h1>Création d'un client</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <select name=\"civiClient\" >
-                            <option value=\"M.\" >M.</option>
-                            <option value=\"Mme.\" >Mme.</option>
-                            <option value=\"Other\" >Other</option>
-                        </select>
-                        <input type=\"text\" name=\"nameClient\" placeholder=\"Nom\">
-                        <input type=\"text\" name=\"firstNameClient\" placeholder=\"Prénom\">
-                        <input type=\"date\" name=\"dateOfBirthClient\" placeholder=\"Date de naissance\">
-                        <input type=\"text\" name=\"adressClient\" placeholder=\"Adresse\">
-                        <input type=\"text\" name=\"phoneClient\" placeholder=\"Numéro de téléphone\">
-                        <input type=\"text\" name=\"emailClient\" placeholder=\"Email\">
-                        <input type=\"text\" name=\"professionClient\" placeholder=\"Profession\">
-                        <input type=\"text\" name=\"situationClient\" placeholder=\"Situation familiale\">
-                         ".$optionSelect."
-                        <input type=\"submit\" name=\"createClientBtn\" value=\"Valider création\">
-                    </p>
-                </form>";
+    $content = '<div class="clientCreationWrapper">
+                    <h1>Création d\'un client</h1>
+                    <form action="index.php" method="post" class="clientCreationForm" required>
+                        <div>
+                            <select name="civiClient" >
+                                <option value="M." >M.</option>
+                                <option value="Mme." >Mme.</option>
+                                <option value="Mx." >Other</option>
+                            </select>
+                            <input type="text" name="nameClient" placeholder="Nom" required>
+                            <input type="text" name="firstNameClient" placeholder="Prénom" required>
+                        </div>
+
+                        <label for="dateOfBirthClient" class="visually-hidden">Date de naissance:</label>
+                        <input type="date" name="dateOfBirthClient" id="dateOfBirthClient" placeholder="Date de naissance" required>
+                        <label for="adressClient" class="visually-hidden">Adresse</label>
+                        <input type="text" name="adressClient" id="adressClient" placeholder="Adresse" required>
+                        <label for="phoneClient" class="visually-hidden">Numéro de téléphone</label>
+                        <input type="tel" name="phoneClient" id="phoneClient" placeholder="Numéro de téléphone" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" required>
+                        <label for="emailClient" class="visually-hidden">Email</label>
+                        <input type="mail" name="emailClient" id="emailClient" placeholder="Email" required>
+                        <label for="professionClient" class="visually-hidden">Profession</label>
+                        <input type="text" name="professionClient" id="professionClient" placeholder="Profession" required>
+                        <label for="situationClient" class="visually-hidden">Situation familiale</label>
+                        <input type="text" name="situationClient" id="situationClient" placeholder="Situation familiale" required>
+                            '.$optionSelect.'
+                        <input type="submit" name="createClientBtn" value="Creer le Client" class="cta" required>
+                    </form>
+                </div>';
     require_once('gabaritGestion.php');
 }
 
