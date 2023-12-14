@@ -11,6 +11,11 @@
 <div class="agentWrapper">
     <div class="navWrapper">
         <nav>
+            <form action="index.php" method="post">
+                    <button class="squareIconButton" name="homeBtn" title="Retour à l'Accueil" onclick="javascript:location.reload();">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+            </form>
             <div class="searchWrapper">
                 <form action="index.php" method="post">
                     <label for="searchClientField" class="visually-hidden">Chercher un client</label>
@@ -22,12 +27,12 @@
             </div>
             <div class="advancedSearchandAccountWrapper">
                 <form action="index.php" method="post">
-                    <button class="advancedSearchButton" name="advancedSearchBtn" title="Recherche avancée">
+                    <button class="squareIconButton" name="advancedSearchBtn" title="Recherche avancée">
                         <i class="fa-regular fa-chart-bar"></i>
                     </button>
                 </form>
                 <form action="index.php" method="post">
-                    <button type="submit" name="addClientBtn" class="advancedSearchButton">
+                    <button type="submit" name="addClientBtn" class="squareIconButton">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </form>
