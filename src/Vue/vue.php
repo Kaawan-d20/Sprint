@@ -209,19 +209,22 @@ function vueDisplayAdvanceSearchClient($listClient="") {
         $content = "";
     }
     else{
-        $content="<form action=\"index.php\" method=\"post\"><table>";
+
+        $content='<form action="index.php" method="post">
+                    <div class="rechercheOutputTableWrapper">
+                        <div class="rechercheCell header">ID Client</div>
+                        <div class="rechercheCell header">Nom</div>
+                        <div class="rechercheCell header">Prénom</div>
+                        <div class="rechercheCell header">Date de Naissance</div>
+                        <div class="rechercheCell header"></div>';
         foreach ($listClient as $client) {
-            $content="<form action=\"index.php\" method=\"post\">";
-            $content .= "<input type=\"number\" name=\"idClient\" value=\"".$client->idClient."\" class=\"hidden\">";
-            $content .= "<tr>
-                            <td name=\"idClient\">".$client->idClient."</td>
-                            <td>".$client->nom."</td><td>".$client->prenom."</td>
-                            <td>".$client->dateNaissance."</td>
-                            <td><input type=\"submit\" name=\"infoClientFromAdvancedBtn\" value=\"Synthèse\"></td>
-                        </tr>";
-            $content .= "</form>";
+           $content .= '<div class="rechercheCell content">'.$client->idClient.'</div>
+                        <div class="rechercheCell content">'.$client->nom.'</div>
+                        <div class="rechercheCell content">'.$client->prenom.'</div>
+                        <div class="rechercheCell content">'.$client->dateNaissance.'</div>
+                        <button class="rechercheCell content" type="submit" name="infoClientFromAdvancedBtn">Synthèse<input type="number" name="idClient" value='.$client->idClient.' class="hidden"></button>';
         }
-        $content .= "</table>";
+        $content .= '</div></form>';
     }
     require_once('gabaritRechercheClient.php');
 }
@@ -478,6 +481,7 @@ function vueDisplayCreateClient($listConseiller) {
 
 
 function vueDisplaySetting($identity){
+    $navbar = vueGenerateNavBar();
     $content="<h1>Modifier info personnel</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>

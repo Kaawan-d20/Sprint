@@ -555,6 +555,12 @@ nav {
 .contractCell.content:not(:nth-last-child(-n+3)) {
     border-bottom: 1px solid var(--text);
 }
+.rechercheCell.content:not(:nth-child(5n)) {
+    border-right: 1px solid var(--text);
+}
+.rechercheCell.content:not(:nth-last-child(-n+5)) {
+    border-bottom: 1px solid var(--text);
+}
 .infoCell.content:nth-last-child(4) {
     border-radius: 0 0 0 5px;
 }
@@ -579,8 +585,16 @@ nav {
 .contractCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
+.rechercheCell.content:nth-last-child(5) {
+    border-radius: 0 0 0 5px;
+}
+.rechercheCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
 
-.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper {
+
+
+.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper, .rechercheOutputTableWrapper {
     border: 1px solid var(--text);
     display: grid;
     border-radius: 5px;
@@ -601,6 +615,15 @@ nav {
 
 .contractTableWrapper {
     grid-template-columns: 1fr 1fr;
+}
+
+.rechercheOutputTableWrapper {
+    margin-top: .5em;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.rechercheOutputTableWrapper button {
+    font-size: var(--classic-font-size);
 }
 
 .syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
@@ -720,9 +743,6 @@ nav {
 }
 
 .clientCreationForm {
-    /* padding: 1em;
-    border: 1px solid var(--text);
-    border-radius: 5px; */
     display: flex;
     flex-direction: column;
     gap: .5em;
@@ -745,6 +765,33 @@ nav {
     background-color: var(--background);
     font-family: var(--mono-font);
 }
+
+.rechercheWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rechercheForm {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.rechercheForm input {
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.rechercheForm input:not(.cta) {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+
 
 /* UTILITY */
 
