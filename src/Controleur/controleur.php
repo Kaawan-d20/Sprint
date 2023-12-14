@@ -398,8 +398,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
 function ctlUpdateCalendar($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
-    $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
-    vueDisplayHomeAgent($array[0], $array[1], $array[2], $identity);
+    vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
 }
 
 
