@@ -21,6 +21,7 @@ function vueDisplayHomeConseiller($username){
 }
 
 function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
+    $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -42,7 +43,7 @@ function vueDisplayLogin(){
 function vueGenerateAppointementHTML($appointment) {
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
-        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
+        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. $appointment->COLOR .'">
         <h2>'. $appointment->INTITULE .'</h2>
         <p>'. $appointment->identiteClient .'</p>
         <div class="eventDetails">
@@ -50,7 +51,7 @@ function vueGenerateAppointementHTML($appointment) {
                 <p class="eventStartTime">'. $heureDebut .'</p>
                 <p class="eventEndTime">'. $heureFin .'</p>
             </div>
-            <div class="eventConseiller lush-green">
+            <div class="eventConseiller '.$appointment->COLOR.'">
                 <i class="fa-solid fa-user-tie"></i>
                 '. $appointment->identiteEmploye .'
             </div>
@@ -59,7 +60,10 @@ function vueGenerateAppointementHTML($appointment) {
 }
 
 
-function vueGenerateNavBar($username) {
+function vueGenerateNavBar() {
+    if ($_SESSION["type"] == 3) {
+        debug(3);
+    }
     $navbarHTML = 
     '<div class="navWrapper">
         <nav>
@@ -91,7 +95,7 @@ function vueGenerateNavBar($username) {
                 <div class="dropdown">
                     <button class="accountButton">
                         <i class="fa-solid fa-user"></i>
-                        '. $username .'
+                        '. $_SESSION["name"] .'
                     </button>
                     <div class="dropdownContent">
                         <form action="index.php" method="post">
@@ -113,6 +117,7 @@ function vueGenerateNavBar($username) {
             </div>
         </nav>
     </div>';
+    return $navbarHTML;
     
 }
 
@@ -122,6 +127,7 @@ function vueGenerateNavBar($username) {
  * @param string $client c'est les données du client
  */
 function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
+    $navbar = vueGenerateNavBar();
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
     $listA="";
@@ -198,7 +204,7 @@ function vueGenerateAccountFilterBtnHTML ($account) {
  * @param string $link c'est le lien pour la synthèse
  */
 function vueDisplayAdvanceSearchClient($listClient="") {
-    
+    $navbar = vueGenerateNavBar();
     if ($listClient == "") {
         $content = "";
     }
