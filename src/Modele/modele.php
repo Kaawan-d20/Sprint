@@ -1073,7 +1073,17 @@ function modGetAllConseiller(){
     $prepared -> closeCursor();
 }
 
-
+function modModifEmployeSetting($idEmploye, $login, $password, $color){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE employe SET login=:login, password=:password, color=:color WHERE idEmploye=:idEmploye';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
+    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
 
 
 

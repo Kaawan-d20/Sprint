@@ -56,6 +56,16 @@ try {
     elseif (isset($_POST["weekSelectorDateField"])){
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
     }
+    elseif (isset($_POST['settingBtn'])){
+        debug($_POST);
+        ctlSetting();
+    }
+    elseif (isset($_POST['ModifSettingOneBtn'])){
+        $login = $_POST['loginEmployee'];
+        $password = $_POST['passwordEmployee'];
+        $color = $_POST['colorEmployee'];
+        ctlSettingSubmit($_SESSION["idEmploye"], $login, $password, $color);
+    }
      // ------------------------------------------------------- Directeur -------------------------------------------------------
     // ------------------------------------------------------- Statistique -------------------------------------------------------
     elseif (isset($_POST['searchStatClient2'])){

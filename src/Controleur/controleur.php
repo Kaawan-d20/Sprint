@@ -19,11 +19,10 @@ function ctlHome (){
     }
     elseif ($_SESSION["type"] == 1){
         $stat = ctlGetStats();
-        vueDisplayHomeDirecteur($stat);
+        vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
     }
     elseif ($_SESSION["type"] == 2){
-        $identity = modGetEmployeFromId($_SESSION["idEmploye"])->NOM;
-        vueDisplayHomeConseiller($identity);
+        vueDisplayHomeConseiller($_SESSION["name"]);
     }
     elseif ($_SESSION["type"] == 3){
         ctlUpdateCalendar(new DateTime("now"));
@@ -50,6 +49,7 @@ function ctlLogin ($username, $password) {
     else{
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
+        $_SESSION["name"] = $resultConnnect->NOM;
         ctlHome();
     }
 }
@@ -452,6 +452,18 @@ function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $pho
     ctlHome();
 }
 
+
+
+function ctlSetting(){
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
+    vueDisplaySetting($identity);
+}
+
+
+function ctlSettingSubmit($idEmploye, $login, $password, $color){
+    modModifEmployeSetting($idEmploye, $login, $password, $color);
+    ctlHome();
+}
 
 
 function debug($what = "debugString") {

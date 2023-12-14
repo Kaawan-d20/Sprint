@@ -37,7 +37,7 @@
                                 Thème
                                 <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
                             </button>
-                            <button class="dropdownButton">
+                            <button type="submit" class="dropdownButton" name="settingBtn" >
                                 Paramètres
                                 <i class="fa-solid fa-user-gear"></i>
                             </button>

@@ -5,7 +5,7 @@
  * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
-function vueDisplayHomeDirecteur($stat){
+function vueDisplayHomeDirecteur($stat, $username){
     $content="";
     require_once('gabaritDirecteurHomePage.php');
 }
@@ -396,6 +396,22 @@ function vueDisplayCreateClient($listConseiller) {
                         <input type=\"text\" name=\"situationClient\" placeholder=\"Situation familiale\">
                          ".$optionSelect."
                         <input type=\"submit\" name=\"createClientBtn\" value=\"Valider création\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
+
+
+
+
+function vueDisplaySetting($identity){
+    $content="<h1>Modifier info personnel</h1>
+                <form action=\"index.php\" method=\"post\">
+                    <p>
+                        Login : <input type=\"text\" name=\"loginEmployee\" value=\"".$identity->LOGIN."\">
+                        Mot de passe : <input type=\"text\" name=\"passwordEmployee\">
+                        Couleur : <input type=\"text\" name=\"colorEmployee\" value=\"".$identity->COLOR."\">
+                        <input type=\"submit\" name=\"ModifSettingOneBtn\" value=\"Valider modification\">
                     </p>
                 </form>";
     require_once('gabaritGestion.php');
