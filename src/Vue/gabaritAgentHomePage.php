@@ -26,6 +26,11 @@
                         <i class="fa-regular fa-chart-bar"></i>
                     </button>
                 </form>
+                <form action="index.php" method="post">
+                    <button type="submit" name="addClientBtn" class="advancedSearchButton">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </form>
                 <div class="dropdown">
                     <button class="accountButton">
                         <i class="fa-solid fa-user"></i>
@@ -50,11 +55,6 @@
                 </div>
             </div>
         </nav>
-    </div>
-    <div>
-        <form action="index.php" method="post">
-            <input type="submit" name="addClientBtn" value="Ajouter Client">
-        </form>
     </div>
     <div class="calendarWrapper">
         <div class="calendarNavWrapper">
