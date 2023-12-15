@@ -460,6 +460,9 @@ function ctlSetting(){
 
 
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
+    if ($password == ''){
+        $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
     ctlHome();
 }
