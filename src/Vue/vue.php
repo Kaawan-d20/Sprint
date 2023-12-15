@@ -280,7 +280,7 @@ function vueDisplayGestionPersonnelOne($employee) {
                             <input type=\"text\" name=\"nameEmployee\" value=\"$employee->NOM\">
                             <input type=\"text\" name=\"firstNameEmployee\" value=\"$employee->PRENOM\">
                             <input type=\"text\" name=\"loginEmployee\" value=\"$employee->LOGIN\">
-                            <input type=\"text\" name=\"passwordEmployee\" value=\"$employee->PASSWORD\">
+                            <input type=\"text\" name=\"passwordEmployee\">
                             <input type=\"text\" name=\"colorEmployee\" value=\"$employee->COLOR\">
                             <input type=\"submit\" name=\"ModifPersonnelOneBtn\" value=\"Valider modification\">
                         </p>

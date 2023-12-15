@@ -103,7 +103,6 @@ document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
 
 globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
-let isLightTheme = false;
 
 let correspondingMonth = [
     "Janvier",
@@ -120,28 +119,7 @@ let correspondingMonth = [
     "Décembre"
 ];
 
-/** switch beetween light and dark theme */ 
-function toggleTheme() {
-    let icon = document.getElementById("themeSwitcherIcon");
-    let btn = document.getElementById("themeSwitcherBtn");
-    if (isLightTheme) {
-        document.body.classList.add("dark");
-        document.body.classList.remove("light");
-        icon.classList.add("fa-sun")
-        icon.classList.remove("fa-moon")
-        btn.setAttribute("title", "Activer le thème Clair")
 
-        isLightTheme = false;
-    } else {
-        document.body.classList.add("light");
-        document.body.classList.remove("dark");
-        icon.classList.add("fa-moon")
-        icon.classList.remove("fa-sun")
-        btn.setAttribute("title", "Activer le thème Sombre")
-
-        isLightTheme = true;
-    }
-}
 /** returns a Date as a string "yyyy-mm-dd" */ 
 function dateToString(globalCurrentDate) {
     return (globalCurrentDate.getFullYear() 
