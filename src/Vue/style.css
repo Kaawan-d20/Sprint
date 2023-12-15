@@ -791,6 +791,40 @@ nav {
     font-family: var(--mono-font);
 }
 
+.modInfoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.modInfoWrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.modInfoField {
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.modInfoField {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+.modInfoPasswordField {
+    margin-left: -1em;
+    flex-grow: 1;
+    background-color: var(--background);
+    font-family: var(--mono-font);
+    border: none;
+    padding: 1em;
+    outline: none;
+}
 
 
 /* UTILITY */
