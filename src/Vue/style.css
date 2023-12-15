@@ -561,6 +561,9 @@ nav {
 .rechercheCell.content:not(:nth-last-child(-n+5)) {
     border-bottom: 1px solid var(--text);
 }
+.statCell.content:not(:nth-child(11n)) {
+    border-right: 1px solid var(--text);
+}
 .infoCell.content:nth-last-child(4) {
     border-radius: 0 0 0 5px;
 }
@@ -591,10 +594,20 @@ nav {
 .rechercheCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
+.statCell.content:nth-last-child(11) {
+    border-radius: 0 0 0 5px;
+}
+.statCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.statCell.header {
+    font-size: var(--small-font-size);
+}
 
 
 
-.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper, .rechercheOutputTableWrapper {
+.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper, .rechercheOutputTableWrapper, .statTableWrapper {
     border: 1px solid var(--text);
     display: grid;
     border-radius: 5px;
@@ -622,9 +635,14 @@ nav {
     grid-template-columns: repeat(5, 1fr);
 }
 
+.statTableWrapper {
+    grid-template-columns: repeat(11, 1fr);
+}
+
 .rechercheOutputTableWrapper button {
     font-size: var(--classic-font-size);
 }
+
 
 .syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
     margin: 0;
@@ -826,6 +844,19 @@ nav {
     outline: none;
 }
 
+.statWrapper {
+    padding: 1em;
+}
+
+.statWrapper h1 {
+    margin: 0;
+}
+
+.gestionBtn {
+    border: 1px solid var(--text);
+    background-color: var(--background);
+    
+}
 
 /* UTILITY */
 
