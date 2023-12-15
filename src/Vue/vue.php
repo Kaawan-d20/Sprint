@@ -18,6 +18,7 @@ $colors = [
  * @return void
  */
 function vueDisplayHomeDirecteur($stat, $username){
+    $navbar = vueGenerateNavBar();
     $content="";
     require_once('gabaritDirecteurHomePage.php');
 }
@@ -28,6 +29,7 @@ function vueDisplayHomeDirecteur($stat, $username){
  * @return void
  */
 function vueDisplayHomeConseiller($username){
+    $navbar = vueGenerateNavBar();
     $content="";
     require_once('gabaritConseillerHomePage.php');
 }
@@ -242,6 +244,7 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 }
 
 function vueDisplayGestionPersonnelAll($listEmployee) {
+    $navbar = vueGenerateNavBar();
     $content="<h1>Gestion du Personnel</h1>
                 <h2>Liste des employers</h2>";
     foreach ($listEmployee as $employee) {
@@ -279,7 +282,7 @@ function vueDisplayGestionPersonnelAll($listEmployee) {
 
 
 function vueDisplayGestionPersonnelOne($employee) {
-    
+    $navbar = vueGenerateNavBar();
         $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
         $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
         $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
@@ -309,6 +312,7 @@ function vueDisplayGestionPersonnelOne($employee) {
 
 
 function vueDisplayGestionPersonnelAdd(){
+    $navbar = vueGenerateNavBar();
     $content="<h1>Ajouter un employé</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>
@@ -337,6 +341,7 @@ function vueDisplayGestionPersonnelAdd(){
 
 
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
+    $navbar = vueGenerateNavBar();
     $content ="<h1>Gestion des services</h1>
                 <h2>Liste des type de compte</h2>";
     foreach ($listTypeAccount as $typeAccount) {
@@ -375,6 +380,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
 
 
 function vueDisplayGestionServicesAdd(){
+    $navbar = vueGenerateNavBar();
     $content="<h1>Ajouter un service</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>
@@ -392,6 +398,7 @@ function vueDisplayGestionServicesAdd(){
 }
 
 function vueDisplayGestionAccountOne($account) {
+    $navbar = vueGenerateNavBar();
     $etat=$account->ACTIF==1 ? "checked": "";
     $content="<h1>Modifier info type compte</h1>
                 <form action=\"index.php\" method=\"post\">
@@ -410,6 +417,7 @@ function vueDisplayGestionAccountOne($account) {
 
 
 function vueDisplayGestionContractOne($contract) {
+    $navbar = vueGenerateNavBar();
     $etat=$contract->ACTIF==1 ? "checked": "";
     $content="<h1>Modifier info type contrat</h1>
                 <form action=\"index.php\" method=\"post\">
@@ -435,12 +443,14 @@ function vueDisplayGestionContractOne($contract) {
  * @param string $error
  */
 function vueDisplayError ($error) {
+    $navbar = vueGenerateNavBar();
     $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
     require_once('gabaritErreur.php');
 }
 
 
 function vueDisplayAgendaConseiller($appointment, $admin){
+    $navbar = vueGenerateNavBar();
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
