@@ -19,17 +19,13 @@ function ctlHome (){
     }
     elseif ($_SESSION["type"] == 1){
         $stat = ctlGetStats();
-        vueDisplayHomeDirecteur($stat);
+        vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
     }
     elseif ($_SESSION["type"] == 2){
-        vueDisplayHomeConseiller();
+        vueDisplayHomeConseiller($_SESSION["name"]);
     }
     elseif ($_SESSION["type"] == 3){
-        /*
-        $array = ctlRDVBetween(new DateTime('monday this week'), new DateTime('sunday this week'));
-        vueDisplayHomeAgent($array[0], $array[1], $array[2]);
-        */
-        vueDisplayHomeAgent();
+        ctlUpdateCalendar(new DateTime("now"));
     }
     
 }
@@ -53,6 +49,7 @@ function ctlLogin ($username, $password) {
     else{
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
+        $_SESSION["name"] = $resultConnnect->NOM;
         ctlHome();
     }
 }
@@ -86,7 +83,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctrGetAccount($idClient), ctrGetContracts($idClient));
+            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient));
         }
     }
 }
@@ -98,6 +95,7 @@ function ctlSearchIdClient($idClient){
  * @param string $dateOfBirth c'est la date de naissance du client
  * @throws Exception si tous les champs sont vides
  * @throws Exception si aucun client n'est trouvé
+ * @return void
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // aucun champ rempli
@@ -116,7 +114,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $listClient=modAdvancedSearchClientBC($firstNameClient, $dateOfBirth);
     }
     elseif (!empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom
-        $listClient=modAdvancedSearchClientA("Staline");
+        $listClient=modAdvancedSearchClientA($nameClient);
     }
     elseif (empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le prénom
         $listClient=modAdvancedSearchClientB($firstNameClient);
@@ -136,6 +134,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * Fonction qui permet d'obtenir l'agenda d'un conseiller
  * pas encore tester
  * @param int $idEmploye c'est login du conseiller
+ * @return void
  */
 
  function ctlCalendarConseiller($loginEmploye="GayBoi"){
@@ -165,7 +164,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
  * @param int $idClient c'est l'id du client
  * @return array c'est la liste des comptes du client (c'est un tableau d'objet)
  */
-function ctrGetAccount($idClient){
+function ctlGetAccount($idClient){
     $account = modGetAccounts($idClient);
     return $account;
 }
@@ -175,7 +174,7 @@ function ctrGetAccount($idClient){
  * @param int $idClient c'est l'id du client
  * @return array c'est la liste des contrat du client (c'est un tableau d'objet)
  */
-function ctrGetContracts($idClient){
+function ctlGetContracts($idClient){
     $contracts = modGetContracts($idClient);
     return $contracts;
 }
@@ -193,10 +192,10 @@ function ctlDebit($idAccount, $amount){
     if ($amount > $solde + $decouvert){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
-    modDebit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -205,10 +204,10 @@ function ctlDebit($idAccount, $amount){
  * @return void
 */
 function ctlCredit($idAccount, $amount){
-    modCredit($idAccount, $amount);
-    $idClient = modGetIdClientFromAccount($idAccount)->idClient;
+    modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctrGetAccount($idClient),ctrGetContracts($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
 }
 
 /**
@@ -223,7 +222,16 @@ function ctlError($error) {
  * Fonction qui permet d'afficher les statistiques
  * @return array c'est un tableau (map) avec les statistiques
  */
-function ctlGetStats(){
+function ctlGetStats($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
     $stat = array();
     $stat['nbClient'] = modGetNumberClients();
     $stat['nbAccount'] = modGetNumberAccounts();
@@ -236,7 +244,25 @@ function ctlGetStats(){
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    debug($date);
+    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
+    $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
+    $stat['nbClientAt'] = modGetNumberClientsAt($date);
     return $stat;
+}
+
+function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
+    $stat = ctlGetStats($dateStart, $dateEnd, $date);
+    vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
 }
 
 function ctlGestionPersonnelAll(){
@@ -253,11 +279,49 @@ function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $p
     ctlGestionPersonnelAll();
 }
 
+function ctlGestionPersonnelAdd(){
+    vueDisplayGestionPersonnelAdd();
+}
+
+function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color){
+    modAddEmploye($category, $name, $firstName, $login, $password, $color);
+    ctlGestionPersonnelAll();
+}
+
+function ctlGestionPersonnelDelete($idEmployee){
+    modDeleteEmploye($idEmployee);
+    ctlGestionPersonnelAll();
+}
+
+
+
+
+
+
+
+
+
+
 
 function ctlGestionServiceslAll(){
     $listTypeAccount = modGetAllAccountTypes();
     $listTypeContract = modGetAllContractTypes();
     vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
+}
+
+
+function ctlGestionServicesAdd(){
+    vueDisplayGestionServicesAdd();
+}
+
+function ctlGestionServicesAddSubmit($name, $type, $active, $document){
+    if ($type == 1){
+        modAddTypeAccount($name, $active, $document);
+    }
+    elseif ($type == 2){
+        modAddTypeContract($name, $active, $document);
+    }
+    ctlGestionServiceslAll();
 }
 
 
@@ -273,47 +337,28 @@ function ctlGestionContractOne($idContract){
     vueDisplayGestionContractOne($contract);
 }
 
-function ctlGestionAccountOneSubmit($idAccount, $name, $active){
-    modModifTypeAccount($idAccount, $name, $active);
+function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
+    modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
-function ctlGestionContractOneSubmit($idContract, $name, $active){
-    modModifTypeContract($idContract, $name, $active);
+function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
+    modModifTypeContract($idContract, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
 
-function ctlGestionMotifAll(){
-    $listMotif = modGetAllMotif();
-    vueDisplayGestionMotifAll($listMotif);
+
+
+function ctlGestionAccountDelete($idAccount){
+    modDeleteTypeAccount($idAccount);
+    ctlGestionServiceslAll();
 }
 
-function ctlGestionMotifOne($idMotif){
-    $motif = modGetMotifFromId($idMotif);
-    vueDisplayGestionMotifOne($motif);
+function ctlGestionContractDelete($idContract){
+    modDeleteTypeContract($idContract);
+    ctlGestionServiceslAll();
 }
-
-function ctlGestionMotifOneSubmit($idMotif, $name, $document){
-    modModifMotif($idMotif, $name, $document);
-    ctlGestionMotifAll();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -340,14 +385,86 @@ function ctlGetInfoEmploye($idEmploye) {
 }
 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    // TODO : faire ca
-    $listRDV = modGetRDVBetween($dateStartOfWeek, $dateEndOfWeek);
-    $listTA = modGetTABetween($dateStartOfWeek, $dateEndOfWeek);
-    $identy = modGetEmployeFromId($_SESSION["idEmploye"]);
-    $nameConseiller = $identy->NOM." ".$identy->PRENOM;
+    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
+    // $listTA = modGetAllAdminBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
     $array = new ArrayObject();
     $array->append($listRDV);
-    $array->append($listTA);
-    $array->append($nameConseiller);
+    // $array->append($listTA);
+    $array->append([]);
+    $array->append($dateStartOfWeek);
     return $array;
+}
+
+function ctlUpdateCalendar($targetDate) {
+    $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
+    $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
+    vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
+}
+
+
+function getMondayOfWeek($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+    $dayOfWeek = date_format($date, 'N');
+    if ($dayOfWeek == 1) {
+        return $date;
+    } else {
+        $mondayOfWeek = date_create(date('Y-m-d', strtotime('previous monday', $date->getTimestamp())));
+        return $mondayOfWeek;
+    }
+}
+
+function getSundayOfWeek($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+    $dayOfWeek = date_format($date, 'N');
+    if ($dayOfWeek == 7) {
+        return $date;
+    } else {
+        $sundayOfWeek = date_create(date('Y-m-d', strtotime('next sunday', $date->getTimestamp())));
+        return $sundayOfWeek;
+    }
+}
+
+
+
+
+
+
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
+    }
+    return $array;
+}
+
+
+
+
+function ctlDisplayNewClientForm()  {
+    vueDisplayCreateClient(modGetAllConseiller());
+}
+
+
+function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
+    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, date("Y-m-d"), $address, $phone, $email, $profession, $situation,$civilite);
+    ctlHome();
+}
+
+
+
+function ctlSetting(){
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
+    vueDisplaySetting($identity);
+}
+
+
+function ctlSettingSubmit($idEmploye, $login, $password, $color){
+    modModifEmployeSetting($idEmploye, $login, $password, $color);
+    ctlHome();
+}
+
+
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
 }

@@ -47,12 +47,37 @@ try {
         $idClient = $_POST['idClient'];
         ctlSearchIdClient($idClient);
     }
-    elseif (isset($_POST['DateRDVBtn'])){
-        $dateStartOfWeek=$_POST['dateStartOfWeek'];
-        $dateEndOfWeek=$_POST['dateEndOfWeek'];
-        ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek);
+    elseif (isset($_POST['weekSelectorPrevious'])){
+        ctlUpdateCalendar($_POST['previousWeekDate']);
     }
-    // ------------------------------------------------------- Directeur -------------------------------------------------------
+    elseif (isset($_POST['weekSelectorNext'])){
+        ctlUpdateCalendar($_POST['nextWeekDate']);
+    }
+    elseif (isset($_POST["weekSelectorDateField"])){
+        ctlUpdateCalendar($_POST['weekSelectorDateField']);
+    }
+    elseif (isset($_POST['settingBtn'])){
+        debug($_POST);
+        ctlSetting();
+    }
+    elseif (isset($_POST['ModifSettingOneBtn'])){
+        $login = $_POST['loginEmployee'];
+        $password = $_POST['passwordEmployee'];
+        $color = $_POST['colorEmployee'];
+        ctlSettingSubmit($_SESSION["idEmploye"], $login, $password, $color);
+    }
+     // ------------------------------------------------------- Directeur -------------------------------------------------------
+    // ------------------------------------------------------- Statistique -------------------------------------------------------
+    elseif (isset($_POST['searchStatClient2'])){
+        $dateStart=$_POST['datedebut'];
+        $dateEnd=$_POST['datefin'];
+        ctlStatsDisplay($dateStart, $dateEnd);
+    }
+    elseif (isset($_POST['searchStatClient1'])){
+        $dateStart=$_POST['date'];
+        debug($dateStart);
+        ctlStatsDisplay("","",$dateStart);
+    }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
     elseif (isset($_POST['GestionPersonnelAllBtn'])){
         ctlGestionPersonnelAll();
@@ -71,6 +96,22 @@ try {
         $color = $_POST['colorEmployee'];
         ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color);
     }
+    elseif (isset($_POST['GestionPersonnelAddBtn'])){
+        ctlGestionPersonnelAdd();
+    }
+    elseif (isset($_POST['AddPersonnelSubmitBtn'])){
+        $name = $_POST['nameEmployee'];
+        $firstName = $_POST['firstNameEmployee'];
+        $login = $_POST['loginEmployee'];
+        $password = $_POST['passwordEmployee'];
+        $category = $_POST['idCategorie'];
+        $color = $_POST['colorEmployee'];
+        ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color);
+    }
+    elseif (isset($_POST['GestionPersonnelDeleteBtn'])){
+        $idEmployee = $_POST['idEmployee'];
+        ctlGestionPersonnelDelete($idEmployee);
+    }
     // ------------------------------------------------------- Gestion Services -------------------------------------------------------
     elseif (isset($_POST['GestionServicesAllBtn'])){
         ctlGestionServiceslAll();
@@ -82,13 +123,15 @@ try {
     elseif (isset($_POST['ModifAccountOneBtn'])){
         $idAccount = $_POST['idAccount'];
         $name = $_POST['nameAccount'];
+        $document = $_POST['documentAccount'];
+        $idMotif = $_POST['idMotif'];
         if (isset($_POST['activeAccount'])) {
             $active = 1;
         }
         else {
             $active = 0;
         }
-        ctlGestionAccountOneSubmit($idAccount, $name, $active);
+        ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif);
     }
     elseif (isset($_POST["GestionContractOneBtn"])){
         $idContract = $_POST['idContract'];
@@ -97,30 +140,63 @@ try {
     elseif (isset($_POST['ModifContractOneBtn'])){
         $idContract = $_POST['idContract'];
         $name = $_POST['nameContract'];
+        $document = $_POST['documentContract'];
+        $idMotif = $_POST['idMotif'];
         if (isset($_POST['activeContract'])) {
             $active = 1;
         }
         else {
             $active = 0;
         }
-        ctlGestionContractOneSubmit($idContract, $name, $active);
+        ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif);
     }
-    // ------------------------------------------------------- Gestion Motif -------------------------------------------------------
-    elseif (isset($_POST['GestionMotifAllBtn'])){
-        ctlGestionMotifAll();
+    elseif (isset($_POST['GestionServicesAddBtn'])){
+        ctlGestionServicesAdd();
     }
-    elseif (isset($_POST['GestionMotifOneBtn'])){
-        $idMotif = $_POST['idMotif'];
-        ctlGestionMotifOne($idMotif);
+    elseif (isset($_POST['AddServiceSubmitBtn'])){
+        $name = $_POST['nameService'];
+        $type = $_POST['typeService'];
+        $document = $_POST['documentService'];
+        if (isset($_POST['activeService'])) {
+            $active = 1;
+        }
+        else {
+            $active = 0;
+        }
+        ctlGestionServicesAddSubmit($name, $type, $active, $document);
     }
-    elseif (isset($_POST['ModifMotifOneBtn'])){
-        $idMotif = $_POST['idMotif'];
-        $intitule = $_POST['intituleMotif'];
-        $document = $_POST['documentMotif'];
-        ctlGestionMotifOneSubmit($idMotif, $intitule, $document);
+    elseif (isset($_POST['GestionAccountDeleteBtn'])){
+        $idAccount = $_POST['idAccount'];
+        ctlGestionAccountDelete($idAccount);
+    }
+    elseif (isset($_POST['GestionContractDeleteBtn'])){
+        $idContract = $_POST['idContract'];
+        ctlGestionContractDelete($idContract);
+    }
+     // ------------------------------------------------------- Statistique -------------------------------------------------------
+     elseif (isset($_POST['seachStatClient'])){
+        $dateStart=$_POST['datedebut'];
+        $dateEnd=$_POST['datefin'];
+        ctlStatClientBetween($dateStart, $dateEnd);
     }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
     // ------------------------------------------------------- Agent -------------------------------------------------------
+    elseif (isset($_POST['addClientBtn'])){
+        ctlDisplayNewClientForm();
+    }
+    elseif (isset($_POST['createClientBtn'])){
+        $civilite = $_POST['civiClient'];
+        $name = $_POST['nameClient'];
+        $firstName = $_POST['firstNameClient'];
+        $dateOfBirth = $_POST['dateOfBirthClient'];
+        $address = $_POST['adressClient'];
+        $phone = $_POST['phoneClient'];
+        $email = $_POST['emailClient'];
+        $profession = $_POST['professionClient'];
+        $situation = $_POST['situationClient'];
+        $idEmployee = $_POST['idEmployee'];
+        ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
+    }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{
