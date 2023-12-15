@@ -6,6 +6,7 @@
     <title>Info</title>
 </head>
 <body class="light">
+<?php echo $navbar ?>
 <div class="syntheseWrapper">
         <div class="nameWrapper">
             <h1><?php echo $civi; ?> <?php echo $firstNameClient; ?> <?php echo $nameClient; ?></h1>

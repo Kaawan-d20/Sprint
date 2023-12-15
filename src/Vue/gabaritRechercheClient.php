@@ -6,6 +6,7 @@
     <title>Info</title>
 </head>
 <body class="light">
+    <?php echo $navbar ?>
     <h1>Recherche Client</h1>
     <form action="index.php" method="post">
         <p><label for="searchClientField">Chercher un client </label>

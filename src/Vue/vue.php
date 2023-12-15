@@ -21,6 +21,7 @@ function vueDisplayHomeConseiller($username){
 }
 
 function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
+    $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -42,7 +43,7 @@ function vueDisplayLogin(){
 function vueGenerateAppointementHTML($appointment) {
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
-        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. 'lush-green' .'">
+        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. $appointment->COLOR .'">
         <h2>'. $appointment->INTITULE .'</h2>
         <p>'. $appointment->identiteClient .'</p>
         <div class="eventDetails">
@@ -50,7 +51,7 @@ function vueGenerateAppointementHTML($appointment) {
                 <p class="eventStartTime">'. $heureDebut .'</p>
                 <p class="eventEndTime">'. $heureFin .'</p>
             </div>
-            <div class="eventConseiller lush-green">
+            <div class="eventConseiller '.$appointment->COLOR.'">
                 <i class="fa-solid fa-user-tie"></i>
                 '. $appointment->identiteEmploye .'
             </div>
@@ -59,12 +60,74 @@ function vueGenerateAppointementHTML($appointment) {
 }
 
 
+function vueGenerateNavBar() {
+    if ($_SESSION["type"] == 3) {
+        debug(3);
+    }
+    $navbarHTML = 
+    '<div class="navWrapper">
+        <nav>
+            <form action="index.php" method="post">
+                    <button class="squareIconButton" name="homeBtn" title="Retour à l\'Accueil" onclick="javascript:location.reload();">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+            </form>
+            <div class="searchWrapper">
+                <form action="index.php" method="post">
+                    <label for="searchClientField" class="visually-hidden">Chercher un client</label>
+                    <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
+                    <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="advancedSearchandAccountWrapper">
+                <form action="index.php" method="post">
+                    <button class="squareIconButton" name="advancedSearchBtn" title="Recherche avancée">
+                        <i class="fa-regular fa-chart-bar"></i>
+                    </button>
+                </form>
+                <form action="index.php" method="post">
+                    <button type="submit" name="addClientBtn" class="squareIconButton">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </form>
+                <div class="dropdown">
+                    <button class="accountButton">
+                        <i class="fa-solid fa-user"></i>
+                        '. $_SESSION["name"] .'
+                    </button>
+                    <div class="dropdownContent">
+                        <form action="index.php" method="post">
+                            <button class="dropdownButton" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">
+                                Thème
+                                <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
+                            </button>
+                            <button type="submit" class="dropdownButton" name="settingBtn" >
+                                Paramètres
+                                <i class="fa-solid fa-user-gear"></i>
+                            </button>
+                            <button class="dropdownButton disconnectionBtn" name="disconnection">
+                                Se déconnecter
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>';
+    return $navbarHTML;
+    
+}
+
 /**
  * Fonction qui affiche la page du client
  * Ne retourne rien
  * @param string $client c'est les données du client
  */
 function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
+    $navbar = vueGenerateNavBar();
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
     $listA="";
@@ -114,7 +177,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
 }
 
 function vueGenerateAccountOperationHTML ($operation) {
-    $sign = ($operation->ISCREDIT == 0) ? "minus" : "plus";
+    $sign = ($operation->ISCREDIT == 0) ? "minus red" : "plus green";
     $operationHTML ='<div class="operationCard">
                         <div>
                             <h2>'.$operation->LIBELLE.':</h2>
@@ -141,7 +204,7 @@ function vueGenerateAccountFilterBtnHTML ($account) {
  * @param string $link c'est le lien pour la synthèse
  */
 function vueDisplayAdvanceSearchClient($listClient="") {
-    
+    $navbar = vueGenerateNavBar();
     if ($listClient == "") {
         $content = "";
     }

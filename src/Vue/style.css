@@ -194,7 +194,7 @@ nav {
     border: none;
 }
 
-.searchButton, .advancedSearchButton {
+.searchButton, .squareIconButton {
     padding: 0 1em;
     background-color: var(--background);
     color: var(--text);
@@ -207,11 +207,11 @@ nav {
     border-left: 1px solid var(--text-secondary);
 }
 
-.searchButton:hover, .searchButton:focus, .advancedSearchButton:focus, .advancedSearchButton:hover {
+.searchButton:hover, .searchButton:focus, .squareIconButton:focus, .squareIconButton:hover {
     background-color: var(--background-secondary);
 }
 
-.advancedSearchButton {
+.squareIconButton {
     border-radius: 5px;
     height: 60px;
     border: 1px solid var(--text-secondary);
@@ -704,12 +704,6 @@ nav {
     color: var(--text-secondary);
 }
 
-.fa-plus {
-    color: var(--dark-spring-green);
-}
-.fa-minus {
-    color: var(--invalid-red);
-}
 .operationsListWrapper {
     margin-top: 1em;
     display: flex;
@@ -801,6 +795,13 @@ input[type="number"] {
 
 .inactive {
     background-color: var(--background);
+}
+
+.green {
+    color: var(--dark-spring-green);
+}
+.red {
+    color: var(--invalid-red);
 }
 
 /* MEDIA QUERIES */
