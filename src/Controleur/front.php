@@ -174,6 +174,7 @@ try {
         ctlGestionContractDelete($idContract);
     }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
+    // ------------------------------------------------------- Création Contrat -------------------------------------------------------
     elseif (isset($_POST['addContractBtn'])){
         $idClient = $_POST['idClient'];
         ctlAddContract($idClient);
@@ -184,6 +185,18 @@ try {
         $monthCost = $_POST['monthCost'];
         $idTypeContract = $_POST['idTypeContract'];
         ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
+    }
+    // ------------------------------------------------------- Création Compte -------------------------------------------------------
+    elseif (isset($_POST['addAccountBtn'])){
+        $idClient = $_POST['idClient'];
+        ctlAddAccount($idClient);
+    }
+    elseif (isset($_POST['createAccountBtn'])){
+        $idClient = $_POST['idClient'];
+        $idClient2 = $_POST['idClient2'];
+        $monthCost = $_POST['monthCost'];
+        $idTypeAccount = $_POST['idTypeAccount'];
+        ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2);
     }
     // ------------------------------------------------------- Agent -------------------------------------------------------
     elseif (isset($_POST['addClientBtn'])){

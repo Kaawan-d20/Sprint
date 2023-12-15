@@ -1304,6 +1304,50 @@ function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeCon
 }
 
 
+function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW());
+              INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
+
+
+function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+
+    // Première requête
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idCompte = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient2, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
+
 
 /* FONCTION NON UTILISEES
 

@@ -69,6 +69,12 @@
                     <input type="submit" value="+ Crédit" name="creditBtn" class="debitCreditBtn">
                 </div>
             </form>
+            <div>
+                <form action="index.php" method="post">
+                    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>">
+                    <input type="submit" value="Ajouter un compte" name="addAccountBtn">
+                </form>
+            </div>
             <div class="accountTableWrapper">
                     <div class="accountCell header">Compte</div>
                     <div class="accountCell header">Solde</div>
@@ -84,6 +90,7 @@
                     <input type="submit" value="Ajouter un contrat" name="addContractBtn">
                 </form>
             </div>
+            
             <div class="contractTableWrapper">
                     <div class="accountCell header">Contrat</div>
                     <div class="accountCell header">Tarif Mensuel</div>
