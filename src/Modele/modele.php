@@ -381,7 +381,7 @@ function modSumAllSolde() {
  */
 function modGetContracts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat WHERE idClient=:idC';
+    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
@@ -989,7 +989,7 @@ function modCreateTypeContract($idM,$name) {
  */
 function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE client SET idEmploye=:idE, nom=:sname, prenom=:fname, dateNaissance=:dob, dateCreation=:dc, adresse=:adr, numTel=:num, email=:email, profession=:job, situationFamiliale=:fam, civilite=:civ WHERE idClient=:idC';
+    $query = 'UPDATE client SET idEmploye=:idE, nom=:sname, prenom=:fname, dateNaissance=:dob, dateCreation=:dc, adresse=:adr, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:fam, civilitee=:civ WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
@@ -1038,7 +1038,7 @@ function modCreateAdmin($idE,$h,$label) {
  */
 function modCreateClient($idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,situationFamiliate,civilite) VALUES (:idE,:sname,:fname,:dob,:dc,:adr,:num,:email,:job,:fam,:civ)';
+    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,SITUATIONFAMILIALE,civilitee) VALUES (:idE,:sname,:fname,:dob,:dc,:adr,:num,:email,:job,:fam,:civ)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
     $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);

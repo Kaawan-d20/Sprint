@@ -139,7 +139,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     }
     $listC="";
     foreach ($listContract as $contract) {
-        $listC .= '<div class="contractCell content">'.$contract->intitule.'</div>
+        $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
             <div class="contractCell content">'.$contract->tarifmensuel.'€</div>';
     }
 
