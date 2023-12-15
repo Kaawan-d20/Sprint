@@ -75,7 +75,8 @@ try {
     }
     elseif (isset($_POST['searchStatClient1'])){
         $dateStart=$_POST['date'];
-        ctlStatsDisplay($date);
+        debug($dateStart);
+        ctlStatsDisplay("","",$dateStart);
     }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
     elseif (isset($_POST['GestionPersonnelAllBtn'])){
