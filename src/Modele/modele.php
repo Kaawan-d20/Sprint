@@ -471,6 +471,21 @@ function modGetAllEmployes() {
 }
 
 /**
+ * renvoie toutes les infos de tous les clients
+ * @return array toutes les infos de tous les clients (IDCLIENT, NOM, PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, IDEMPLOYE) (tableau d'objets)
+ */
+function modGetAllClients() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM client';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
+/**
  * renvoie le nombre de clients
  * @return int le nombre de clients
  */
@@ -645,6 +660,20 @@ function modGetAllAccountTypes() {
 function modGetAllContractTypes() {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM typeContrat NATURAL JOIN motif';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie toutes les informations de tous les types de contrat qui sont actifs
+ * @return array toutes les infos de tous les types de contrat qui sont actifs(IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ */
+function modGetAllContractTypesEnable() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typeContrat NATURAL JOIN motif WHERE actif=1';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -1230,8 +1259,49 @@ function modModifEmployeSetting($idEmploye, $login, $password, $color){
     $prepared -> closeCursor();
 }
 
+function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW());
+              INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
 
 
+function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+
+    // Première requête
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idContrat = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient2, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
 
 
 

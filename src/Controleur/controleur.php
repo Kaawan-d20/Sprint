@@ -468,6 +468,26 @@ function ctlSettingSubmit($idEmploye, $login, $password, $color){
 }
 
 
+
+function ctlAddContract($idClient){
+    $listTypeContract = modGetAllContractTypes();
+    $listAllClient = modGetAllClients();
+    vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
+}
+
+
+function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
+    if ($idClient2 == ""){
+        modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
+    }
+    else{
+        modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract);
+    }
+    ctlSearchIdClient($idClient);
+}
+
+
+
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }

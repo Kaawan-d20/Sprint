@@ -173,13 +173,18 @@ try {
         $idContract = $_POST['idContract'];
         ctlGestionContractDelete($idContract);
     }
-     // ------------------------------------------------------- Statistique -------------------------------------------------------
-     elseif (isset($_POST['seachStatClient'])){
-        $dateStart=$_POST['datedebut'];
-        $dateEnd=$_POST['datefin'];
-        ctlStatClientBetween($dateStart, $dateEnd);
-    }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
+    elseif (isset($_POST['addContractBtn'])){
+        $idClient = $_POST['idClient'];
+        ctlAddContract($idClient);
+    }
+    elseif (isset($_POST['createContractBtn'])){
+        $idClient = $_POST['idClient'];
+        $idClient2 = $_POST['idClient2'];
+        $monthCost = $_POST['monthCost'];
+        $idTypeContract = $_POST['idTypeContract'];
+        ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
+    }
     // ------------------------------------------------------- Agent -------------------------------------------------------
     elseif (isset($_POST['addClientBtn'])){
         ctlDisplayNewClientForm();

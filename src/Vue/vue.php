@@ -479,3 +479,29 @@ function vueDisplaySetting($identity){
                 </form>";
     require_once('gabaritGestion.php');
 }
+
+
+function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
+    $optionSelect = "<select name=\"idTypeContract\">";
+    foreach ($listTypeContract as $typeContract) {
+        $optionSelect .= "<option value=\"".$typeContract->IDTYPECONTRAT."\">".$typeContract->NOM."</option>";
+    }
+    $optionSelect .= "</select>";
+
+    $datalist = "<input list=\"listClient\" name=\"idClient2\" ><datalist id=\"listClient\">";
+    foreach ($listeClient as $client) {
+        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->NOM." ".$client->PRENOM."</option>";
+    }
+    $datalist .= "</datalist>";
+
+
+    $content="<form action=\"index.php\" method=\"post\">
+                    <p>
+                        ".$optionSelect.$datalist."
+                        <input type=\"number\" name=\"monthCost\" placeholder=\"Cout Mensuel\" step=\"0.01\">
+                        <input type=\"hidden\" name=\"idClient\" value=\"".$idClient."\">
+                        <input type=\"submit\" name=\"createContractBtn\" value=\"Crée contrat\">
+                    </p>
+                </form>";
+    require_once('gabaritGestion.php');
+}
