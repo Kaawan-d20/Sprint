@@ -262,7 +262,7 @@ function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
         $date = (new DateTime('today'))->format('Y-m-d');
     }
     $stat = ctlGetStats($dateStart, $dateEnd, $date);
-    vueDisplayHomeDirecteur($stat);
+    vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
 }
 
 function ctlGestionPersonnelAll(){
