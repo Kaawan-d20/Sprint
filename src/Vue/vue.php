@@ -79,9 +79,6 @@ function vueGenerateAppointementHTML($appointment) {
 
 
 function vueGenerateNavBar() {
-    if ($_SESSION["type"] == 3) {
-        debug(3);
-    }
     $navbarHTML = 
     '<div class="navWrapper">
         <nav>
@@ -229,8 +226,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         $createAccount="";
         $createContract="";
     }
-    debug($createAccount);
-    debug($createContract);
+
     require_once('gabaritInfoClient.php');
 }
 

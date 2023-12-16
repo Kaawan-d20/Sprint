@@ -19,7 +19,7 @@
             <div class="infoCell header">Situation familiale</div>
             <div class="infoCell header">Client·e depuis</div>
             
-            <input type="date" class="infoCell content" id="naissance" name="naissance" value="<?php echo $naissance; ?>">
+            <input type="date" class="infoCell content" id="naissance" name="naissance" value="<?php echo $naissance; ?>" readonly="true">
             <input type="text" class="infoCell content" id="profession" name="profession" value="<?php echo $profession; ?>">
             <input type="text" class="infoCell content" id="situation" name="situation" value="<?php echo $situation; ?>">
             <input type="date" class="infoCell content" id="creation" name="creation" disabled="disabled" value="<?php echo $creation; ?>">
@@ -39,6 +39,10 @@
                     
                     <div class="contactCell header">Conseiller : </div>
                     <input type="text" class="contactCell content" name="nameConseiller" id="nameConseiller" value="<?php echo $nameConseiller; ?>">
+                </div>
+                <div class="btnWrapper">
+                    <input type="submit" value="Enregistrer" name="editClientBtn" class="btn">
+                    <input type="reset" value="Effacer" class="btn">
                 </div>
             </div>
             <div class="RDVSectionWrapper">
@@ -62,10 +66,10 @@
                 </div>
                 <div class="debitCreditBtnWrapper">
                     <div class="amountInputWrapper">
-                        <input type="number" placeholder="Entrez un montant" name="amountInput" id="amountInput" class="amountInput" min="0" required>
+                        <input type="number" placeholder="Entrez un montant" name="amountInput" id="amountInput" class="amountInput" min="0" step="0.01" required>
                         €
                     </div>
-                    <input type="submit" value="- Débit" name="debitBtn" min="0" class="debitCreditBtn">
+                    <input type="submit" value="- Débit" name="debitBtn" class="debitCreditBtn">
                     <input type="submit" value="+ Crédit" name="creditBtn" class="debitCreditBtn">
                 </div>
             </form>

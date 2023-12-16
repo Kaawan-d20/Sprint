@@ -244,7 +244,6 @@ function ctlGetStats($dateStart="", $dateEnd="", $date=""){
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
-    debug($date);
     $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
     $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
     $stat['nbClientAt'] = modGetNumberClientsAt($date);
@@ -477,6 +476,9 @@ function ctlAddContract($idClient){
 
 
 function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
+    if ($idClient2 == $idClient){
+        throw new Exception('Vous ne pouvez pas créer un contrat avec vous même');
+    }
     if ($idClient2 == ""){
         modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
     }
@@ -487,7 +489,6 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
 }
 
 
-
 function ctlAddAccount($idClient){
     $listTypeAccount = modGetAllAccountTypes();
     $listAllClient = modGetAllClients();
@@ -496,10 +497,27 @@ function ctlAddAccount($idClient){
 
 
 function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
+    if ($idClient2 == $idClient){
+        throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
+    }
+    $listAccount = modGetAccounts($idClient);
+    debug($listAccount);
+    foreach ($listAccount as $account){
+        debug($account->idtypecompte);
+        if ($account->idtypecompte == $idTypeAccount){
+            throw new Exception('Compte déjà existant');
+        }
+    }
     if ($idClient2 == ""){
         modAddAccountToClientOne($idClient, $monthCost, $idTypeAccount);
     }
     else{
+        $listAccount = modGetAccounts($idClient2);
+        foreach ($listAccount as $account){
+            if ($account->idtypecompte == $idTypeAccount){
+                throw new Exception('Compte déjà existant pour la deuxième personne');
+            }
+        }
         modAddAccountToClientTwo($idClient, $idClient2, $monthCost, $idTypeAccount);
     }
     ctlSearchIdClient($idClient);

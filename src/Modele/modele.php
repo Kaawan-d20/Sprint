@@ -62,11 +62,11 @@ function modGetClientFromId($idClient) {
  * renvoie tous les comptes du client dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param int $idClient l'id du client
- * @return array les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION) (tableau d'objets)
+ * @return array les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION, IDTYPECOMPTE) (tableau d'objets)
  */
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte NATURAL JOIN typecompte WHERE idClient=:idC';
+    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation, idtypecompte FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte NATURAL JOIN typecompte WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();

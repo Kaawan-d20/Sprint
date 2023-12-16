@@ -57,7 +57,6 @@ try {
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
     }
     elseif (isset($_POST['settingBtn'])){
-        debug($_POST);
         ctlSetting();
     }
     elseif (isset($_POST['ModifSettingOneBtn'])){
@@ -75,7 +74,6 @@ try {
     }
     elseif (isset($_POST['searchStatClient1'])){
         $dateStart=$_POST['date'];
-        debug($dateStart);
         ctlStatsDisplay("","",$dateStart);
     }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
@@ -87,7 +85,6 @@ try {
         ctlGestionPersonnelOne($idEmployee);
     }
     elseif (isset($_POST['ModifPersonnelOneBtn'])){
-        debug($_POST);
         $idEmployee = $_POST['idEmployee'];
         $name = $_POST['nameEmployee'];
         $firstName = $_POST['firstNameEmployee'];
