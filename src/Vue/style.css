@@ -934,6 +934,35 @@ nav {
     background-color: var(--background-secondary)
 }
 
+.gestionPersonnelAddForm {
+    padding: 1em;
+}
+
+.gestionPersonnelAddForm div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5em;
+}
+
+.gestionPersonnelAddInput {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    padding: 1em;
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.gestionPersonnelAddInput:not(:last-child):hover {
+    background-color: var(--background-secondary);
+}
+
+.gestionPersonnelAddInput:last-child {
+    background-color: var(--cta);
+}
+
+
 /* UTILITY */
 
 .cta {

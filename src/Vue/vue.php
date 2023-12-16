@@ -309,27 +309,44 @@ function vueGenerateGestionEmployeRow($employee) {
     return $row;
 }
 
-
-
-
 function vueDisplayGestionPersonnelAdd(){
     $navbar = vueGenerateNavBar();
-    $content="<h1>Ajouter un employé</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <select name=\"idCategorie\" >
-                            <option value=\"1\" >Directeur</option>
-                            <option value=\"2\" >Conseiller</option>
-                            <option value=\"3\" >Agent d'accueil</option>
+    $selectOptions = '';
+    $colors = [
+        "sunny-orange",
+        "turquoise-cyan",
+        "berry-red",
+        "lush-green",
+        "lavender",
+        "lemon-yellow",
+        "royal-purple",
+        "ocean-blue",
+        "coral-pink"
+    ];
+    $selectOptions = "";
+    foreach ($colors as $color) {
+        $selectOptions .= '<option value="'.$color.'">'.$color.'</option>';
+    }
+    $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
+                    <h1>Ajouter un employé</h1>
+                    <div>
+                        <select name="idCategorie" class="gestionPersonnelAddInput" required>
+                            <option value="1" >Directeur</option>
+                            <option value="2" >Conseiller</option>
+                            <option value="3" >Agent d\'accueil</option>
                         </select>
-                        <input type=\"text\" name=\"nameEmployee\" placeholder=\"Nom\">
-                        <input type=\"text\" name=\"firstNameEmployee\" placeholder=\"Prénom\">
-                        <input type=\"text\" name=\"loginEmployee\" placeholder=\"Login\">
-                        <input type=\"text\" name=\"passwordEmployee\" placeholder=\"Mot de passe\">
-                        <input type=\"text\" name=\"colorEmployee\" placeholder=\"Couleur\">
-                        <input type=\"submit\" name=\"AddPersonnelSubmitBtn\" value=\"Valider ajout\">
-                    </p>
-                </form>";
+                        <input type="text" name="nameEmployee" placeholder="Nom" class="gestionPersonnelAddInput" required>
+                        <input type="text" name="firstNameEmployee" placeholder="Prénom" class="gestionPersonnelAddInput" required>
+                        <input type="text" name="loginEmployee" placeholder="Login" class="gestionPersonnelAddInput" required>
+                        <input type="password" name="passwordEmployee" placeholder="Mot de passe" class="gestionPersonnelAddInput" required>
+                        <select name="colorEmployee" class="gestionPersonnelAddInput" required>
+                            '.$selectOptions.'
+                        </select>
+                        <button type="submit" name="AddPersonnelSubmitBtn" class="gestionPersonnelAddInput" required>
+                            <i class="fa-solid fa-check"></i> Valider ajout
+                        </button>
+                    </div>
+                </form>';
     require_once('gabaritGestion.php');
 }
 
