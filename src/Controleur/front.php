@@ -86,6 +86,7 @@ try {
         ctlGestionPersonnelOne($idEmployee);
     }
     elseif (isset($_POST['ModifPersonnelOneBtn'])){
+        debug($_POST);
         $idEmployee = $_POST['idEmployee'];
         $name = $_POST['nameEmployee'];
         $firstName = $_POST['firstNameEmployee'];

@@ -854,8 +854,65 @@ nav {
 
 .gestionBtn {
     border: 1px solid var(--text);
+    border-radius: 5px;
     background-color: var(--background);
-    
+    padding: 1em;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.gestionForm {
+    display: flex;
+    gap: 1em;
+}
+
+.gestionBtn:hover, .gestionBtn:focus {
+    background-color: var(--background-secondary);
+}
+
+.employeTableWrapper {
+    display: grid;
+    margin: 1em;
+    grid-auto-flow: row;
+}
+
+.employeTableHeaderWrapper, .employeTableContentWrapper {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.employeCell.header:first-child {
+    border-radius: 5px 0 0 0;
+}
+.employeCell.header:nth-child(7) {
+    border-radius: 0 5px 0 0;
+}
+.employeTableContentWrapper:last-child .employeCell.content:first-child {
+    border-radius: 0 0 0 5px;
+}
+.employeTableContentWrapper:last-child .employeCell.content:nth-child(7) {
+    border-radius: 0 0 5px 0;
+}
+.employeCell.content:first-child {
+    border-left: 1px solid var(--text);
+}
+.employeCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+.employeCell.content:nth-child(-n+7) {
+    border-bottom: 1px solid var(--text);
+}
+
+.employeBtn {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    margin: 1px 0 0 .5em;
+    border-radius: 5px;
+    font-size: var(--classic-font-size);
+}
+
+.employeBtn:hover {
+    background-color: var(--background-secondary)
 }
 
 /* UTILITY */

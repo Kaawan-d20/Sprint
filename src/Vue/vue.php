@@ -130,7 +130,32 @@ function vueGenerateNavBar() {
                 </div>
             </div>
         </nav>
-    </div>';
+    </div>
+    <script>
+    let isLightTheme = true;
+    /** switch beetween light and dark theme */ 
+    function toggleTheme() {
+        let icon = document.getElementById("themeSwitcherIcon");
+        let btn = document.getElementById("themeSwitcherBtn");
+        if (isLightTheme) {
+            document.body.classList.add("dark");
+            document.body.classList.remove("light");
+            icon.classList.add("fa-sun")
+            icon.classList.remove("fa-moon")
+            btn.setAttribute("title", "Activer le thème Clair")
+
+            isLightTheme = false;
+        } else {
+            document.body.classList.add("light");
+            document.body.classList.remove("dark");
+            icon.classList.add("fa-moon")
+            icon.classList.remove("fa-sun")
+            btn.setAttribute("title", "Activer le thème Sombre")
+
+            isLightTheme = true;
+        }
+    }
+    </script>';
     return $navbarHTML;
     
 }
@@ -245,67 +270,69 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 
 function vueDisplayGestionPersonnelAll($listEmployee) {
     $navbar = vueGenerateNavBar();
-    $content="<h1>Gestion du Personnel</h1>
-                <h2>Liste des employers</h2>";
+    $content='<h1>Gestion des Employés</h1>
+                <div class="employeTableWrapper">
+                    <div class="employeTableHeaderWrapper">
+                        <div class="employeCell header">Id</div>
+                        <div class="employeCell header">Rôle</div>
+                        <div class="employeCell header">Nom</div>
+                        <div class="employeCell header">Prénom</div>
+                        <div class="employeCell header">Login</div>
+                        <div class="employeCell header">Mot de Passe</div>
+                        <div class="employeCell header">Couleur</div>
+
+                    </div>';
     foreach ($listEmployee as $employee) {
-        if ($employee->IDCATEGORIE == 1) {
-            $category = "Directeur";
-        }
-        elseif ($employee->IDCATEGORIE == 2) {
-            $category = "Conseiller";
-        }
-        elseif ($employee->IDCATEGORIE == 3) {
-            $category = "Agent d'acceuil";
-        }
-        
-        $content .= "<form action=\"index.php\" method=\"post\">
-                        <p>
-                            Id de l'employe : ".$employee->IDEMPLOYE.", 
-                            Type d'employe : ".$category.", 
-                            Nom de l'employé : ".$employee->NOM.", 
-                            Prénom de l'employé : ".$employee->PRENOM.",  
-                            Login de l'employé : ".$employee->LOGIN.",
-                            Couleur de l'employé : ".$employee->COLOR.", 
-                            <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
-                            <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
-                            <input type=\"submit\" value=\"Supprimer l'employe.\" name=\"GestionPersonnelDeleteBtn\">
-                        </p>
-                    </form>";
+        $content .= vueGenerateGestionEmployeRow($employee);   
     }
-    $content .= "<form action=\"index.php\" method=\"post\">
-                    <p>
-                        <input type=\"submit\" value=\"Ajouter un employé.\" name=\"GestionPersonnelAddBtn\">
-                    </p>
-                </form>";
+    $content .= '</div>
+                <form action="index.php" method="post">
+                    <button type="submit" name="GestionPersonnelAddBtn" class="cta">
+                        Ajouter un employé
+                    </button>
+                </form>';
     require_once('gabaritGestion.php');
 }
 
 
-function vueDisplayGestionPersonnelOne($employee) {
-    $navbar = vueGenerateNavBar();
-        $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
-        $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
-        $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
-        $content="<h1>Modifier info employé</h1>
-                    <form action=\"index.php\" method=\"post\">
-                        <p>
-                            <select name=\"idCategorie\" >
-                                <option value=\"1\" ".$etat1." >Directeur</option>
-                                <option value=\"2\" ".$etat2." >Conseiller</option>
-                                <option value=\"3\" ".$etat3." >Agent d'acceuil</option>
-                            </select>
-                            <input type=\"hidden\" name=\"idEmployee\" value=\"$employee->IDEMPLOYE\">
-                            <input type=\"text\" name=\"nameEmployee\" value=\"$employee->NOM\">
-                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$employee->PRENOM\">
-                            <input type=\"text\" name=\"loginEmployee\" value=\"$employee->LOGIN\">
-                            <input type=\"text\" name=\"passwordEmployee\" value=\"$employee->PASSWORD\">
-                            <input type=\"text\" name=\"colorEmployee\" value=\"$employee->COLOR\">
-                            <input type=\"submit\" name=\"ModifPersonnelOneBtn\" value=\"Valider modification\">
-                        </p>
-                    </form>";
-    
-    require_once('gabaritGestion.php');
-
+function vueGenerateGestionEmployeRow($employee) {
+    $colors = [
+        "sunny-orange",
+        "turquoise-cyan",
+        "berry-red",
+        "lush-green",
+        "lavender",
+        "lemon-yellow",
+        "royal-purple",
+        "ocean-blue",
+        "coral-pink"
+    ];
+    $selectOptions = "";
+    foreach ($colors as $color) {
+        $selected = ($employee->COLOR == $color) ? "selected" : "";
+        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
+    }
+    $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
+    $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
+    $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
+    $row='<form action="index.php" method="post" class="employeTableContentWrapper" onformchange="displayValidBtn">
+            <input  type="number" class="employeCell content" name="idEmployee" value="'.$employee->IDEMPLOYE.'" readonly="true">
+            <select name="idCategorie" class="employeCell content">
+                <option value="1" '.$etat1.' >Directeur</option>
+                <option value="2" '.$etat2.' >Conseiller</option>
+                <option value="3" '.$etat3.' >Agent d\'acceuil</option>
+            </select>
+            <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
+            <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
+            <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
+            <input type="password" name="passwordEmployee" class="employeCell content" value="'.$employee->PASSWORD.'">
+            <select name="colorEmployee" class="employeCell content">
+                '.$selectOptions.'
+            </select>
+            <button type="submit" name="ModifPersonnelOneBtn" class="employeBtn"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
+            <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i>Supprimer</button>
+        </form>';
+    return $row;
 }
 
 
