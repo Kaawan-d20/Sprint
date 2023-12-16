@@ -21,7 +21,7 @@ function modGetSalt($login) {
 }
 
 /**
- * renvoie toutes les infos de l'employe dont le login et password sont en paramètres,
+ * renvoie toutes les infos de l'employé dont le login et password sont en paramètres,
  * rien si celui-ci n'est pas présent dans la base de données.
  * @param string $login le login de l'employé
  * @param string $password le password salé de l'employé
@@ -381,7 +381,7 @@ function modSumAllSolde() {
  */
 function modGetContracts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat WHERE idClient=:idC';
+    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
@@ -469,6 +469,21 @@ function modGetAllEmployes() {
     $prepared -> closeCursor();
     return $result;
 }
+
+/**
+ * renvoie toutes les infos de tous les clients
+ * @return array toutes les infos de tous les clients (IDCLIENT, NOM, PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, IDEMPLOYE) (tableau d'objets)
+ */
+function modGetAllClients() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM client';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
 
 /**
  * renvoie le nombre de clients
@@ -653,6 +668,20 @@ function modGetAllContractTypes() {
 }
 
 /**
+ * renvoie toutes les informations de tous les types de contrat qui sont actifs
+ * @return array toutes les infos de tous les types de contrat qui sont actifs(IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ */
+function modGetAllContractTypesEnable() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typeContrat NATURAL JOIN motif WHERE actif=1';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
  * renvoie toutes les infos du type de compte dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données
  * @param int $idTypeAccount l'id du type de compte
@@ -828,10 +857,28 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
 }
 
 /**
- * renvoie le nombre de rdv entre la première et la deuxième date mises en paramètres
+ * renvoie toutes les ta entre la première et la deuxième date mises en paramètres,
+ * rien si il n'y en a pas dans la base de données
  * @param string $date1 date de début
  * @param string $date2 date de fin
- * @return int le nombre de rdv entre la première et la deuxième date mises en paramètres
+ */
+function modGetAllAdminBetween($date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM tacheAdmin WHERE horaire>:d1 AND horaire<:d2';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $prepared;
+}
+
+/**
+ * renvoie le nombre de rdv après la date1 mais avant la date2
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
  */
 function modGetNumberAppointmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
@@ -879,6 +926,164 @@ function modGetNumberClientsAt($date){
     $result = $prepared -> fetch();
     return $result->nbClients;
 }
+
+/**
+ * cree un nouveau rdv
+ * @param int $idM l'id du motif
+ * @param int $idC l'id du client
+ * @param int $idE l'id de l'employe
+ * @param string $time la date et l'heure 
+ */
+function modAddAppointment($idM,$idC,$idE,$time) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaire) VALUES (:idM,:idC,:idE,:dt)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':dt', $time, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * modifie le decouvert du compte dont l'id est en paramètre
+ * @param int $idC l'id du compte
+ * @param string $deco le découvert
+ */
+function modSetDecouvert($idC,$deco) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE compte SET decouvert=:deco WHERE idCompte=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':deco', $deco, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree un motif avec le libelle et le(s) document(s) en paramètres
+ * @param string $label le libelle
+ * @param string $doc le(s) document(s) 
+ */
+function modCreateMotive($label,$doc) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO motif(intitule,document) VALUES (:label,:doc)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> bindParam(':doc', $doc, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree un type de compte avec l'id de motif et le nom en paramètres
+ * @param int $idM l'id du motif
+ * @param string $name le nom du compte
+ */
+function modCreateTypeAccount($idM,$name) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO typeCompte(idMotif,nom) VALUES (:idM,:nameA)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':nameA', $name, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree un type de contrat avec l'id de motif et le nom en paramètres
+ * @param int $idM l'id du motif
+ * @param string $name le nom du contrat
+ */
+function modCreateTypeContract($idM,$name) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO typeContrat(idMotif,nom) VALUES (:idM,:nameA)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
+    $prepared -> bindParam(':nameA', $name, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * modifie les infos du client dont l'id est en paramètre
+ * @param int $idC l'id du client
+ * @param int $idE l'id du conseiller
+ * @param string $sname le nom
+ * @param string $fname le prenom
+ * @param string $dob la date de naissance
+ * @param string $dc la date de creation
+ * @param string $adr l'adresse
+ * @param string $num le numero de tel
+ * @param string $email l'adresse mail
+ * @param string $job la profession
+ * @param string $fam la situation familiale
+ * @param string $civ la civilite
+ */
+function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE client SET idEmploye=:idE, nom=:sname, prenom=:fname, dateNaissance=:dob, dateCreation=:dc, adresse=:adr, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:fam, civilitee=:civ WHERE idClient=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':dob', $dob, PDO::PARAM_STR);
+    $prepared -> bindParam(':dc', $dc, PDO::PARAM_STR);
+    $prepared -> bindParam(':adr', $adr, PDO::PARAM_STR);
+    $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
+    $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
+    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
+    $prepared -> bindParam(':fam', $fam, PDO::PARAM_STR);
+    $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree une ta avec l'id d'employé, l'horaire et le libelle en paramètre
+ * @param int $idE l'id de l'employé
+ * @param string $h l'horaire
+ * @param string $label le libelle
+ */
+function modCreateAdmin($idE,$h,$label) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO tacheAdmin(idEmploye,horaire,libelle) VALUES (:idE,:h,:label)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':h', $h, PDO::PARAM_STR);
+    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+/**
+ * cree un client avec les infos en paramètre
+ * @param int $idE l'id du conseiller
+ * @param string $sname le nom
+ * @param string $fname le prenom
+ * @param string $dob la date de naissance
+ * @param string $dc la date de creation
+ * @param string $adr l'adresse
+ * @param string $num le numero de tel
+ * @param string $email l'adresse mail
+ * @param string $job la profession
+ * @param string $fam la situation familiale
+ * @param string $civ la civilite
+ */
+function modCreateClient($idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,SITUATIONFAMILIALE,civilitee) VALUES (:idE,:sname,:fname,:dob,:dc,:adr,:num,:email,:job,:fam,:civ)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
+    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
+    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
+    $prepared -> bindParam(':dob', $dob, PDO::PARAM_STR);
+    $prepared -> bindParam(':dc', $dc, PDO::PARAM_STR);
+    $prepared -> bindParam(':adr', $adr, PDO::PARAM_STR);
+    $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
+    $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
+    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
+    $prepared -> bindParam(':fam', $fam, PDO::PARAM_STR);
+    $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
+    $prepared -> execute();
+}
+
+
 
 /**
  * renvoie la liste des operations du compte dont l'id est en paramètre
@@ -1040,38 +1245,7 @@ function modGetAllConseiller(){
     $prepared -> closeCursor();
     return $result;
 }
-/**
- * cree un client avec les infos en paramètre
- * @param int $idE l'id du conseiller
- * @param string $sname le nom
- * @param string $fname le prenom
- * @param string $dob la date de naissance
- * @param string $dc la date de creation
- * @param string $adr l'adresse
- * @param string $num le numero de tel
- * @param string $email l'adresse mail
- * @param string $job la profession
- * @param string $fam la situation familiale
- * @param string $civ la civilite
- */
- function modCreateClient($idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$fam,$civ) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,SITUATIONFAMILIALE,CIVILITEE) VALUES (:idE,:sname,:fname,:dob,:dc,:adr,:num,:email,:job,:fam,:civ)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
-    $prepared -> bindParam(':sname', $sname, PDO::PARAM_STR);
-    $prepared -> bindParam(':fname', $fname, PDO::PARAM_STR);
-    $prepared -> bindParam(':dob', $dob, PDO::PARAM_STR);
-    $prepared -> bindParam(':dc', $dc, PDO::PARAM_STR);
-    $prepared -> bindParam(':adr', $adr, PDO::PARAM_STR);
-    $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
-    $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
-    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
-    $prepared -> bindParam(':fam', $fam, PDO::PARAM_STR);
-    $prepared -> bindParam(':civ', $civ, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
+
 
 function modModifEmployeSetting($idEmploye, $login, $password, $color){
     $connection = Connection::getInstance()->getConnection();
@@ -1085,9 +1259,94 @@ function modModifEmployeSetting($idEmploye, $login, $password, $color){
     $prepared -> closeCursor();
 }
 
+function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW());
+              INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
 
 
+function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
 
+    // Première requête
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idContrat = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient2, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
+
+
+function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW());
+              INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
+
+
+function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+
+    // Première requête
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idCompte = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient2, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
 
 
 /* FONCTION NON UTILISEES

@@ -75,7 +75,8 @@ try {
     }
     elseif (isset($_POST['searchStatClient1'])){
         $dateStart=$_POST['date'];
-        ctlStatsDisplay($date);
+        debug($dateStart);
+        ctlStatsDisplay("","",$dateStart);
     }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
     elseif (isset($_POST['GestionPersonnelAllBtn'])){
@@ -173,13 +174,31 @@ try {
         $idContract = $_POST['idContract'];
         ctlGestionContractDelete($idContract);
     }
-     // ------------------------------------------------------- Statistique -------------------------------------------------------
-     elseif (isset($_POST['seachStatClient'])){
-        $dateStart=$_POST['datedebut'];
-        $dateEnd=$_POST['datefin'];
-        ctlStatClientBetween($dateStart, $dateEnd);
-    }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
+    // ------------------------------------------------------- Création Contrat -------------------------------------------------------
+    elseif (isset($_POST['addContractBtn'])){
+        $idClient = $_POST['idClient'];
+        ctlAddContract($idClient);
+    }
+    elseif (isset($_POST['createContractBtn'])){
+        $idClient = $_POST['idClient'];
+        $idClient2 = $_POST['idClient2'];
+        $monthCost = $_POST['monthCost'];
+        $idTypeContract = $_POST['idTypeContract'];
+        ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
+    }
+    // ------------------------------------------------------- Création Compte -------------------------------------------------------
+    elseif (isset($_POST['addAccountBtn'])){
+        $idClient = $_POST['idClient'];
+        ctlAddAccount($idClient);
+    }
+    elseif (isset($_POST['createAccountBtn'])){
+        $idClient = $_POST['idClient'];
+        $idClient2 = $_POST['idClient2'];
+        $monthCost = $_POST['monthCost'];
+        $idTypeAccount = $_POST['idTypeAccount'];
+        ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2);
+    }
     // ------------------------------------------------------- Agent -------------------------------------------------------
     elseif (isset($_POST['addClientBtn'])){
         ctlDisplayNewClientForm();

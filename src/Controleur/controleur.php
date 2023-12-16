@@ -460,8 +460,49 @@ function ctlSetting(){
 
 
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
+    if ($password == ''){
+        $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
     ctlHome();
+}
+
+
+
+function ctlAddContract($idClient){
+    $listTypeContract = modGetAllContractTypes();
+    $listAllClient = modGetAllClients();
+    vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
+}
+
+
+function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
+    if ($idClient2 == ""){
+        modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
+    }
+    else{
+        modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract);
+    }
+    ctlSearchIdClient($idClient);
+}
+
+
+
+function ctlAddAccount($idClient){
+    $listTypeAccount = modGetAllAccountTypes();
+    $listAllClient = modGetAllClients();
+    vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
+}
+
+
+function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
+    if ($idClient2 == ""){
+        modAddAccountToClientOne($idClient, $monthCost, $idTypeAccount);
+    }
+    else{
+        modAddAccountToClientTwo($idClient, $idClient2, $monthCost, $idTypeAccount);
+    }
+    ctlSearchIdClient($idClient);
 }
 
 
