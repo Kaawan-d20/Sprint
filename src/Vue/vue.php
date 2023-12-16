@@ -1,5 +1,9 @@
 <?php
 
+if(session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $colors = [
     "sunny-orange",
     "turquoise-cyan",
@@ -210,8 +214,23 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         }
         
         $operationDisplay .= $operationsHTML. "</div>";
-        debug($operationDisplay);
     }
+    if ($_SESSION["type"] == 2) {
+        $createAccount='<div><form action="index.php" method="post">
+                            <input type="hidden" name="idClient" value="'.$idClient.'">
+                            <input type="submit" value="Ajouter un compte" name="addAccountBtn">
+                        </form></div>';
+        $createContract = '<div><form action="index.php" method="post">
+                                <input type="hidden" name="idClient" value="'.$idClient.'">
+                                <input type="submit" value="Ajouter un contrat" name="addContractBtn">
+                            </form></div>';
+    }
+    else {
+        $createAccount="";
+        $createContract="";
+    }
+    debug($createAccount);
+    debug($createContract);
     require_once('gabaritInfoClient.php');
 }
 
