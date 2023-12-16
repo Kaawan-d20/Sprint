@@ -1,11 +1,24 @@
 <?php
 
+$colors = [
+    "sunny-orange",
+    "turquoise-cyan",
+    "berry-red",
+    "lush-green",
+    "lavender",
+    "lemon-yellow",
+    "royal-purple",
+    "ocean-blue",
+    "coral-pink"
+];
+
 /**
  * Fonction qui affiche la page d'accueil du directeur
  * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
 function vueDisplayHomeDirecteur($stat, $username){
+    $navbar = vueGenerateNavBar();
     $content="";
     require_once('gabaritDirecteurHomePage.php');
 }
@@ -16,6 +29,7 @@ function vueDisplayHomeDirecteur($stat, $username){
  * @return void
  */
 function vueDisplayHomeConseiller($username){
+    $navbar = vueGenerateNavBar();
     $content="";
     require_once('gabaritConseillerHomePage.php');
 }
@@ -116,7 +130,32 @@ function vueGenerateNavBar() {
                 </div>
             </div>
         </nav>
-    </div>';
+    </div>
+    <script>
+    let isLightTheme = true;
+    /** switch beetween light and dark theme */ 
+    function toggleTheme() {
+        let icon = document.getElementById("themeSwitcherIcon");
+        let btn = document.getElementById("themeSwitcherBtn");
+        if (isLightTheme) {
+            document.body.classList.add("dark");
+            document.body.classList.remove("light");
+            icon.classList.add("fa-sun")
+            icon.classList.remove("fa-moon")
+            btn.setAttribute("title", "Activer le thème Clair")
+
+            isLightTheme = false;
+        } else {
+            document.body.classList.add("light");
+            document.body.classList.remove("dark");
+            icon.classList.add("fa-moon")
+            icon.classList.remove("fa-sun")
+            btn.setAttribute("title", "Activer le thème Sombre")
+
+            isLightTheme = true;
+        }
+    }
+    </script>';
     return $navbarHTML;
     
 }
@@ -209,91 +248,98 @@ function vueDisplayAdvanceSearchClient($listClient="") {
         $content = "";
     }
     else{
-        $content="<form action=\"index.php\" method=\"post\"><table>";
+
+        $content='<form action="index.php" method="post">
+                    <div class="rechercheOutputTableWrapper">
+                        <div class="rechercheCell header">ID Client</div>
+                        <div class="rechercheCell header">Nom</div>
+                        <div class="rechercheCell header">Prénom</div>
+                        <div class="rechercheCell header">Date de Naissance</div>
+                        <div class="rechercheCell header"></div>';
         foreach ($listClient as $client) {
-            $content="<form action=\"index.php\" method=\"post\">";
-            $content .= "<input type=\"number\" name=\"idClient\" value=\"".$client->idClient."\" class=\"hidden\">";
-            $content .= "<tr>
-                            <td name=\"idClient\">".$client->idClient."</td>
-                            <td>".$client->nom."</td><td>".$client->prenom."</td>
-                            <td>".$client->dateNaissance."</td>
-                            <td><input type=\"submit\" name=\"infoClientFromAdvancedBtn\" value=\"Synthèse\"></td>
-                        </tr>";
-            $content .= "</form>";
+           $content .= '<div class="rechercheCell content">'.$client->idClient.'</div>
+                        <div class="rechercheCell content">'.$client->nom.'</div>
+                        <div class="rechercheCell content">'.$client->prenom.'</div>
+                        <div class="rechercheCell content">'.$client->dateNaissance.'</div>
+                        <button class="rechercheCell content" type="submit" name="infoClientFromAdvancedBtn">Synthèse<input type="number" name="idClient" value='.$client->idClient.' class="hidden"></button>';
         }
-        $content .= "</table>";
+        $content .= '</div></form>';
     }
     require_once('gabaritRechercheClient.php');
 }
 
 function vueDisplayGestionPersonnelAll($listEmployee) {
-    $content="<h1>Gestion du Personnel</h1>
-                <h2>Liste des employers</h2>";
+    $navbar = vueGenerateNavBar();
+    $content='<h1>Gestion des Employés</h1>
+                <div class="employeTableWrapper">
+                    <div class="employeTableHeaderWrapper">
+                        <div class="employeCell header">Id</div>
+                        <div class="employeCell header">Rôle</div>
+                        <div class="employeCell header">Nom</div>
+                        <div class="employeCell header">Prénom</div>
+                        <div class="employeCell header">Login</div>
+                        <div class="employeCell header">Mot de Passe</div>
+                        <div class="employeCell header">Couleur</div>
+
+                    </div>';
     foreach ($listEmployee as $employee) {
-        if ($employee->IDCATEGORIE == 1) {
-            $category = "Directeur";
-        }
-        elseif ($employee->IDCATEGORIE == 2) {
-            $category = "Conseiller";
-        }
-        elseif ($employee->IDCATEGORIE == 3) {
-            $category = "Agent d'acceuil";
-        }
-        
-        $content .= "<form action=\"index.php\" method=\"post\">
-                        <p>
-                            Id de l'employe : ".$employee->IDEMPLOYE.", 
-                            Type d'employe : ".$category.", 
-                            Nom de l'employé : ".$employee->NOM.", 
-                            Prénom de l'employé : ".$employee->PRENOM.",  
-                            Login de l'employé : ".$employee->LOGIN.",
-                            Couleur de l'employé : ".$employee->COLOR.", 
-                            <input type=\"hidden\" name=\"idEmployee\" value=\"".$employee->IDEMPLOYE ."\">
-                            <input type=\"submit\" value=\"Modifier l'employe.\" name=\"GestionPersonnelOneBtn\">
-                            <input type=\"submit\" value=\"Supprimer l'employe.\" name=\"GestionPersonnelDeleteBtn\">
-                        </p>
-                    </form>";
+        $content .= vueGenerateGestionEmployeRow($employee);   
     }
-    $content .= "<form action=\"index.php\" method=\"post\">
-                    <p>
-                        <input type=\"submit\" value=\"Ajouter un employé.\" name=\"GestionPersonnelAddBtn\">
-                    </p>
-                </form>";
+    $content .= '</div>
+                <form action="index.php" method="post">
+                    <button type="submit" name="GestionPersonnelAddBtn" class="cta">
+                        Ajouter un employé
+                    </button>
+                </form>';
     require_once('gabaritGestion.php');
 }
 
 
-function vueDisplayGestionPersonnelOne($employee) {
-    
-        $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
-        $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
-        $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
-        $content="<h1>Modifier info employé</h1>
-                    <form action=\"index.php\" method=\"post\">
-                        <p>
-                            <select name=\"idCategorie\" >
-                                <option value=\"1\" ".$etat1." >Directeur</option>
-                                <option value=\"2\" ".$etat2." >Conseiller</option>
-                                <option value=\"3\" ".$etat3." >Agent d'acceuil</option>
-                            </select>
-                            <input type=\"hidden\" name=\"idEmployee\" value=\"$employee->IDEMPLOYE\">
-                            <input type=\"text\" name=\"nameEmployee\" value=\"$employee->NOM\">
-                            <input type=\"text\" name=\"firstNameEmployee\" value=\"$employee->PRENOM\">
-                            <input type=\"text\" name=\"loginEmployee\" value=\"$employee->LOGIN\">
-                            <input type=\"text\" name=\"passwordEmployee\">
-                            <input type=\"text\" name=\"colorEmployee\" value=\"$employee->COLOR\">
-                            <input type=\"submit\" name=\"ModifPersonnelOneBtn\" value=\"Valider modification\">
-                        </p>
-                    </form>";
-    
-    require_once('gabaritGestion.php');
-
+function vueGenerateGestionEmployeRow($employee) {
+    $colors = [
+        "sunny-orange",
+        "turquoise-cyan",
+        "berry-red",
+        "lush-green",
+        "lavender",
+        "lemon-yellow",
+        "royal-purple",
+        "ocean-blue",
+        "coral-pink"
+    ];
+    $selectOptions = "";
+    foreach ($colors as $color) {
+        $selected = ($employee->COLOR == $color) ? "selected" : "";
+        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
+    }
+    $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
+    $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
+    $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
+    $row='<form action="index.php" method="post" class="employeTableContentWrapper" onformchange="displayValidBtn">
+            <input  type="number" class="employeCell content" name="idEmployee" value="'.$employee->IDEMPLOYE.'" readonly="true">
+            <select name="idCategorie" class="employeCell content">
+                <option value="1" '.$etat1.' >Directeur</option>
+                <option value="2" '.$etat2.' >Conseiller</option>
+                <option value="3" '.$etat3.' >Agent d\'acceuil</option>
+            </select>
+            <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
+            <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
+            <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
+            <input type="password" name="passwordEmployee" class="employeCell content" value="'.$employee->PASSWORD.'">
+            <select name="colorEmployee" class="employeCell content">
+                '.$selectOptions.'
+            </select>
+            <button type="submit" name="ModifPersonnelOneBtn" class="employeBtn"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
+            <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i>Supprimer</button>
+        </form>';
+    return $row;
 }
 
 
 
 
 function vueDisplayGestionPersonnelAdd(){
+    $navbar = vueGenerateNavBar();
     $content="<h1>Ajouter un employé</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>
@@ -322,6 +368,7 @@ function vueDisplayGestionPersonnelAdd(){
 
 
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
+    $navbar = vueGenerateNavBar();
     $content ="<h1>Gestion des services</h1>
                 <h2>Liste des type de compte</h2>";
     foreach ($listTypeAccount as $typeAccount) {
@@ -360,6 +407,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
 
 
 function vueDisplayGestionServicesAdd(){
+    $navbar = vueGenerateNavBar();
     $content="<h1>Ajouter un service</h1>
                 <form action=\"index.php\" method=\"post\">
                     <p>
@@ -377,6 +425,7 @@ function vueDisplayGestionServicesAdd(){
 }
 
 function vueDisplayGestionAccountOne($account) {
+    $navbar = vueGenerateNavBar();
     $etat=$account->ACTIF==1 ? "checked": "";
     $content="<h1>Modifier info type compte</h1>
                 <form action=\"index.php\" method=\"post\">
@@ -395,6 +444,7 @@ function vueDisplayGestionAccountOne($account) {
 
 
 function vueDisplayGestionContractOne($contract) {
+    $navbar = vueGenerateNavBar();
     $etat=$contract->ACTIF==1 ? "checked": "";
     $content="<h1>Modifier info type contrat</h1>
                 <form action=\"index.php\" method=\"post\">
@@ -420,12 +470,14 @@ function vueDisplayGestionContractOne($contract) {
  * @param string $error
  */
 function vueDisplayError ($error) {
+    $navbar = vueGenerateNavBar();
     $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
     require_once('gabaritErreur.php');
 }
 
 
 function vueDisplayAgendaConseiller($appointment, $admin){
+    $navbar = vueGenerateNavBar();
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
@@ -436,47 +488,93 @@ function vueDisplayAgendaConseiller($appointment, $admin){
 
 
 function vueDisplayCreateClient($listConseiller) {
-    $optionSelect = "<select name=\"idEmployee\">";
+    $navbar = vueGenerateNavBar();
+    $optionSelect = '<label for="idEmployee" class="visually-hidden">Conseiller</label><select name="idEmployee" id="idEmployee" required>';
     foreach ($listConseiller as $conseiller) {
         $optionSelect .= "<option value=\"".$conseiller->idEmploye."\">".$conseiller->identiteEmploye."</option>";
     }
     $optionSelect .= "</select>";
-    $content = "<h1>Création d'un client</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <select name=\"civiClient\" >
-                            <option value=\"M.\" >M.</option>
-                            <option value=\"Mme.\" >Mme.</option>
-                            <option value=\"Other\" >Other</option>
-                        </select>
-                        <input type=\"text\" name=\"nameClient\" placeholder=\"Nom\">
-                        <input type=\"text\" name=\"firstNameClient\" placeholder=\"Prénom\">
-                        <input type=\"date\" name=\"dateOfBirthClient\" placeholder=\"Date de naissance\">
-                        <input type=\"text\" name=\"adressClient\" placeholder=\"Adresse\">
-                        <input type=\"text\" name=\"phoneClient\" placeholder=\"Numéro de téléphone\">
-                        <input type=\"text\" name=\"emailClient\" placeholder=\"Email\">
-                        <input type=\"text\" name=\"professionClient\" placeholder=\"Profession\">
-                        <input type=\"text\" name=\"situationClient\" placeholder=\"Situation familiale\">
-                         ".$optionSelect."
-                        <input type=\"submit\" name=\"createClientBtn\" value=\"Valider création\">
-                    </p>
-                </form>";
+    $content = '<div class="clientCreationWrapper"> 
+                    <h1>Création d\'un client</h1>
+                    <form action="index.php" method="post" class="clientCreationForm" required>
+                        <div>
+                            <select name="civiClient" >
+                                <option value="M." >M.</option>
+                                <option value="Mme." >Mme.</option>
+                                <option value="Mx." >Other</option>
+                            </select>
+                            <input type="text" name="nameClient" placeholder="Nom" required>
+                            <input type="text" name="firstNameClient" placeholder="Prénom" required>
+                        </div>
+
+                        <label for="dateOfBirthClient" class="visually-hidden">Date de naissance:</label>
+                        <input type="date" name="dateOfBirthClient" id="dateOfBirthClient" placeholder="Date de naissance" required>
+                        <label for="adressClient" class="visually-hidden">Adresse</label>
+                        <input type="text" name="adressClient" id="adressClient" placeholder="Adresse" required>
+                        <label for="phoneClient" class="visually-hidden">Numéro de téléphone</label>
+                        <input type="tel" name="phoneClient" id="phoneClient" placeholder="Numéro de téléphone" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" required>
+                        <label for="emailClient" class="visually-hidden">Email</label>
+                        <input type="mail" name="emailClient" id="emailClient" placeholder="Email" required>
+                        <label for="professionClient" class="visually-hidden">Profession</label>
+                        <input type="text" name="professionClient" id="professionClient" placeholder="Profession" required>
+                        <label for="situationClient" class="visually-hidden">Situation familiale</label>
+                        <input type="text" name="situationClient" id="situationClient" placeholder="Situation familiale" required>
+                            '.$optionSelect.'
+                        <input type="submit" name="createClientBtn" value="Creer le Client" class="cta" required>
+                    </form>
+                </div>';
     require_once('gabaritGestion.php');
 }
 
-
-
-
-function vueDisplaySetting($identity){
-    $content="<h1>Modifier info personnel</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        Login : <input type=\"text\" name=\"loginEmployee\" value=\"".$identity->LOGIN."\">
-                        Mot de passe : <input type=\"text\" name=\"passwordEmployee\">
-                        Couleur : <input type=\"text\" name=\"colorEmployee\" value=\"".$identity->COLOR."\">
-                        <input type=\"submit\" name=\"ModifSettingOneBtn\" value=\"Valider modification\">
-                    </p>
-                </form>";
+function vueDisplaySetting($identity) {
+    $navbar = vueGenerateNavBar();
+    $selectOptions = '';
+    $colors = [
+        "sunny-orange",
+        "turquoise-cyan",
+        "berry-red",
+        "lush-green",
+        "lavender",
+        "lemon-yellow",
+        "royal-purple",
+        "ocean-blue",
+        "coral-pink"
+    ];
+    foreach ($colors as $color) {
+        $selectOptions .= '<option value="'.$color.'">'.$color.'</option>';
+    }
+    $content='<div class="modInfoWrapper">
+                <form action="index.php" method="post">
+                    <h1>Modifier info personnel</h1>
+                    <label for="loginEmployee"  class="visually-hidden">Login :</label>
+                    <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" required>
+                    <div class="loginFormFieldWrapper">
+                        <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
+                        <input type="password" name="passwordEmployee" id="passwordEmployee" class="modInfoPasswordField" placeholder="Password" required>
+                        <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+                    </div>
+                    <label for="colorEmployee" class="visually-hidden">Couleur : </label>
+                    <select name="colorEmployee" id="colorEmployee" class="modInfoField">
+                    '.$selectOptions.'
+                    </select>
+                    <input type="submit" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField">
+                </form>
+            </div>
+            <script>
+            function togglePasswordVisibility() {
+                let passwordField = document.getElementById("passwordEmployee");
+                let icon = document.getElementById("visibilityIcon");
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    passwordField.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+            </script> ';
     require_once('gabaritGestion.php');
 }
 
@@ -528,6 +626,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
                         <input type=\"hidden\" name=\"idClient\" value=\"".$idClient."\">
                         <input type=\"submit\" name=\"createAccountBtn\" value=\"Crée compte\">
                     </p>
-                </form>";
+                </form>"; 
     require_once('gabaritGestion.php');
 }
+

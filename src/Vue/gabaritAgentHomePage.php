@@ -103,7 +103,6 @@ document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
 
 globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
-
 let correspondingMonth = [
     "Janvier",
     "Février",
@@ -118,8 +117,6 @@ let correspondingMonth = [
     "Novembre",
     "Décembre"
 ];
-
-
 /** returns a Date as a string "yyyy-mm-dd" */ 
 function dateToString(globalCurrentDate) {
     return (globalCurrentDate.getFullYear() 
