@@ -536,6 +536,14 @@ function ctlDeleteContract($idContract){
 }
 
 
+
+function ctlModifOverdraft($idAccount, $overdraft){
+    modModifOverdraft($idAccount, $overdraft);
+    $idClient = modGetIdClientFromAccount($idAccount);
+    ctlSearchIdClient($idClient);
+}
+
+
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }

@@ -170,32 +170,51 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     $navbar = vueGenerateNavBar();
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
-    $listA="";
+    // pour faire la liste des comptes
+    if ($_SESSION["type"] == 2) {
+        $listA = '<div class="accountCell header">Supression</div>';
+    }
+    else{
+        $listA = '';
+    }
     foreach ($listAccounts as $account) {
         $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->NOM.': '. $account->solde ."€</option>";
         $listA .= '<div class="accountCell content">'.$account->NOM.'</div>
-            <div class="accountCell content">'.$account->solde.'€</div>
-            <div class="accountCell content">'.$account->decouvert.'€</div>';
+            <div class="accountCell content">'.$account->solde.'€</div>';
         if ($_SESSION["type"] == 2) {
-            $listA.='<div class="accountCell content">
+            $listA.='
+            <div class="accountCell content">
+                <form action="index.php" method="post">
+                    <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01">
+                    <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                    <input type="submit" value="Modifier le découvert" name="modifOverdraftBtn">
+                </form>
+            </div>  
+            <div class="accountCell content">
                 <form action="index.php" method="post">
                     <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
                     <input type="submit" value="Supprimer le compte" name="deleteAccountBtn">
-                </form>';
+                </form>
+            </div>';
+        }
+        else{
+            $listA.='<div class="accountCell content">'.$account->decouvert.'€</div>';
         }
         $listA .= '</div>';
             
     }
+    // pour faire la liste des contrats
     $listC="";
     foreach ($listContract as $contract) {
         $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
             <div class="contractCell content">'.$contract->tarifmensuel.'€</div>';
         if ($_SESSION["type"] == 2) {
             $listC.='<div class="contractCell content">
-                <form action="index.php" method="post">
-                    <input type="hidden" name="idContract" value="'.$contract->idContrat.'">
-                    <input type="submit" value="Supprimer le contrat" name="deleteContractBtn">
-                </form>';
+                        <form action="index.php" method="post">
+                            <input type="hidden" name="idContract" value="'.$contract->idContrat.'">
+                            <input type="submit" value="Supprimer le contrat" name="deleteContractBtn">
+                        </form>
+                    </div>';
         }
         $listC .= '</div>';
     }
@@ -230,14 +249,18 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         $operationDisplay .= $operationsHTML. "</div>";
     }
     if ($_SESSION["type"] == 2) {
-        $createAccount='<div><form action="index.php" method="post">
-                            <input type="hidden" name="idClient" value="'.$idClient.'">
-                            <input type="submit" value="Ajouter un compte" name="addAccountBtn">
-                        </form></div>';
-        $createContract = '<div><form action="index.php" method="post">
+        $createAccount='<div>
+                            <form action="index.php" method="post">
                                 <input type="hidden" name="idClient" value="'.$idClient.'">
-                                <input type="submit" value="Ajouter un contrat" name="addContractBtn">
-                            </form></div>';
+                                <input type="submit" value="Ajouter un compte" name="addAccountBtn">
+                            </form>
+                        </div>';
+        $createContract = '<div>
+                                <form action="index.php" method="post">
+                                    <input type="hidden" name="idClient" value="'.$idClient.'">
+                                    <input type="submit" value="Ajouter un contrat" name="addContractBtn">
+                                </form>
+                            </div>';
     }
     else {
         $createAccount="";

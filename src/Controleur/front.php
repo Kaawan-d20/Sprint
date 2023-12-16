@@ -180,6 +180,11 @@ try {
         ctlGestionContractDelete($idContract);
     }
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
+    elseif (isset($_POST['modifOverdraftBtn'])){
+        $idAccount = $_POST['idAccount'];
+        $overdraft = $_POST['overdraft'];
+        ctlModifOverdraft($idAccount, $overdraft);
+    }
     // ------------------------------------------------------- Création Contrat -------------------------------------------------------
     elseif (isset($_POST['addContractBtn'])){
         $idClient = $_POST['idClient'];

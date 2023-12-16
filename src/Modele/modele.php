@@ -1385,7 +1385,15 @@ function modDeleteContract($idContract){
 }
 
 
-
+function modModifOverdraft($idAccount, $overdraft){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE compte SET decouvert=:overdraft WHERE idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
 
 
 
