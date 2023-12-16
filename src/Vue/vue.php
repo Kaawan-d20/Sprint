@@ -164,7 +164,7 @@ function vueGenerateNavBar() {
 /**
  * Fonction qui affiche la page du client
  * Ne retourne rien
- * @param string $client c'est les données du client
+ * @param object $client c'est les données du client
  */
 function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
     $navbar = vueGenerateNavBar();
@@ -176,11 +176,28 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         $listA .= '<div class="accountCell content">'.$account->NOM.'</div>
             <div class="accountCell content">'.$account->solde.'€</div>
             <div class="accountCell content">'.$account->decouvert.'€</div>';
+        if ($_SESSION["type"] == 2) {
+            $listA.='<div class="accountCell content">
+                <form action="index.php" method="post">
+                    <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                    <input type="submit" value="Supprimer le compte" name="deleteAccountBtn">
+                </form>';
+        }
+        $listA .= '</div>';
+            
     }
     $listC="";
     foreach ($listContract as $contract) {
         $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
             <div class="contractCell content">'.$contract->tarifmensuel.'€</div>';
+        if ($_SESSION["type"] == 2) {
+            $listC.='<div class="contractCell content">
+                <form action="index.php" method="post">
+                    <input type="hidden" name="idContract" value="'.$contract->idContrat.'">
+                    <input type="submit" value="Supprimer le contrat" name="deleteContractBtn">
+                </form>';
+        }
+        $listC .= '</div>';
     }
 
     // pour faire la synthèse

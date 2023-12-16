@@ -523,6 +523,18 @@ function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
     ctlSearchIdClient($idClient);
 }
 
+function ctlDeleteAccount($idAccount){
+    $idClient = modGetIdClientFromAccount($idAccount);
+    modDeleteAccount($idAccount);
+    ctlSearchIdClient($idClient);
+}
+
+function ctlDeleteContract($idContract){
+    $idClient = modGetIdClientFromContract($idContract);
+    modDeleteContract($idContract);
+    ctlSearchIdClient($idClient);
+}
+
 
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");

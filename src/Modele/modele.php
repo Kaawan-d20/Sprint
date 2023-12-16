@@ -340,6 +340,20 @@ function modGetIdClientFromAccount($idAccount){
     return $result->idClient;
 }
 
+
+function modGetIdClientFromContract($idContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idClient;
+}
+
+
 /**
  * renvoie le solde du compte dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
@@ -1347,6 +1361,56 @@ function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAcco
 
     $prepared -> closeCursor();
 }
+
+
+function modDeleteAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM operation WHERE idCompte=:idAccount;
+                DELETE FROM possedeCompte WHERE idCompte=:idAccount;
+                DELETE FROM compte WHERE idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+function modDeleteContract($idContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM possedeContrat WHERE idContrat=:idContract;
+                DELETE FROM contrat WHERE idContrat=:idContract';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idContract', $idContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* FONCTION NON UTILISEES

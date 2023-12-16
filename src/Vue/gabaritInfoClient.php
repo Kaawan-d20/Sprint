@@ -78,6 +78,7 @@
                     <div class="accountCell header">Compte</div>
                     <div class="accountCell header">Solde</div>
                     <div class="accountCell header">Decouvert </div>
+                    
                     <?php echo $listA ?>
             </div>
         </div>

@@ -65,6 +65,14 @@ try {
         $color = $_POST['colorEmployee'];
         ctlSettingSubmit($_SESSION["idEmploye"], $login, $password, $color);
     }
+    elseif (isset($_POST['deleteAccountBtn'])){
+        $idAccount = $_POST['idAccount'];
+        ctlDeleteAccount($idAccount);
+    }
+    elseif (isset($_POST['deleteContractBtn'])){
+        $idContract = $_POST['idContract'];
+        ctlDeleteContract($idContract);
+    }
      // ------------------------------------------------------- Directeur -------------------------------------------------------
     // ------------------------------------------------------- Statistique -------------------------------------------------------
     elseif (isset($_POST['searchStatClient2'])){
