@@ -540,8 +540,10 @@ function vueDisplaySetting($identity) {
         "ocean-blue",
         "coral-pink"
     ];
+    $selectOptions = "";
     foreach ($colors as $color) {
-        $selectOptions .= '<option value="'.$color.'">'.$color.'</option>';
+        $selected = ($identity->COLOR == $color) ? "selected" : "";
+        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
     }
     $content='<div class="modInfoWrapper">
                 <form action="index.php" method="post">
@@ -588,7 +590,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
 
     $datalist = "<input list=\"listClient\" name=\"idClient2\" ><datalist id=\"listClient\">";
     foreach ($listeClient as $client) {
-        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->NOM." ".$client->PRENOM."</option>";
+        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->IDCLIENT." ".$client->NOM." ".$client->PRENOM."</option>";
     }
     $datalist .= "</datalist>";
 
@@ -614,7 +616,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
 
     $datalist = "<input list=\"listClient\" name=\"idClient2\" ><datalist id=\"listClient\">";
     foreach ($listeClient as $client) {
-        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->NOM." ".$client->PRENOM."</option>";
+        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->IDCLIENT." ".$client->NOM." ".$client->PRENOM."</option>";
     }
     $datalist .= "</datalist>";
 

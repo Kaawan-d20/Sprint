@@ -886,6 +886,7 @@ nav {
 }
 .employeCell.header:nth-child(7) {
     border-radius: 0 5px 0 0;
+    margin-right: -2px; /*Shuntus maximus*/
 }
 .employeTableContentWrapper:last-child .employeCell.content:first-child {
     border-radius: 0 0 0 5px;
