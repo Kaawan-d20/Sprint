@@ -130,32 +130,7 @@ function vueGenerateNavBar() {
                 </div>
             </div>
         </nav>
-    </div>
-    <script>
-    let isLightTheme = true;
-    /** switch beetween light and dark theme */ 
-    function toggleTheme() {
-        let icon = document.getElementById("themeSwitcherIcon");
-        let btn = document.getElementById("themeSwitcherBtn");
-        if (isLightTheme) {
-            document.body.classList.add("dark");
-            document.body.classList.remove("light");
-            icon.classList.add("fa-sun")
-            icon.classList.remove("fa-moon")
-            btn.setAttribute("title", "Activer le thème Clair")
-
-            isLightTheme = false;
-        } else {
-            document.body.classList.add("light");
-            document.body.classList.remove("dark");
-            icon.classList.add("fa-moon")
-            icon.classList.remove("fa-sun")
-            btn.setAttribute("title", "Activer le thème Sombre")
-
-            isLightTheme = true;
-        }
-    }
-    </script>';
+    </div>';
     return $navbarHTML;
     
 }
@@ -270,27 +245,26 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 
 function vueDisplayGestionPersonnelAll($listEmployee) {
     $navbar = vueGenerateNavBar();
-    $content='<h1>Gestion des Employés</h1>
-                <div class="employeTableWrapper">
-                    <div class="employeTableHeaderWrapper">
-                        <div class="employeCell header">Id</div>
-                        <div class="employeCell header">Rôle</div>
-                        <div class="employeCell header">Nom</div>
-                        <div class="employeCell header">Prénom</div>
-                        <div class="employeCell header">Login</div>
-                        <div class="employeCell header">Mot de Passe</div>
-                        <div class="employeCell header">Couleur</div>
+    $content='<div class="employeTableWrapper">
+                <h1>Gestion des Employés</h1>
+                <div class="employeTableHeaderWrapper">
+                    <div class="employeCell header">Id</div>
+                    <div class="employeCell header">Rôle</div>
+                    <div class="employeCell header">Nom</div>
+                    <div class="employeCell header">Prénom</div>
+                    <div class="employeCell header">Login</div>
+                    <div class="employeCell header">Mot de Passe</div>
+                    <div class="employeCell header">Couleur</div>
 
-                    </div>';
+                </div>';
     foreach ($listEmployee as $employee) {
         $content .= vueGenerateGestionEmployeRow($employee);   
     }
-    $content .= '</div>
-                <form action="index.php" method="post">
-                    <button type="submit" name="GestionPersonnelAddBtn" class="cta">
-                        Ajouter un employé
+    $content .= '<form action="index.php" method="post">
+                    <button type="submit" name="GestionPersonnelAddBtn" class="GestionPersonnelAddBtn">
+                        <i class="fa-solid fa-plus"></i> Ajouter un employé
                     </button>
-                </form>';
+                </form></div>';
     require_once('gabaritGestion.php');
 }
 
@@ -320,7 +294,7 @@ function vueGenerateGestionEmployeRow($employee) {
             <select name="idCategorie" class="employeCell content">
                 <option value="1" '.$etat1.' >Directeur</option>
                 <option value="2" '.$etat2.' >Conseiller</option>
-                <option value="3" '.$etat3.' >Agent d\'acceuil</option>
+                <option value="3" '.$etat3.' >Agent d\'accueil</option>
             </select>
             <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
             <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
@@ -346,7 +320,7 @@ function vueDisplayGestionPersonnelAdd(){
                         <select name=\"idCategorie\" >
                             <option value=\"1\" >Directeur</option>
                             <option value=\"2\" >Conseiller</option>
-                            <option value=\"3\" >Agent d'acceuil</option>
+                            <option value=\"3\" >Agent d'accueil</option>
                         </select>
                         <input type=\"text\" name=\"nameEmployee\" placeholder=\"Nom\">
                         <input type=\"text\" name=\"firstNameEmployee\" placeholder=\"Prénom\">

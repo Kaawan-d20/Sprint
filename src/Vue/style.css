@@ -876,6 +876,24 @@ nav {
     grid-auto-flow: row;
 }
 
+.employeTableWrapper h1 {
+    margin: 0;
+}
+
+.GestionPersonnelAddBtn {
+    margin-top: .5em;
+    padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    font-family: var(--display-font);
+}
+
+.GestionPersonnelAddBtn:hover {
+    background-color: var(--background-secondary);
+}
+
 .employeTableHeaderWrapper, .employeTableContentWrapper {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
@@ -888,10 +906,10 @@ nav {
     border-radius: 0 5px 0 0;
     margin-right: -2px; /*Shuntus maximus*/
 }
-.employeTableContentWrapper:last-child .employeCell.content:first-child {
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:first-child {
     border-radius: 0 0 0 5px;
 }
-.employeTableContentWrapper:last-child .employeCell.content:nth-child(7) {
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:nth-child(7) {
     border-radius: 0 0 5px 0;
 }
 .employeCell.content:first-child {
