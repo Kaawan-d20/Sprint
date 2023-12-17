@@ -543,16 +543,28 @@ nav {
 .contactCell.content:not(:last-child) {
     border-bottom: 1px solid var(--text);
 }
-.accountCell.content:not(:nth-child(3n)) {
+.agent .accountCell.content:not(:nth-child(3n)) {
     border-right: 1px solid var(--text);
 }
-.accountCell.content:not(:nth-last-child(-n+3)) {
+.agent .accountCell.content:not(:nth-last-child(-n+3)) {
     border-bottom: 1px solid var(--text);
 }
-.contractCell.content:not(:nth-child(2n)) {
+.conseiller .accountCell.content:not(:nth-child(4n)) {
     border-right: 1px solid var(--text);
 }
-.contractCell.content:not(:nth-last-child(-n+3)) {
+.conseiller .accountCell.content:not(:nth-last-child(-n+4)) {
+    border-bottom: 1px solid var(--text);
+}
+.agent .contractCell.content:not(:nth-child(2n)) {
+    border-right: 1px solid var(--text);
+}
+.agent .contractCell.content:not(:nth-last-child(-n+2)) {
+    border-bottom: 1px solid var(--text);
+}
+.conseiller .contractCell.content:not(:nth-child(3n)) {
+    border-right: 1px solid var(--text);
+}
+.conseiller .contractCell.content:not(:nth-last-child(-n+3)) {
     border-bottom: 1px solid var(--text);
 }
 .rechercheCell.content:not(:nth-child(5n)) {
@@ -576,16 +588,28 @@ nav {
 .contactCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
-.accountCell.content:nth-last-child(3) {
+.agent .accountCell.content:nth-last-child(3) {
     border-radius: 0 0 0 5px;
 }
-.accountCell.content:last-child {
+.agent .accountCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
-.contractCell.content:nth-last-child(2) {
+.conseiller .accountCell.content:nth-last-child(4) {
     border-radius: 0 0 0 5px;
 }
-.contractCell.content:last-child {
+.conseiller .accountCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.agent .contractCell.content:nth-last-child(2) {
+    border-radius: 0 0 0 5px;
+}
+.agent .contractCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.conseiller .contractCell.content:nth-last-child(3) {
+    border-radius: 0 0 0 5px;
+}
+.conseiller .contractCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
 .rechercheCell.content:nth-last-child(5) {
@@ -621,13 +645,22 @@ nav {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
-.accountTableWrapper {
+.accountTableWrapper.agent {
     margin-top: .5em;
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-.contractTableWrapper {
+.accountTableWrapper.conseiller {
+    margin-top: .5em;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.contractTableWrapper.agent {
     grid-template-columns: 1fr 1fr;
+}
+
+.contractTableWrapper.conseiller {
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .rechercheOutputTableWrapper {
@@ -1007,6 +1040,24 @@ nav {
     border-radius: 0 0 0 5px;
 }
 
+.btn {
+    margin: 0.5em 0;
+    padding: 1em;
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    font-size: var(--classic-font-size);
+    flex-grow: 1;
+}
+
+.btn:hover {
+    background-color: var(--background-secondary);
+}
+
+.btnWrapper {
+    display: flex;
+    gap: .5em;
+}
 
 
 

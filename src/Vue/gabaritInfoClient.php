@@ -41,8 +41,12 @@
                     <input type="text" class="contactCell content" name="nameConseiller" id="nameConseiller" value="<?php echo $nameConseiller; ?>">
                 </div>
                 <div class="btnWrapper">
-                    <input type="submit" value="Enregistrer" name="editClientBtn" class="btn">
-                    <input type="reset" value="Effacer" class="btn">
+                    <button type="submit" name="editClientBtn" class="btn">
+                        <i class="fa-solid fa-pen-to-square"></i> Enregistrer les modifications
+                    </button>
+                    <button type="reset"  class="btn red">
+                        <i class="fa-solid fa-trash-can"></i> Effacer les modifications
+                    </button>
                 </div>
             </div>
             <div class="RDVSectionWrapper">
@@ -74,18 +78,18 @@
                 </div>
             </form>
             <?php echo $createAccount;?>  
-            <div class="accountTableWrapper">
+            <div class="accountTableWrapper <?php echo $typeClass?>">
                     <div class="accountCell header">Compte</div>
                     <div class="accountCell header">Solde</div>
                     <div class="accountCell header">Decouvert </div>
-                    
+
                     <?php echo $listA ?>
             </div>
         </div>
         <div class="contractSection">
             <h1>Contrats:</h1>
             <?php echo $createContract;?>           
-            <div class="contractTableWrapper">
+            <div class="contractTableWrapper <?php echo $typeClass?>">
                     <div class="accountCell header">Contrat</div>
                     <div class="accountCell header">Tarif Mensuel</div>
                     <?php echo $listC ?>

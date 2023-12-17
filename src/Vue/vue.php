@@ -148,9 +148,11 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     // pour faire la liste des comptes
     if ($_SESSION["type"] == 2) {
         $listA = '<div class="accountCell header">Supression</div>';
+        $typeClass = 'conseiller';
     }
     else{
         $listA = '';
+        $typeClass = 'agent';
     }
     foreach ($listAccounts as $account) {
         $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->NOM.': '. $account->solde ."€</option>";
@@ -158,19 +160,15 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
             <div class="accountCell content">'.$account->solde.'€</div>';
         if ($_SESSION["type"] == 2) {
             $listA.='
-            <div class="accountCell content">
-                <form action="index.php" method="post">
-                    <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01">
-                    <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
-                    <input type="submit" value="Modifier le découvert" name="modifOverdraftBtn">
-                </form>
-            </div>
-            <div class="accountCell content">
-                <form action="index.php" method="post">
-                    <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
-                    <input type="submit" value="Supprimer le compte" name="deleteAccountBtn">
-                </form>
-            </div>';
+            <form action="index.php" method="post" class="accountCell content">
+                <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01">
+                <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                <input type="submit" value="Modifier le découvert" name="modifOverdraftBtn">
+            </form>
+            <form action="index.php" method="post" class="accountCell content">
+                <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                <input type="submit" value="Supprimer le compte" name="deleteAccountBtn">
+            </form>';
         }
         else{
             $listA.='<div class="accountCell content">'.$account->decouvert.'€</div>';
@@ -178,6 +176,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
     }  
     // pour faire la liste des contrats
     $listC="";
+    $listC .= ($_SESSION["type"] == 2) ? '<div class="accountCell header">Supression</div>' : '';
     foreach ($listContract as $contract) {
         $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
             <div class="contractCell content">'.$contract->tarifmensuel.'€</div>';
@@ -225,13 +224,21 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         $createAccount='<div>
                             <form action="index.php" method="post">
                                 <input type="hidden" name="idClient" value="'.$idClient.'">
-                                <input type="submit" value="Ajouter un compte" name="addAccountBtn">
+                                <div class="btnWrapper">
+                                    <button type="submit" name="addAccountBtn" class="btn">
+                                        <i class="fa-solid fa-plus"></i> Ajouter un compte
+                                    </button>
+                                </div>
                             </form>
                         </div>';
         $createContract = '<div>
                                 <form action="index.php" method="post">
                                     <input type="hidden" name="idClient" value="'.$idClient.'">
-                                    <input type="submit" value="Ajouter un contrat" name="addContractBtn">
+                                    <div class="btnWrapper">
+                                        <button type="submit" name="addContractBtn" class="btn">
+                                            <i class="fa-solid fa-plus"></i> Ajouter un contrat
+                                        </button>
+                                    </div>
                                 </form>
                             </div>';
     }
