@@ -1054,15 +1054,17 @@ function modModifClient($idC,$idE,$sname,$fname,$dob,$dc,$adr,$num,$email,$job,$
 /**
  * cree une ta avec l'id d'employé, l'horaire et le libelle en paramètre
  * @param int $idE l'id de l'employé
- * @param string $h l'horaire
+ * @param string $hd l'horaire de début
+ * @param string $hf l'horaire de fin
  * @param string $label le libelle
  */
-function modCreateAdmin($idE,$h,$label) {
+function modCreateAdmin($idE,$hd,$hf,$label) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO tacheAdmin(idEmploye,horaire,libelle) VALUES (:idE,:h,:label)';
+    $query = 'INSERT INTO tacheAdmin(idEmploye,horaireDebut,horaireFin,libelle) VALUES (:idE,:hd,:hf,:label)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
-    $prepared -> bindParam(':h', $h, PDO::PARAM_STR);
+    $prepared -> bindParam(':hd', $hd, PDO::PARAM_STR);
+    $prepared -> bindParam(':hf', $hf, PDO::PARAM_STR);
     $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
     $prepared -> execute();
 }
