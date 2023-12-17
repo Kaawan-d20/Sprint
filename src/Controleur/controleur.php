@@ -22,7 +22,7 @@ function ctlHome (){
         vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
     }
     elseif ($_SESSION["type"] == 2){
-        vueDisplayHomeConseiller($_SESSION["name"]);
+        ctlUpdateCalendarConseiller(new DateTime("now"));
     }
     elseif ($_SESSION["type"] == 3){
         ctlUpdateCalendar(new DateTime("now"));
@@ -385,13 +385,20 @@ function ctlGetInfoEmploye($idEmploye) {
 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
-    // $listTA = modGetAllAdminBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
+    $listTA = modGetAllAdminBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
     $array = new ArrayObject();
     $array->append($listRDV);
-    // $array->append($listTA);
-    $array->append([]);
+    $array->append($listTA);
     $array->append($dateStartOfWeek);
     return $array;
+}
+
+function ctlUpdateCalendarConseiller($targetDate) {
+    $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
+    $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
+    $employe = ctlGetInfoEmploye($_SESSION["idEmploye"]);
+    $fullName = $employe->PRENOM." ".$employe->NOM;
+    vueDisplayHomeConseiller($array[0], $array[1], $array[2], $_SESSION["name"], $fullName);
 }
 
 function ctlUpdateCalendar($targetDate) {

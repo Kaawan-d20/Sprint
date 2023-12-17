@@ -1059,7 +1059,20 @@ nav {
     gap: .5em;
 }
 
+.conseillerWrapper {
+    padding: 1em;
+}
 
+.eventTitleCard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.eventTitleCard i {
+    font-size: var(--bigger-font-size);
+}
 
 /* UTILITY */
 

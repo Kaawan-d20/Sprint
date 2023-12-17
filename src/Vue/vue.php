@@ -32,20 +32,39 @@ function vueDisplayHomeDirecteur($stat, $username){
  * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
-function vueDisplayHomeConseiller($username){
+function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $fullName){
     $navbar = vueGenerateNavBar();
-    $content="";
-    require_once('gabaritConseillerHomePage.php');
-}
-
-function vueDisplayHomeAgent($appointments, $TA, $dateOfWeek, $username) {
-    $navbar = vueGenerateNavBar();
+    debug($TAS);
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
         $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
+    }
+    foreach ($TAS as $TA) {
+        debug($TA);
+        $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
+        $weekNumber = date_format($TADate, "N");
+        $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
+    }
+    require_once('gabaritConseillerHomePage.php');
+}
+
+function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
+    $navbar = vueGenerateNavBar();
+    debug($TAS);
+    $weekEvents = array("", "", "", "", "", "", "");
+    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
+    foreach ($appointments as $appointment) {
+        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
+        $weekNumber = date_format($appointmentDate, "N");
+        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
+    }
+    foreach ($TAS as $TA) {
+        $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
+        $weekNumber = date_format($TADate, "N");
+        $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
     }
     require_once('gabaritAgentHomePage.php');
 }
@@ -61,8 +80,11 @@ function vueDisplayLogin(){
 function vueGenerateAppointementHTML($appointment) {
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
-        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" data-color="'. $appointment->COLOR .'">
-        <h2>'. $appointment->INTITULE .'</h2>
+    return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" data-color="'. $appointment->COLOR .'">
+        <div class="eventTitleCard">
+            <h2>'. $appointment->INTITULE .'</h2>
+            <i class="fa-solid fa-users"></i>
+        </div>
         <p>'. $appointment->identiteClient .'</p>
         <div class="eventDetails">
             <div>
@@ -75,6 +97,30 @@ function vueGenerateAppointementHTML($appointment) {
             </div>
         </div>
     </div>';
+}
+
+function vueGenerateAdminHTML($TA) {
+    debug($TA);
+    $identiteEmploye = $TA->PRENOM.' '.$TA->NOM;
+    $heureDebut = (substr($TA->HORAIREDEBUT, 11, 5));
+    $heureFin = (substr($TA->HORAIREFIN, 11, 5));
+    return '<div class="event" data-conseiller="'. $identiteEmploye .'" data-color="'. $TA->COLOR .'">
+        <div class="eventTitleCard">
+            <h2>'. $TA->LIBELLE .'</h2>
+            <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <div class="eventDetails">
+            <div>
+                <p class="eventStartTime">'. $heureDebut .'</p>
+                <p class="eventEndTime">'. $heureFin .'</p>
+            </div>
+            <div class="eventConseiller '.$TA->COLOR.'">
+                <i class="fa-solid fa-user-tie"></i>
+                '. $identiteEmploye .'
+            </div>
+        </div>
+    </div>';
+
 }
 
 
