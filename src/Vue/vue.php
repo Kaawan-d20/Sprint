@@ -758,31 +758,45 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
 }
 
 
-function vueDisplayAddAppointement() {
+function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $clientActuel = "") {
     $navbar = vueGenerateNavBar();
     $TODO = "todo";
     $ID = "todo";
+    $conseillersOption = "";
+    $clientOption = "";
+    $motifsOption = "";
+    foreach ($listClients as $client) {
+        $clientOption .= '<option value="'.$client->IDCLIENT.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
+    }
+    foreach ($listConseillers as $conseiller) {
+        $conseillersOption .= '<option value="'.$conseiller->IDEMPLOYE.'">'.$conseiller->PRENOM.' '.$conseiller->NOM.'</option>';
+    }
+    foreach ($listMotifs as $motif) {
+        $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
+    }
     $content = '<div class="addAppointementWrapper">
                     <form action="index.php" method="post" class="addAppointementForm">
                         <h1>Ajouter un rendez-vous</h1>
                         <div class="field">
                             <label for="appointementsDateField">Date</label>
-                            <input type="date" name="appointementsDateField" id="appointementsDateField">
+                            <input type="date" name="appointementsDateField" id="appointementsDateField" required>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de début</label>
-                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField">
+                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" required>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de fin</label>
-                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField">
+                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" required>
                         </div>
-                        <input type="text" value="'.$TODO.'" name="appointementsClientField" class="field">
-                        <select name="appointementsConseillerField" id="appointementsConseillerField" class="field">
-                            <option value="'.$ID.'">'.$TODO.'</option>
+                        <select name="appointementsClientField" id="appointementsClientField" class="field" required>
+                            '.$clientOption.'
                         </select>
-                        <select name="appointementsMotifField" id="appointementsMotifField" class="field">
-                            <option value="'.$ID.'">'.$TODO.'</option>
+                        <select name="appointementsConseillerField" id="appointementsConseillerField" class="field"required>
+                            '.$conseillersOption.'
+                        </select>
+                        <select name="appointementsMotifField" id="appointementsMotifField" class="field"required>
+                            '.$motifsOption.'
                         </select>
                         <button type="submit" name="addAppointementsBtn" class="cta field">
                             Valider
