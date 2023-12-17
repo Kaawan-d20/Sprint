@@ -85,7 +85,10 @@ function vueGenerateAppointementHTML($appointment) {
             <h2>'. $appointment->INTITULE .'</h2>
             <i class="fa-solid fa-users"></i>
         </div>
-        <p>'. $appointment->identiteClient .'</p>
+        <form action="index.php" method="post">
+            <input type="number" name="searchClientByIdField" id="searchClientByIdField" class="hidden" value="'.$appointment->IDCLIENT.'">
+            <input type="submit" name="searchClientBtn" value="'. $appointment->identiteClient .'" class="eventClientInput">
+        </form>
         <div class="eventDetails">
             <div>
                 <p class="eventStartTime">'. $heureDebut .'</p>
@@ -135,7 +138,7 @@ function vueGenerateNavBar() {
             </form>
             <div class="searchWrapper">
                 <form action="index.php" method="post">
-                    <label for="searchClientField" class="visually-hidden">Chercher un client</label>
+                    <label for="searchClientByIdField" class="visually-hidden">Chercher un client</label>
                     <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
                     <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
                         <i class="fa-solid fa-magnifying-glass"></i>
