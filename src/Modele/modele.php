@@ -1397,9 +1397,45 @@ function modModifOverdraft($idAccount, $overdraft){
     $prepared -> closeCursor();
 }
 
+/**
+ * renvoie toutes les infos de tous les motifs
+ */
+function modGetAllMotif() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM motif';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
+ * renvoie toutes les infos de tous les employés appartenant à la catégorie conseiller
+ */
+function modGetAllCounselors() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM employe WHERE idCategorie=2';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 
-
+/**
+ * renvoie toutes les infos de tous les clients 
+*/
+function modGetAllClient() {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM client';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 
 
@@ -1426,15 +1462,7 @@ function modModifOverdraft($idAccount, $overdraft){
 /* FONCTION NON UTILISEES
 
 
-function modGetAllMotif() {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM motif';
-    $prepared = $connection -> query($query);
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
+
 
 
 
