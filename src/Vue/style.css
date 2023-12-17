@@ -746,7 +746,7 @@ nav {
 }
 
 .operationsListWrapper {
-    margin-top: 1em;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     gap: .5em;

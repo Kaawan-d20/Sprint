@@ -164,7 +164,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
                     <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
                     <input type="submit" value="Modifier le découvert" name="modifOverdraftBtn">
                 </form>
-            </div>  
+            </div>
             <div class="accountCell content">
                 <form action="index.php" method="post">
                     <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
@@ -175,9 +175,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         else{
             $listA.='<div class="accountCell content">'.$account->decouvert.'€</div>';
         }
-        $listA .= '</div>';
-            
-    }
+    }  
     // pour faire la liste des contrats
     $listC="";
     foreach ($listContract as $contract) {
@@ -404,14 +402,6 @@ function vueDisplayGestionPersonnelAdd(){
                 </form>';
     require_once('gabaritGestion.php');
 }
-
-
-
-
-
-
-
-
 
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
     $navbar = vueGenerateNavBar();
