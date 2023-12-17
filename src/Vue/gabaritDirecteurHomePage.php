@@ -57,7 +57,7 @@
             <p>Nombre de Contrat souscrit entre deux dates : <?php echo $stat['ContractBetween'] ?></p>
         </form>
         <form action="index.php" method="post">
-            <label >Date de fin </label>
+            <label >Date </label>
             <input type="date" name="date">
             <input type="submit" name='searchStatClient1' value="Rechercher">
             <p>Nombre de Client à une date <?php echo $stat['nbClientAt'] ?></p>

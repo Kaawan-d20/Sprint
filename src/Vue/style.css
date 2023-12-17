@@ -876,6 +876,24 @@ nav {
     grid-auto-flow: row;
 }
 
+.employeTableWrapper h1 {
+    margin: 0;
+}
+
+.GestionPersonnelAddBtn {
+    margin-top: .5em;
+    padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    font-family: var(--display-font);
+}
+
+.GestionPersonnelAddBtn:hover {
+    background-color: var(--background-secondary);
+}
+
 .employeTableHeaderWrapper, .employeTableContentWrapper {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
@@ -886,11 +904,12 @@ nav {
 }
 .employeCell.header:nth-child(7) {
     border-radius: 0 5px 0 0;
+    margin-right: -2px; /*Shuntus maximus*/
 }
-.employeTableContentWrapper:last-child .employeCell.content:first-child {
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:first-child {
     border-radius: 0 0 0 5px;
 }
-.employeTableContentWrapper:last-child .employeCell.content:nth-child(7) {
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:nth-child(7) {
     border-radius: 0 0 5px 0;
 }
 .employeCell.content:first-child {
@@ -914,6 +933,82 @@ nav {
 .employeBtn:hover {
     background-color: var(--background-secondary)
 }
+
+.gestionPersonnelAddForm {
+    padding: 1em;
+}
+
+.gestionPersonnelAddForm div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5em;
+}
+
+.gestionPersonnelAddInput {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    padding: 1em;
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.gestionPersonnelAddInput:not(:last-child):hover {
+    background-color: var(--background-secondary);
+}
+
+.gestionPersonnelAddInput:last-child {
+    background-color: var(--cta);
+}
+
+.gestionServiceWrapper {
+    padding: 1em;
+}
+
+.gestionServiceWrapper h1{
+    margin: 0;
+}
+
+.gestionServiceWrapper h2 {
+    margin: .5em 0 0 0 ;
+}
+
+.gestionServiceTableHeaderWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceTableContentWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceCell.content {
+    border-bottom: 1px solid var(--text);
+}
+.gestionServiceCell.content:first-child {
+    border-left: 1px solid var(--text);
+}
+.gestionServiceCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+
+.gestionServiceCell.header:first-child {
+    border-radius: 5px 0 0 0;
+}
+.gestionServiceCell.header:nth-child(4) {
+    border-radius: 0 5px 0 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:nth-child(4) {
+    border-radius: 0 0 5px 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:first-child {
+    border-radius: 0 0 0 5px;
+}
+
+
+
 
 /* UTILITY */
 
