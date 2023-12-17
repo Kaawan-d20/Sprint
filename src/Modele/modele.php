@@ -946,16 +946,18 @@ function modGetNumberClientsAt($date){
  * @param int $idM l'id du motif
  * @param int $idC l'id du client
  * @param int $idE l'id de l'employe
- * @param string $time la date et l'heure 
+ * @param string $hd l'horaire de début
+ * @param string $hf l'horaire de fin 
  */
-function modAddAppointment($idM,$idC,$idE,$time) {
+function modAddAppointment($idM,$idC,$idE,$hd,$hf) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaire) VALUES (:idM,:idC,:idE,:dt)';
+    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaireDebut,horaireFin) VALUES (:idM,:idC,:idE,:hd,:hf)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
     $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
     $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
-    $prepared -> bindParam(':dt', $time, PDO::PARAM_STR);
+    $prepared -> bindParam(':hd', $hd, PDO::PARAM_STR);
+    $prepared -> bindParam(':hf', $hf, PDO::PARAM_STR);
     $prepared -> execute();
 }
 
