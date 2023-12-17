@@ -859,7 +859,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
     JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
-    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horairedebut>:d1 AND horairedebut<:d2';
+    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horairedebut>:d1 AND horairedebut<=:d2';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);

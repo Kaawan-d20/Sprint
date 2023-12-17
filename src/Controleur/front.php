@@ -226,6 +226,18 @@ try {
         $idEmployee = $_POST['idEmployee'];
         ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
     }
+    elseif (isset($_POST['newRDVbtn'])) {
+        ctlDisplayAddAppointement();
+    }
+    elseif (isset($_POST['addAppointementsBtn'])) {
+        $idClient = $_POST['appointementsClientField'];
+        $idEmployee = $_POST['appointementsConseillerField'];
+        $date = $_POST['appointementsDateField'];
+        $heureDebut = $_POST['appointementsHoraireDebutField'];
+        $heureFin = $_POST['appointementsHoraireFinField'];
+        $idMotif = $_POST['appointementsMotifField'];
+        ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
+    }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{

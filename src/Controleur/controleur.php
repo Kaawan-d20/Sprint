@@ -542,12 +542,27 @@ function ctlDeleteContract($idContract){
     ctlSearchIdClient($idClient);
 }
 
-
-
 function ctlModifOverdraft($idAccount, $overdraft){
     modModifOverdraft($idAccount, $overdraft);
     $idClient = modGetIdClientFromAccount($idAccount);
     ctlSearchIdClient($idClient);
+}
+
+function ctlDisplayAddAppointement() {
+    $listConseillers = modGetAllCounselors();
+    $listClients = modGetAllClient();
+    $listMotifs = modGetAllMotif();
+    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs);
+}
+
+function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
+    if ($heureDebut < $heureFin) {
+        debug("yes");
+        $horaireDebut= $date.'T'.$heureDebut.':00';
+        $horaireFin= $date.'T'.$heureFin.':00';
+        modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
+        ctlHome();
+    }
 }
 
 

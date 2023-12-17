@@ -1085,6 +1085,45 @@ nav {
     text-decoration: underline;
 }
 
+.addAppointementWrapper {
+    display: flex;
+    min-height: 80vh;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.addAppointementForm {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.field {
+    display: flex;
+    gap: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    font-family: var(--mono-font);
+    padding: 1em;
+}
+
+.field input {
+    border: none;
+    background-color: transparent;
+    font-size: var(--big-font-size);
+}
+
+.field:hover {
+    background-color: var(--background-secondary);
+}
+
+.field:last-child {
+    flex-grow: 1;
+}
+
 /* UTILITY */
 
 .cta {
