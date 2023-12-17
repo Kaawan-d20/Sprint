@@ -962,6 +962,53 @@ nav {
     background-color: var(--cta);
 }
 
+.gestionServiceWrapper {
+    padding: 1em;
+}
+
+.gestionServiceWrapper h1{
+    margin: 0;
+}
+
+.gestionServiceWrapper h2 {
+    margin: .5em 0 0 0 ;
+}
+
+.gestionServiceTableHeaderWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceTableContentWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceCell.content {
+    border-bottom: 1px solid var(--text);
+}
+.gestionServiceCell.content:first-child {
+    border-left: 1px solid var(--text);
+}
+.gestionServiceCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+
+.gestionServiceCell.header:first-child {
+    border-radius: 5px 0 0 0;
+}
+.gestionServiceCell.header:nth-child(4) {
+    border-radius: 0 5px 0 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:nth-child(4) {
+    border-radius: 0 0 5px 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:first-child {
+    border-radius: 0 0 0 5px;
+}
+
+
+
 
 /* UTILITY */
 

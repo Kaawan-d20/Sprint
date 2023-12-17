@@ -360,76 +360,109 @@ function vueDisplayGestionPersonnelAdd(){
 
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
     $navbar = vueGenerateNavBar();
-    $content ="<h1>Gestion des services</h1>
-                <h2>Liste des type de compte</h2>";
+    $content ='<div class="gestionServiceWrapper">
+                <h1>Gestion des services</h1>
+                <h2>Liste des type de compte</h2>
+                    <div class="gestionServiceTableWrapper">
+                        <div class="gestionServiceTableHeaderWrapper">
+                            <div class="gestionServiceCell header">ID</div>
+                            <div class="gestionServiceCell header">Intitulé</div>
+                            <div class="gestionServiceCell header">Actif</div>
+                            <div class="gestionServiceCell header">Document</div>
+                            <div></div>
+                            <div></div>
+                        </div>';
     foreach ($listTypeAccount as $typeAccount) {
-        $content .= "<form action=\"index.php\" method=\"post\">
-                        <p>
-                            Intitulé du type de compte : ".$typeAccount->NOM.",
-                            Actif : ".$typeAccount->ACTIF.",
-                            Document : ".$typeAccount->DOCUMENT."
-                            <input type=\"hidden\" name=\"idAccount\" value=\"".$typeAccount->IDTYPECOMPTE."\">
-                            <input type=\"submit\" value=\"Modifier le type de compte.\" name=\"GestionAccountOneBtn\">
-                            <input type=\"submit\" value=\"Supprimer le type de contrat.\" name=\"GestionAccountDeleteBtn\">
+        $actif = ($typeAccount->ACTIF == 1) ? "actif" : "désactivé";
+        $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
+                        <input type="text" name="idAccount" class="gestionServiceCell content" value="'.$typeAccount->IDTYPECOMPTE.'" readonly="true">
+                        <div class="gestionServiceCell content">'.$typeAccount->NOM.'</div>
+                        <div class="gestionServiceCell content">'.$actif.'</div>
+                        <div class="gestionServiceCell content">'.$typeAccount->DOCUMENT.'</div>
+                        <button type="submit" name="GestionAccountOneBtn" class="employeBtn">
+                        <i class="fa-solid fa-pen-to-square"></i>Modifier le type de compte
+                        </button>
+                        <button type="submit" name="GestionAccountDeleteBtn" class="employeBtn red">
+                            <i class="fa-solid fa-trash-can"></i>Supprimer le type de compte
+                        </button>
+                    </form>';
+    }
+    $content .='</div>
+                <h2>Liste des type de Contrat</h2>
+                <div class="gestionServiceTableWrapper">
+                    <div class="gestionServiceTableHeaderWrapper">
+                        <div class="gestionServiceCell header">ID</div>
+                        <div class="gestionServiceCell header">Intitulé</div>
+                        <div class="gestionServiceCell header">Actif</div>
+                        <div class="gestionServiceCell header">Document</div>
+                        <div></div>
+                        <div></div>
+                    </div>';
 
-                        </p>
-                    </form>";
-    }
-    $content .="<h2>Liste des type de Contrat</h2>";
     foreach ($listTypeContract as $typeContract) {
-        $content .= "<form action=\"index.php\" method=\"post\">
-                        <p>
-                            Intitulé du type de contrat : ".$typeContract->NOM.",
-                            Actif : ".$typeContract->ACTIF.",
-                            Document : ".$typeContract->DOCUMENT."
-                            <input type=\"hidden\" name=\"idContract\" value=\"".$typeContract->IDTYPECONTRAT."\">
-                            <input type=\"submit\" value=\"Modifier le type de contrat.\" name=\"GestionContractOneBtn\">
-                            <input type=\"submit\" value=\"Supprimer le type de contrat.\" name=\"GestionContractDeleteBtn\">
-                        </p>
-                    </form>";
+        $actif = ($typeContract->ACTIF == 1) ? "actif" : "désactivé";
+        $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
+                        <input type="text" name="idAccount" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
+                        <div class="gestionServiceCell content">'.$typeContract->NOM.'</div>
+                        <div class="gestionServiceCell content">'.$actif.'</div>
+                        <div class="gestionServiceCell content">'.$typeContract->DOCUMENT.'</div>
+                        <button type="submit" name="GestionAccountOneBtn" class="employeBtn">
+                        <i class="fa-solid fa-pen-to-square"></i>Modifier le type de contrat
+                        </button>
+                        <button type="submit" name="GestionAccountDeleteBtn" class="employeBtn red">
+                            <i class="fa-solid fa-trash-can"></i>Supprimer le type de contrat
+                        </button>
+                    </form>';
     }
-    $content .= "<form action=\"index.php\" method=\"post\">
+    $content .= '</div><form action="index.php" method="post">
                     <p>
-                        <input type=\"submit\" value=\"Ajouter un Service.\" name=\"GestionServicesAddBtn\">
+                        <button type="submit"  name="GestionServicesAddBtn" class="GestionPersonnelAddBtn">
+                            <i class="fa-solid fa-plus"></i>Ajouter un Service
+                        </button>
                     </p>
-                </form>";
+                </form>';
     require_once('gabaritGestion.php');
 }
 
 
 function vueDisplayGestionServicesAdd(){
     $navbar = vueGenerateNavBar();
-    $content="<h1>Ajouter un service</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <select name=\"typeService\" >
-                            <option value=\"1\" >Type de compte</option>
-                            <option value=\"2\" >Type de contrat</option>
+    $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
+                <h1>Ajouter un service</h1>
+                    <div>
+                        <select name="typeService" class="gestionPersonnelAddInput" required>
+                            <option value="1" >Compte</option>
+                            <option value="2" >Contrat</option>
                         </select>
-                        <input type=\"text\" name=\"nameService\" placeholder=\"Nom\">
-                        <input type=\"text\" name=\"documentService\" placeholder=\"Document\">
-                        <input type=\"checkbox\" name=\"activeService\" >
-                        <input type=\"submit\" name=\"AddServiceSubmitBtn\" value=\"Valider ajout\">
-                    </p>
-                </form>";
+                        <input type="text" name="nameService" placeholder="Nom" class="gestionPersonnelAddInput" required>
+                        <input type="text" name="documentService" placeholder="Document" class="gestionPersonnelAddInput" required>
+                        <div class="gestionPersonnelAddInput">
+                            <label for="activeService">Actif:<label>
+                            <input type="checkbox" name="activeService">
+                        </div>
+                        <input type="submit" name="AddServiceSubmitBtn" value="Valider ajout" class="gestionPersonnelAddInput">
+                    </div>
+                </form>';
     require_once('gabaritGestion.php');
 }
 
 function vueDisplayGestionAccountOne($account) {
     $navbar = vueGenerateNavBar();
     $etat=$account->ACTIF==1 ? "checked": "";
-    $content="<h1>Modifier info type compte</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <input type=\"text\" name=\"nameAccount\" value=\"".$account->NOM."\">
-                        <input type=\"text\" name=\"documentAccount\" value=\"".$account->DOCUMENT."\">
-                        <input type=\"checkbox\" name=\"activeAccount\" ". $etat ."  >
-                        <input type=\"hidden\" name=\"idAccount\" value=\"".$account->IDTYPECOMPTE."\">
-                        <input type=\"hidden\" name=\"idMotif\" value=\"".$account->IDMOTIF."\">
-
-                        <input type=\"submit\" name=\"ModifAccountOneBtn\" value=\"Valider modification\">
-                    </p>
-                </form>";
+    $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
+                <h1>Modifier info type compte</h1>
+                <div>
+                    <input type="text" name="nameAccount" value="'.$account->NOM.'" class="gestionPersonnelAddInput">
+                    <input type="text" name="documentAccount" value="'.$account->DOCUMENT.'" class="gestionPersonnelAddInput">
+                    <div class="gestionPersonnelAddInput">
+                        <label for="activeAccount">Activé:</label>
+                        <input type="checkbox" name="activeAccount" id="activeAccount" '.$etat.'>
+                    </div>
+                    <input type="hidden" name="idAccount" value="'.$account->IDTYPECOMPTE.' "class="gestionPersonnelAddInput">
+                    <input type="hidden" name="idMotif" value="'.$account->IDMOTIF.'" class="gestionPersonnelAddInput">
+                    <input type="submit" name="ModifAccountOneBtn" value="Valider modification" class="gestionPersonnelAddInput">
+                </div>
+            </form>';
     require_once('gabaritGestion.php');
 }
 
@@ -437,23 +470,22 @@ function vueDisplayGestionAccountOne($account) {
 function vueDisplayGestionContractOne($contract) {
     $navbar = vueGenerateNavBar();
     $etat=$contract->ACTIF==1 ? "checked": "";
-    $content="<h1>Modifier info type contrat</h1>
-                <form action=\"index.php\" method=\"post\">
-                    <p>
-                        <input type=\"text\" name=\"nameContract\" value=\"".$contract->NOM."\">
-                        <input type=\"text\" name=\"documentContract\" value=\"".$contract->DOCUMENT."\">
-                        <input type=\"checkbox\" name=\"activeContract\" ".$etat.">
-                        <input type=\"hidden\" name=\"idContract\" value=\"".$contract->IDTYPECONTRAT."\">
-                        <input type=\"hidden\" name=\"idMotif\" value=\"".$contract->IDMOTIF."\">
-
-                        <input type=\"submit\" name=\"ModifContractOneBtn\" value=\"Valider modification\">
-                    </p>
-                </form>";
+    $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
+                <h1>Modifier info type Contrat</h1>
+                <div>
+                    <input type="text" name="nameAccount" value="'.$contract->NOM.'" class="gestionPersonnelAddInput">
+                    <input type="text" name="documentAccount" value="'.$contract->DOCUMENT.'" class="gestionPersonnelAddInput">
+                    <div class="gestionPersonnelAddInput">
+                        <label for="activeAccount">Activé:</label>
+                        <input type="checkbox" name="activeAccount" id="activeAccount" '.$etat.'>
+                    </div>
+                    <input type="hidden" name="idAccount" value="'.$contract->IDTYPECONTRAT.' "class="gestionPersonnelAddInput">
+                    <input type="hidden" name="idMotif" value="'.$contract->IDMOTIF.'" class="gestionPersonnelAddInput">
+                    <input type="submit" name="ModifAccountOneBtn" value="Valider modification" class="gestionPersonnelAddInput">
+                </div>
+            </form>';
     require_once('gabaritGestion.php');
 }
-
-
-
 
 /**
  * Fonction qui affiche la page d'erreur
