@@ -61,7 +61,7 @@ function vueDisplayLogin(){
 function vueGenerateAppointementHTML($appointment) {
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
-        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" dataset-color="'. $appointment->COLOR .'">
+        return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" data-color="'. $appointment->COLOR .'">
         <h2>'. $appointment->INTITULE .'</h2>
         <p>'. $appointment->identiteClient .'</p>
         <div class="eventDetails">
@@ -469,7 +469,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
     $content .= '</div><form action="index.php" method="post">
                     <p>
                         <button type="submit"  name="GestionServicesAddBtn" class="GestionPersonnelAddBtn">
-                            <i class="fa-solid fa-plus"></i>Ajouter un Service
+                            <i class="fa-solid fa-plus"></i> Ajouter un Service
                         </button>
                     </p>
                 </form>';

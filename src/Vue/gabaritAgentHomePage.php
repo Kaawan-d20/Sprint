@@ -148,14 +148,16 @@ function generateSingleFilter(name, colorClass) {
 function generateFilters () {
     let filterWrapper = document.createElement("div");
     filterWrapper.classList.add("filterWrapper");
-    let conseillersDict = [];
+    let conseillers = [];
+    let conseillerColors = [];
     document.querySelectorAll(".event").forEach(event => {
-        if (! conseillersDict.includes(event.dataset.conseiller)) {
-            conseillersDict.push(event.dataset.conseiller);
+        if (! conseillers.includes(event.dataset.conseiller)) {
+            conseillers.push(event.dataset.conseiller);
+            conseillerColors[event.dataset.conseiller] = event.dataset.color;
         }
     })
-    conseillersDict.forEach((conseiller) => {
-        let filterBtn = generateSingleFilter(conseiller, "lush-green"); // TODO :ajouter la couleur correct et pas le shuntage
+    conseillers.forEach((conseiller) => {
+        let filterBtn = generateSingleFilter(conseiller, conseillerColors[conseiller]);
         filterWrapper.appendChild(filterBtn);
     })
     document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
