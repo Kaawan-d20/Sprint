@@ -87,6 +87,11 @@
                 <div class="events"><?php echo( $weekEvents[6]); ?></div>
             </div>
         </div>
+        <form action="index.php" method="post">
+            <button type="submit" class="btn" name="newRDVbtn">
+                <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+            </button>
+        </form>
     </div>
 </div>
 <script>

@@ -1074,6 +1074,17 @@ nav {
     font-size: var(--bigger-font-size);
 }
 
+.eventClientInput {
+    border: none;
+    color: var(--text);
+    background-color: transparent;
+    font-size: var(--small-font-size);
+}
+
+.eventClientInput:hover {
+    text-decoration: underline;
+}
+
 /* UTILITY */
 
 .cta {
