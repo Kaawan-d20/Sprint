@@ -732,6 +732,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
 
 
 function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
+    $navbar = vueGenerateNavBar();
     $optionSelect = "<select name=\"idTypeAccount\">";
     foreach ($listTypeAccount as $typeAccount) {
         $optionSelect .= "<option value=\"".$typeAccount->IDTYPECOMPTE."\">".$typeAccount->NOM."</option>";
@@ -756,3 +757,38 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     require_once('gabaritGestion.php');
 }
 
+
+function vueDisplayAddAppointement() {
+    $navbar = vueGenerateNavBar();
+    $TODO = "todo";
+    $ID = "todo";
+    $content = '<div class="addAppointementWrapper">
+                    <form action="index.php" method="post" class="addAppointementForm">
+                        <h1>Ajouter un rendez-vous</h1>
+                        <div class="field">
+                            <label for="appointementsDateField">Date</label>
+                            <input type="date" name="appointementsDateField" id="appointementsDateField">
+                        </div>
+                        <div class="field">
+                            <label for="appointementsDateField">Horaire de début</label>
+                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField">
+                        </div>
+                        <div class="field">
+                            <label for="appointementsDateField">Horaire de fin</label>
+                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField">
+                        </div>
+                        <input type="text" value="'.$TODO.'" name="appointementsClientField" class="field">
+                        <select name="appointementsConseillerField" id="appointementsConseillerField" class="field">
+                            <option value="'.$ID.'">'.$TODO.'</option>
+                        </select>
+                        <select name="appointementsMotifField" id="appointementsMotifField" class="field">
+                            <option value="'.$ID.'">'.$TODO.'</option>
+                        </select>
+                        <button type="submit" name="addAppointementsBtn" class="cta field">
+                            Valider
+                        </button>
+                    </form>
+                </div>';
+    require_once('gabaritGestion.php');
+
+}

@@ -226,6 +226,9 @@ try {
         $idEmployee = $_POST['idEmployee'];
         ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
     }
+    elseif (isset($_POST['newRDVbtn'])) {
+        ctlDisplayAddAppointement();
+    }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{

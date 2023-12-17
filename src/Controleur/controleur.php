@@ -550,6 +550,13 @@ function ctlModifOverdraft($idAccount, $overdraft){
     ctlSearchIdClient($idClient);
 }
 
+function ctlDisplayAddAppointement() {
+    $listConseiller = [];
+    $listMotif = [];
+    $listClients = [];
+    vueDisplayAddAppointement();
+}
+
 
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
