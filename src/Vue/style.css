@@ -453,6 +453,14 @@ nav {
     border-radius: 0 0 5px 5px;
 }
 
+.event .document {
+    display: none;
+}
+
+.event:hover .document {
+    display: inline-block;
+}
+
 .monday .events .event:hover:last-child {
     border-radius: 0 0 0 10px;
 }
@@ -1116,6 +1124,12 @@ nav {
     font-size: var(--big-font-size);
 }
 
+.field input[type="text"] {
+    font-size: var(--classic-font-size);
+    font-family: var(--mono-font);
+    width: 100%;
+}
+
 .field:hover {
     background-color: var(--background-secondary);
 }
@@ -1135,6 +1149,15 @@ nav {
 .newRDVbtn:hover {
     background-color: var(--background-secondary);
 }
+
+.addAppointementRDVWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.addAppointementRDVWrapper .events {
+    padding-right: 1em;
+} 
 
 /* UTILITY */
 

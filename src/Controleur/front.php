@@ -53,8 +53,17 @@ try {
     elseif (isset($_POST['weekSelectorNext'])){
         ctlUpdateCalendar($_POST['nextWeekDate']);
     }
+    elseif (isset($_POST['weekSelectorPreviousConseiller'])){
+        ctlUpdateCalendarConseiller($_POST['previousWeekDate']);
+    }
+    elseif (isset($_POST['weekSelectorNextConseiller'])){
+        ctlUpdateCalendarConseiller($_POST['nextWeekDate']);
+    }
     elseif (isset($_POST["weekSelectorDateField"])){
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
+    }
+    elseif (isset($_POST["weekSelectorDateFieldConseiller"])){
+        ctlUpdateCalendarConseiller($_POST['weekSelectorDateFieldConseiller']);
     }
     elseif (isset($_POST['settingBtn'])){
         ctlSetting();
@@ -230,6 +239,10 @@ try {
         $date = $_POST['newRDVdateField'];
         ctlDisplayAddAppointement($date);
     }
+    elseif (isset($_POST['newRDVConseillerbtn'])) {
+        $date = $_POST['newRDVdateFieldConseiller'];
+        ctlDisplayAddAppointementConseiller($date);
+    }
     elseif (isset($_POST['addAppointementsBtn'])) {
         $idClient = $_POST['appointementsClientField'];
         $idEmployee = $_POST['appointementsConseillerField'];
@@ -238,6 +251,14 @@ try {
         $heureFin = $_POST['appointementsHoraireFinField'];
         $idMotif = $_POST['appointementsMotifField'];
         ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
+    }
+    elseif (isset($_POST['addAdminBtn'])) {
+        $idEmployee = $_POST['appointementsConseillerField'];
+        $date = $_POST['appointementsDateField'];
+        $heureDebut = $_POST['appointementsHoraireDebutField'];
+        $heureFin = $_POST['appointementsHoraireFinField'];
+        $libelle = $_POST['adminLibelleField'];
+        ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle);
     }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------

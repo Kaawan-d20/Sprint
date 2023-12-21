@@ -289,7 +289,6 @@ function setdayCellSpan (week) {
 
 function setHiddenDatefield (week) {
     let datefieldToFill = document.querySelectorAll("#newRDVdateField");
-    console.log(datefieldToFill);
     for (let i = 0; i < 7; i++) {
         datefieldToFill[i].value = week[i];
     }
@@ -326,7 +325,7 @@ function getWeekArrayFullDate(mondayDate) {
     for (let i = 0; i < 7; i++) {
         let currentday = currentDate.getDate().toString();
         currentday = (currentday.length < 2) ? '0' + currentday : currentday;
-        let currentmonth = currentDate.getMonth().toString();
+        let currentmonth = (currentDate.getMonth() +1 ).toString();
         currentmonth = (currentmonth.length < 2) ? '0' + currentmonth : currentmonth;
         let currentyear = currentDate.getFullYear().toString();
         let currentFullDate = currentyear + "-" + currentmonth + '-' + currentday;
