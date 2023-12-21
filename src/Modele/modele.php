@@ -3,33 +3,33 @@ require_once('modele/token.php');
 require_once('token.php');
 
 /**
- * renvoie le salt correspondant au login passé en paramètre, 
- * rien si ce login n'est pas présent dans la base de données.
- * @param string $login le login de l'employé
- * @return string le salt de l'employé
+ * Renvoie le salt correspondant au login passé en paramètre,
+ * Rien si ce login n'est pas présent dans la base de données.
+ * @param string $login Le login de l'employé.
+ * @return string Le salt de l'employé.
  */
 function modGetSalt($login) {
     $connection = Connection::getInstance()->getConnection();
-    $query = $connection -> prepare("SELECT salt FROM employe WHERE login=:logi");
+    $query = $connection -> prepare("SELECT SALT FROM employe WHERE login=:logi");
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(":logi", $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->salt;
+    return $result->SALT;
 }
 
 /**
- * renvoie toutes les infos de l'employé dont le login et password sont en paramètres,
- * rien si celui-ci n'est pas présent dans la base de données.
- * @param string $login le login de l'employé
- * @param string $password le password salé de l'employé
- * @return object les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, PASSWORD, COLOR, SALT)
+ * Renvoie toutes les infos de l'employé dont le login et password sont en paramètres,
+ * Rien si celui-ci n'est pas présent dans la base de données.
+ * @param string $login Le login de l'employé
+ * @param string $password Le password salé de l'employé
+ * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM)
  */
 function modConnect($login, $password) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM employe WHERE login=:logi AND password=:pass';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM FROM employe WHERE login=:logi AND password=:pass';
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(':logi',$login,PDO::PARAM_STR);
     $prepared -> bindParam(':pass',$password,PDO::PARAM_STR);
@@ -42,7 +42,8 @@ function modConnect($login, $password) {
 
 
 /**
- * renvoie toutes les infos de tous les motifs
+ * Renvoie toutes les infos de tous les motifs
+ * @return array Toutes les infos de tous les motifs (IDMOTIF, INTITULE, DOCUMENT) (tableau d'objets)
  */
 function modGetAllMotif() {
     $connection = Connection::getInstance()->getConnection();
@@ -61,14 +62,18 @@ function modGetAllMotif() {
 
 
 /**
- * renvoie tous les comptes du client dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idClient l'id du client
- * @return array les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION, IDTYPECOMPTE) (tableau d'objets)
+ * Renvoie tous les comptes du client dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données.
+ * @param int $idClient L'id du client
+ * @return array Les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION, IDTYPECOMPTE) (tableau d'objets)
  */
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation, idtypecompte FROM compte LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte NATURAL JOIN typecompte WHERE idClient=:idC';
+    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation, idtypecompte
+                FROM compte
+                LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte
+                NATURAL JOIN typecompte
+                WHERE idClient=:idC';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
@@ -78,13 +83,11 @@ function modGetAccounts($idClient) {
     return $result;
 }
 
-
-
 /**
- * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idAccount l'id du compte
- * @return int l'id du client
+ * Renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données.
+ * @param int $idAccount L'id du compte
+ * @return int L'id du client
  */
 function modGetIdClientFromAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
@@ -99,9 +102,12 @@ function modGetIdClientFromAccount($idAccount){
 }
 
 
-
-
-
+/**
+ * Crée un compte et l'ajout au client dont l'id est en paramètre
+ * @param int $idClient L'id du client
+ * @param string $overdraft Le découvert du compte
+ * @param int $idTypeAccount L'id du type de compte
+ */
 function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW());
@@ -115,11 +121,17 @@ function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
 
 }
 
-
+/**
+ * Crée un compte et l'ajout aux deux client dont l'id est en paramètre
+ * @param int $idClient L'id du client
+ * @param int $idClient2 L'id du deuxième client
+ * @param string $overdraft Le découvert du compte
+ * @param int $idTypeAccount L'id du type de compte
+ */
 function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount){
     $connection = Connection::getInstance()->getConnection();
 
-    // Première requête
+    // Première requête création du compte
     $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW())';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
@@ -129,14 +141,14 @@ function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAcco
     // Récupérer l'ID du contrat inséré
     $idCompte = $connection->lastInsertId();
 
-    // Deuxième requête
+    // Deuxième requête ajout du compte au premier client
     $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
     $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
     $prepared -> execute();
 
-    // Troisième requête
+    // Troisième requête ajout du compte au deuxième client
     $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient2, :idCompte)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
@@ -146,7 +158,11 @@ function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAcco
     $prepared -> closeCursor();
 }
 
-
+/**
+ * Supprime le compte dont l'id est en paramètre
+ * Supprime aussi les opérations et les liens avec les clients
+ * @param int $idAccount L'id du compte
+ */
 function modDeleteAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
     $query = 'DELETE FROM operation WHERE idCompte=:idAccount;
@@ -158,7 +174,9 @@ function modDeleteAccount($idAccount){
     $prepared -> closeCursor();
 }
 
-
+/**
+ * Renvoie l
+ */
 function modGetAllClientsByCounselors($idEmployee){
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT * FROM client WHERE idEmploye=:idE';
@@ -718,6 +736,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     rdv.HORAIREDEBUT,
     rdv.HORAIREFIN,
     motif.INTITULE
+    motif.DOCUMENT
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
     JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
