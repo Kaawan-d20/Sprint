@@ -548,11 +548,11 @@ function ctlModifOverdraft($idAccount, $overdraft){
     ctlSearchIdClient($idClient);
 }
 
-function ctlDisplayAddAppointement() {
+function ctlDisplayAddAppointement($date) {
     $listConseillers = modGetAllCounselors();
     $listClients = modGetAllClient();
     $listMotifs = modGetAllMotif();
-    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs);
+    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date);
 }
 
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {

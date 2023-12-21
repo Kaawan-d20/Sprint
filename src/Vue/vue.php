@@ -758,7 +758,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
 }
 
 
-function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $clientActuel = "") {
+function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $clientActuel = "") {
     $navbar = vueGenerateNavBar();
     $TODO = "todo";
     $ID = "todo";
@@ -766,7 +766,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
     $clientOption = "";
     $motifsOption = "";
     foreach ($listClients as $client) {
-        $clientOption .= '<option value="'.$client->IDCLIENT.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
+        $clientOption .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
     }
     foreach ($listConseillers as $conseiller) {
         $conseillersOption .= '<option value="'.$conseiller->IDEMPLOYE.'">'.$conseiller->PRENOM.' '.$conseiller->NOM.'</option>';
@@ -779,7 +779,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         <h1>Ajouter un rendez-vous</h1>
                         <div class="field">
                             <label for="appointementsDateField">Date</label>
-                            <input type="date" name="appointementsDateField" id="appointementsDateField" required>
+                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" required readonly>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de début</label>
@@ -789,7 +789,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                             <label for="appointementsDateField">Horaire de fin</label>
                             <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" required>
                         </div>
-                        <select name="appointementsClientField" id="appointementsClientField" class="field" required>
+                        <select name="appointementsClientField" id="appointementsClientField" class="field" required onChange="changeConseiller(this)">
                             '.$clientOption.'
                         </select>
                         <select name="appointementsConseillerField" id="appointementsConseillerField" class="field"required>
@@ -802,7 +802,16 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                             Valider
                         </button>
                     </form>
-                </div>';
+                </div>
+                <script>
+                    function changeConseiller(select) {
+                        let option =select.options[select.selectedIndex];
+                        console.log(option);
+                        let value = option.dataset.conseiller;
+                        console.log(value);
+                        document.getElementById("appointementsConseillerField").value = value;
+                    }
+                </script>';
     require_once('gabaritGestion.php');
 
 }
