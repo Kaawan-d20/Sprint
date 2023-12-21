@@ -139,7 +139,7 @@ function vueGenerateAdminHTML($TA) {
 
 
 function vueGenerateNavBar() {
-    $datalist = '<input list="listClient" name="idClient" class="searchField"><datalist id="listClient">';
+    $datalist = '<input list="listClient" name="searchClientByIdField" class="searchField"><datalist id="listClient">';
     foreach ($_SESSION["listClient"] as $client) {
         $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
     }
