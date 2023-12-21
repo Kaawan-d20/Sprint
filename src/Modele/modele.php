@@ -57,7 +57,7 @@ function modGetAllMotif() {
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
-# ----------------------------------------------------------------- ACCOUNT ------------------------------------------------------------ #
+# ----------------------------------------------------------------- ACCOUNT ---------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
 
@@ -175,7 +175,9 @@ function modDeleteAccount($idAccount){
 }
 
 /**
- * Renvoie l
+ * Renvoie les infos des clients dont id est en paramètre est le conseiller
+ * @param int $idEmployee l'id du conseiller
+ * @return array les infos des clients dont id est en paramètre est le conseiller (IDCLIENT, IDEMPLOYE, NOM, PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE) (tableau d'objets)
  */
 function modGetAllClientsByCounselors($idEmployee){
     $connection = Connection::getInstance()->getConnection();
@@ -728,7 +730,7 @@ function modCreateAdmin($idE,$hd,$hf,$label) {
  */
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT rdv.IDEMPLOYE,
+    $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
     CONCAT(employe.PRENOM," ", employe.NOM) AS identiteEmploye,
     employe.COLOR,
     rdv.IDCLIENT,
