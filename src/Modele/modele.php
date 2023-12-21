@@ -328,7 +328,7 @@ function modGetAllAccountTypesEnable() {
  * Renvoie toutes les infos du type de compte dont l'id est en paramètre,
  * Rien si il n'est pas présent dans la base de données
  * @param int $idTypeAccount l'id du type de compte
- * @return object les infos du type de compte (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT)
+ * @return object Les infos du type de compte (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT)
  */
 function modGetTypeAccount($idTypeAccount) {
     $connection = Connection::getInstance()->getConnection();
@@ -391,6 +391,7 @@ function modAddTypeAccount($name, $active, $document){
 
 /**
  * Fonction qui permet de supprimer un type de compte
+ * Supprime aussi les opérations et les liens avec les clients, les RDV, les comptes et les motifs affiliés
  * @param int $idTypeAccount L'id du type de compte
  * @return void
  */
@@ -411,23 +412,21 @@ function modDeleteTypeAccount($idTypeAccount){
 }
 
 
-
-
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 # ----------------------------------------------------------------- CONTRACT ------------------------------------------------------------ #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
 /**
- * renvoie tous les contrats du client dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idClient l'id du client
- * @return array les contrats du client (IDCONTRAT, IDTYPECONTRAT, TARIFMENSUEL, DATEOUVERTURE) (tableau d'objets)
+ * Renvoie tous les contrats du client dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données.
+ * @param int $idClient L'id du client
+ * @return array Les contrats du client (IDCONTRAT, IDTYPECONTRAT, TARIFMENSUEL, DATEOUVERTURE, NOM) (tableau d'objets)
  */
 function modGetContracts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idC';
+    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam('idClient', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -435,11 +434,17 @@ function modGetContracts($idClient) {
     return $result;
 }
 
+/**
+ * Renvoie l'id du client à qui appartient le contrat dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données
+ * @param int $idContract l'id du contrat
+ * @return int L'id du client
+ */
 function modGetIdClientFromContract($idContract){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idC';
+    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idClient';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':idClient', $idContract, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -448,7 +453,13 @@ function modGetIdClientFromContract($idContract){
 }
 
 
-
+/**
+ * Crée et ajoute un contrat au client dont l'id est en paramètre
+ * @param int $idClient L'id du client
+ * @param string $monthCost Le coût mensuel du contrat
+ * @param int $idTypeContract L'id du type de contrat
+ * @return void
+ */
 function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW());
@@ -459,10 +470,16 @@ function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
-
 }
 
-
+/**
+ * Crée et ajoute un contrat aux deux clients dont l'id est en paramètre
+ * @param int $idClient L'id du client
+ * @param int $idClient2 L'id du deuxième client
+ * @param string $monthCost Le coût mensuel du contrat
+ * @param int $idTypeContract L'id du type de contrat
+ * @return void
+ */
 function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract){
     $connection = Connection::getInstance()->getConnection();
 
@@ -493,7 +510,12 @@ function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeCon
     $prepared -> closeCursor();
 }
 
-
+/**
+ * Supprime le contrat dont l'id est en paramètre
+ * Supprime aussi les liens avec les clients
+ * @param int $idContract L'id du contrat
+ * @return void
+ */
 function modDeleteContract($idContract){
     $connection = Connection::getInstance()->getConnection();
     $query = 'DELETE FROM possedeContrat WHERE idContrat=:idContract;
@@ -511,8 +533,8 @@ function modDeleteContract($idContract){
 
 
 /**
- * renvoie toutes les informations de tous les types de contrat
- * @return array toutes les infos de tous les types de contrat (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ * Renvoie toutes les informations de tous les types de contrat
+ * @return array Toutes les infos de tous les types de contrat (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
  */
 function modGetAllContractTypes() {
     $connection = Connection::getInstance()->getConnection();
@@ -525,8 +547,8 @@ function modGetAllContractTypes() {
 }
 
 /**
- * renvoie toutes les informations de tous les types de contrat qui sont actifs
- * @return array toutes les infos de tous les types de contrat qui sont actifs(IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ * Renvoie toutes les informations de tous les types de contrat qui sont actifs
+ * @return array Toutes les infos de tous les types de contrat qui sont actifs (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
  */
 function modGetAllContractTypesEnable() {
     $connection = Connection::getInstance()->getConnection();
@@ -539,16 +561,16 @@ function modGetAllContractTypesEnable() {
 }
 
 /**
- * renvoie toutes les infos du type de contrat dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données
- * @param int $idContractType l'id du type de contrat
- * @return object les infos du type de contrat (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF)
+ * Renvoie toutes les infos du type de contrat dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données
+ * @param int $idContractType L'id du type de contrat
+ * @return object Les infos du type de contrat (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF)
  */
 function modGetContractFromId($idContractType) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecontrat NATURAL JOIN motif WHERE idtypecontrat=:idC';
+    $query = 'SELECT * FROM typecontrat NATURAL JOIN motif WHERE idtypecontrat=:idContractType';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idContractType, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContractType', $idContractType, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -557,23 +579,23 @@ function modGetContractFromId($idContractType) {
 
 /**
  * Fonction qui permet de mettre à jour les informations d'un type de contrat
- * @param int $idContract l'id du type de contrat
- * @param string $name le nom du type de contrat
+ * @param int $idContractType L'id du type de contrat
+ * @param string $name Le nom du type de contrat
  * @param int $active 1 si le type de contrat est actif, 0 sinon
- * @param string $document le document du type de contrat
- * @param int $idMotif l'id du motif du type de contrat
+ * @param string $document Le document du type de contrat
+ * @param int $idMotif L'id du motif du type de contrat
  * @return void
  */
-function modModifTypeContract($idContract, $name, $active, $document, $idMotif){
+function modModifTypeContract($idContractType, $name, $active, $document, $idMotif){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idC;
-                UPDATE motif SET document=:document WHERE idmotif=:idM';
+    $query = 'UPDATE typecontrat SET nom=:name, actif=:active WHERE idtypecontrat=:idContractType;
+                UPDATE motif SET document=:document WHERE idmotif=:idMotif';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContractType', $idContractType, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
     $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
-    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -582,9 +604,9 @@ function modModifTypeContract($idContract, $name, $active, $document, $idMotif){
 
 /**
  * Fonction qui permet d'ajouter un type de contrat
- * @param string $name le nom du type de contrat
+ * @param string $name Le nom du type de contrat
  * @param int $active 1 si le type de contrat est actif, 0 sinon
- * @param string $document le document du type de contrat
+ * @param string $document Le document du type de contrat
  * @return void
  */
 function modAddTypeContract($name, $active, $document){
@@ -600,11 +622,10 @@ function modAddTypeContract($name, $active, $document){
     $prepared -> closeCursor();
 }
 
-
-
 /**
  * Fonction qui permet de supprimer un type de contrat
- * @param int $idTypeContract l'id du type de contrat
+ * Supprime aussi les RDV, les contrats, les motifs affiliés et les liens avec les clients
+ * @param int $idTypeContract L'id du type de contrat
  * @return void
  */
 function modDeleteTypeContract($idTypeContract){
