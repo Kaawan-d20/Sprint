@@ -758,13 +758,20 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
 }
 
 
-function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $clientActuel = "") {
+function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray, $clientActuel = "") {
     $navbar = vueGenerateNavBar();
     $TODO = "todo";
     $ID = "todo";
     $conseillersOption = "";
     $clientOption = "";
     $motifsOption = "";
+    $events = "";
+    foreach ($rdvArray[0] as $appointment) {
+        $events .= vueGenerateAppointementHTML($appointment);
+    }
+    foreach ($rdvArray[1] as $TA) {
+        $events .= vueGenerateAdminHTML($TA);
+    }
     foreach ($listClients as $client) {
         $clientOption .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
     }
@@ -774,7 +781,9 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
     foreach ($listMotifs as $motif) {
         $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
     }
-    $content = '<div class="addAppointementWrapper">
+    $content = '
+            <div class="addAppointementRDVWrapper">
+                <div class="addAppointementWrapper">
                     <form action="index.php" method="post" class="addAppointementForm">
                         <h1>Ajouter un rendez-vous</h1>
                         <div class="field">
@@ -803,6 +812,12 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         </button>
                     </form>
                 </div>
+                <div class="addAppointementWrapper">
+                    <div class="events">
+                        '.$events.'
+                    </div>
+                </div>
+            </div>
                 <script>
                     function changeConseiller(select) {
                         let option =select.options[select.selectedIndex];

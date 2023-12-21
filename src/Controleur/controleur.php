@@ -384,8 +384,12 @@ function ctlGetInfoEmploye($idEmploye) {
 }
 
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
-    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
-    $listTA = modGetAllAdminBetween($dateStartOfWeek->format('Y-m-d'), $dateEndOfWeek->format('Y-m-d'));
+    $dateStartOfWeekString = $dateStartOfWeek->format('Y-m-d') . " 00:00:00";
+    $dateEndOfWeekString = $dateEndOfWeek->format('Y-m-d') . " 23:59:59";
+
+    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeekString, $dateEndOfWeekString);
+    $listTA = modGetAllAdminBetween($dateStartOfWeekString, $dateEndOfWeekString);
+
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
@@ -393,8 +397,27 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     return $array;
 }
 
+function ctlRDVDate($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+
+    $dateStart = $date->format('Y-m-d');
+    $dateStart .= ' 00:00:00';
+    $dateEnd = $date->format('Y-m-d');
+    $dateEnd .= ' 23:59:59';
+
+    $listRDV = modGetAllAppoinmentsBetween($dateStart, $dateEnd);
+    $listTA = modGetAllAdminBetween($dateStart, $dateEnd);
+
+    $array = new ArrayObject();
+    $array->append($listRDV);
+    $array->append($listTA);
+    // $array->append($date);
+    return $array;
+}
+
 function ctlUpdateCalendarConseiller($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
+    ctlRDVDate($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     $employe = ctlGetInfoEmploye($_SESSION["idEmploye"]);
     $fullName = $employe->PRENOM." ".$employe->NOM;
@@ -403,6 +426,7 @@ function ctlUpdateCalendarConseiller($targetDate) {
 
 function ctlUpdateCalendar($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
+    ctlRDVDate($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
 }
@@ -508,9 +532,7 @@ function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
         throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
     }
     $listAccount = modGetAccounts($idClient);
-    debug($listAccount);
     foreach ($listAccount as $account){
-        debug($account->idtypecompte);
         if ($account->idtypecompte == $idTypeAccount){
             throw new Exception('Compte déjà existant');
         }
@@ -552,11 +574,11 @@ function ctlDisplayAddAppointement($date) {
     $listConseillers = modGetAllCounselors();
     $listClients = modGetAllClient();
     $listMotifs = modGetAllMotif();
-    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date);
+    $rdvArray = ctlRDVDate($date);
+    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
 }
 
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
-    debug('test');
     if ($heureDebut < $heureFin) {
         $horaireDebut= $date.' '.$heureDebut.':00';
         $horaireFin= $date.' '.$heureFin.':00';

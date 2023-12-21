@@ -1136,6 +1136,15 @@ nav {
     background-color: var(--background-secondary);
 }
 
+.addAppointementRDVWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.addAppointementRDVWrapper .events {
+    padding-right: 1em;
+} 
+
 /* UTILITY */
 
 .cta {
