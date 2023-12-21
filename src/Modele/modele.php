@@ -608,23 +608,17 @@ function modAddTypeContract($name, $active, $document){
  * @return void
  */
 function modDeleteTypeContract($idTypeContract){
+    debug("modDeleteTypeContract");
     $connection = Connection::getInstance()->getConnection();
     $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    
-    // Récupérer l'idmotif
-    $query = 'SELECT idmotif FROM typecontrat WHERE idtypecontrat=:idTypeContract';
+    $query = 'DELETE FROM `possedecontrat` WHERE IDCONTRAT IN (SELECT IDCONTRAT FROM contrat WHERE IDTYPECONTRAT=:idtypecontrat);
+                SET @IDM = (SELECT IDMOTIF FROM typecontrat WHERE IDTYPECONTRAT=:idtypecontrat);
+                DELETE FROM `RDV` WHERE IDMOTIF = @IDM;
+                DELETE FROM `contrat` WHERE IDTYPECONTRAT=:idtypecontrat;
+                DELETE FROM `typecontrat` WHERE IDTYPECONTRAT=:idtypecontrat;
+                DELETE FROM `motif` WHERE IDMOTIF = @IDM;';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeContract', $idTypeContract, PDO::PARAM_INT);
-    $prepared -> execute();
-    $idMotif = $prepared->fetchColumn();
-    $prepared -> closeCursor();
-
-    // Supprimer les entrées
-    $query = 'DELETE FROM typecontrat WHERE idTypecontrat=:idTypeContract;
-              DELETE FROM motif WHERE idmotif = :idMotif';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeContract', $idTypeContract, PDO::PARAM_INT);
-    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':idtypecontrat', $idTypeContract, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }

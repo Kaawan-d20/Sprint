@@ -185,6 +185,7 @@ try {
         ctlGestionAccountDelete($idAccount);
     }
     elseif (isset($_POST['GestionContractDeleteBtn'])){
+        debug($_POST);
         $idContract = $_POST['idContract'];
         ctlGestionContractDelete($idContract);
     }
