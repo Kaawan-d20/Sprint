@@ -24,7 +24,7 @@
                     <input type="password" name="landingPasswordField" id="landingPasswordField" class="loginFormField" placeholder="Password" required>
                     <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                 </div>
-                <p>Pas de compte ? <a href="i dont know">en créer un</a></p>
+                <!-- <p>Pas de compte ? <a href="i dont know">en créer un</a></p> -->
                 <div class="ctaContainer">
                     <input type="submit" name="landingSubmitBtn"  id="landingSubmitBtn" value="Connection" class="cta">
                 </div>

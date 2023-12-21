@@ -87,7 +87,7 @@ function vueGenerateAppointementHTML($appointment) {
             <input type="submit" name="searchClientBtn" value="'. $appointment->identiteClient .'" class="eventClientInput">
         </form>
         <p class="document">
-            '.$appointment->DOCUMENT.'
+            Documents a apporter: '.$appointment->DOCUMENT.'
         </p>
         <div class="eventDetails">
             <div>
@@ -711,31 +711,31 @@ function vueDisplaySetting($identity) {
 
 
 function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
-    $optionSelect = "<select name=\"idTypeContract\">";
+    $navbar = vueGenerateNavBar();
+    $optionSelect = '<select name="idTypeContract" class="addContractField">';
     if (count($listTypeContract) == 0) {
-        $content = "<div>Aucun type de compte disponible</div>";
+        $content = '<div>Aucun type de compte disponible</div>';
         require_once('gabaritGestion.php');
     }
     foreach ($listTypeContract as $typeContract) {
-        $optionSelect .= "<option value=\"".$typeContract->IDTYPECONTRAT."\">".$typeContract->NOM."</option>";
+        $optionSelect .= '<option value="'.$typeContract->IDTYPECONTRAT.'">'.$typeContract->NOM.'</option>';
     }
-    $optionSelect .= "</select>";
+    $optionSelect .= '</select>';
 
-    $datalist = "<input list=\"listClient\" name=\"idClient2\" ><datalist id=\"listClient\">";
+    $datalist = '<div class="addContractField"><label for="idClient2">Bénéficiaire n°2</label><input list="listClient" name="idClient2"><datalist id="listClient">';
     foreach ($listeClient as $client) {
-        $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->IDCLIENT." ".$client->NOM." ".$client->PRENOM."</option>";
+        $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' '.$client->NOM.' '.$client->PRENOM.'</option>';
     }
-    $datalist .= "</datalist>";
+    $datalist .= '</datalist>';
 
-
-    $content="<form action=\"index.php\" method=\"post\">
-                    <p>
-                        ".$optionSelect.$datalist."
-                        <input type=\"number\" name=\"monthCost\" placeholder=\"Cout Mensuel\" step=\"0.01\">
-                        <input type=\"hidden\" name=\"idClient\" value=\"".$idClient."\">
-                        <input type=\"submit\" name=\"createContractBtn\" value=\"Crée contrat\">
-                    </p>
-                </form>";
+    $content='<form action="index.php" method="post" class="addContractForm">
+                '.$optionSelect.$datalist.'
+                <input type="number" name="monthCost" placeholder="Cout Mensuel" step="0.01" class="addContractField" required>
+                <input type="hidden" name="idClient" value="'.$idClient.'">
+                <button type="submit" name="createContractBtn" class="addContractField cta">
+                    Valider la création
+                </button>
+                </form>';
     require_once('gabaritGestion.php');
 }
 
@@ -747,27 +747,27 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
         $content = "<div>Aucun type de compte disponible</div>";
         require_once('gabaritGestion.php');
     }
-    $optionSelect = "<select name=\"idTypeAccount\">";
+    $optionSelect = '<select name="idTypeAccount" class="addContractField">';
     foreach ($listTypeAccount as $typeAccount) {
         $optionSelect .= "<option value=\"".$typeAccount->IDTYPECOMPTE."\">".$typeAccount->NOM."</option>";
     }
     $optionSelect .= "</select>";
 
-    $datalist = "<input list=\"listClient\" name=\"idClient2\" ><datalist id=\"listClient\">";
+    $datalist = '<div class="addContractField"><label for="idClient2">Bénéficiaire n°2</label><input list="listClient" name="idClient2" ><datalist id="listClient">';
     foreach ($listeClient as $client) {
         $datalist .= "<option value=\"".$client->IDCLIENT."\">".$client->IDCLIENT." ".$client->NOM." ".$client->PRENOM."</option>";
     }
-    $datalist .= "</datalist>";
+    $datalist .= "</datalist></div>";
 
 
-    $content="<form action=\"index.php\" method=\"post\">
-                    <p>
-                        ".$optionSelect.$datalist."
-                        <input type=\"number\" name=\"monthCost\" placeholder=\"Découvert\" step=\"0.01\">
-                        <input type=\"hidden\" name=\"idClient\" value=\"".$idClient."\">
-                        <input type=\"submit\" name=\"createAccountBtn\" value=\"Crée compte\">
-                    </p>
-                </form>"; 
+    $content='<form action="index.php" method="post" class="addContractForm">
+                    '.$optionSelect.$datalist.'
+                    <input type="number" name="monthCost" placeholder="Découvert" step="0.01" class="addContractField">
+                    <input type="hidden" name="idClient" value="'.$idClient.'">
+                    <button type="submit" name="createAccountBt" class="addContractField cta">
+                        Valider la création
+                    </button>
+                </form>'; 
     require_once('gabaritGestion.php');
 }
 
