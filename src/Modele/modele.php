@@ -1474,7 +1474,21 @@ function modGetNumberClientsAt($date){
     return $result->nbClients;
 }
 
-
+/**
+ * renvoie tous les rdv du client dont l'id est en paramètre
+ * @param int $id l'id du client
+ */
+function modGetAppointmentsClient($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM rdv WHERE idClient=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 
 
