@@ -83,7 +83,12 @@ function modGetAccounts($idClient) {
     return $result;
 }
 
-
+/**
+ * Renvoie des infos du compte dont l'id est en paramètre.
+ * Rien si il n'est pas présent dans la base de données.
+ * @param int $idAccount L'id du compte
+ * @return object Les infos du compte (SOLED, DECOUVERT, IDCLIENT)
+ */
 function modGetInfoAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT solde,decouvert,idClient
@@ -255,6 +260,7 @@ function modCredit($idAccount,$sum,$date) {
  * Modifie le decouvert du compte dont l'id est en paramètre
  * @param int $idAccount L'id du compte
  * @param string $overdraft Le montant du découvert
+ * @return void
  */
 function modModifOverdraft($idAccount, $overdraft){
     $connection = Connection::getInstance()->getConnection();
@@ -267,51 +273,15 @@ function modModifOverdraft($idAccount, $overdraft){
 }
 
 /**
- * Renvoie le découvert du compte dont l'id est en paramètre,
- * Rien si il n'est pas présent dans la base de données.
- * @param int $idA L'id du compte
- * @return string Le découvert du compte
+ * Renvoie la liste des operations du compte dont l'id est en paramètre
+ * @param int $idAccount L'id du compte
+ * @return array La liste des operations du compte dont l'id est en paramètre (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets)
  */
-function modGetDecouvert($idA) {
+function modGetOperations($idAccount) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT decouvert FROM Compte WHERE idCompte=:idA';
+    $query = 'SELECT * FROM operation WHERE idCompte=:idCompte';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->decouvert;
-}
-
-/**
- * Renvoie le solde du compte dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idA l'id du compte
- * @return string le solde du compte
- */
-function modGetSolde($idA) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT solde FROM Compte WHERE idCompte=:idA';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->solde;
-}
-
-/**
- * renvoie la liste des operations du compte dont l'id est en paramètre
- * @param int $id l'id du compte
- * @return array la liste des operations du compte dont l'id est en paramètre (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets)
- */
-function modGetOperations($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM operation WHERE idCompte=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idAccount, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -326,8 +296,8 @@ function modGetOperations($id) {
 
 
 /**
- * renvoie toutes les infos de tous les types de compte
- * @return array toutes les infos de tous les types de compte (IDTYPECOMPTE, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ * Renvoie toutes les infos de tous les types de compte
+ * @return array Infos de tous les types de compte (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT) (tableau d'objets)
  */
 function modGetAllAccountTypes() {
     $connection = Connection::getInstance()->getConnection();
@@ -340,8 +310,8 @@ function modGetAllAccountTypes() {
 }
 
 /**
- * renvoie toutes les informations de tous les types de compte qui sont actifs
- * @return array toutes les infos de tous les types de compte qui sont actifs(IDTYPECOMPTE, NOM, ACTIF, DOCUMENT, IDMOTIF) (tableau d'objets)
+ * Renvoie toutes les informations de tous les types de compte qui sont actifs
+ * @return array Infos de tous les types de compte qui sont actifs (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT) (tableau d'objets)
  */
 function modGetAllAccountTypesEnable() {
     $connection = Connection::getInstance()->getConnection();
@@ -355,16 +325,16 @@ function modGetAllAccountTypesEnable() {
 
 
 /**
- * renvoie toutes les infos du type de compte dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données
+ * Renvoie toutes les infos du type de compte dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données
  * @param int $idTypeAccount l'id du type de compte
- * @return object les infos du type de compte (IDTYPECOMPTE, NOM, ACTIF, DOCUMENT, IDMOTIF)
+ * @return object les infos du type de compte (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT)
  */
 function modGetTypeAccount($idTypeAccount) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecompte NATURAL JOIN motif WHERE idtypecompte=:idA';
+    $query = 'SELECT * FROM typecompte NATURAL JOIN motif WHERE idtypecompte=:idTypeCompte';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -374,23 +344,23 @@ function modGetTypeAccount($idTypeAccount) {
 
 /**
  * Fonction qui permet de mettre à jour les informations d'un type de compte
- * @param int $idAccount l'id du type de compte
- * @param string $name le nom du type de compte
+ * @param int $idAccount L'id du type de compte
+ * @param string $name Le nom du type de compte
  * @param int $active 1 si le type de compte est actif, 0 sinon
- * @param string $document le document du type de compte
- * @param int $idMotif l'id du motif du type de compte
+ * @param string $document Le document du type de compte
+ * @param int $idMotif L'id du motif du type de compte
  * @return void
  */
 function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idA;
-                UPDATE motif SET document=:document WHERE idmotif=:idM';
+    $query = 'UPDATE typecompte SET nom=:name, actif=:active WHERE idtypecompte=:idAccount;
+                UPDATE motif SET document=:document WHERE idmotif=:idMotif';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
     $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
-    $prepared -> bindParam(':idM', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -398,9 +368,9 @@ function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
 
 /**
  * Fonction qui permet d'ajouter un type de compte
- * @param string $name le nom du type de compte
+ * @param string $name Le nom du type de compte
  * @param int $active 1 si le type de compte est actif, 0 sinon
- * @param string $document le document du type de compte
+ * @param string $document Les documents du type de compte
  * @return void
  */
 function modAddTypeAccount($name, $active, $document){
@@ -421,7 +391,7 @@ function modAddTypeAccount($name, $active, $document){
 
 /**
  * Fonction qui permet de supprimer un type de compte
- * @param int $idTypeAccount l'id du type de compte
+ * @param int $idTypeAccount L'id du type de compte
  * @return void
  */
 function modDeleteTypeAccount($idTypeAccount){
@@ -435,15 +405,62 @@ function modDeleteTypeAccount($idTypeAccount){
     $prepared -> execute();
     $idMotif = $prepared->fetchColumn();
     $prepared -> closeCursor();
-
-    // Supprimer les entrées
-    $query = 'DELETE FROM typecompte WHERE idTypeCompte=:idTypeAccount;
-              DELETE FROM motif WHERE idmotif = :idMotif';
+    debug("motif");
+    // Liste des comptes à supprimer
+    $query = 'SELECT idCompte FROM compte WHERE idTypeCompte=:idTypeAccount';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $idComptes = $prepared->fetchAll();
+    $prepared -> closeCursor();
+    debug("idComptes");
+    // Supprimer référénce etrangers
+    foreach($idComptes as $idCompte){
+        $query = 'DELETE FROM operation WHERE idCompte=:idCompte';
+        $prepared = $connection -> prepare($query);
+        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+        $prepared -> execute();
+        $prepared -> closeCursor();
+        debug("operation");
+        $query = 'DELETE FROM possedeCompte WHERE idCompte=:idCompte';
+        $prepared = $connection -> prepare($query);
+        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+        $prepared -> execute();
+        $prepared -> closeCursor();
+        debug("possedeCompte");
+        $query = 'DELETE FROM compte WHERE idCompte=:idCompte';
+        $prepared = $connection -> prepare($query);
+        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+        $prepared -> execute();
+        $prepared -> closeCursor();
+        debug("compte");
+
+        
+    }
+    debug("fin foreach");
+    // Supprimer du type de compte
+    // TODO: Reparer le bug
+    $query = 'DELETE FROM typecompte WHERE idTypeCompte=:idTypeAccount;';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+    debug("typecompte");
+    // Supprimer du motif
+    $query = 'DELETE FROM motif WHERE idmotif = :idMotif';
+    $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
+
+    debug("motif");
+    // Supprimer les comptes
+    $query = 'DELETE FROM compte WHERE idCompte=:idCompte';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+    debug("compte");
 }
 
 
