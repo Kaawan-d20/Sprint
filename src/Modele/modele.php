@@ -10,9 +10,9 @@ require_once('token.php');
  */
 function modGetSalt($login) {
     $connection = Connection::getInstance()->getConnection();
-    $query = $connection -> prepare("SELECT SALT FROM employe WHERE login=:logi");
+    $query = $connection -> prepare("SELECT SALT FROM employe WHERE login=:login");
     $prepared = $connection->prepare($query);
-    $prepared -> bindParam(":logi", $login, PDO::PARAM_STR);
+    $prepared -> bindParam(":login", $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -29,10 +29,10 @@ function modGetSalt($login) {
  */
 function modConnect($login, $password) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM FROM employe WHERE login=:logi AND password=:pass';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM FROM employe WHERE login=:login AND password=:password';
     $prepared = $connection->prepare($query);
-    $prepared -> bindParam(':logi',$login,PDO::PARAM_STR);
-    $prepared -> bindParam(':pass',$password,PDO::PARAM_STR);
+    $prepared -> bindParam(':login',$login,PDO::PARAM_STR);
+    $prepared -> bindParam(':password',$password,PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -73,9 +73,9 @@ function modGetAccounts($idClient) {
                 FROM compte
                 LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte
                 NATURAL JOIN typecompte
-                WHERE idClient=:idC';
+                WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam('idC', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam('idClient', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -91,9 +91,9 @@ function modGetAccounts($idClient) {
  */
 function modGetIdClientFromAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idA';
+    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idAccount';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -181,9 +181,9 @@ function modDeleteAccount($idAccount){
  */
 function modGetAllClientsByCounselors($idEmployee){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM client WHERE idEmploye=:idE';
+    $query = 'SELECT * FROM client WHERE idEmploye=:idEmployee';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idEmployee, PDO::PARAM_INT);
+    $prepared -> bindParam(':idEmployee', $idEmployee, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -193,37 +193,38 @@ function modGetAllClientsByCounselors($idEmployee){
 
 
 /**
- * débite le compte dont l'id est en paramètre de la somme (positive) en paramètre
- * @param int $idA id du compte à débiter
- * @param string $sum la somme à débiter
- * @param string $date la date de l'opération
+ * Débite le compte dont l'id est en paramètre de la somme (positive) en paramètre
+ * Crée une opération affiliée au compte
+ * @param int $idAccount L'id du compte à débiter
+ * @param string $sum La somme à débiter (positive)
+ * @param string $date La date de l'opération
  * @return void
  */
-function modDebit($idA,$sum,$date) {
+function modDebit($idAccount,$sum,$date) {
     $connection = Connection::getInstance()->getConnection();
     $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idA,'Banque','Debit',:date,:sum,0)";
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Debit',:date,:sum,0)";
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
-    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
+    $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
 
 /**
- * crédite le compte dont l'id est en paramètre de la somme en paramètre 
- * @param int $idA id du compte à créditer
- * @param string $sum somme à créditer
- * @param string $date date de l'opération
+ * Crédite le compte dont l'id est en paramètre de la somme en paramètre 
+ * @param int $idAccount L'id du compte à créditer
+ * @param string $sum La somme à créditer
+ * @param string $date La date de l'opération
  * @return void
  */
-function modCredit($idA,$sum,$date) {
+function modCredit($idAccount,$sum,$date) {
     $connection = Connection::getInstance()->getConnection();
-    $query = "UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idA;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idA,'Banque','Crédit',:date,:sum,1)";
+    $query = "UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idAccount;
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Crédit',:date,:sum,1)";
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idA, PDO::PARAM_INT);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
     $prepared -> execute();
@@ -234,25 +235,25 @@ function modCredit($idA,$sum,$date) {
 
 
 /**
- * modifie le decouvert du compte dont l'id est en paramètre
- * @param int $idC l'id du compte
- * @param string $deco le découvert
+ * Modifie le decouvert du compte dont l'id est en paramètre
+ * @param int $idAccount L'id du compte
+ * @param string $overdraft Le montant du découvert
  */
 function modModifOverdraft($idAccount, $overdraft){
     $connection = Connection::getInstance()->getConnection();
     $query = 'UPDATE compte SET decouvert=:overdraft WHERE idCompte=:idAccount';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
 
 /**
- * renvoie le découvert du compte dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idA l'id du compte
- * @return string le découvert du compte
+ * Renvoie le découvert du compte dont l'id est en paramètre,
+ * Rien si il n'est pas présent dans la base de données.
+ * @param int $idA L'id du compte
+ * @return string Le découvert du compte
  */
 function modGetDecouvert($idA) {
     $connection = Connection::getInstance()->getConnection();
@@ -716,7 +717,7 @@ function modCreateAdmin($idE,$hd,$hf,$label) {
 
 function modDeleteAdmin($idAdmin){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM tacheAdmin WHERE idTacheAdmin=:idAdmin';
+    $query = 'DELETE FROM tacheAdmin WHERE idTA=:idAdmin';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
     $prepared -> execute();
