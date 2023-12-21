@@ -397,70 +397,17 @@ function modAddTypeAccount($name, $active, $document){
 function modDeleteTypeAccount($idTypeAccount){
     $connection = Connection::getInstance()->getConnection();
     $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    
-    // Récupérer l'idmotif
-    $query = 'SELECT idmotif FROM typecompte WHERE idtypecompte=:idTypeAccount';
+    $query = 'DELETE FROM `possedecompte` WHERE IDCOMPTE IN (SELECT IDCOMPTE FROM compte WHERE IDTYPECOMPTE=:idtypecompte);
+                DELETE FROM `operation` WHERE IDCOMPTE IN (SELECT IDCOMPTE FROM compte WHERE IDTYPECOMPTE=:idtypecompte);
+                SET @IDM = (SELECT IDMOTIF FROM typecompte WHERE IDTYPECOMPTE=:idtypecompte);
+                DELETE FROM `RDV` WHERE IDMOTIF = @IDM;
+                DELETE FROM `compte` WHERE IDTYPECOMPTE=:idtypecompte;
+                DELETE FROM `typecompte` WHERE IDTYPECOMPTE=:idtypecompte;
+                DELETE FROM `motif` WHERE IDMOTIF = @IDM;';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $idMotif = $prepared->fetchColumn();
-    $prepared -> closeCursor();
-    debug("motif");
-    // Liste des comptes à supprimer
-    $query = 'SELECT idCompte FROM compte WHERE idTypeCompte=:idTypeAccount';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $idComptes = $prepared->fetchAll();
-    $prepared -> closeCursor();
-    debug("idComptes");
-    // Supprimer référénce etrangers
-    foreach($idComptes as $idCompte){
-        $query = 'DELETE FROM operation WHERE idCompte=:idCompte';
-        $prepared = $connection -> prepare($query);
-        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-        $prepared -> execute();
-        $prepared -> closeCursor();
-        debug("operation");
-        $query = 'DELETE FROM possedeCompte WHERE idCompte=:idCompte';
-        $prepared = $connection -> prepare($query);
-        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-        $prepared -> execute();
-        $prepared -> closeCursor();
-        debug("possedeCompte");
-        $query = 'DELETE FROM compte WHERE idCompte=:idCompte';
-        $prepared = $connection -> prepare($query);
-        $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-        $prepared -> execute();
-        $prepared -> closeCursor();
-        debug("compte");
-
-        
-    }
-    debug("fin foreach");
-    // Supprimer du type de compte
-    // TODO: Reparer le bug
-    $query = 'DELETE FROM typecompte WHERE idTypeCompte=:idTypeAccount;';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeAccount', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':idtypecompte', $idTypeAccount, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
-    debug("typecompte");
-    // Supprimer du motif
-    $query = 'DELETE FROM motif WHERE idmotif = :idMotif';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-
-    debug("motif");
-    // Supprimer les comptes
-    $query = 'DELETE FROM compte WHERE idCompte=:idCompte';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-    debug("compte");
 }
 
 

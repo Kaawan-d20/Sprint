@@ -605,8 +605,7 @@ function vueDisplayGestionContractOne($contract) {
  * @param string $error
  */
 function vueDisplayError ($error) {
-    $navbar = vueGenerateNavBar();
-    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
+    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir à l'acceuil </a></p>";
     require_once('gabaritErreur.php');
 }
 

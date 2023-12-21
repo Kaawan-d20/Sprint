@@ -52,6 +52,7 @@ function ctlLogin ($username, $password) {
         $_SESSION["name"] = $resultConnnect->NOM;
         $_SESSION["theme"] = "dark";
         $_SESSION["listClient"] = modGetAllClients();
+        debug("appel de ctlHome");
         ctlHome();
     }
 }
