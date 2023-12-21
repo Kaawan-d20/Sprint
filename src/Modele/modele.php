@@ -735,7 +735,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
     rdv.HORAIREDEBUT,
     rdv.HORAIREFIN,
-    motif.INTITULE
+    motif.INTITULE,
     motif.DOCUMENT
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
