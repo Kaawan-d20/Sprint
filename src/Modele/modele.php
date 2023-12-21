@@ -76,23 +76,7 @@ function modGetAccounts($idClient) {
     return $result;
 }
 
-/**
- * renvoie l'id de la catégorie à laquelle appartient l'employé dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé
- * @return int l'id de la catégorie de l'employé
- */
-function modGetTypeStaff($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->idCategorie;
-}
+
 
 /**
  * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
@@ -230,41 +214,6 @@ function modAdvancedSearchClientC($bdate) {
     return $result;
 }
 
-/**
- * renvoie l'id du RDV, celui du motif, celui du client et celui de l'employé et l'horaire (début et fin) de tous les RDV de l'employé dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé
- * @return array les RDV de l'employé (IDRDV, IDMOTIF, IDCLIENT, IDEMPLOYE, HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
- */
-function modGetAppointmentConseiller($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horairedebut, horairefin FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
-
-/**
- * renvoie id de la tache admin, l'horaire (début et fin) et le libelle de toutes les taches admin de l'employé dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param string $id l'id de l'employé
- * @return array les taches admin de l'employé (IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE) (tableau d'objets)
- */
-function modGetAdminConseiller($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idTa, horairedebut, horairefin, libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
 
 /**
  * débite le compte dont l'id est en paramètre de la somme (positive) en paramètre
@@ -1538,5 +1487,46 @@ function modModifMotif($idMotif, $intitule, $document) {
     $prepared -> closeCursor();
 }
 
+
+
+
+function modGetTypeStaff($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idCategorie FROM employe WHERE idEmploye=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idCategorie;
+}
+
+
+
+function modGetAppointmentConseiller($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horairedebut, horairefin FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
+function modGetAdminConseiller($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idTa, horairedebut, horairefin, libelle FROM tacheadmin NATURAL JOIN employe WHERE idEmploye=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 */

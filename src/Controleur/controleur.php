@@ -48,8 +48,9 @@ function ctlLogin ($username, $password) {
     }
     else{
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
-        $_SESSION["type"] = modGetTypeStaff($_SESSION["idEmploye"]);
+        $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
         $_SESSION["name"] = $resultConnnect->NOM;
+        $_SESSION["theme"] = "dark";
         ctlHome();
     }
 }
@@ -130,34 +131,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     }
 }
 
-/**
- * Fonction qui permet d'obtenir l'agenda d'un conseiller
- * pas encore tester
- * @param int $idEmploye c'est login du conseiller
- * @return void
- */
 
- function ctlCalendarConseiller($loginEmploye="GayBoi"){
-    $appointment = modGetAppointmentConseiller($loginEmploye);
-    $rdv = new ArrayObject();
-    foreach ($appointment as $event) {
-        $thisRDV = new ArrayObject();
-        $thisRDV->append(modGetIntituleMotif($event->idMotif));
-        $infoClient = modGetClientFromId($event->idClient);
-        $thisRDV->append($infoClient->NOM);
-        $thisRDV->append($infoClient->PRENOM);
-        $thisRDV->append($infoClient->CIVILITEE);
-        $employe = modGetEmployeFromId($event->IDEMPLOYE);
-        $thisRDV->append($employe->PRENOM);
-        $date = new DateTime($event->date);
-        $thisRDV->append($date->format('Y/m/d'));
-        $thisRDV->append($date->format('H:i'));
-
-
-    }
-    $admin = modGetAdminConseiller($loginEmploye);
-    vueDisplayAgendaConseiller($appointment, $admin);
-}
 
 /**
  * Fonction qui permet d'obtenir la liste des compte d'un client
@@ -635,3 +609,29 @@ function debug($what = "debugString") {
 
 #ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
 
+/*
+
+function ctlCalendarConseiller($loginEmploye="GayBoi"){
+    $appointment = modGetAppointmentConseiller($loginEmploye);
+    $rdv = new ArrayObject();
+    foreach ($appointment as $event) {
+        $thisRDV = new ArrayObject();
+        $thisRDV->append(modGetIntituleMotif($event->idMotif));
+        $infoClient = modGetClientFromId($event->idClient);
+        $thisRDV->append($infoClient->NOM);
+        $thisRDV->append($infoClient->PRENOM);
+        $thisRDV->append($infoClient->CIVILITEE);
+        $employe = modGetEmployeFromId($event->IDEMPLOYE);
+        $thisRDV->append($employe->PRENOM);
+        $date = new DateTime($event->date);
+        $thisRDV->append($date->format('Y/m/d'));
+        $thisRDV->append($date->format('H:i'));
+
+
+    }
+    $admin = modGetAdminConseiller($loginEmploye);
+    vueDisplayAgendaConseiller($appointment, $admin);
+}
+
+
+*/
