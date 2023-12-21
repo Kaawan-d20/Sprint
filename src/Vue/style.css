@@ -595,7 +595,7 @@ nav {
 .rechercheCell.content:not(:nth-last-child(-n+5)) {
     border-bottom: 1px solid var(--text);
 }
-.statCell.content:not(:nth-child(11n)) {
+.statCell.content:not(:nth-child(14n)) {
     border-right: 1px solid var(--text);
 }
 .infoCell.content:nth-last-child(4) {
@@ -640,7 +640,7 @@ nav {
 .rechercheCell.content:last-child {
     border-radius: 0 0 5px 0;
 }
-.statCell.content:nth-last-child(11) {
+.statCell.content:nth-last-child(14) {
     border-radius: 0 0 0 5px;
 }
 .statCell.content:last-child {
@@ -691,7 +691,7 @@ nav {
 }
 
 .statTableWrapper {
-    grid-template-columns: repeat(11, 1fr);
+    grid-template-columns: repeat(14, 1fr);
 }
 
 .rechercheOutputTableWrapper button {
