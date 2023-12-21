@@ -557,9 +557,20 @@ function ctlDisplayAddAppointement() {
 
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
     if ($heureDebut < $heureFin) {
-        debug("yes");
-        $horaireDebut= $date.'T'.$heureDebut.':00';
-        $horaireFin= $date.'T'.$heureFin.':00';
+        $horaireDebut= $date.' '.$heureDebut.':00';
+        $horaireFin= $date.' '.$heureFin.':00';
+        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
+        foreach ($listAppointement as $appointement){
+            if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+            if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+            if ($horaireDebut > $appointement->HORAIREDEBUT && $horaireFin < $appointement->HORAIREFIN){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+        }
         modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
         ctlHome();
     }
@@ -569,3 +580,6 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
 function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }
+
+#ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
+
