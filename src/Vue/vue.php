@@ -732,12 +732,12 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
     $datalist .= '</datalist>';
 
     $content='<form action="index.php" method="post" class="addContractForm">
-                '.$optionSelect.$datalist.'
-                <input type="number" name="monthCost" placeholder="Cout Mensuel" step="0.01" class="addContractField" required>
-                <input type="hidden" name="idClient" value="'.$idClient.'">
-                <button type="submit" name="createContractBtn" class="addContractField cta">
-                    Valider la création
-                </button>
+                    '.$optionSelect.$datalist.'
+                    <input type="number" name="monthCost" placeholder="Cout Mensuel" step="0.01" class="addContractField" required>
+                    <input type="hidden" name="idClient" value="'.$idClient.'">
+                    <button type="submit" name="createContractBtn" class="addContractField cta">
+                        Valider la création
+                    </button>
                 </form>';
     require_once('gabaritGestion.php');
 }
@@ -767,7 +767,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
                     '.$optionSelect.$datalist.'
                     <input type="number" name="monthCost" placeholder="Découvert" step="0.01" class="addContractField">
                     <input type="hidden" name="idClient" value="'.$idClient.'">
-                    <button type="submit" name="createAccountBt" class="addContractField cta">
+                    <button type="submit" name="createAccountBtn" class="addContractField cta">
                         Valider la création
                     </button>
                 </form>'; 

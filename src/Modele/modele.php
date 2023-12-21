@@ -83,6 +83,23 @@ function modGetAccounts($idClient) {
     return $result;
 }
 
+
+function modGetInfoAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT solde,decouvert,idClient
+                FROM compte
+                LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte
+                WHERE compte.idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam('idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
 /**
  * Renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
  * Rien si il n'est pas présent dans la base de données.
