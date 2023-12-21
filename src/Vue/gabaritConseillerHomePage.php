@@ -17,18 +17,18 @@
             </div>
             <div class="weekSelector">
                 <form action="index.php" method="post" id="previousWeekForm">
-                    <button class="previous" name="weekSelectorPrevious" id="weekSelectorPrevious" title="Semaine Precedente" type="submit">
+                    <button class="previous" name="weekSelectorPreviousConseiller" id="weekSelectorPrevious" title="Semaine Precedente" type="submit">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <input type="date" name="previousWeekDate" id="previousWeekDate" class="hidden">
                 </form>
                 <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
                     <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                    <input type="date" name="weekSelectorDateField" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
-                    <input type="submit" name="weekSelectorDateBtn" id="weekSelectorDateBtn" class="hidden">
+                    <input type="date" name="weekSelectorDateFieldConseiller" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
+                    <input type="submit" name="weekSelectorDateBtnConseiller" id="weekSelectorDateBtn" class="hidden">
                 </form>
                 <form action="index.php" method="post">
-                    <button class="next" name="weekSelectorNext" title="Semaine Suivante" type="submit" value="next">
+                    <button class="next" name="weekSelectorNextConseiller" title="Semaine Suivante" type="submit" value="next">
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     <input type="date" name="nextWeekDate" id="nextWeekDate" class="hidden">
@@ -41,49 +41,105 @@
                     <h1>Lundi</h1>
                     <span>01</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[0]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[0]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day tuesday">
                 <div class="dayCell">
                     <h1>Mardi</h1>
                     <span>02</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[1]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[1]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day wednesday">
                 <div class="dayCell">
                     <h1>Mercredi</h1>
                     <span>03</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[2]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[2]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day thursday">
                 <div class="dayCell">
                     <h1>Jeudi</h1>
                     <span>04</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[3]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[3]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day friday">
                 <div class="dayCell">
                     <h1>Vendredi</h1>
                     <span>05</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[4]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[4]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day saturday">
                 <div class="dayCell">
                     <h1>Samedi</h1>
                     <span>06</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[5]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[5]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="day sunday">
                 <div class="dayCell">
                     <h1>Dimanche</h1>
                     <span>07</span>
                 </div>
-                <div class="events"><?php echo( $weekEvents[6]); ?></div>
+                <div class="events">
+                    <?php echo( $weekEvents[6]); ?>
+                    <form action="index.php" method="post">
+                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
+                            <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -236,6 +292,13 @@ function setdayCellSpan (week) {
     }
 }
 
+function setHiddenDatefield (week) {
+    let datefieldToFill = document.querySelectorAll("#newRDVdateFieldConseiller");
+    for (let i = 0; i < 7; i++) {
+        datefieldToFill[i].value = week[i];
+    }
+}
+
 /** called during the updating of the title to setup the month and year label */ 
 function updateDateTitle(currentDate) {
     document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
@@ -245,7 +308,9 @@ function updateDateTitle(currentDate) {
 
 function updateCalendar(currentDate) {
     updateDateTitle(currentDate);
+    currentDateCopy = new Date(currentDate);
     setdayCellSpan(getWeekArray(currentDate));
+    setHiddenDatefield(getWeekArrayFullDate(currentDateCopy));
 }
 
 function getWeekArray(mondayDate) {
@@ -254,6 +319,22 @@ function getWeekArray(mondayDate) {
     for (let i = 0; i < 7; i++) {
         let currentday = currentDate.getDate().toString();
         weekArray.push((currentday.length < 2) ? '0' + currentday :currentday);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return (weekArray);
+}
+
+function getWeekArrayFullDate(mondayDate) {
+    let weekArray = [];
+    let currentDate = mondayDate;
+    for (let i = 0; i < 7; i++) {
+        let currentday = currentDate.getDate().toString();
+        currentday = (currentday.length < 2) ? '0' + currentday : currentday;
+        let currentmonth = (currentDate.getMonth() +1 ).toString();
+        currentmonth = (currentmonth.length < 2) ? '0' + currentmonth : currentmonth;
+        let currentyear = currentDate.getFullYear().toString();
+        let currentFullDate = currentyear + "-" + currentmonth + '-' + currentday;
+        weekArray.push(currentFullDate);
         currentDate.setDate(currentDate.getDate() + 1);
     }
     return (weekArray);
