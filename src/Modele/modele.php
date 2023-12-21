@@ -652,40 +652,40 @@ function modDeleteTypeContract($idTypeContract){
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
 /**
- * renvoie tous les TA entre la première et la deuxième date mises en paramètres,
- * rien si il n'y en a pas dans la base de données
- * @param int $id l'id du conseiller
- * @param string $date1 date de début
- * @param string $date2 date de fin
+ * Renvoie tous les TA entre la première et la deuxième date mises en paramètres,
+ * Rien si il n'y en a pas dans la base de données
+ * @param int $id L'id du conseiller
+ * @param string $dateDebut Date de début
+ * @param string $dateFin Date de fin
  * @return array tous les TA entre la première et la deuxième date mises en paramètres (HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
  */
-function modGetTABetweenCounselor($id,$date1,$date2) {
+function modGetTABetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM tacheadmin WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM tacheadmin WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin AND idEmploye=:idConseiller';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
-    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
+    $prepared -> bindParam(':idConseiller', $idConseiller, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
-    debug($result);
     return $result;
 }
 
 /**
- * renvoie toutes les ta entre la première et la deuxième date mises en paramètres,
- * rien si il n'y en a pas dans la base de données
- * @param string $date1 date de début
- * @param string $date2 date de fin
+ * Renvoie toutes les ta entre la première et la deuxième date mises en paramètres,
+ * Rien si il n'y en a pas dans la base de données
+ * @param string $dateDebut Date de début
+ * @param string $dateFin Date de fin
+ * @return array tous les ta entre la première et la deuxième date mises en paramètres (IDTA, IDEMPLOYE, HORAIREDEBUT, HORAIREFIN, LIBELLE, IDCATEGORIE, NOM, PRENOM, LOGIN, PASSWORD, COLOR, SALT) (tableau d'objets)
  */
-function modGetAllAdminBetween($date1,$date2) {
+function modGetAllTABetween($dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT *  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:d1 AND horairedebut<:d2';
+    $query = 'SELECT *  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
-    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result=$prepared -> fetchAll();
@@ -693,31 +693,34 @@ function modGetAllAdminBetween($date1,$date2) {
     return $result;
 }
 
-
-
 /**
- * cree une ta avec l'id d'employé, l'horaire et le libelle en paramètre
- * @param int $idE l'id de l'employé
- * @param string $hd l'horaire de début
- * @param string $hf l'horaire de fin
- * @param string $label le libelle
+ * Crée une TA avec l'id d'employé, l'horaire et le libelle en paramètre
+ * @param int $idEmploye L'id de l'employé
+ * @param string $horaireDebut L'horaire de début
+ * @param string $horaireFin L'horaire de fin
+ * @param string $libelle Le libelle
+ * @return void
  */
-function modCreateAdmin($idE,$hd,$hf,$label) {
+function modCreateAdmin($idEmploye,$horaireDebut,$horaireFin,$libelle) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO tacheAdmin(idEmploye,horaireDebut,horaireFin,libelle) VALUES (:idE,:hd,:hf,:label)';
+    $query = 'INSERT INTO tacheAdmin(idEmploye,horaireDebut,horaireFin,libelle) VALUES (:idEmploye,:horaireDebut,:horaireFin,:libelle)';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
-    $prepared -> bindParam(':hd', $hd, PDO::PARAM_STR);
-    $prepared -> bindParam(':hf', $hf, PDO::PARAM_STR);
-    $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
+    $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
+    $prepared -> bindParam(':horaireDebut', $horaireDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':horaireFin', $horaireFin, PDO::PARAM_STR);
+    $prepared -> bindParam(':libelle', $libelle, PDO::PARAM_STR);
     $prepared -> execute();
 }
-
-function modDeleteAdmin($idAdmin){
+/**
+ * Supprime la TA dont l'id est en paramètre
+ * @param int $idTA L'id de la TA
+ * @return void
+ */
+function modDeleteTA($idTA){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM tacheAdmin WHERE idTA=:idAdmin';
+    $query = 'DELETE FROM tacheAdmin WHERE idTA=:idTA';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+    $prepared -> bindParam(':idTA', $idTA, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
 }

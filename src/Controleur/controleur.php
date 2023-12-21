@@ -362,7 +362,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $dateEndOfWeekString = $dateEndOfWeek->format('Y-m-d') . " 23:59:59";
 
     $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeekString, $dateEndOfWeekString);
-    $listTA = modGetAllAdminBetween($dateStartOfWeekString, $dateEndOfWeekString);
+    $listTA = modGetAllTABetween($dateStartOfWeekString, $dateEndOfWeekString);
 
     $array = new ArrayObject();
     $array->append($listRDV);
@@ -380,7 +380,7 @@ function ctlRDVDate($date) {
     $dateEnd .= ' 23:59:59';
 
     $listRDV = modGetAllAppoinmentsBetween($dateStart, $dateEnd);
-    $listTA = modGetAllAdminBetween($dateStart, $dateEnd);
+    $listTA = modGetAllTABetween($dateStart, $dateEnd);
 
     $array = new ArrayObject();
     $array->append($listRDV);
@@ -641,7 +641,7 @@ function ctlDeleteAppointment($idAppointment) {
 }
 
 function ctlDeleteTA($idTA) {
-    modDeleteAdmin($idTA);
+    modDeleteTA($idTA);
     ctlHome();
 }
 
