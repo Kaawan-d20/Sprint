@@ -551,7 +551,7 @@ function ctlDisplayAddAppointement($date) {
 }
 
 function ctlDisplayAddAppointementConseiller($date) {
-    $listClients = modGetAllClient(); // TODO : modGetAllClientsByCounselors($_SESSION->IDEMPLOYE);
+    $listClients = modGetAllClientsByCounselors($_SESSION["idEmploye"]);
     $listMotifs = modGetAllMotif();
     $rdvArray = ctlRDVDate($date);
     vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray);

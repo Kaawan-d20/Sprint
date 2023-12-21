@@ -202,7 +202,7 @@ function modGetAllClientsByCounselors($idEmployee){
  */
 function modDebit($idAccount,$sum,$date) {
     $connection = Connection::getInstance()->getConnection();
-    $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idA;
+    $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idAccount;
                 INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Debit',:date,:sum,0)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
@@ -387,12 +387,14 @@ function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
  * @return void
  */
 function modAddTypeAccount($name, $active, $document){
+    $nameMotif = 'Gestion de '.$name;
     $connection = Connection::getInstance()->getConnection();
     $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES ('Gestion de :name',:document);
-    INSERT INTO `typecompte`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
+    $query = 'INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif,:document);
+    INSERT INTO `typecompte`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':nameMotif', $nameMotif, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
     $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
     $prepared -> execute();
@@ -740,7 +742,7 @@ function modDeleteAdmin($idAdmin){
 function modGetAllAppoinmentsBetween($date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
-    CONCAT(employe.PRENOM," ", employe.NOM) AS identiteEmploye,
+    CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
     employe.COLOR,
     rdv.IDCLIENT,
     CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
