@@ -1135,7 +1135,6 @@ nav {
 .field input {
     border: none;
     background-color: transparent;
-    font-size: var(--big-font-size);
 }
 
 .field input[type="text"] {
@@ -1172,6 +1171,29 @@ nav {
 .addAppointementRDVWrapper .events {
     padding-right: 1em;
 } 
+
+.addContractForm {
+    display: flex;
+    gap: 1em;
+    flex-direction: row;
+    padding: 1em;
+}
+
+.addContractField {
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+    background-color: var(--background);
+    display: flex;
+    gap: .5em;
+    align-items: center;
+    font-size: var(--classic-font-size);
+}
+
+.addContractField:hover {
+    background-color: var(--background-secondary);
+
+}
 
 /* UTILITY */
 
