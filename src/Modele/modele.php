@@ -880,9 +880,7 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
  */
 function modGetAppoinmentsBetweenCounselor($id,$date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN
-    FROM rdv
-    WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM rdv WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
@@ -891,6 +889,7 @@ function modGetAppoinmentsBetweenCounselor($id,$date1,$date2) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
+    debug($result);
     return $result;
 }
 
@@ -906,9 +905,7 @@ function modGetAppoinmentsBetweenCounselor($id,$date1,$date2) {
  */
 function modGetTABetweenCounselor($id,$date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN
-    FROM tacheadmin
-    WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM tacheadmin WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
@@ -917,6 +914,7 @@ function modGetTABetweenCounselor($id,$date1,$date2) {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
+    debug($result);
     return $result;
 }
 

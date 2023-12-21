@@ -556,11 +556,14 @@ function ctlDisplayAddAppointement() {
 }
 
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
+    debug('test');
     if ($heureDebut < $heureFin) {
         $horaireDebut= $date.' '.$heureDebut.':00';
         $horaireFin= $date.' '.$heureFin.':00';
-        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
-        $listTA = modGetTABetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
+        $debutCall = $date . ' 00:00:00';
+        $finCall = $date . ' 23:59:59';
+        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+        $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
         foreach ($listAppointement as $appointement){
             if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
@@ -568,7 +571,7 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
             if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
-            if ($horaireDebut > $appointement->HORAIREDEBUT && $horaireFin < $appointement->HORAIREFIN){
+            if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
         }
@@ -579,7 +582,7 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
             if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
-            if ($horaireDebut > $TA->HORAIREDEBUT && $horaireFin < $TA->HORAIREFIN){
+            if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
         }
@@ -594,8 +597,10 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
     if ($heureDebut < $heureFin) {
         $horaireDebut= $date.' '.$heureDebut.':00';
         $horaireFin= $date.' '.$heureFin.':00';
-        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
-        $listTA = modGetTABetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
+        $debutCall = $date . ' 00:00:00';
+        $finCall = $date . ' 23:59:59';
+        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+        $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
         foreach ($listAppointement as $appointement){
             if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
@@ -603,7 +608,7 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
             if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
             }
-            if ($horaireDebut > $appointement->HORAIREDEBUT && $horaireFin < $appointement->HORAIREFIN){
+            if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
             }
         }
@@ -614,7 +619,7 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
             if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
             }
-            if ($horaireDebut > $TA->HORAIREDEBUT && $horaireFin < $TA->HORAIREFIN){
+            if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
             }
         }
