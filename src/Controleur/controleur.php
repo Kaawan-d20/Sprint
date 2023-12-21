@@ -634,6 +634,24 @@ function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }
 
+
+function ctlDeleteAppointment($idAppointment) {
+    modDeleteAppointment($idAppointment);
+    ctlHome();
+}
+
+function ctlDeleteTA($idTA) {
+    modDeleteAdmin($idTA);
+    ctlHome();
+}
+
+
+
+
+
+
+
+
 #ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
 
 /*

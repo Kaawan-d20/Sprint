@@ -714,6 +714,14 @@ function modCreateAdmin($idE,$hd,$hf,$label) {
     $prepared -> execute();
 }
 
+function modDeleteAdmin($idAdmin){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM tacheAdmin WHERE idTacheAdmin=:idAdmin';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAdmin', $idAdmin, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 # ----------------------------------------------------------------- APPOINTMENT ---------------------------------------------------------------- #
@@ -798,6 +806,14 @@ function modAddAppointment($idM,$idC,$idE,$hd,$hf) {
     $prepared -> execute();
 }
 
+function modDeleteAppointment($idAppointment){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM rdv WHERE idRDV=:idAppointment';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAppointment', $idAppointment, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #

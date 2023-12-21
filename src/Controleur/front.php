@@ -260,6 +260,14 @@ try {
         $libelle = $_POST['adminLibelleField'];
         ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle);
     }
+    elseif (isset($_POST['deleteRDVbtn'])) {
+        $idRDV = $_POST['idRDVField'];
+        ctlDeleteAppointment($idRDV);
+    }
+    elseif (isset($_POST['deleteTAbtn'])){
+        $idRDV = $_POST['idTAField'];
+        ctlDeleteTA($idRDV);
+    }
     // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{
