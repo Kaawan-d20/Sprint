@@ -162,15 +162,13 @@ function ctlGetContracts($idClient){
  * @return void
  */
 function ctlDebit($idAccount, $amount){
-    $decouvert = modGetDecouvert($idAccount);
-    $solde = modGetSolde($idAccount);
-    if ($amount > $solde + $decouvert){
+    $account = modGetInfoAccount($idAccount);
+    if ($amount > $account->solde + $account->decouvert){
         throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
     }
     modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
-    $idClient = modGetIdClientFromAccount($idAccount);
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
+    $client = modGetClientFromId($account->idClient);
+    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient));
 }
 /**
  * Fonction qui permet de créditer un compte

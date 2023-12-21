@@ -769,7 +769,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
                     '.$optionSelect.$datalist.'
                     <input type="number" name="monthCost" placeholder="Découvert" step="0.01" class="addContractField">
                     <input type="hidden" name="idClient" value="'.$idClient.'">
-                    <button type="submit" name="createAccountBt" class="addContractField cta">
+                    <button type="submit" name="createAccountBtn" class="addContractField cta">
                         Valider la création
                     </button>
                 </form></div>'; 
