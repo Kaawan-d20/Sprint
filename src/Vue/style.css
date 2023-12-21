@@ -428,7 +428,7 @@ nav {
     
 }
 
-.event:not(:last-child):not(:has(+ .hidden)) .eventDetails{
+.event:not(:last-child):not(:has(+ .hidden)):not(:hover) .eventDetails{
     border-bottom: 1px solid var(--mid-text);
 }
 
@@ -453,12 +453,26 @@ nav {
     border-radius: 0 0 5px 5px;
 }
 
-.event .document {
+.event .document, .event .deleteForm {
     display: none;
 }
 
 .event:hover .document {
     display: inline-block;
+}
+
+.event:hover .deleteForm {
+    display: block;
+}
+
+.deleteRDVbtn {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    width: 100%;
+    background-color: var(--invalid-red);
+    color: var(--background);
+    margin-bottom: 1em;
 }
 
 .monday .events .event:hover:last-child {
