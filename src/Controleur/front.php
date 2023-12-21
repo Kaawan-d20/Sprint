@@ -249,6 +249,3 @@ catch(Exception $e) {
      $msg = $e->getMessage() ;
      ctlError($msg);
 }
-
-
-ctlCreateNewTA(2, "2023-12-11", "10:10", "10:20", "test");
