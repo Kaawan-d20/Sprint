@@ -417,7 +417,6 @@ function ctlRDVDate($date) {
 
 function ctlUpdateCalendarConseiller($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
-    ctlRDVDate($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     $employe = ctlGetInfoEmploye($_SESSION["idEmploye"]);
     $fullName = $employe->PRENOM." ".$employe->NOM;
@@ -426,7 +425,6 @@ function ctlUpdateCalendarConseiller($targetDate) {
 
 function ctlUpdateCalendar($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
-    ctlRDVDate($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
 }
@@ -576,6 +574,13 @@ function ctlDisplayAddAppointement($date) {
     $listMotifs = modGetAllMotif();
     $rdvArray = ctlRDVDate($date);
     vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
+}
+
+function ctlDisplayAddAppointementConseiller($date) {
+    $listClients = modGetAllClient(); // TODO : modGetAllClientsByCounselors($_SESSION->IDEMPLOYE);
+    $listMotifs = modGetAllMotif();
+    $rdvArray = ctlRDVDate($date);
+    vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray);
 }
 
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {

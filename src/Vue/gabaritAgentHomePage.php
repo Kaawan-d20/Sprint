@@ -289,7 +289,6 @@ function setdayCellSpan (week) {
 
 function setHiddenDatefield (week) {
     let datefieldToFill = document.querySelectorAll("#newRDVdateField");
-    console.log(datefieldToFill);
     for (let i = 0; i < 7; i++) {
         datefieldToFill[i].value = week[i];
     }

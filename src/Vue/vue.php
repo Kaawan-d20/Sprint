@@ -34,7 +34,6 @@ function vueDisplayHomeDirecteur($stat, $username){
  */
 function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $fullName){
     $navbar = vueGenerateNavBar();
-    debug($TAS);
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -43,7 +42,6 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
     foreach ($TAS as $TA) {
-        debug($TA);
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
         $weekNumber = date_format($TADate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
@@ -53,7 +51,6 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
 
 function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
     $navbar = vueGenerateNavBar();
-    debug($TAS);
     $weekEvents = array("", "", "", "", "", "", "");
     // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
@@ -78,6 +75,7 @@ function vueDisplayLogin(){
 }
 
 function vueGenerateAppointementHTML($appointment) {
+    debug($appointment);
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
     return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" data-color="'. $appointment->COLOR .'">
@@ -89,6 +87,9 @@ function vueGenerateAppointementHTML($appointment) {
             <input type="number" name="searchClientByIdField" id="searchClientByIdField" class="hidden" value="'.$appointment->IDCLIENT.'">
             <input type="submit" name="searchClientBtn" value="'. $appointment->identiteClient .'" class="eventClientInput">
         </form>
+        <p class="document">
+            whoah a document
+        </p>
         <div class="eventDetails">
             <div>
                 <p class="eventStartTime">'. $heureDebut .'</p>
@@ -103,7 +104,6 @@ function vueGenerateAppointementHTML($appointment) {
 }
 
 function vueGenerateAdminHTML($TA) {
-    debug($TA);
     $identiteEmploye = $TA->PRENOM.' '.$TA->NOM;
     $heureDebut = (substr($TA->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($TA->HORAIREFIN, 11, 5));
@@ -600,16 +600,13 @@ function vueDisplayError ($error) {
 }
 
 
+/** NON UTILISE */ 
 function vueDisplayAgendaConseiller($appointment, $admin){
     $navbar = vueGenerateNavBar();
     $bla = json_encode($appointment);
     echo json_encode($admin);
     require_once('gabaritAgentHomePage.php');
 }
-
-
-
-
 
 function vueDisplayCreateClient($listConseiller) {
     $navbar = vueGenerateNavBar();
@@ -760,8 +757,6 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
 
 function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray, $clientActuel = "") {
     $navbar = vueGenerateNavBar();
-    $TODO = "todo";
-    $ID = "todo";
     $conseillersOption = "";
     $clientOption = "";
     $motifsOption = "";
@@ -829,4 +824,94 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                 </script>';
     require_once('gabaritGestion.php');
 
+}
+
+function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray) {
+    $navbar = vueGenerateNavBar();
+    $clientOption = "";
+    $motifsOption = "";
+    $events = "";
+    foreach ($rdvArray[0] as $appointment) {
+        $events .= vueGenerateAppointementHTML($appointment);
+    }
+    foreach ($rdvArray[1] as $TA) {
+        $events .= vueGenerateAdminHTML($TA);
+    }
+    foreach ($listClients as $client) {
+        $clientOption .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
+    }
+    foreach ($listMotifs as $motif) {
+        $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
+    }
+    $content = '
+            <div class="addAppointementRDVWrapper">
+                <div class="addAppointementWrapper">
+                    <form action="index.php" method="post" class="addAppointementForm">
+                        <h1>Ajouter un rendez-vous</h1>
+                        <div class="field">
+                            <label for="TAToggle">Tâche administrative :</label>
+                            <input type="checkbox" name="TAToggle" id="TAToggle" onClick="toggleTA()">
+                        </div>
+                        <div class="field">
+                            <label for="appointementsDateField">Date</label>
+                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" required readonly>
+                        </div>
+                        <div class="field">
+                            <label for="appointementsDateField">Horaire de début</label>
+                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" required>
+                        </div>
+                        <div class="field">
+                            <label for="appointementsDateField">Horaire de fin</label>
+                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" required>
+                        </div>
+                        <select name="appointementsClientField" id="appointementsClientField" class="field appointement" required>
+                            '.$clientOption.'
+                        </select>
+                        <select name="appointementsConseillerField" id="appointementsConseillerField" class="field hidden" readonly>
+                            <option value="'.$_SESSION['idEmploye'].'">'.$_SESSION['name'].'</option>
+                        </select>
+                        <select name="appointementsMotifField" id="appointementsMotifField" class="field appointement">
+                            '.$motifsOption.'
+                        </select>
+                        <div class="field admin hidden">
+                            <input type="text" name="adminLibelleField" id="adminLibelleField" placeholder="Motif">
+                        </div>
+                        <button type="submit" name="addAppointementsBtn" class="cta field appointement">
+                            Valider
+                        </button>
+                        <button type="submit" name="addAdminBtn" class="cta field admin hidden">
+                            Valider
+                        </button>
+                    </form>
+                </div>
+                <div class="addAppointementWrapper">
+                    <div class="events">
+                        '.$events.'
+                    </div>
+                </div>
+            </div>
+            <script>
+                let isAdmin = false;
+                function toggleTA() {
+                    console.log(isAdmin);
+                    isAdmin = ! isAdmin ;
+                    console.log(isAdmin);
+                    if (isAdmin) {
+                        document.querySelectorAll(".admin").forEach(function (item) {
+                            item.classList.remove("hidden")
+                        });
+                        document.querySelectorAll(".appointement").forEach(function (item) {
+                            item.classList.add("hidden")
+                        });
+                    } else {
+                        document.querySelectorAll(".appointement").forEach(function (item) {
+                            item.classList.remove("hidden")
+                        });
+                        document.querySelectorAll(".admin").forEach(function (item) {
+                            item.classList.add("hidden")
+                        });
+                    }
+                }
+            </script>';
+    require_once('gabaritGestion.php');
 }
