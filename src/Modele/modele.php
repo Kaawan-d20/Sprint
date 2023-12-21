@@ -268,7 +268,7 @@ function modGetDecouvert($idA) {
 }
 
 /**
- * renvoie le solde du compte dont l'id est en paramètre,
+ * Renvoie le solde du compte dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param int $idA l'id du compte
  * @return string le solde du compte
