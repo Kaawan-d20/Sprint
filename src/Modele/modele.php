@@ -409,6 +409,17 @@ function modCreateTypeAccount($idM,$name) {
     $prepared -> execute();
 }
 
+function modGetAllClientsByCounselors($idEmployee){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM client WHERE idEmploye=:idE';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idEmployee, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
