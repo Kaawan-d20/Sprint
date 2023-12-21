@@ -75,7 +75,6 @@ function vueDisplayLogin(){
 }
 
 function vueGenerateAppointementHTML($appointment) {
-    debug($appointment);
     $heureDebut = (substr($appointment->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($appointment->HORAIREFIN, 11, 5)); 
     return '<div class="event" data-conseiller="'. $appointment->identiteEmploye .'" data-color="'. $appointment->COLOR .'">
@@ -88,7 +87,7 @@ function vueGenerateAppointementHTML($appointment) {
             <input type="submit" name="searchClientBtn" value="'. $appointment->identiteClient .'" class="eventClientInput">
         </form>
         <p class="document">
-            whoah a document
+            '.$appointment->DOCUMENT.'
         </p>
         <div class="eventDetails">
             <div>
@@ -100,6 +99,12 @@ function vueGenerateAppointementHTML($appointment) {
                 '. $appointment->identiteEmploye .'
             </div>
         </div>
+        <form action="index.php" method="post" class="deleteForm">
+            <input type="number" name="idRDVField" id="idRDVField" class="hidden" value="'.$appointment->IDRDV.'">
+            <button type="submit" class="deleteRDVbtn" name="deleteRDVbtn">
+                <i class="fa-solid fa-trash-can"></i> Supprimer
+            </button>
+        </form>
     </div>';
 }
 
@@ -122,6 +127,12 @@ function vueGenerateAdminHTML($TA) {
                 '. $identiteEmploye .'
             </div>
         </div>
+        <form action="index.php" method="post" class="deleteForm">
+        <input type="number" name="idTAField" id="idTAField" class="hidden" value="'.$TA->IDTA.'">
+        <button type="submit" class="deleteRDVbtn" name="deleteTAbtn">
+            <i class="fa-solid fa-trash-can"></i> Supprimer
+        </button>
+    </form>
     </div>';
 
 }
