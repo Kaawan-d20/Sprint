@@ -1122,6 +1122,18 @@ nav {
 
 .field:last-child {
     flex-grow: 1;
+    margin-bottom: 1em;
+}
+
+.newRDVbtn {
+    padding: 1em;
+    font-size: var(--classic-font-size);
+    border: none;
+    background-color: var(--background);
+}
+
+.newRDVbtn:hover {
+    background-color: var(--background-secondary);
 }
 
 /* UTILITY */

@@ -227,7 +227,8 @@ try {
         ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
     }
     elseif (isset($_POST['newRDVbtn'])) {
-        ctlDisplayAddAppointement();
+        $date = $_POST['newRDVdateField'];
+        ctlDisplayAddAppointement($date);
     }
     elseif (isset($_POST['addAppointementsBtn'])) {
         $idClient = $_POST['appointementsClientField'];
