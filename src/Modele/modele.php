@@ -41,8 +41,6 @@ function modConnect($login, $password) {
 }
 
 
-
-
 /**
  * renvoie toutes les infos de tous les motifs
  */
@@ -55,9 +53,6 @@ function modGetAllMotif() {
     $prepared -> closeCursor();
     return $result;
 }
-
-
-
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
@@ -82,6 +77,100 @@ function modGetAccounts($idClient) {
     $prepared -> closeCursor();
     return $result;
 }
+
+
+
+/**
+ * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
+ * rien si il n'est pas présent dans la base de données.
+ * @param int $idAccount l'id du compte
+ * @return int l'id du client
+ */
+function modGetIdClientFromAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idA';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idClient;
+}
+
+
+
+
+
+function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW());
+              INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
+
+
+function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount){
+    $connection = Connection::getInstance()->getConnection();
+
+    // Première requête
+    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idCompte = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient2, :idCompte)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
+
+
+function modDeleteAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM operation WHERE idCompte=:idAccount;
+                DELETE FROM possedeCompte WHERE idCompte=:idAccount;
+                DELETE FROM compte WHERE idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
+function modGetAllClientsByCounselors($idEmployee){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM client WHERE idEmploye=:idE';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idE', $idEmployee, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
 
 /**
  * débite le compte dont l'id est en paramètre de la somme (positive) en paramètre
@@ -121,6 +210,24 @@ function modCredit($idA,$sum,$date) {
     $prepared -> closeCursor();
 }
 
+
+
+
+/**
+ * modifie le decouvert du compte dont l'id est en paramètre
+ * @param int $idC l'id du compte
+ * @param string $deco le découvert
+ */
+function modModifOverdraft($idAccount, $overdraft){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE compte SET decouvert=:overdraft WHERE idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
 /**
  * renvoie le découvert du compte dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
@@ -140,24 +247,6 @@ function modGetDecouvert($idA) {
 }
 
 /**
- * renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
- * rien si il n'est pas présent dans la base de données.
- * @param int $idAccount l'id du compte
- * @return int l'id du client
- */
-function modGetIdClientFromAccount($idAccount){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idA';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idA', $idAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->idClient;
-}
-
-/**
  * renvoie le solde du compte dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données.
  * @param int $idA l'id du compte
@@ -174,6 +263,29 @@ function modGetSolde($idA) {
     $prepared -> closeCursor();
     return $result->solde;
 }
+
+/**
+ * renvoie la liste des operations du compte dont l'id est en paramètre
+ * @param int $id l'id du compte
+ * @return array la liste des operations du compte dont l'id est en paramètre (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets)
+ */
+function modGetOperations($id) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM operation WHERE idCompte=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------ #
+# ----------------------------------------------------------------- TYPE ACCOUNT ----------------------------------------------------------- #
+# ------------------------------------------------------------------------------------------------------------------------------------------ #
+
 
 /**
  * renvoie toutes les infos de tous les types de compte
@@ -245,37 +357,6 @@ function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
     $prepared -> closeCursor();
 }
 
-/**
- * modifie le decouvert du compte dont l'id est en paramètre
- * @param int $idC l'id du compte
- * @param string $deco le découvert
- */
-function modSetDecouvert($idC,$deco) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE compte SET decouvert=:deco WHERE idCompte=:idC';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
-    $prepared -> bindParam(':deco', $deco, PDO::PARAM_STR);
-    $prepared -> execute();
-}
-
-/**
- * renvoie la liste des operations du compte dont l'id est en paramètre
- * @param int $id l'id du compte
- * @return array la liste des operations du compte dont l'id est en paramètre (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets)
- */
-function modGetOperations($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM operation WHERE idCompte=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
-
 
 /**
  * Fonction qui permet d'ajouter un type de compte
@@ -326,118 +407,11 @@ function modDeleteTypeAccount($idTypeAccount){
 }
 
 
-function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW());
-              INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
-    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
-    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-
-}
-
-
-function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount){
-    $connection = Connection::getInstance()->getConnection();
-
-    // Première requête
-    $query = 'INSERT INTO compte(idTypeCompte, solde, decouvert, dateCreation) VALUES (:idTypeCompte, "0.00", :overdraft, NOW())';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
-    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
-    $prepared -> execute();
-
-    // Récupérer l'ID du contrat inséré
-    $idCompte = $connection->lastInsertId();
-
-    // Deuxième requête
-    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
-    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-    $prepared -> execute();
-
-    // Troisième requête
-    $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient2, :idCompte)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
-    $prepared -> bindParam(':idCompte', $idCompte, PDO::PARAM_INT);
-    $prepared -> execute();
-
-    $prepared -> closeCursor();
-}
-
-
-function modDeleteAccount($idAccount){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM operation WHERE idCompte=:idAccount;
-                DELETE FROM possedeCompte WHERE idCompte=:idAccount;
-                DELETE FROM compte WHERE idCompte=:idAccount';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
-
-
-
-
-function modModifOverdraft($idAccount, $overdraft){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE compte SET decouvert=:overdraft WHERE idCompte=:idAccount';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
-    $prepared -> bindParam(':overdraft', $overdraft, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
-
-/**
- * cree un type de compte avec l'id de motif et le nom en paramètres
- * @param int $idM l'id du motif
- * @param string $name le nom du compte
- */
-function modCreateTypeAccount($idM,$name) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO typeCompte(idMotif,nom) VALUES (:idM,:nameA)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
-    $prepared -> bindParam(':nameA', $name, PDO::PARAM_STR);
-    $prepared -> execute();
-}
-
-function modGetAllClientsByCounselors($idEmployee){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM client WHERE idEmploye=:idE';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idE', $idEmployee, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
-}
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 # ----------------------------------------------------------------- CONTRACT ------------------------------------------------------------ #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
-
-
-function modGetIdClientFromContract($idContract){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idC';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->idClient;
-}
 
 /**
  * renvoie tous les contrats du client dont l'id est en paramètre,
@@ -456,6 +430,81 @@ function modGetContracts($idClient) {
     $prepared -> closeCursor();
     return $result;
 }
+
+function modGetIdClientFromContract($idContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idC';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idC', $idContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idClient;
+}
+
+
+
+function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW());
+              INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+
+}
+
+
+function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract){
+    $connection = Connection::getInstance()->getConnection();
+
+    // Première requête
+    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW())';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
+    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
+    $prepared -> execute();
+
+    // Récupérer l'ID du contrat inséré
+    $idContrat = $connection->lastInsertId();
+
+    // Deuxième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    // Troisième requête
+    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient2, :idContrat)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
+    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
+    $prepared -> execute();
+
+    $prepared -> closeCursor();
+}
+
+
+function modDeleteContract($idContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM possedeContrat WHERE idContrat=:idContract;
+                DELETE FROM contrat WHERE idContrat=:idContract';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idContract', $idContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------ #
+# ----------------------------------------------------------------- TYPE CONTRACT ----------------------------------------------------------- #
+# ------------------------------------------------------------------------------------------------------------------------------------------ #
+
 
 /**
  * renvoie toutes les informations de tous les types de contrat
@@ -576,61 +625,6 @@ function modDeleteTypeContract($idTypeContract){
     $prepared -> closeCursor();
 }
 
-
-function modAddContractToClientOne($idClient, $monthCost, $idTypeContract){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW());
-              INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, (SELECT LAST_INSERT_ID()))';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
-    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
-    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-
-}
-
-
-function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract){
-    $connection = Connection::getInstance()->getConnection();
-
-    // Première requête
-    $query = 'INSERT INTO contrat(idTypeContrat, TarifMensuel, dateOuverture) VALUES (:idTypeContrat, :monthCost, NOW())';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeContrat', $idTypeContract, PDO::PARAM_INT);
-    $prepared -> bindParam(':monthCost', $monthCost, PDO::PARAM_STR);
-    $prepared -> execute();
-
-    // Récupérer l'ID du contrat inséré
-    $idContrat = $connection->lastInsertId();
-
-    // Deuxième requête
-    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, :idContrat)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
-    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
-    $prepared -> execute();
-
-    // Troisième requête
-    $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient2, :idContrat)';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idClient2', $idClient2, PDO::PARAM_INT);
-    $prepared -> bindParam(':idContrat', $idContrat, PDO::PARAM_INT);
-    $prepared -> execute();
-
-    $prepared -> closeCursor();
-}
-
-
-function modDeleteContract($idContract){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM possedeContrat WHERE idContrat=:idContract;
-                DELETE FROM contrat WHERE idContrat=:idContract';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idContract', $idContract, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
 
 
 
