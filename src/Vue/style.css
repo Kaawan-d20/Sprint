@@ -170,18 +170,15 @@ nav {
     padding-left: 1em;
     border: 1px solid var(--text-secondary);
     background-color: var(--background);
-    border-radius: 5px
+    border-radius: 5px;
+    display: flex;
+    gap: 1em;
 }
 
 .advancedSearchandAccountWrapper {
     display: flex;
     justify-content: end;
     gap: 1em;
-}
-
-.searchWrapper form {
-    gap: 1em;
-    display: flex;
 }
 
 .searchField {

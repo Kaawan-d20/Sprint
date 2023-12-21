@@ -139,7 +139,7 @@ function vueGenerateAdminHTML($TA) {
 
 
 function vueGenerateNavBar() {
-    $datalist = '<input list="listClient" name="idClient" ><datalist id="listClient">';
+    $datalist = '<input list="listClient" name="idClient" class="searchField"><datalist id="listClient">';
     foreach ($_SESSION["listClient"] as $client) {
         $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
     }
@@ -152,15 +152,13 @@ function vueGenerateNavBar() {
                         <i class="fa-solid fa-house"></i>
                     </button>
             </form>
-            <div class="searchWrapper">
-                <form action="index.php" method="post">
-                    <label for="searchClientByIdField" class="visually-hidden">Chercher un client</label>
-                    '.$datalist.'
-                    <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </form>
-            </div>
+            <form action="index.php" method="post" class="searchWrapper">
+                <label for="searchClientByIdField" class="visually-hidden">Chercher un client</label>
+                '.$datalist.'
+                <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
             <div class="advancedSearchandAccountWrapper">
                 <form action="index.php" method="post">
                     <button class="squareIconButton" name="advancedSearchBtn" title="Recherche avancée">
