@@ -139,7 +139,7 @@ function vueGenerateAdminHTML($TA) {
 
 
 function vueGenerateNavBar() {
-    $datalist = '<input list="listClient" name="searchClientByIdField" class="searchField"><datalist id="listClient">';
+    $datalist = '<input list="listClient" name="searchClientByIdField" class="searchField" placeholder="Id du client" required><datalist id="listClient">';
     foreach ($_SESSION["listClient"] as $client) {
         $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
     }
@@ -729,16 +729,17 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
     foreach ($listeClient as $client) {
         $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' '.$client->NOM.' '.$client->PRENOM.'</option>';
     }
-    $datalist .= '</datalist>';
+    $datalist .= '</datalist></div>';
 
-    $content='<form action="index.php" method="post" class="addContractForm">
+    $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
+                <h1>Ajouter un Type de Contrat</h1>
                 '.$optionSelect.$datalist.'
                 <input type="number" name="monthCost" placeholder="Cout Mensuel" step="0.01" class="addContractField" required>
                 <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="createContractBtn" class="addContractField cta">
                     Valider la création
                 </button>
-                </form>';
+                </form></div>';
     require_once('gabaritGestion.php');
 }
 
@@ -763,14 +764,15 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     $datalist .= "</datalist></div>";
 
 
-    $content='<form action="index.php" method="post" class="addContractForm">
+    $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
+                    <h1>Ajouter un Type de Compte</h1>
                     '.$optionSelect.$datalist.'
                     <input type="number" name="monthCost" placeholder="Découvert" step="0.01" class="addContractField">
                     <input type="hidden" name="idClient" value="'.$idClient.'">
                     <button type="submit" name="createAccountBt" class="addContractField cta">
                         Valider la création
                     </button>
-                </form>'; 
+                </form></div>'; 
     require_once('gabaritGestion.php');
 }
 
