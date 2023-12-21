@@ -707,6 +707,10 @@ function vueDisplaySetting($identity) {
 
 function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
     $optionSelect = "<select name=\"idTypeContract\">";
+    if (count($listTypeContract) == 0) {
+        $content = "<div>Aucun type de compte disponible</div>";
+        require_once('gabaritGestion.php');
+    }
     foreach ($listTypeContract as $typeContract) {
         $optionSelect .= "<option value=\"".$typeContract->IDTYPECONTRAT."\">".$typeContract->NOM."</option>";
     }
@@ -733,6 +737,11 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
 
 function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     $navbar = vueGenerateNavBar();
+    debug($listTypeAccount);
+    if (count($listTypeAccount) == 0) {
+        $content = "<div>Aucun type de compte disponible</div>";
+        require_once('gabaritGestion.php');
+    }
     $optionSelect = "<select name=\"idTypeAccount\">";
     foreach ($listTypeAccount as $typeAccount) {
         $optionSelect .= "<option value=\"".$typeAccount->IDTYPECOMPTE."\">".$typeAccount->NOM."</option>";

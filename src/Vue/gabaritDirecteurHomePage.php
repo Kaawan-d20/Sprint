@@ -35,6 +35,10 @@
             <div class="statCell header">Nombre de comptes inactifs</div>
             <div class="statCell header">Nombre de comptes à découvert</div>
             <div class="statCell header">Nombre de comptes non à découvert</div>
+            <div class="statCell header">Somme de tous les comptes</div>
+            <div class="statCell header">Nombre de contrats actifs</div>
+            <div class="statCell header">Nombre de contrats inactifs</div>
+
 
             <div class="statCell content"><?php echo $stat['nbClient'] ?></div>
             <div class="statCell content"><?php echo $stat['nbAccount'] ?></div>
@@ -47,6 +51,9 @@
             <div class="statCell content"><?php echo $stat['nbAccountInactif'] ?></div>
             <div class="statCell content"><?php echo $stat['nbAccountDecouvert'] ?></div>
             <div class="statCell content"><?php echo $stat['nbAccoutNonDecouvert'] ?></div>
+            <div class="statCell content"><?php echo $stat['sumAccount'] ?></div>
+            <div class="statCell content"><?php echo $stat['nbContractActive'] ?></div>
+            <div class="statCell content"><?php echo $stat['nbContractInactif'] ?></div>
         </div>
 
         <form action="index.php" method="post">

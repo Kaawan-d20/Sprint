@@ -216,8 +216,11 @@ function ctlGetStats($dateStart="", $dateEnd="", $date=""){
     $stat['nbTypeContract'] = modGetNumberContractTypes();
     $stat['nbAccountActive'] = modGetNumberActiveAccounts();
     $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
+    $stat['nbContractActive'] = modGetNumberActiveContracts();
+    $stat['nbContractInactif'] = modGetNumberInactiveContracts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
     $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    $stat['sumAccount'] = modSumAllSolde();
     $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
     $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
     $stat['nbClientAt'] = modGetNumberClientsAt($date);
@@ -341,10 +344,7 @@ function ctlGestionContractDelete($idContract){
 
 
 
-function ctlGetIntituleCategorie($idCategorie){
-    $intitule = modGetIntituleCategorie($idCategorie);
-    return $intitule;
-}
+
 
 
 /**
@@ -422,7 +422,7 @@ function ctlGetOperation($idClient){
 
 
 function ctlDisplayNewClientForm()  {
-    vueDisplayCreateClient(modGetAllConseiller());
+    vueDisplayCreateClient(modGetAllCounselors());
 }
 
 
@@ -450,7 +450,7 @@ function ctlSettingSubmit($idEmploye, $login, $password, $color){
 
 
 function ctlAddContract($idClient){
-    $listTypeContract = modGetAllContractTypes();
+    $listTypeContract = modGetAllContractTypesEnable();
     $listAllClient = modGetAllClients();
     vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
 }
@@ -471,7 +471,7 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
 
 
 function ctlAddAccount($idClient){
-    $listTypeAccount = modGetAllAccountTypes();
+    $listTypeAccount = modGetAllAccountTypesEnable();
     $listAllClient = modGetAllClients();
     vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
 }
@@ -524,7 +524,7 @@ function ctlModifOverdraft($idAccount, $overdraft){
 
 function ctlDisplayAddAppointement($date) {
     $listConseillers = modGetAllCounselors();
-    $listClients = modGetAllClient();
+    $listClients = modGetAllClients();
     $listMotifs = modGetAllMotif();
     vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date);
 }
@@ -633,5 +633,9 @@ function ctlCalendarConseiller($loginEmploye="GayBoi"){
     vueDisplayAgendaConseiller($appointment, $admin);
 }
 
+function ctlGetIntituleCategorie($idCategorie){
+    $intitule = modGetIntituleCategorie($idCategorie);
+    return $intitule;
+}
 
 */
