@@ -560,6 +560,7 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
         $horaireDebut= $date.' '.$heureDebut.':00';
         $horaireFin= $date.' '.$heureFin.':00';
         $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
+        $listTA = modGetTABetweenCounselor($idEmployee,$horaireDebut,$horaireFin);
         foreach ($listAppointement as $appointement){
             if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
@@ -568,6 +569,17 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
             if ($horaireDebut > $appointement->HORAIREDEBUT && $horaireFin < $appointement->HORAIREFIN){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+        }
+        foreach ($listTA as $TA){
+            if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+            if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
+                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+            }
+            if ($horaireDebut > $TA->HORAIREDEBUT && $horaireFin < $TA->HORAIREFIN){
                 throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
             }
         }

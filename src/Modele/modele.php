@@ -880,18 +880,35 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
  */
 function modGetAppoinmentsBetweenCounselor($id,$date1,$date2) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT rdv.IDEMPLOYE,
-    CONCAT(employe.PRENOM," ", employe.NOM) AS identiteEmploye,
-    employe.COLOR,
-    rdv.IDCLIENT,
-    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
-    rdv.HORAIREDEBUT,
-    rdv.HORAIREFIN,
-    motif.INTITULE
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN
     FROM rdv
-    JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
-    JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
-    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
+    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result= $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
+
+/**
+ * renvoie tous les TA entre la première et la deuxième date mises en paramètres,
+ * rien si il n'y en a pas dans la base de données
+ * @param int $id l'id du conseiller
+ * @param string $date1 date de début
+ * @param string $date2 date de fin
+ * @return array tous les TA entre la première et la deuxième date mises en paramètres (HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
+ */
+function modGetTABetweenCounselor($id,$date1,$date2) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN
+    FROM tacheadmin
+    WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
     $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
