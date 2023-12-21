@@ -972,6 +972,7 @@ function modGetClientFromId($idClient) {
 }
 
 
+
 /**
  * renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
  * rien si il n'est pas présent dans la base de données.

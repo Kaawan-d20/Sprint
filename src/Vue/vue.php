@@ -139,6 +139,11 @@ function vueGenerateAdminHTML($TA) {
 
 
 function vueGenerateNavBar() {
+    $datalist = '<input list="listClient" name="idClient" ><datalist id="listClient">';
+    foreach ($_SESSION["listClient"] as $client) {
+        $datalist .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
+    }
+    $datalist .= "</datalist>";
     $navbarHTML = 
     '<div class="navWrapper">
         <nav>
@@ -150,7 +155,7 @@ function vueGenerateNavBar() {
             <div class="searchWrapper">
                 <form action="index.php" method="post">
                     <label for="searchClientByIdField" class="visually-hidden">Chercher un client</label>
-                    <input type="number" name="searchClientByIdField" id="searchClientByIdField" placeholder="Id du client" class="searchField" required="required">
+                    '.$datalist.'
                     <button class="searchButton" name="searchClientBtn" title="Recherche par ID">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
