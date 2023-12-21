@@ -729,16 +729,14 @@ function modDeleteTA($idTA){
 # ----------------------------------------------------------------- APPOINTMENT ---------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
-
-
 /**
- * renvoie tous les rdv entre la première et la deuxième date mises en paramètres,
- * rien si il n'y en a pas dans la base de données
- * @param string $date1 date de début
- * @param string $date2 date de fin
- * @return array tous les rdv entre la première et la deuxième date mises en paramètres (IDEMPLOYE, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE) (tableau d'objets
+ * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres,
+ * Rien si il n'y en a pas dans la base de données
+ * @param string $dateDebut Date de début
+ * @param string $dateFin Date de fin
+ * @return array tous les rdv entre la première et la deuxième date mises en paramètres (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
-function modGetAllAppoinmentsBetween($date1,$date2) {
+function modGetAllAppoinmentsBetween($dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
     CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
@@ -752,10 +750,10 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
     JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
-    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horairedebut>:d1 AND horairedebut<=:d2';
+    JOIN client ON rdv.IDCLIENT=client.IDCLIENT WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
-    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
@@ -765,49 +763,70 @@ function modGetAllAppoinmentsBetween($date1,$date2) {
 
 
 /**
- * renvoie tous les rdv entre la première et la deuxième date mises en paramètres,
- * rien si il n'y en a pas dans la base de données
- * @param int $id l'id du conseiller
- * @param string $date1 date de début
- * @param string $date2 date de fin
- * @return array tous les rdv entre la première et la deuxième date mises en paramètres (IDEMPLOYE, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE) (tableau d'objets
+ * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre,
+ * Rien si il n'y en a pas dans la base de données
+ * @param int $idConseiller L'id du conseiller
+ * @param string $dateDebut Date de début
+ * @param string $dateFin Date de fin
+ * @return array Tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre (HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
  */
-function modGetAppoinmentsBetweenCounselor($id,$date1,$date2) {
+function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM rdv WHERE horairedebut>:d1 AND horairedebut<=:d2 AND idEmploye=:id';
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM rdv WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin AND idEmploye=:idConseiller';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':d1', $date1, PDO::PARAM_STR);
-    $prepared -> bindParam(':d2', $date2, PDO::PARAM_STR);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_INT);
+    $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
+    $prepared -> bindParam(':idConseiller', $idConseiller, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result= $prepared -> fetchAll();
     $prepared -> closeCursor();
-    debug($result);
     return $result;
 }
 
-
 /**
- * cree un nouveau rdv
- * @param int $idM l'id du motif
- * @param int $idC l'id du client
- * @param int $idE l'id de l'employe
- * @param string $hd l'horaire de début
- * @param string $hf l'horaire de fin 
+ * Renvoie tous les rdv du client dont l'id est en paramètre
+ * @param int $id L'id du client
+ * @return array Tous les rdv du client dont l'id est en paramètre (IDRDV, IDMOTIF, IDCLIENT, IDEMPLOYE, HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
  */
-function modAddAppointment($idM,$idC,$idE,$hd,$hf) {
+function modGetAppointmentsClient($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaireDebut,horaireFin) VALUES (:idM,:idC,:idE,:hd,:hf)';
+    $query = 'SELECT * FROM rdv WHERE idClient=:id';
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idM', $idM, PDO::PARAM_INT);
-    $prepared -> bindParam(':idC', $idC, PDO::PARAM_INT);
-    $prepared -> bindParam(':idE', $idE, PDO::PARAM_INT);
-    $prepared -> bindParam(':hd', $hd, PDO::PARAM_STR);
-    $prepared -> bindParam(':hf', $hf, PDO::PARAM_STR);
+    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
 }
 
+/**
+ * Crée un nouveau rdv
+ * @param int $idMotif L'id du motif
+ * @param int $idClient L'id du client
+ * @param int $idEmploye L'id de l'employe
+ * @param string $horaireDebut L'horaire de début
+ * @param string $horaireFin L'horaire de fin 
+ */
+function modAddAppointment($idMotif,$idClient,$idEmploye,$horaireDebut,$horaireFin) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaireDebut,horaireFin) VALUES (:idMotif,:idClient,:idEmploye,:horaireDebut,:horaireFin)';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
+    $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
+    $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
+    $prepared -> bindParam(':horaireDebut', $horaireDebut, PDO::PARAM_STR);
+    $prepared -> bindParam(':horaireFin', $horaireFin, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+/**
+ * Supprime le rdv dont l'id est en paramètre
+ * @param int $idAppointment L'id du rdv
+ * @return void
+ */
 function modDeleteAppointment($idAppointment){
     $connection = Connection::getInstance()->getConnection();
     $query = 'DELETE FROM rdv WHERE idRDV=:idAppointment';
@@ -822,7 +841,7 @@ function modDeleteAppointment($idAppointment){
 # ----------------------------------------------------------------- EMPLOYE ---------------------------------------------------------------- #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
-
+#TODO : Je me suis arrêté ici
 /**
  * renvoie toutes les infos de l'employé dont l'id est en paramètre,
  * rien si il n'est pas présent dans la base de données
@@ -1471,22 +1490,6 @@ function modGetNumberClientsAt($date){
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     return $result->nbClients;
-}
-
-/**
- * renvoie tous les rdv du client dont l'id est en paramètre
- * @param int $id l'id du client
- */
-function modGetAppointmentsClient($id) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM rdv WHERE idClient=:id';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetchAll();
-    $prepared -> closeCursor();
-    return $result;
 }
 
 
