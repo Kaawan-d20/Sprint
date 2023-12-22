@@ -27,8 +27,8 @@ function ctlHome (){
     elseif ($_SESSION["type"] == 3){
         ctlUpdateCalendar(new DateTime("now"));
     }
-    
 }
+
 /**
  * Fonction qui permet de se connecter
  * C'est ici que l'on initialise la session 
@@ -50,9 +50,7 @@ function ctlLogin ($username, $password) {
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
         $_SESSION["name"] = $resultConnnect->NOM;
-        $_SESSION["theme"] = "dark";
         $_SESSION["listClient"] = modGetAllClients();
-        debug("appel de ctlHome");
         ctlHome();
     }
 }
@@ -66,8 +64,6 @@ function ctlLogout() {
     session_destroy();
     vueDisplayLogin();
 }
-
-
 
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
