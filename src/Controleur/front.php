@@ -34,6 +34,22 @@ try {
     elseif (isset($_POST['disconnection'])){ // Si le bouton de déconnexion est cliqué
         ctlLogout();
     }
+    elseif (isset($_POST['addClientBtn'])){ // Si le bouton d'ajout d'un client est cliqué
+        ctlDisplayNewClientForm();
+    }
+    elseif (isset($_POST['createClientBtn'])){ // Si le bouton de validation d'ajout d'un client est cliqué
+        $civilite = $_POST['civiClient'];
+        $name = $_POST['nameClient'];
+        $firstName = $_POST['firstNameClient'];
+        $dateOfBirth = $_POST['dateOfBirthClient'];
+        $address = $_POST['adressClient'];
+        $phone = $_POST['phoneClient'];
+        $email = $_POST['emailClient'];
+        $profession = $_POST['professionClient'];
+        $situation = $_POST['situationClient'];
+        $idEmployee = $_POST['idEmployee'];
+        ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
+    }
     // ------------------------------------------------------- Recherche Client -------------------------------------------------------
     elseif (isset($_POST['advanceSearchClient'])){ // Si le bouton de recherche avancée de client (nom, prénom, date de naissance) est cliqué
         $name = $_POST['searchNameClientField'];
@@ -88,30 +104,31 @@ try {
     elseif (isset($_POST["weekSelectorDateFieldConseiller"])){
         ctlUpdateCalendarConseiller($_POST['weekSelectorDateFieldConseiller']);
     }
-    // ------------------------------------------------------- Création Contrat -------------------------------------------------------
-    elseif (isset($_POST['addContractBtn'])){ // Si le bouton d'ajout de contrat est cliqué
-        $idClient = $_POST['idClient'];
-        ctlAddContract($idClient);
-    }
-    elseif (isset($_POST['createContractBtn'])){ //
-        $idClient = $_POST['idClient'];
-        $idClient2 = $_POST['idClient2'];
-        $monthCost = $_POST['monthCost'];
-        $idTypeContract = $_POST['idTypeContract'];
-        ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
-    }
     // ------------------------------------------------------- Création Compte -------------------------------------------------------
-    elseif (isset($_POST['addAccountBtn'])){
+    elseif (isset($_POST['addAccountBtn'])){ // Si le bouton d'ajout de compte est cliqué
         $idClient = $_POST['idClient'];
         ctlAddAccount($idClient);
     }
-    elseif (isset($_POST['createAccountBtn'])){
+    elseif (isset($_POST['createAccountBtn'])){ // Si le bouton de validation d'ajout de compte est cliqué
         $idClient = $_POST['idClient'];
         $idClient2 = $_POST['idClient2'];
         $monthCost = $_POST['monthCost'];
         $idTypeAccount = $_POST['idTypeAccount'];
         ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2);
     }
+    // ------------------------------------------------------- Création Contrat -------------------------------------------------------
+    elseif (isset($_POST['addContractBtn'])){ // Si le bouton d'ajout de contrat est cliqué
+        $idClient = $_POST['idClient'];
+        ctlAddContract($idClient);
+    }
+    elseif (isset($_POST['createContractBtn'])){ // Si le bouton de validation d'ajout de contrat est cliqué
+        $idClient = $_POST['idClient'];
+        $idClient2 = $_POST['idClient2'];
+        $monthCost = $_POST['monthCost'];
+        $idTypeContract = $_POST['idTypeContract'];
+        ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
+    }
+    
     // ------------------------------------------------------- Paramètres -------------------------------------------------------
     elseif (isset($_POST['settingBtn'])){ // Si le bouton de paramètres est cliqué
         ctlSetting();
@@ -220,32 +237,17 @@ try {
     // ------------------------------------------------------- Conseiller -------------------------------------------------------
     
     
-    // ------------------------------------------------------- Agent -------------------------------------------------------
-    elseif (isset($_POST['addClientBtn'])){
-        ctlDisplayNewClientForm();
-    }
-    elseif (isset($_POST['createClientBtn'])){
-        $civilite = $_POST['civiClient'];
-        $name = $_POST['nameClient'];
-        $firstName = $_POST['firstNameClient'];
-        $dateOfBirth = $_POST['dateOfBirthClient'];
-        $address = $_POST['adressClient'];
-        $phone = $_POST['phoneClient'];
-        $email = $_POST['emailClient'];
-        $profession = $_POST['professionClient'];
-        $situation = $_POST['situationClient'];
-        $idEmployee = $_POST['idEmployee'];
-        ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee);
-    }
-    elseif (isset($_POST['newRDVbtn'])) {
+    // ------------------------------------------------------- RDV -------------------------------------------------------
+    
+    elseif (isset($_POST['newRDVbtn'])) { // Si le bouton de prise de rendez-vous de l'agent est cliqué
         $date = $_POST['newRDVdateField'];
         ctlDisplayAddAppointement($date);
     }
-    elseif (isset($_POST['newRDVConseillerbtn'])) {
+    elseif (isset($_POST['newRDVConseillerbtn'])) { // Si le bouton de prise de rendez-vous du conseiller est cliqué
         $date = $_POST['newRDVdateFieldConseiller'];
         ctlDisplayAddAppointementConseiller($date);
     }
-    elseif (isset($_POST['addAppointementsBtn'])) {
+    elseif (isset($_POST['addAppointementsBtn'])) { // Si le bouton de validation de prise de rendez-vous est cliqué
         $idClient = $_POST['appointementsClientField'];
         $idEmployee = $_POST['appointementsConseillerField'];
         $date = $_POST['appointementsDateField'];
@@ -254,7 +256,12 @@ try {
         $idMotif = $_POST['appointementsMotifField'];
         ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
     }
-    elseif (isset($_POST['addAdminBtn'])) {
+    elseif (isset($_POST['deleteRDVbtn'])) { // Si le bouton de suppression de rendez-vous est cliqué
+        $idRDV = $_POST['idRDVField'];
+        ctlDeleteAppointment($idRDV);
+    }
+    // ------------------------------------------------------- TA -------------------------------------------------------
+    elseif (isset($_POST['addAdminBtn'])) { // Si le bouton de prise de TA est cliqué
         $idEmployee = $_POST['appointementsConseillerField'];
         $date = $_POST['appointementsDateField'];
         $heureDebut = $_POST['appointementsHoraireDebutField'];
@@ -262,15 +269,11 @@ try {
         $libelle = $_POST['adminLibelleField'];
         ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle);
     }
-    elseif (isset($_POST['deleteRDVbtn'])) {
-        $idRDV = $_POST['idRDVField'];
-        ctlDeleteAppointment($idRDV);
-    }
-    elseif (isset($_POST['deleteTAbtn'])){
+    
+    elseif (isset($_POST['deleteTAbtn'])){ // Si le bouton de suppression de TA est cliqué
         $idRDV = $_POST['idTAField'];
         ctlDeleteTA($idRDV);
     }
-    // ------------------------------------------------------- Client -------------------------------------------------------
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{
         ctlHome();
