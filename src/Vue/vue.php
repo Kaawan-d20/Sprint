@@ -688,7 +688,7 @@ function vueDisplaySetting($identity) {
                 <form action="index.php" method="post">
                     <h1>Modifier info personnel</h1>
                     <label for="loginEmployee"  class="visually-hidden">Login :</label>
-                    <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" required>
+                    <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" placeholder="Login" required>
                     <div class="loginFormFieldWrapper">
                         <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
                         <input type="password" name="passwordEmployee" id="passwordEmployee" class="modInfoPasswordField" placeholder="Password" required>
