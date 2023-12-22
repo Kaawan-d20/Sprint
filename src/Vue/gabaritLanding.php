@@ -29,6 +29,9 @@
                     <input type="submit" name="landingSubmitBtn"  id="landingSubmitBtn" value="Connection" class="cta">
                 </div>
             </form>
+            <button class="landingThemeBtn" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">
+                <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
+            </button>
         </div>
         <div>
             <p class="error">

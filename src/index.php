@@ -18,7 +18,19 @@
     <?php require_once 'controleur/front.php'; ?>
 
     <script>
-        let isLightTheme = true;
+        let nom_du_cookie = "Theme=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(nom_du_cookie) == 0) {
+                console.log(c.substring(nom_du_cookie.length, c.length));
+            }
+        }
+        let isLightTheme = c.substring(nom_du_cookie.length, c.length) != "light";
         /** switch beetween light and dark theme */ 
         function toggleTheme() {
             let icon = document.getElementById("themeSwitcherIcon");
@@ -31,16 +43,21 @@
                 btn.setAttribute("title", "Activer le thème Clair")
 
                 isLightTheme = false;
+
+                document.cookie = "Theme=dark; path=/";
             } else {
                 document.body.classList.add("light");
                 document.body.classList.remove("dark");
                 icon.classList.add("fa-moon")
                 icon.classList.remove("fa-sun")
                 btn.setAttribute("title", "Activer le thème Sombre")
-
+                
                 isLightTheme = true;
+                document.cookie = "Theme=light; path=/";
             }
+            
         }
+        toggleTheme();
     </script>
 </body>
 </html>

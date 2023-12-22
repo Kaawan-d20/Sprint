@@ -645,13 +645,6 @@ function ctlDeleteTA($idTA) {
     ctlHome();
 }
 
-
-
-
-
-
-
-
 #ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
 
 /*
