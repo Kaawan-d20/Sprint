@@ -485,17 +485,17 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                             <div></div>
                         </div>';
     foreach ($listTypeAccount as $typeAccount) {
-        $actif = ($typeAccount->ACTIF == 1) ? "actif" : "désactivé";
+        $actif = ($typeAccount->ACTIF == 1) ? "checked" : "";
         $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
                         <input type="text" name="idAccount" class="gestionServiceCell content" value="'.$typeAccount->IDTYPECOMPTE.'" readonly="true">
-                        <div class="gestionServiceCell content">'.$typeAccount->NOM.'</div>
-                        <div class="gestionServiceCell content">'.$actif.'</div>
-                        <div class="gestionServiceCell content">'.$typeAccount->DOCUMENT.'</div>
-                        <button type="submit" name="GestionAccountOneBtn" class="employeBtn">
-                        <i class="fa-solid fa-pen-to-square"></i>Modifier le type de compte
+                        <input type="text" name="nameAccount" class="gestionServiceCell content" value="'.$typeAccount->NOM.'">
+                        <div class="gestionServiceCell content"><input type="checkbox" name="activeAccount" class="gestionServiceCell content" '.$actif.'></div>
+                        <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeAccount->DOCUMENT.'">
+                        <button type="submit" name="ModifAccountOneBtn" class="employeBtn">
+                        <i class="fa-solid fa-pen-to-square"></i> Modifier le type de compte
                         </button>
                         <button type="submit" name="GestionAccountDeleteBtn" class="employeBtn red">
-                            <i class="fa-solid fa-trash-can"></i>Supprimer le type de compte
+                            <i class="fa-solid fa-trash-can"></i> Supprimer le type de compte
                         </button>
                     </form>';
     }
@@ -512,13 +512,13 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                     </div>';
 
     foreach ($listTypeContract as $typeContract) {
-        $actif = ($typeContract->ACTIF == 1) ? "actif" : "désactivé";
+        $actif = ($typeContract->ACTIF == 1) ? "checked" : "";
         $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
                         <input type="text" name="idContract" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
-                        <div class="gestionServiceCell content">'.$typeContract->NOM.'</div>
-                        <div class="gestionServiceCell content">'.$actif.'</div>
-                        <div class="gestionServiceCell content">'.$typeContract->DOCUMENT.'</div>
-                        <button type="submit" name="GestionContractOneBtn" class="employeBtn">
+                        <input type="text" name="nameContract" class="gestionServiceCell content" value="'.$typeContract->NOM.'">
+                        <div class="gestionServiceCell content"><input type="checkbox" name="activeContract" class="gestionServiceCell content" '.$actif.'></div>
+                        <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeContract->DOCUMENT.'">
+                        <button type="submit" name="ModifContractOneBtn" class="employeBtn">
                         <i class="fa-solid fa-pen-to-square"></i>Modifier le type de contrat
                         </button>
                         <button type="submit" name="GestionContractDeleteBtn" class="employeBtn red">

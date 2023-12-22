@@ -101,11 +101,7 @@ try {
     elseif (isset($_POST['GestionPersonnelAllBtn'])){ // Si le bouton de gestion du personnel est cliqué
         ctlGestionPersonnelAll();
     }
-    elseif (isset($_POST['GestionPersonnelOneBtn'])){
-        $idEmployee = $_POST['idEmployee'];
-        ctlGestionPersonnelOne($idEmployee);
-    }
-    elseif (isset($_POST['ModifPersonnelOneBtn'])){
+    elseif (isset($_POST['ModifPersonnelOneBtn'])){ // Si le bouton de modification d'un employé est cliqué
         $idEmployee = $_POST['idEmployee'];
         $name = $_POST['nameEmployee'];
         $firstName = $_POST['firstNameEmployee'];
@@ -115,10 +111,10 @@ try {
         $color = $_POST['colorEmployee'];
         ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color);
     }
-    elseif (isset($_POST['GestionPersonnelAddBtn'])){
+    elseif (isset($_POST['GestionPersonnelAddBtn'])){ // Si le bouton d'ajout d'un employé est cliqué
         ctlGestionPersonnelAdd();
     }
-    elseif (isset($_POST['AddPersonnelSubmitBtn'])){
+    elseif (isset($_POST['AddPersonnelSubmitBtn'])){ // Si le bouton de validation d'ajout d'un employé est cliqué
         $name = $_POST['nameEmployee'];
         $firstName = $_POST['firstNameEmployee'];
         $login = $_POST['loginEmployee'];
@@ -127,12 +123,12 @@ try {
         $color = $_POST['colorEmployee'];
         ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color);
     }
-    elseif (isset($_POST['GestionPersonnelDeleteBtn'])){
+    elseif (isset($_POST['GestionPersonnelDeleteBtn'])){ // Si le bouton de suppression d'un employé est cliqué
         $idEmployee = $_POST['idEmployee'];
         ctlGestionPersonnelDelete($idEmployee);
     }
     // ------------------------------------------------------- Gestion Services -------------------------------------------------------
-    elseif (isset($_POST['GestionServicesAllBtn'])){
+    elseif (isset($_POST['GestionServicesAllBtn'])){ // Si le bouton de gestion des services est cliqué
         ctlGestionServiceslAll();
     }
     elseif (isset($_POST['GestionAccountOneBtn'])){
