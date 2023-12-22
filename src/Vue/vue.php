@@ -204,10 +204,11 @@ function vueGenerateNavBar() {
  * Ne retourne rien
  * @param object $client c'est les données du client
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperationsAccount){
+function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperationsAccount, $listRDVClients){
     $navbar = vueGenerateNavBar();
     // pour faire le select pour le débit / crédit
     $optionSelect = "";
+    $events = "";
     // pour faire la liste des comptes
     if ($_SESSION["type"] == 2) {
         $listA = '<div class="accountCell header">Supression</div>';
@@ -217,6 +218,11 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract,$listOperati
         $listA = '';
         $typeClass = 'agent';
     }
+    debug($listRDVClients);
+    foreach ($listRDVClients as $appointements) {
+        $events .= vueGenerateAppointementHTML($appointements);
+    }
+    $events .= ($events == "") ? '<p style="margin-left:1em;">Pas de rendez-vous.</p>' : "";
     foreach ($listAccounts as $account) {
         $optionSelect .= "<option value=\"".$account->idCompte."\">".$account->NOM.': '. $account->solde ."€</option>";
         $listA .= '<div class="accountCell content">'.$account->NOM.'</div>
