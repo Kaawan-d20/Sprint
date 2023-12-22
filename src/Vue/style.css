@@ -1171,8 +1171,8 @@ nav {
 
 .addContractForm {
     display: flex;
-    gap: 1em;
-    flex-direction: row;
+    gap: .5em;
+    flex-direction: column;
     padding: 1em;
 }
 
@@ -1187,9 +1187,33 @@ nav {
     font-size: var(--classic-font-size);
 }
 
+.addContractField.cta {
+    align-items: center;
+    justify-content: center;
+}
+
 .addContractField:hover {
     background-color: var(--background-secondary);
 
+}
+
+.addContractField input {
+    flex-grow: 1;
+    font-size: var(--classic-font-size);
+    border: 1px solid var(--text);
+    padding: .5em;
+    border-radius: 5px;
+}
+
+.addContractField:hover input {
+    background-color: var(--background-secondary);
+}
+
+.addContractWrapper {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* UTILITY */
