@@ -47,10 +47,14 @@
         
 
         <div>
-            <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
-                <input type="date" name="datedebut" class="weekSelectorDateField"  title="Selectionner une semaine">
-                <input type="date" name="datefin" class="weekSelectorDateField"  title="Selectionner une semaine">
-                <button type="submit" name="searchStatClient1" class="gestionBtn">Rechercher</button>
+            <h1>Nombre de contrat & RDV sur une période</h1>
+            <form action="index.php" method="post" class="statForm">
+                <input type="date" name="datedebut" class="statDateField"  title="Selectionner une date de début" required>
+                <input type="date" name="datefin" class="statDateField"  title="Selectionner une date de fin" required>
+                <button type="submit" name="searchStatClient1" class="statBtn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Rechercher
+                </button>
             </form>
         </div>
 
@@ -58,12 +62,12 @@
 
 
         <p></p>
-        <div class="statTableWrapper">
-            <div class="statCell header">Nombre de RDV entre deux dates</div>
-            <div class="statCell header">Nombre de Contrat souscrit entre deux dates</div>
-
-            <div class="statCell content"><?php echo $stat['AppoinmentBetween'] ?></div>
-            <div class="statCell content"><?php echo $stat['ContractBetween'] ?></div>
+        <div class="statResultTableWrapper">
+            <div class="statResultCell header">Nombre de RDV entre deux dates</div>
+            <div class="statResultCell content"><?php echo $stat['AppoinmentBetween'] ?></div>
+            
+            <div class="statResultCell header">Nombre de Contrat souscrit entre deux dates</div>
+            <div class="statResultCell content"><?php echo $stat['ContractBetween'] ?></div>
         </div>
         <p></p>
 
@@ -71,9 +75,13 @@
 
 
         <div>
-            <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
-                <input type="date" name="date" class="weekSelectorDateField"  title="Selectionner une semaine">
-                <button type="submit" name="searchStatClient1" class="gestionBtn">Rechercher</button>
+            <h1>Nombre de Clients à une date</h1>
+            <form action="index.php" method="post" class="statForm">
+                <input type="date" name="date" class="statDateField"  title="Selectionner une semaine">
+                <button type="submit" name="searchStatClient1" class="statBtn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Rechercher
+                </button>
             </form>
         </div>
 
@@ -82,13 +90,14 @@
 
 
         <p></p>
-        <div class="statTableWrapper">
-            <div class="statCell header">Nombre de Client à une date</div>
+        <div class="statResultTableWrapper">
+            <div class="statResultCell header">Nombre de Client à une date</div>
 
-            <div class="statCell content"><?php echo $stat['nbClientAt'] ?></div>
+            <div class="statResultCell content"><?php echo $stat['nbClientAt'] ?></div>
         </div>
         <p></p>
         <div>
+            <h1>Gestion de la Banque</h1>
             <form action="index.php" method="post" class="gestionForm">
                 <button type="submit" name="GestionPersonnelAllBtn" class="gestionBtn">Gestion du Personnel</button>
                 <button type="submit" name="GestionServicesAllBtn" class="gestionBtn">Gestion des Services</button>
