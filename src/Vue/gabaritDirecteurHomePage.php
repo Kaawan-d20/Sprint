@@ -9,20 +9,8 @@
     <div class="directeurWrapper">
     <?php echo $navbar ?>
     <div class="statWrapper">
-        <h1>Statistiques globales
-        </h1>
-        <!-- <p>Nombre de clients : <?php echo $stat['nbClient'] ?></p>
-        <p>Nombre de comptes : <?php echo $stat['nbAccount'] ?></p>
-        <p>Nombre de contrats : <?php echo $stat['nbContract'] ?></p>
-        <p>Nombre de conseillers : <?php echo $stat['nbConseiller'] ?></p>
-        <p>Nombre d'agents : <?php echo $stat['nbAgent'] ?></p>
-        <p>Nombre de types de compte : <?php echo $stat['nbTypeAccount'] ?></p>
-        <p>Nombre de types de contrat : <?php echo $stat['nbTypeContract'] ?></p>
-        <p>Nombre de comptes actifs : <?php echo $stat['nbAccountActive'] ?></p>
-        <p>Nombre de comptes inactifs : <?php echo $stat['nbAccountInactif'] ?></p>
-        <p>Nombre de comptes à découvert : <?php echo $stat['nbAccountDecouvert'] ?></p>
-        <p>Nombre de comptes non à découvert : <?php echo $stat['nbAccoutNonDecouvert'] ?></p> -->
-        
+        <h1>Statistiques globales</h1>
+        <p></p>
         <div class="statTableWrapper">
             <div class="statCell header">Nombre de clients</div>
             <div class="statCell header">Nombre de comptes</div>
@@ -55,21 +43,51 @@
             <div class="statCell content"><?php echo $stat['nbContractActive'] ?></div>
             <div class="statCell content"><?php echo $stat['nbContractInactif'] ?></div>
         </div>
+        <p></p>
+        
 
-        <form action="index.php" method="post">
-            <label >Date de début </label><input type="date" name="datedebut">
-            <label > Date de fin </label><input type="date" name="datefin">
-            <input type="submit" name='searchStatClient2'value="Rechercher">
-            <p>Nombre de RDV entre deux dates : <?php echo $stat['AppoinmentBetween'] ?></p>
-            <p>Nombre de Contrat souscrit entre deux dates : <?php echo $stat['ContractBetween'] ?></p>
-        </form>
-        <form action="index.php" method="post">
-            <label >Date </label>
-            <input type="date" name="date">
-            <input type="submit" name='searchStatClient1' value="Rechercher">
-            <p>Nombre de Client à une date <?php echo $stat['nbClientAt'] ?></p>
+        <div>
+            <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
+                <input type="date" name="datedebut" class="weekSelectorDateField"  title="Selectionner une semaine">
+                <input type="date" name="datefin" class="weekSelectorDateField"  title="Selectionner une semaine">
+                <button type="submit" name="searchStatClient1" class="gestionBtn">Rechercher</button>
+            </form>
+        </div>
 
-        </form>
+
+
+
+        <p></p>
+        <div class="statTableWrapper">
+            <div class="statCell header">Nombre de RDV entre deux dates</div>
+            <div class="statCell header">Nombre de Contrat souscrit entre deux dates</div>
+
+            <div class="statCell content"><?php echo $stat['AppoinmentBetween'] ?></div>
+            <div class="statCell content"><?php echo $stat['ContractBetween'] ?></div>
+        </div>
+        <p></p>
+
+
+
+
+        <div>
+            <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
+                <input type="date" name="date" class="weekSelectorDateField"  title="Selectionner une semaine">
+                <button type="submit" name="searchStatClient1" class="gestionBtn">Rechercher</button>
+            </form>
+        </div>
+
+
+
+
+
+        <p></p>
+        <div class="statTableWrapper">
+            <div class="statCell header">Nombre de Client à une date</div>
+
+            <div class="statCell content"><?php echo $stat['nbClientAt'] ?></div>
+        </div>
+        <p></p>
         <div>
             <form action="index.php" method="post" class="gestionForm">
                 <button type="submit" name="GestionPersonnelAllBtn" class="gestionBtn">Gestion du Personnel</button>
