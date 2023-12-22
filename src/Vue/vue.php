@@ -419,7 +419,7 @@ function vueGenerateGestionEmployeRow($employee) {
             <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
             <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
             <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
-            <input type="password" name="passwordEmployee" class="employeCell content" value="'.$employee->PASSWORD.'">
+            <input type="password" name="passwordEmployee" class="employeCell content" value="">
             <select name="colorEmployee" class="employeCell content">
                 '.$selectOptions.'
             </select>

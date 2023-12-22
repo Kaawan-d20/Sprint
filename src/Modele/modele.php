@@ -854,7 +854,7 @@ function modGetEmployeFromId($idEmploye) {
  */
 function modGetAllEmployes() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, COLOR FROM employe';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, COLOR FROM employe';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();

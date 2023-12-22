@@ -11,46 +11,57 @@ if(session_status() === PHP_SESSION_NONE) {
 
 try {
     // ------------------------------------------------------- Landing Page -------------------------------------------------------
-    if (isset($_POST['landingSubmitBtn'])){
+    if (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
         ctlLogin($username, $password);
     }
-    // ------------------------------------------------------- General -------------------------------------------------------
-    elseif (isset($_POST['searchClientBtn'])){
+    // ------------------------------------------------------- Nav Bar -------------------------------------------------------
+    elseif (isset($_POST['searchClientBtn'])){ // Si le bouton de recherche de client par id (datalist) est cliqué
         $idClient = $_POST['searchClientByIdField'];
         ctlSearchIdClient($idClient);
     }
-    elseif (isset($_POST['advancedSearchBtn'])){
+    elseif (isset($_POST['advancedSearchBtn'])){ // Si le bouton de recherche avancée de client est cliqué
         vueDisplayAdvanceSearchClient();
     }
-    elseif (isset($_POST['advanceSearchClient'])){
+    elseif (isset($_POST['disconnection'])){ // Si le bouton de déconnexion est cliqué
+        ctlLogout();
+    }
+    // ------------------------------------------------------- Recherche Client -------------------------------------------------------
+    elseif (isset($_POST['advanceSearchClient'])){ // Si le bouton de recherche avancée de client (nom, prénom, date de naissance) est cliqué
         $name = $_POST['searchNameClientField'];
         $firstName = $_POST['searchFirstNameClientField'];
         $dateOfBirth = $_POST['searchBirthClientField'];
         cltAdvanceSearchClient($name, $firstName, $dateOfBirth);
     }
-    elseif (isset($_POST['disconnection'])){
-        ctlLogout();
+    elseif (isset($_POST['infoClientFromAdvancedBtn'])){ // Si le bouton d'information client (synthése) est cliqué
+        $idClient = $_POST['idClient'];
+        ctlSearchIdClient($idClient);
     }
-    elseif (isset($_POST['debitBtn'])){
+    // ------------------------------------------------------- Informations Client -------------------------------------------------------
+    elseif (isset($_POST['debitBtn'])){ // Si le bouton de débit est cliqué
         $idAccount = $_POST['debitAccountSelector'];
         $amount = $_POST['amountInput'];
         ctlDebit($idAccount, $amount);
     }
-    elseif (isset($_POST['creditBtn'])){
+    elseif (isset($_POST['creditBtn'])){// Si le bouton de crédit est cliqué
         $idAccount = $_POST['debitAccountSelector'];
         $amount = $_POST['amountInput'];
         ctlCredit($idAccount, $amount);
     }
-    elseif (isset($_POST['infoClientFromAdvancedBtn'])){
-        $idClient = $_POST['idClient'];
-        ctlSearchIdClient($idClient);
+    elseif (isset($_POST['deleteAccountBtn'])){ // Si le bouton de suppression de compte est cliqué
+        $idAccount = $_POST['idAccount'];
+        ctlDeleteAccount($idAccount);
     }
-    elseif (isset($_POST['weekSelectorPrevious'])){
+    elseif (isset($_POST['deleteContractBtn'])){ // Si le bouton de suppression de contrat est cliqué
+        $idContract = $_POST['idContract'];
+        ctlDeleteContract($idContract);
+    }
+    // ------------------------------------------------------- Agenda -------------------------------------------------------
+    elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente est cliqué
         ctlUpdateCalendar($_POST['previousWeekDate']);
     }
-    elseif (isset($_POST['weekSelectorNext'])){
+    elseif (isset($_POST['weekSelectorNext'])){ // Si le bouton de semaine suivante est cliqué
         ctlUpdateCalendar($_POST['nextWeekDate']);
     }
     elseif (isset($_POST['weekSelectorPreviousConseiller'])){
@@ -65,36 +76,29 @@ try {
     elseif (isset($_POST["weekSelectorDateFieldConseiller"])){
         ctlUpdateCalendarConseiller($_POST['weekSelectorDateFieldConseiller']);
     }
-    elseif (isset($_POST['settingBtn'])){
+    // ------------------------------------------------------- Paramètres -------------------------------------------------------
+    elseif (isset($_POST['settingBtn'])){ // Si le bouton de paramètres est cliqué
         ctlSetting();
     }
-    elseif (isset($_POST['ModifSettingOneBtn'])){
+    elseif (isset($_POST['ModifSettingOneBtn'])){ // Si le bouton de modification des paramètres (formulaire) est cliqué
         $login = $_POST['loginEmployee'];
         $password = $_POST['passwordEmployee'];
         $color = $_POST['colorEmployee'];
         ctlSettingSubmit($_SESSION["idEmploye"], $login, $password, $color);
     }
-    elseif (isset($_POST['deleteAccountBtn'])){
-        $idAccount = $_POST['idAccount'];
-        ctlDeleteAccount($idAccount);
-    }
-    elseif (isset($_POST['deleteContractBtn'])){
-        $idContract = $_POST['idContract'];
-        ctlDeleteContract($idContract);
-    }
      // ------------------------------------------------------- Directeur -------------------------------------------------------
     // ------------------------------------------------------- Statistique -------------------------------------------------------
-    elseif (isset($_POST['searchStatClient2'])){
+    elseif (isset($_POST['searchStatClient2'])){ // Si le bouton de recherche de statistique entre deux dates est cliqué
         $dateStart=$_POST['datedebut'];
         $dateEnd=$_POST['datefin'];
         ctlStatsDisplay($dateStart, $dateEnd);
     }
-    elseif (isset($_POST['searchStatClient1'])){
+    elseif (isset($_POST['searchStatClient1'])){ // Si le bouton de recherche de statistique à partir d'une date est cliqué
         $dateStart=$_POST['date'];
         ctlStatsDisplay("","",$dateStart);
     }
     // ------------------------------------------------------- Gestion Personnel -------------------------------------------------------
-    elseif (isset($_POST['GestionPersonnelAllBtn'])){
+    elseif (isset($_POST['GestionPersonnelAllBtn'])){ // Si le bouton de gestion du personnel est cliqué
         ctlGestionPersonnelAll();
     }
     elseif (isset($_POST['GestionPersonnelOneBtn'])){
