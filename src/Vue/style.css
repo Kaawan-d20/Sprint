@@ -468,7 +468,7 @@ nav {
     padding: .5em;
     width: 100%;
     background-color: var(--invalid-red);
-    color: var(--background);
+    color: var(--white);
     margin-bottom: 1em;
 }
 
@@ -543,6 +543,7 @@ nav {
 
 .content {
     font-family: var(--mono-font);
+    color: var(--text);
     background-color: var(--background);
     border: none;
     outline: none;
@@ -648,7 +649,22 @@ nav {
     font-size: var(--small-font-size);
 }
 
+.accountCell.content {
+    display: flex;
+    gap: .5em;
+}
 
+.accountCell.content input, .accountCell.content button {
+    padding: .5em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.accountCell.content input:hover {
+    background-color: var(--background-secondary);
+}
 
 .contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper, .rechercheOutputTableWrapper, .statTableWrapper {
     border: 1px solid var(--text);
@@ -708,6 +724,7 @@ nav {
 .debitAccountSelector {
     background-color: var(--background);
     border: 1px solid var(--text);
+    color: var(--text);
     border-radius: 5px;
     padding: .5em;
     font-family: var(--mono-font);
@@ -727,6 +744,7 @@ nav {
     border: 1px solid var(--text);
     padding: .5em;
     background-color: var(--background);
+    color: var(--text);
     border-radius: 5px;
     font-family: var(--mono-font);
     font-size: var(--classic-font-size);
@@ -751,6 +769,7 @@ nav {
 .amountInput {
     border: none;
     background-color: var(--background);
+    color: var(--text-secondary);
     outline: none;
     flex-grow: 1;
 }
@@ -890,6 +909,7 @@ nav {
     margin-left: -1em;
     flex-grow: 1;
     background-color: var(--background);
+    color: var(--text);
     font-family: var(--mono-font);
     border: none;
     padding: 1em;
@@ -988,18 +1008,22 @@ nav {
 
 .gestionPersonnelAddForm {
     padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gestionPersonnelAddForm div {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
     gap: .5em;
 }
 
 .gestionPersonnelAddInput {
     background-color: var(--background);
     border: 1px solid var(--text);
+    color: var(--text);
     padding: 1em;
     border-radius: 5px;
     font-family: var(--mono-font);
@@ -1181,6 +1205,7 @@ nav {
     border-radius: 5px;
     border: 1px solid var(--text);
     background-color: var(--background);
+    color: var(--text);
     display: flex;
     gap: .5em;
     align-items: center;
@@ -1201,11 +1226,13 @@ nav {
     flex-grow: 1;
     font-size: var(--classic-font-size);
     border: 1px solid var(--text);
+    background-color: var(--background);
+    color: var(--text);
     padding: .5em;
     border-radius: 5px;
 }
 
-.addContractField:hover input {
+.addContractField input:hover {
     background-color: var(--background-secondary);
 }
 
@@ -1311,6 +1338,34 @@ input[type="number"] {
     background-color: #FF5387;
 }
 
+.sunny-orange-text {
+    color: #FF9F1C;
+}
+.turquoise-cyan-text {
+    color: #41EAD4;
+}
+.berry-red-text {
+    color: #F71735;
+}
+.lush-green-text {
+    color: #9EFF1C;
+}
+.lavender-text {
+    color: #B57DFF;
+}
+.lemon-yellow-text {
+    color: #FFFF4D;
+}
+.royal-purple-text {
+    color: #D441EA;
+}
+.ocean-blue-text {
+    color: #1C7DFF;
+}
+.coral-pink-text {
+    color: #FF5387;
+}
+
 .hidden  {
     display: none;
 }
@@ -1327,7 +1382,7 @@ input[type="number"] {
     color: var(--dark-spring-green);
 }
 .red {
-    color: var(--invalid-red);
+    color: var(--invalid-red)!important;
 }
 
 /* MEDIA QUERIES */

@@ -230,13 +230,19 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
             <form action="index.php" method="post" class="accountCell content">
                 <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
-                <input type="submit" value="Modifier le découvert" name="modifOverdraftBtn">
+                <button type="submit" name="modifOverdraftBtn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Modifier le découvert
+                </button>
             </form>';
         if ($_SESSION["type"] == 2) {
             $listA.='
             <form action="index.php" method="post" class="accountCell content">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
-                <input type="submit" value="Supprimer le compte" name="deleteAccountBtn">
+                <button type="submit" name="deleteAccountBtn" class="red">
+                    <i class="fa-solid fa-trash-can"></i>
+                    Supprimer le compte
+                </button>
             </form>';
         }
     }  
@@ -410,7 +416,7 @@ function vueGenerateGestionEmployeRow($employee) {
     $selectOptions = "";
     foreach ($colors as $color) {
         $selected = ($employee->COLOR == $color) ? "selected" : "";
-        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
+        $selectOptions .= '<option value="'.$color.'"'.$selected.' class="'.$color.'-text'.'>'.$color.'</option>';
     }
     $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
     $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
@@ -451,11 +457,11 @@ function vueDisplayGestionPersonnelAdd(){
     ];
     $selectOptions = "";
     foreach ($colors as $color) {
-        $selectOptions .= '<option value="'.$color.'">'.$color.'</option>';
+        $selectOptions .= '<option value="'.$color.'" class="'.$color.'-text'.'>'.$color.'</option>';
     }
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
-                    <h1>Ajouter un employé</h1>
                     <div>
+                        <h1>Ajouter un employé</h1>
                         <select name="idCategorie" class="gestionPersonnelAddInput" required>
                             <option value="1" >Directeur</option>
                             <option value="2" >Conseiller</option>
@@ -548,8 +554,8 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
 function vueDisplayGestionServicesAdd(){
     $navbar = vueGenerateNavBar();
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
-                <h1>Ajouter un service</h1>
                     <div>
+                        <h1>Ajouter un service</h1>
                         <select name="typeService" class="gestionPersonnelAddInput" required>
                             <option value="1" >Compte</option>
                             <option value="2" >Contrat</option>
@@ -570,8 +576,8 @@ function vueDisplayGestionAccountOne($account) {
     $navbar = vueGenerateNavBar();
     $etat=$account->ACTIF==1 ? "checked": "";
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
-                <h1>Modifier info type compte</h1>
                 <div>
+                    <h1>Modifier info type compte</h1>
                     <input type="text" name="nameAccount" value="'.$account->NOM.'" class="gestionPersonnelAddInput">
                     <input type="text" name="documentAccount" value="'.$account->DOCUMENT.'" class="gestionPersonnelAddInput">
                     <div class="gestionPersonnelAddInput">
@@ -591,8 +597,8 @@ function vueDisplayGestionContractOne($contract) {
     $navbar = vueGenerateNavBar();
     $etat=$contract->ACTIF==1 ? "checked": "";
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
-                <h1>Modifier info type Contrat</h1>
                 <div>
+                    <h1>Modifier info type Contrat</h1>
                     <input type="text" name="nameAccount" value="'.$contract->NOM.'" class="gestionPersonnelAddInput">
                     <input type="text" name="documentAccount" value="'.$contract->DOCUMENT.'" class="gestionPersonnelAddInput">
                     <div class="gestionPersonnelAddInput">
@@ -682,7 +688,7 @@ function vueDisplaySetting($identity) {
     $selectOptions = "";
     foreach ($colors as $color) {
         $selected = ($identity->COLOR == $color) ? "selected" : "";
-        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
+        $selectOptions .= '<option value="'.$color.'"'.$selected.' class="'.$color.'-text'.'">'.$color.'</option>';
     }
     $content='<div class="modInfoWrapper">
                 <form action="index.php" method="post">
