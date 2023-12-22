@@ -687,7 +687,7 @@ function modGetAllTABetween($dateDebut,$dateFin) {
  * @param string $libelle Le libelle
  * @return void
  */
-function modCreateAdmin($idEmploye,$horaireDebut,$horaireFin,$libelle) {
+function modCreateTA($idEmploye,$horaireDebut,$horaireFin,$libelle) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'INSERT INTO tacheAdmin(idEmploye,horaireDebut,horaireFin,libelle) VALUES (:idEmploye,:horaireDebut,:horaireFin,:libelle)';
     $prepared = $connection -> prepare($query);

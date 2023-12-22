@@ -624,7 +624,7 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
                 throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
             }
         }
-        modCreateAdmin($idEmployee, $horaireDebut, $horaireFin, $libelle);
+        modCreateTA($idEmployee, $horaireDebut, $horaireFin, $libelle);
         ctlHome();
     }
 }
