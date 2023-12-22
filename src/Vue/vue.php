@@ -514,14 +514,14 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
     foreach ($listTypeContract as $typeContract) {
         $actif = ($typeContract->ACTIF == 1) ? "actif" : "désactivé";
         $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
-                        <input type="text" name="idAccount" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
+                        <input type="text" name="idContract" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
                         <div class="gestionServiceCell content">'.$typeContract->NOM.'</div>
                         <div class="gestionServiceCell content">'.$actif.'</div>
                         <div class="gestionServiceCell content">'.$typeContract->DOCUMENT.'</div>
-                        <button type="submit" name="GestionAccountOneBtn" class="employeBtn">
+                        <button type="submit" name="GestionContractOneBtn" class="employeBtn">
                         <i class="fa-solid fa-pen-to-square"></i>Modifier le type de contrat
                         </button>
-                        <button type="submit" name="GestionAccountDeleteBtn" class="employeBtn red">
+                        <button type="submit" name="GestionContractDeleteBtn" class="employeBtn red">
                             <i class="fa-solid fa-trash-can"></i>Supprimer le type de contrat
                         </button>
                     </form>';
@@ -605,8 +605,7 @@ function vueDisplayGestionContractOne($contract) {
  * @param string $error
  */
 function vueDisplayError ($error) {
-    $navbar = vueGenerateNavBar();
-    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir au forum </a></p>";
+    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir à l'acceuil </a></p>";
     require_once('gabaritErreur.php');
 }
 
