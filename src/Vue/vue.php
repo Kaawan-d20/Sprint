@@ -491,6 +491,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                         <input type="text" name="nameAccount" class="gestionServiceCell content" value="'.$typeAccount->NOM.'">
                         <div class="gestionServiceCell content"><input type="checkbox" name="activeAccount" class="gestionServiceCell content" '.$actif.'></div>
                         <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeAccount->DOCUMENT.'">
+                        <input type="hidden" name="idMotif" value="'.$typeAccount->IDMOTIF.'" class="gestionPersonnelAddInput">
                         <button type="submit" name="ModifAccountOneBtn" class="employeBtn">
                         <i class="fa-solid fa-pen-to-square"></i> Modifier le type de compte
                         </button>
@@ -517,7 +518,8 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
                         <input type="text" name="idContract" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
                         <input type="text" name="nameContract" class="gestionServiceCell content" value="'.$typeContract->NOM.'">
                         <div class="gestionServiceCell content"><input type="checkbox" name="activeContract" class="gestionServiceCell content" '.$actif.'></div>
-                        <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeContract->DOCUMENT.'">
+                        <input type="text" name="documentContract" class="gestionServiceCell content" value="'.$typeContract->DOCUMENT.'">
+                        <input type="hidden" name="idMotif" value="'.$typeContract->IDMOTIF.'" class="gestionPersonnelAddInput">
                         <button type="submit" name="ModifContractOneBtn" class="employeBtn">
                         <i class="fa-solid fa-pen-to-square"></i>Modifier le type de contrat
                         </button>
