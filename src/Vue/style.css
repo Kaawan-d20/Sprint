@@ -1264,6 +1264,43 @@ nav {
     background-color: var(--background-secondary);
 }
 
+.statDateField, .statBtn {
+    background-color: var(--background);
+    color: var(--text);
+    padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.statDateField:hover, .statBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.statForm {
+    display: flex;
+    gap: .5em;
+}
+
+.statResultTableWrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+}
+
+.statResultCell.content:nth-child(2):not(:last-child) {
+    border-bottom: 1px solid var(--text);
+    border-radius: 0 5px 0 0;
+}
+
+.statResultCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.statResultCell.content:nth-child(2):last-child {
+    border-radius: 0 5px 5px 0;
+}
+
 /* UTILITY */
 
 .cta {
