@@ -1216,6 +1216,27 @@ nav {
     align-items: center;
 }
 
+.landingThemeBtn {
+    position: absolute;
+    min-height: 62px;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    bottom: 1em;
+    right: 1em;
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+    font-size: var(--big-font-size);
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.landingThemeBtn:hover {
+    background-color: var(--background-secondary);
+}
+
 /* UTILITY */
 
 .cta {

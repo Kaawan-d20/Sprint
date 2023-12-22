@@ -52,7 +52,7 @@
             <div class="RDVSectionWrapper">
                 <h1>Liste des RDV du client:</h1>
                 <div class="RDVWrapper">
-
+                    <?php echo $events; ?>
                 </div>
             </div>
         </div>

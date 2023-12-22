@@ -760,7 +760,16 @@ function modGetAllAppoinmentsBetween($dateDebut,$dateFin) {
  */
 function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM rdv WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin AND idEmploye=:idConseiller';
+    $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
+    CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
+    employe.COLOR, rdv.IDCLIENT,
+    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    rdv.HORAIREDEBUT, rdv.HORAIREFIN, motif.INTITULE, motif.DOCUMENT
+    FROM rdv
+    JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
+    JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
+    JOIN client ON rdv.IDCLIENT=client.IDCLIENT
+    WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin AND rdv.idEmploye=:idConseiller';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
@@ -772,6 +781,7 @@ function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     return $result;
 }
 
+
 /**
  * Renvoie tous les rdv du client dont l'id est en paramètre
  * @param int $id L'id du client
@@ -779,7 +789,16 @@ function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
  */
 function modGetAppointmentsClient($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM rdv WHERE idClient=:id';
+    $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
+    CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
+    employe.COLOR, rdv.IDCLIENT,
+    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    rdv.HORAIREDEBUT, rdv.HORAIREFIN, motif.INTITULE, motif.DOCUMENT
+    FROM rdv
+    JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
+    JOIN motif ON rdv.IDMOTIF=motif.IDMOTIF
+    JOIN client ON rdv.IDCLIENT=client.IDCLIENT
+    WHERE rdv.idClient=:id AND rdv.HORAIREDEBUT>=NOW();';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();

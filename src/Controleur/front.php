@@ -8,8 +8,15 @@ if(session_status() === PHP_SESSION_NONE) {
 }
 
 
-
 try {
+    // ------------------------------------------------------- Theme -------------------------------------------------------
+    if(!isset($_COOKIE["Theme"])) {
+        setcookie("Theme", "light", [
+            'expires' => time() + (86400 * 30),
+            'path' => '/',
+            'samesite' => 'Lax', // You can use 'Strict', 'Lax', or 'None'
+        ]);
+    }
     // ------------------------------------------------------- Landing Page -------------------------------------------------------
     if (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
         $username = $_POST['landingLoginField'];

@@ -86,7 +86,7 @@ function ctlSearchIdClient($idClient){
             throw new Exception('Aucun client trouvé');
         }
         else{
-            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient));
+            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
         }
     }
 }
@@ -169,7 +169,7 @@ function ctlDebit($idAccount, $amount){
     }
     modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
     $client = modGetClientFromId($account->idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient));
 }
 /**
  * Fonction qui permet de créditer un compte
@@ -181,7 +181,7 @@ function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
     $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
 }
 
 /**
@@ -644,13 +644,6 @@ function ctlDeleteTA($idTA) {
     modDeleteTA($idTA);
     ctlHome();
 }
-
-
-
-
-
-
-
 
 #ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
 
