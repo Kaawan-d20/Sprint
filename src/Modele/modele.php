@@ -853,11 +853,11 @@ function modDeleteAppointment($idAppointment){
  * Renvoie toutes les infos de l'employé dont l'id est en paramètre,
  * Rien si il n'est pas présent dans la base de données
  * @param string $idEmploye L'id de l'employé
- * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, COLOR)
+ * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, COLOR)
  */
 function modGetEmployeFromId($idEmploye) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, COLOR FROM employe WHERE idEmploye=:idEmploye';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, COLOR FROM employe WHERE idEmploye=:idEmploye';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_STR);
     $prepared -> execute();
