@@ -449,7 +449,7 @@ function ctlDisplayNewClientForm()  {
 
 
 function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
-    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, date("Y-m-d"), $address, $phone, $email, $profession, $situation,$civilite);
+    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
     ctlHome();
 }
 
