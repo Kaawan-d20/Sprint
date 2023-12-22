@@ -416,8 +416,9 @@ function vueGenerateGestionEmployeRow($employee) {
     $selectOptions = "";
     foreach ($colors as $color) {
         $selected = ($employee->COLOR == $color) ? "selected" : "";
-        $selectOptions .= '<option value="'.$color.'"'.$selected. ' class="'.$color.'-text'.'">'.$color.'</option>';
+        $selectOptions .= '<option value="'.$color.'"'.$selected.'>'.$color.'</option>';
     }
+
     $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
     $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
     $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
