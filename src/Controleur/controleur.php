@@ -32,10 +32,10 @@ function ctlHome (){
 /**
  * Fonction qui permet de se connecter
  * C'est ici que l'on initialise la session 
- * @param string $username c'est le nom d'utilisateur qui est le login dans la base de données
- * @param string $password c'est le mot de passe de l'utilisateur mais il est hashé et salé
- * @throws Exception si le login ou le mot de passe est incorrect
- * @throws Exception si le login ou le mot de passe est vide
+ * @param string $username C'est le nom d'utilisateur qui est le login dans la base de données
+ * @param string $password C'est le mot de passe de l'utilisateur mais il est hashé et salé
+ * @throws Exception Si le login ou le mot de passe est incorrect
+ * @throws Exception Si le login ou le mot de passe est vide
  * @return void
  */
 function ctlLogin ($username, $password) {
@@ -50,6 +50,7 @@ function ctlLogin ($username, $password) {
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
         $_SESSION["name"] = $resultConnnect->NOM;
+        $_SESSION["firstName"] = $resultConnnect->PRENOM;
         $_SESSION["listClient"] = modGetAllClients();
         ctlHome();
     }
@@ -67,9 +68,9 @@ function ctlLogout() {
 
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
- * @param int $idClient c'est l'id du client
- * @throws Exception si l'id est vide
- * @throws Exception si aucun client n'est trouvé
+ * @param int $idClient C'est l'id du client
+ * @throws Exception Si l'id est vide
+ * @throws Exception Si aucun client n'est trouvé
  * @return void
  */
 function ctlSearchIdClient($idClient){
@@ -89,36 +90,36 @@ function ctlSearchIdClient($idClient){
 
 /**
  * Fonction qui permet de chercher un client en fonction de son nom, prénom et date de naissance
- * @param string $nameClient c'est le nom du client
- * @param string $firstNameClient c'est le prénom du client
- * @param string $dateOfBirth c'est la date de naissance du client
- * @throws Exception si tous les champs sont vides
- * @throws Exception si aucun client n'est trouvé
+ * @param string $nameClient C'est le nom du client
+ * @param string $firstNameClient C'est le prénom du client
+ * @param string $dateOfBirth C'est la date de naissance du client
+ * @throws Exception Si tous les champs sont vides
+ * @throws Exception Si aucun client n'est trouvé
  * @return void
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
-    if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // aucun champ rempli
+    if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // Aucun champ rempli
         throw new Exception('Veuillez remplir tous les champs');
     }
-    elseif (!empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // il y a tout de rempli
+    elseif (!empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // Il y a tout de rempli
         $listClient=modAdvancedSearchClientABC($nameClient, $firstNameClient, $dateOfBirth);
     }
-    elseif (!empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom et le prénom
+    elseif (!empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // Il y a que le nom et le prénom
         $listClient=modAdvancedSearchClientAB($nameClient, $firstNameClient);
     }
-    elseif (!empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que le nom et la date de naissance
+    elseif (!empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // Il y a que le nom et la date de naissance
         $listClient=modAdvancedSearchClientAC($nameClient, $dateOfBirth);
     }
-    elseif (empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que le prénom et la date de naissance
+    elseif (empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // Il y a que le prénom et la date de naissance
         $listClient=modAdvancedSearchClientBC($firstNameClient, $dateOfBirth);
     }
-    elseif (!empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le nom
+    elseif (!empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)){ // Il y a que le nom
         $listClient=modAdvancedSearchClientA($nameClient);
     }
-    elseif (empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // il y a que le prénom
+    elseif (empty($nameClient) && !empty($firstNameClient) && empty($dateOfBirth)){ // Il y a que le prénom
         $listClient=modAdvancedSearchClientB($firstNameClient);
     }
-    elseif (empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // il y a que la date de naissance
+    elseif (empty($nameClient) && empty($firstNameClient) && !empty($dateOfBirth)){ // Il y a que la date de naissance
         $listClient=modAdvancedSearchClientC($dateOfBirth);
     }
     if (empty($listClient)){
@@ -129,12 +130,10 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     }
 }
 
-
-
 /**
  * Fonction qui permet d'obtenir la liste des compte d'un client
- * @param int $idClient c'est l'id du client
- * @return array c'est la liste des comptes du client (c'est un tableau d'objet)
+ * @param int $idClient C'est l'id du client
+ * @return array C'est la liste des comptes du client (c'est un tableau d'objet)
  */
 function ctlGetAccount($idClient){
     $account = modGetAccounts($idClient);
@@ -143,8 +142,8 @@ function ctlGetAccount($idClient){
 
 /**
  * Fonction qui permet d'obtenir la liste des contrat d'un client
- * @param int $idClient c'est l'id du client
- * @return array c'est la liste des contrat du client (c'est un tableau d'objet)
+ * @param int $idClient C'est l'id du client
+ * @return array C'est la liste des contrat du client (c'est un tableau d'objet)
  */
 function ctlGetContracts($idClient){
     $contracts = modGetContracts($idClient);
@@ -153,9 +152,9 @@ function ctlGetContracts($idClient){
 
 /**
  * Fonction qui permet de débiter un compte
- * @param int $idAccount c'est l'id du compte
- * @param string $amount c'est le montant à débiter
- * @throws Exception si le montant est supérieur au solde et au découvert
+ * @param int $idAccount C'est l'id du compte
+ * @param string $amount C'est le montant à débiter
+ * @throws Exception Si le montant est supérieur au solde et au découvert
  * @return void
  */
 function ctlDebit($idAccount, $amount){
@@ -167,10 +166,11 @@ function ctlDebit($idAccount, $amount){
     $client = modGetClientFromId($account->idClient);
     vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient));
 }
+
 /**
  * Fonction qui permet de créditer un compte
- * @param int $idAccount c'est l'id du compte
- * @param string $amount c'est le montant à créditer
+ * @param int $idAccount C'est l'id du compte
+ * @param string $amount C'est le montant à créditer
  * @return void
 */
 function ctlCredit($idAccount, $amount){
@@ -181,16 +181,8 @@ function ctlCredit($idAccount, $amount){
 }
 
 /**
- * Fonction qui permet d'afficher les erreurs
- * @param string $error c'est le message d'erreur
- * @return void
- */
-function ctlError($error) {
-    vueDisplayError($error);
-}
-/**
  * Fonction qui permet d'afficher les statistiques
- * @return array c'est un tableau (map) avec les statistiques
+ * @return array C'est un tableau (map) avec les statistiques
  */
 function ctlGetStats($dateStart="", $dateEnd="", $date=""){
     if ($dateStart == ''){
@@ -223,6 +215,12 @@ function ctlGetStats($dateStart="", $dateEnd="", $date=""){
     return $stat;
 }
 
+/**
+ * Fonction qui demande la génération des statistiques et l'envoie à la vue
+ * @param string $dateStart C'est la date de début
+ * @param string $dateEnd C'est la date de fin
+ * @param string $date C'est une date
+ */
 function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
     if ($dateStart == ''){
         $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
@@ -237,55 +235,90 @@ function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
     vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
 }
 
+/**
+ * Fonction qui de demander au model la liste des employés et de l'envoyer à la vue
+ * @return void
+ */
 function ctlGestionPersonnelAll(){
     $listEmploye = modGetAllEmployes();
     vueDisplayGestionPersonnelAll($listEmploye);
 }
-function ctlGestionPersonnelOne($idEmploye){
-    $employee = modGetEmployeFromId($idEmploye);
-    vueDisplayGestionPersonnelOne($employee);
-}
 
+/**
+ * Fonction qui demande au model de modifier un employé puis appel la page de gestion du personnel
+ * @param int $idEmployee C'est l'id de l'employé
+ * @param string $name C'est le nom de l'employé
+ * @param string $firstName C'est le prénom de l'employé
+ * @param string $login C'est le login de l'employé
+ * @param string $password C'est le mot de passe de l'employé
+ * @param int $category C'est la catégorie de l'employé
+ * @param string $color C'est la couleur de l'employé
+ * @return void
+ */
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
 
+/**
+ * Fonction qui demande à la vue d'afficher la page de création d'un employé
+ * @return void
+ */
 function ctlGestionPersonnelAdd(){
     vueDisplayGestionPersonnelAdd();
 }
 
+/**
+ * Fonction qui demande au model d'ajouter un employé puis appel la page de gestion du personnel
+ * @param string $name C'est le nom de l'employé
+ * @param string $firstName C'est le prénom de l'employé
+ * @param string $login C'est le login de l'employé
+ * @param string $password C'est le mot de passe de l'employé
+ * @param int $category C'est la catégorie de l'employé
+ * @param string $color C'est la couleur de l'employé
+ * @return void
+ */
 function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color){
     modAddEmploye($category, $name, $firstName, $login, $password, $color);
     ctlGestionPersonnelAll();
 }
 
+/**
+ * Fonction qui demande au model de supprimer un employé puis appel la page de gestion du personnel
+ * @param int $idEmployee C'est l'id de l'employé
+ * @return void
+ */
 function ctlGestionPersonnelDelete($idEmployee){
     modDeleteEmploye($idEmployee);
     ctlGestionPersonnelAll();
 }
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * Fonction qui demande au model de récupérer les informations des type de compte et de contrat puis appel la page de gestion des services
+ * @return void
+ */
 function ctlGestionServiceslAll(){
     $listTypeAccount = modGetAllAccountTypes();
     $listTypeContract = modGetAllContractTypes();
     vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
 }
 
-
+/**
+ * Fonction qui demande à la vue d'afficher la page de création d'un type de compte ou de contrat
+ * @return void
+ */
 function ctlGestionServicesAdd(){
     vueDisplayGestionServicesAdd();
 }
 
+/**
+ * Fonction qui demande au model d'ajouter un type de compte ou de contrat puis appel la page de gestion des services
+ * @param string $name C'est le nom du type de compte ou de contrat
+ * @param int $type C'est le type de service (1 pour compte, 2 pour contrat)
+ * @param int $active C'est si le service est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du service
+ * @return void
+ */
 function ctlGestionServicesAddSubmit($name, $type, $active, $document){
     if ($type == 1){
         modAddTypeAccount($name, $active, $document);
@@ -296,63 +329,70 @@ function ctlGestionServicesAddSubmit($name, $type, $active, $document){
     ctlGestionServiceslAll();
 }
 
-
-function ctlGestionAccountOne($idAccount){
-    $account = modGetTypeAccount($idAccount);
-    vueDisplayGestionAccountOne($account);
-}
-
-
-
-function ctlGestionContractOne($idContract){
-    $contract = modGetContractFromId($idContract);
-    vueDisplayGestionContractOne($contract);
-}
-
+/**
+ * Fonction qui demande au model de modifier un type de compte puis appel la page de gestion des services
+ * @param int $idAccount C'est l'id du type de compte
+ * @param string $name C'est le nom du type de compte
+ * @param int $active C'est si le type de compte est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du type de compte
+ * @param int $idMotif C'est l'id du motif de modification
+ * @return void
+ */
 function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
     modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
+/**
+ * Fonction qui demande au model de modifier un type de contrat puis appel la page de gestion des services
+ * @param int $idContract C'est l'id du type de contrat
+ * @param string $name C'est le nom du type de contrat
+ * @param int $active C'est si le type de contrat est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du type de contrat
+ * @param int $idMotif C'est l'id du motif de modification
+ * @return void
+ */
 function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
     modModifTypeContract($idContract, $name, $active, $document, $idMotif);
     ctlGestionServiceslAll();
 }
 
-
-
-
+/**
+ * Fonction qui demande au model de supprimer un type de compte puis appel la page de gestion des services
+ * @param int $idAccount C'est l'id du type de compte
+ * @return void
+ */
 function ctlGestionAccountDelete($idAccount){
     modDeleteTypeAccount($idAccount);
     ctlGestionServiceslAll();
 }
 
+/**
+ * Fonction qui demande au model de supprimer un type de contrat puis appel la page de gestion des services
+ * @param int $idContract C'est l'id du type de contrat
+ * @return void
+ */
 function ctlGestionContractDelete($idContract){
     modDeleteTypeContract($idContract);
     ctlGestionServiceslAll();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /**
- * Fonction qui renvoie les informations d'un employé
- * @param int $idEmploye c'est l'id de l'employé
- * @return object $employee c'est les informations de l'employé
+ * Fonction qui demande au model de récupérer les informations d'un employé
+ * @param int $idEmploye C'est l'id de l'employé
+ * @return object C'est les informations de l'employé
  */
 function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
 
+/**
+ * Fonction qui demande au model de récupérer les RDV et les tâches administratives entre deux dates
+ * @param DateTime $dateStartOfWeek C'est la date de début de la semaine
+ * @param DateTime $dateEndOfWeek C'est la date de fin de la semaine
+ * @return ArrayObject C'est un tableau avec les RDV, les tâches administratives et la date de début de la semaine
+ */
 function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $dateStartOfWeekString = $dateStartOfWeek->format('Y-m-d') . " 00:00:00";
     $dateEndOfWeekString = $dateEndOfWeek->format('Y-m-d') . " 23:59:59";
@@ -367,6 +407,11 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     return $array;
 }
 
+/**
+ * Fonction qui demande au model de récupérer les RDV et les tâches administratives pour une journée
+ * @param DateTime $date C'est la date
+ * @return ArrayObject C'est un tableau avec les RDV, les tâches administratives
+ */
 function ctlRDVDate($date) {
     $date = ($date instanceof DateTime) ? $date : date_create($date);
 
@@ -381,25 +426,39 @@ function ctlRDVDate($date) {
     $array = new ArrayObject();
     $array->append($listRDV);
     $array->append($listTA);
-    // $array->append($date);
     return $array;
 }
 
+/**
+ * Fonction qui permet de récupérer les évènements d'une semaine
+ * Fonction qui demande à une fonction du controleur la liste des RDV et des tâches administratives pour une semaine
+ * @param DateTime|string $targetDate C'est la date de la semaine
+ * @return void
+ */
 function ctlUpdateCalendarConseiller($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
-    $employe = ctlGetInfoEmploye($_SESSION["idEmploye"]);
-    $fullName = $employe->PRENOM." ".$employe->NOM;
+    $fullName = $_SESSION["firstName"]." ".$_SESSION["name"];
     vueDisplayHomeConseiller($array[0], $array[1], $array[2], $_SESSION["name"], $fullName);
 }
 
+/**
+ * Fonction qui permet de récupérer les évènements d'une semaine
+ * Fonction qui demande à une fonction du controleur la liste des RDV et des tâches administratives pour une semaine
+ * @param DateTime|string $targetDate C'est la date de la semaine
+ * @return void
+ */
 function ctlUpdateCalendar($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
 }
 
-
+/**
+ * Fonction qui renvoie la date du lundi de la semaine de la date donnée
+ * @param DateTime $date C'est la date
+ * @return DateTime C'est la date du lundi de la semaine
+ */
 function getMondayOfWeek($date) {
     $date = ($date instanceof DateTime) ? $date : date_create($date);
     $dayOfWeek = date_format($date, 'N');
@@ -411,6 +470,11 @@ function getMondayOfWeek($date) {
     }
 }
 
+/**
+ * Fonction qui renvoie la date du dimanche de la semaine de la date donnée
+ * @param DateTime $date C'est la date
+ * @return DateTime C'est la date du dimanche de la semaine
+ */
 function getSundayOfWeek($date) {
     $date = ($date instanceof DateTime) ? $date : date_create($date);
     $dayOfWeek = date_format($date, 'N');
@@ -422,11 +486,11 @@ function getSundayOfWeek($date) {
     }
 }
 
-
-
-
-
-
+/**
+ * Fonction qui demande au model de récupérer tout les operation de tout les comptes d'un client
+ * @param int $idClient C'est l'id du client
+ * @return array C'est un tableau avec les opérations de tout les comptes du client (map idCompte => opérations (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets))
+ */
 function ctlGetOperation($idClient){
     $accounts=modGetAccounts($idClient);
     $array = array();
@@ -446,6 +510,7 @@ function ctlDisplayNewClientForm()  {
 
 function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
     modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
+    $_SESSION["listClient"] = modGetAllClients();
     ctlHome();
 }
 
@@ -641,7 +706,17 @@ function ctlDeleteTA($idTA) {
     ctlHome();
 }
 
-#ni (d<debut<f) ni (d<fin<f) ni(debut<d et f<fin)
+
+
+/**
+ * Fonction qui permet d'afficher les erreurs
+ * @param string $error C'est le message d'erreur
+ * @return void
+ */
+function ctlError($error) {
+    vueDisplayError($error);
+}
+
 
 /*
 
@@ -671,5 +746,27 @@ function ctlGetIntituleCategorie($idCategorie){
     $intitule = modGetIntituleCategorie($idCategorie);
     return $intitule;
 }
+
+
+function ctlGestionPersonnelOne($idEmploye){
+    $employee = modGetEmployeFromId($idEmploye);
+    vueDisplayGestionPersonnelOne($employee);
+}
+
+
+function ctlGestionAccountOne($idAccount){
+    $account = modGetTypeAccount($idAccount);
+    vueDisplayGestionAccountOne($account);
+}
+
+
+
+function ctlGestionContractOne($idContract){
+    $contract = modGetContractFromId($idContract);
+    vueDisplayGestionContractOne($contract);
+}
+
+
+
 
 */

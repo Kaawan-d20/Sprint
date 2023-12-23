@@ -25,11 +25,11 @@ function modGetSalt($login) {
  * Rien si celui-ci n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé
  * @param string $password Le password salé de l'employé
- * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM)
+ * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM)
  */
 function modConnect($login, $password) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM FROM employe WHERE login=:login AND password=:password';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM FROM employe WHERE login=:login AND password=:password';
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(':login',$login,PDO::PARAM_STR);
     $prepared -> bindParam(':password',$password,PDO::PARAM_STR);
