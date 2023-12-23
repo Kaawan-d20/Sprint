@@ -137,7 +137,6 @@ function modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount){
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> closeCursor();
-
 }
 
 /**
@@ -330,6 +329,7 @@ function modGetTypeAccount($idTypeAccount) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result;
 }
 
@@ -563,6 +563,7 @@ function modGetContractFromId($idContractType) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result;
 }
 
@@ -597,12 +598,13 @@ function modModifTypeContract($idContractType, $name, $active, $document, $idMot
  * @return void
  */
 function modAddTypeContract($name, $active, $document){
+    $nameMotif = 'Gestion de '.$name;
     $connection = Connection::getInstance()->getConnection();
     $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES ('Gestion de :name',:document);
+    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif,:document);
     INSERT INTO `typecontrat`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
     $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':nameMotif', $nameMotif, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
     $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
     $prepared -> execute();
@@ -696,6 +698,7 @@ function modCreateTA($idEmploye,$horaireDebut,$horaireFin,$libelle) {
     $prepared -> bindParam(':horaireFin', $horaireFin, PDO::PARAM_STR);
     $prepared -> bindParam(':libelle', $libelle, PDO::PARAM_STR);
     $prepared -> execute();
+    $prepared -> closeCursor();
 }
 
 /**
@@ -714,7 +717,7 @@ function modDeleteTA($idTA){
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
-# ----------------------------------------------------------------- APPOINTMENT ---------------------------------------------------------------- #
+# ----------------------------------------------------------------- APPOINTMENT ------------------------------------------------------------ #
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 
 
@@ -756,7 +759,7 @@ function modGetAllAppoinmentsBetween($dateDebut,$dateFin) {
  * @param int $idConseiller L'id du conseiller
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
- * @return array Tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre (HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
+ * @return array Tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
 function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
@@ -785,7 +788,7 @@ function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
 /**
  * Renvoie tous les rdv du client dont l'id est en paramètre
  * @param int $id L'id du client
- * @return array Tous les rdv du client dont l'id est en paramètre (IDRDV, IDMOTIF, IDCLIENT, IDEMPLOYE, HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
+ * @return array Tous les rdv du client dont l'id est en paramètre (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
 function modGetAppointmentsClient($id) {
     $connection = Connection::getInstance()->getConnection();
@@ -869,7 +872,7 @@ function modGetEmployeFromId($idEmploye) {
 
 /**
  * Renvoie toutes les infos de tous les employés
- * @return array Des infos de tous les employés (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, COLOR) (tableau d'objets)
+ * @return array Des infos de tous les employés (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, COLOR) (tableau d'objets)
  */
 function modGetAllEmployes() {
     $connection = Connection::getInstance()->getConnection();
@@ -1184,10 +1187,11 @@ function modModifClient($idClient,$idEmploye,$name,$firstName,$birthDate,$adress
     $prepared -> bindParam(':situationFamiliale', $situationFamiliale, PDO::PARAM_STR);
     $prepared -> bindParam(':civilite', $civilite, PDO::PARAM_STR);
     $prepared -> execute();
+    $prepared -> closeCursor();
 }
 
 /**
- * Cree un client avec les infos en paramètre
+ * Crée un client avec les infos en paramètre
  * @param int $idEmploye L'id du conseiller
  * @param string $name Le nom
  * @param string $firstName Le prenom
@@ -1214,6 +1218,7 @@ function modCreateClient($idEmploye,$name,$firstName,$birthDate,$adress,$num,$em
     $prepared -> bindParam(':situationFamiliale', $situationFamiliale, PDO::PARAM_STR);
     $prepared -> bindParam(':civilite', $civilite, PDO::PARAM_STR);
     $prepared -> execute();
+    $prepared -> closeCursor();
 }
 
 
@@ -1434,6 +1439,7 @@ function modGetNumberAppointmentsBetween($dateDebut,$dateFin) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result->nbAppointments;
 }
 
@@ -1452,6 +1458,7 @@ function modGetNumberContractsBetween($dateDebut,$dateFin) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result->nbContracts;
 }
 
@@ -1468,6 +1475,7 @@ function modGetNumberClientsAt($date){
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result->nbClients;
 }
 
@@ -1515,6 +1523,7 @@ function modGetMotifFromId($idMotif) {
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
+    $prepared -> closeCursor();
     return $result;
 }
 
@@ -1604,6 +1613,7 @@ function modCreateMotive($label,$doc) {
     $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
     $prepared -> bindParam(':doc', $doc, PDO::PARAM_STR);
     $prepared -> execute();
+    $prepared -> closeCursor();
 }
 
 
