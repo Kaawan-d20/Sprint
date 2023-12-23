@@ -86,22 +86,22 @@ try {
         ctlModifOverdraft($idAccount, $overdraft);
     }
     // ------------------------------------------------------- Agenda -------------------------------------------------------
-    elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente est cliqué
+    elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente de l'agent d'acceuil est cliqué
         ctlUpdateCalendar($_POST['previousWeekDate']);
     }
-    elseif (isset($_POST['weekSelectorNext'])){ // Si le bouton de semaine suivante est cliqué
+    elseif (isset($_POST['weekSelectorNext'])){ // Si le bouton de semaine suivante de l'agent d'acceuil est cliqué
         ctlUpdateCalendar($_POST['nextWeekDate']);
     }
-    elseif (isset($_POST['weekSelectorPreviousConseiller'])){
-        ctlUpdateCalendarConseiller($_POST['previousWeekDate']);
-    }
-    elseif (isset($_POST['weekSelectorNextConseiller'])){
-        ctlUpdateCalendarConseiller($_POST['nextWeekDate']);
-    }
-    elseif (isset($_POST["weekSelectorDateField"])){
+    elseif (isset($_POST["weekSelectorDateField"])){ // Si le champ de date de l'agent d'acceuil à été modifié (onblur)
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
     }
-    elseif (isset($_POST["weekSelectorDateFieldConseiller"])){
+    elseif (isset($_POST['weekSelectorPreviousConseiller'])){ // Si le bouton de semaine précédente du conseiller est cliqué
+        ctlUpdateCalendarConseiller($_POST['previousWeekDate']);
+    }
+    elseif (isset($_POST['weekSelectorNextConseiller'])){ // Si le bouton de semaine suivante du conseiller est cliqué
+        ctlUpdateCalendarConseiller($_POST['nextWeekDate']);
+    }
+    elseif (isset($_POST["weekSelectorDateFieldConseiller"])){ // Si le champ de date du conseiller à été modifié (onblur)
         ctlUpdateCalendarConseiller($_POST['weekSelectorDateFieldConseiller']);
     }
     // ------------------------------------------------------- Création Compte -------------------------------------------------------
@@ -128,7 +128,6 @@ try {
         $idTypeContract = $_POST['idTypeContract'];
         ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2);
     }
-    
     // ------------------------------------------------------- Paramètres -------------------------------------------------------
     elseif (isset($_POST['settingBtn'])){ // Si le bouton de paramètres est cliqué
         ctlSetting();
@@ -139,7 +138,7 @@ try {
         $color = $_POST['colorEmployee'];
         ctlSettingSubmit($_SESSION["idEmploye"], $login, $password, $color);
     }
-     // ------------------------------------------------------- Directeur -------------------------------------------------------
+    // ------------------------------------------------------- Directeur -------------------------------------------------------
     // ------------------------------------------------------- Statistique -------------------------------------------------------
     elseif (isset($_POST['searchStatClient2'])){ // Si le bouton de recherche de statistique entre deux dates est cliqué
         $dateStart=$_POST['datedebut'];
@@ -234,11 +233,7 @@ try {
         $idContract = $_POST['idContract'];
         ctlGestionContractDelete($idContract);
     }
-    // ------------------------------------------------------- Conseiller -------------------------------------------------------
-    
-    
     // ------------------------------------------------------- RDV -------------------------------------------------------
-    
     elseif (isset($_POST['newRDVbtn'])) { // Si le bouton de prise de rendez-vous de l'agent est cliqué
         $date = $_POST['newRDVdateField'];
         ctlDisplayAddAppointement($date);
