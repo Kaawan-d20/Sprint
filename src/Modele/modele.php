@@ -618,7 +618,6 @@ function modAddTypeContract($name, $active, $document){
  * @return void
  */
 function modDeleteTypeContract($idTypeContract){
-    debug("modDeleteTypeContract");
     $connection = Connection::getInstance()->getConnection();
     $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
     $query = 'DELETE FROM `possedecontrat` WHERE IDCONTRAT IN (SELECT IDCONTRAT FROM contrat WHERE IDTYPECONTRAT=:idtypecontrat);

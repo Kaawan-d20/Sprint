@@ -218,7 +218,6 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
         $listA = '';
         $typeClass = 'agent';
     }
-    debug($listRDVClients);
     foreach ($listRDVClients as $appointements) {
         $events .= vueGenerateAppointementHTML($appointements);
     }

@@ -67,6 +67,308 @@ function ctlLogout() {
 }
 
 /**
+ * Fonction qui permet d'afficher les erreurs
+ * @param string $error C'est le message d'erreur
+ * @return void
+ */
+function ctlError($error) {
+    vueDisplayError($error);
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- SERVICE ----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
+ * Fonction qui demande au model de récupérer les informations des type de compte et de contrat puis appel la page de gestion des services
+ * @return void
+ */
+function ctlGestionServiceslAll(){
+    $listTypeAccount = modGetAllAccountTypes();
+    $listTypeContract = modGetAllContractTypes();
+    vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
+}
+
+/**
+ * Fonction qui demande à la vue d'afficher la page de création d'un type de compte ou de contrat
+ * @return void
+ */
+function ctlGestionServicesAdd(){
+    vueDisplayGestionServicesAdd();
+}
+
+/**
+ * Fonction qui demande au model d'ajouter un type de compte ou de contrat puis appel la page de gestion des services
+ * @param string $name C'est le nom du type de compte ou de contrat
+ * @param int $type C'est le type de service (1 pour compte, 2 pour contrat)
+ * @param int $active C'est si le service est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du service
+ * @return void
+ */
+function ctlGestionServicesAddSubmit($name, $type, $active, $document){
+    if ($type == 1){
+        modAddTypeAccount($name, $active, $document);
+    }
+    elseif ($type == 2){
+        modAddTypeContract($name, $active, $document);
+    }
+    ctlGestionServiceslAll();
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- TYPE COMPTE ------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
+ * Fonction qui demande au model de modifier un type de compte puis appel la page de gestion des services
+ * @param int $idAccount C'est l'id du type de compte
+ * @param string $name C'est le nom du type de compte
+ * @param int $active C'est si le type de compte est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du type de compte
+ * @param int $idMotif C'est l'id du motif de modification
+ * @return void
+ */
+function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
+    modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
+    ctlGestionServiceslAll();
+}
+
+/**
+ * Fonction qui demande au model de supprimer un type de compte puis appel la page de gestion des services
+ * @param int $idAccount C'est l'id du type de compte
+ * @return void
+ */
+function ctlGestionAccountDelete($idAccount){
+    modDeleteTypeAccount($idAccount);
+    ctlGestionServiceslAll();
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- TYPE CONTRAT -----------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
+ * Fonction qui demande au model de supprimer un type de contrat puis appel la page de gestion des services
+ * @param int $idContract C'est l'id du type de contrat
+ * @return void
+ */
+function ctlGestionContractDelete($idContract){
+    modDeleteTypeContract($idContract);
+    ctlGestionServiceslAll();
+}
+
+/**
+ * Fonction qui demande au model de modifier un type de contrat puis appel la page de gestion des services
+ * @param int $idContract C'est l'id du type de contrat
+ * @param string $name C'est le nom du type de contrat
+ * @param int $active C'est si le type de contrat est actif ou non (1 pour actif, 0 pour inactif)
+ * @param string $document C'est le document du type de contrat
+ * @param int $idMotif C'est l'id du motif de modification
+ * @return void
+ */
+function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
+    modModifTypeContract($idContract, $name, $active, $document, $idMotif);
+    ctlGestionServiceslAll();
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- COMPTE -----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
+ * Fonction qui permet d'obtenir la liste des compte d'un client
+ * @param int $idClient C'est l'id du client
+ * @return array C'est la liste des comptes du client (c'est un tableau d'objet)
+ */
+function ctlGetAccount($idClient){
+    $account = modGetAccounts($idClient);
+    return $account;
+}
+
+/**
+ * Fonction qui permet de débiter un compte
+ * @param int $idAccount C'est l'id du compte
+ * @param string $amount C'est le montant à débiter
+ * @throws Exception Si le montant est supérieur au solde et au découvert
+ * @return void
+ */
+function ctlDebit($idAccount, $amount){
+    $account = modGetInfoAccount($idAccount);
+    if ($amount > $account->solde + $account->decouvert){
+        throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
+    }
+    modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $client = modGetClientFromId($account->idClient);
+    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient));
+}
+
+/**
+ * Fonction qui permet de créditer un compte
+ * @param int $idAccount C'est l'id du compte
+ * @param string $amount C'est le montant à créditer
+ * @return void
+*/
+function ctlCredit($idAccount, $amount){
+    modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
+    $idClient = modGetIdClientFromAccount($idAccount);
+    $client = modGetClientFromId($idClient);
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
+}
+
+/**
+ * Fonction qui demande au model de récupérer tout les operation de tout les comptes d'un client
+ * @param int $idClient C'est l'id du client
+ * @return array C'est un tableau avec les opérations de tout les comptes du client (map idCompte => opérations (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets))
+ */
+function ctlGetOperation($idClient){
+    $accounts=modGetAccounts($idClient);
+    $array = array();
+    foreach ($accounts as $account){
+        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
+    }
+    return $array;
+}
+
+/**
+ * Fonction qui demande au model de modifier le découvert d'un compte puis appel la sythèse du client
+ * @param int $idAccount C'est l'id du compte
+ * @param string $overdraft C'est le découvert du compte
+ * @return void
+*/
+function ctlModifOverdraft($idAccount, $overdraft){
+    modModifOverdraft($idAccount, $overdraft);
+    $idClient = modGetIdClientFromAccount($idAccount);
+    ctlSearchIdClient($idClient);
+}
+
+/**
+ * Fonction qui demande au model de récupérer la liste des types de compte actif
+ * Puis demande à la vue d'afficher la page de création d'un compte
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
+function ctlAddAccount($idClient){
+    $listTypeAccount = modGetAllAccountTypesEnable();
+    $listAllClient = modGetAllClients();
+    vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
+}
+
+/**
+ * Fonction qui demande au model de créer un compte puis appel la sythèse du client
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
+function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
+    if ($idClient2 == $idClient){
+        throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
+    }
+    $listAccount = modGetAccounts($idClient);
+    foreach ($listAccount as $account){
+        if ($account->idtypecompte == $idTypeAccount){
+            throw new Exception('Compte déjà existant');
+        }
+    }
+    if ($idClient2 == ""){
+        modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount);
+    }
+    else{
+        $listAccount = modGetAccounts($idClient2);
+        foreach ($listAccount as $account){
+            if ($account->idtypecompte == $idTypeAccount){
+                throw new Exception('Compte déjà existant pour la deuxième personne');
+            }
+        }
+        modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount);
+    }
+    ctlSearchIdClient($idClient);
+}
+
+/**
+ * Fonction qui demande au model de supprimer un compte puis appel la sythèse du client
+ * @param int $idAccount C'est l'id du compte
+ * @return void
+ */
+function ctlDeleteAccount($idAccount){
+    $idClient = modGetIdClientFromAccount($idAccount);
+    modDeleteAccount($idAccount);
+    ctlSearchIdClient($idClient);
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- CONTRAT ----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
+ * Fonction qui permet d'obtenir la liste des contrat d'un client
+ * @param int $idClient C'est l'id du client
+ * @return array C'est la liste des contrat du client (c'est un tableau d'objet)
+ */
+function ctlGetContracts($idClient){
+    $contracts = modGetContracts($idClient);
+    return $contracts;
+}
+
+/**
+ * Fonction qui demande au model de récupérer la liste des types de contrat actif
+ * Puis demande à la vue d'afficher la page de création d'un contrat
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
+function ctlAddContract($idClient){
+    $listTypeContract = modGetAllContractTypesEnable();
+    $listAllClient = modGetAllClients();
+    vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
+}
+
+/**
+ * Fonction qui demande au model de créer un contrat puis appel la sythèse du client
+ * @param int $idClient C'est l'id du client
+ * @param string $monthCost C'est le coût mensuel du contrat
+ * @param int $idTypeContract C'est l'id du type de contrat
+ * @param int $idClient2 C'est l'id du deuxième client (si c'est un compte joint)
+ * @return void
+ */
+function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
+    if ($idClient2 == $idClient){
+        throw new Exception('Vous ne pouvez pas créer un contrat avec vous même');
+    }
+    if ($idClient2 == ""){
+        modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
+    }
+    else{
+        modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract);
+    }
+    ctlSearchIdClient($idClient);
+}
+
+/**
+ * Fonction qui demande au model de supprimer un contrat puis appel la sythèse du client
+ * @param int $idContract C'est l'id du contrat
+ * @return void
+*/
+function ctlDeleteContract($idContract){
+    $idClient = modGetIdClientFromContract($idContract);
+    modDeleteContract($idContract);
+    ctlSearchIdClient($idClient);
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- CLIENT -----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
  * Fonction qui permet de chercher un client en fonction de son idClient
  * @param int $idClient C'est l'id du client
  * @throws Exception Si l'id est vide
@@ -131,109 +433,39 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
 }
 
 /**
- * Fonction qui permet d'obtenir la liste des compte d'un client
- * @param int $idClient C'est l'id du client
- * @return array C'est la liste des comptes du client (c'est un tableau d'objet)
- */
-function ctlGetAccount($idClient){
-    $account = modGetAccounts($idClient);
-    return $account;
-}
-
-/**
- * Fonction qui permet d'obtenir la liste des contrat d'un client
- * @param int $idClient C'est l'id du client
- * @return array C'est la liste des contrat du client (c'est un tableau d'objet)
- */
-function ctlGetContracts($idClient){
-    $contracts = modGetContracts($idClient);
-    return $contracts;
-}
-
-/**
- * Fonction qui permet de débiter un compte
- * @param int $idAccount C'est l'id du compte
- * @param string $amount C'est le montant à débiter
- * @throws Exception Si le montant est supérieur au solde et au découvert
+ * Fonction qui demande à la vue d'afficher la page de création d'un client
  * @return void
  */
-function ctlDebit($idAccount, $amount){
-    $account = modGetInfoAccount($idAccount);
-    if ($amount > $account->solde + $account->decouvert){
-        throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
-    }
-    modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
-    $client = modGetClientFromId($account->idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient));
+function ctlDisplayNewClientForm()  {
+    vueDisplayCreateClient(modGetAllCounselors());
 }
 
 /**
- * Fonction qui permet de créditer un compte
- * @param int $idAccount C'est l'id du compte
- * @param string $amount C'est le montant à créditer
+ * Fonction qui demande au model de créer un client puis appel la page d'accueil
+ * Update la liste des clients dans la session
+ * @param string $civilite C'est la civilité du client
+ * @param string $name C'est le nom du client
+ * @param string $firstName C'est le prénom du client
+ * @param string $dateOfBirth C'est la date de naissance du client
+ * @param string $address C'est l'adresse du client
+ * @param string $phone C'est le numéro de téléphone du client
+ * @param string $email C'est l'email du client
+ * @param string $profession C'est la profession du client
+ * @param string $situation C'est la situation du client
+ * @param int $idEmployee C'est l'id de l'employé qui a créé le client
  * @return void
-*/
-function ctlCredit($idAccount, $amount){
-    modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
-    $idClient = modGetIdClientFromAccount($idAccount);
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
+ */
+function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
+    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
+    $_SESSION["listClient"] = modGetAllClients();
+    ctlHome();
 }
 
-/**
- * Fonction qui permet d'afficher les statistiques
- * @return array C'est un tableau (map) avec les statistiques
- */
-function ctlGetStats($dateStart="", $dateEnd="", $date=""){
-    if ($dateStart == ''){
-        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
-    }
-    if ($dateEnd == ''){
-        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
-    }
-    if ($date == ''){
-        $date = (new DateTime('today'))->format('Y-m-d');
-    }
-    $stat = array();
-    $stat['nbClient'] = modGetNumberClients();
-    $stat['nbAccount'] = modGetNumberAccounts();
-    $stat['nbContract'] = modGetNumberContracts();
-    $stat['nbConseiller'] = modGetNumberCounselors();
-    $stat['nbAgent'] = modGetNumberAgents();
-    $stat['nbTypeAccount'] = modGetNumberAccountTypes();
-    $stat['nbTypeContract'] = modGetNumberContractTypes();
-    $stat['nbAccountActive'] = modGetNumberActiveAccounts();
-    $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
-    $stat['nbContractActive'] = modGetNumberActiveContracts();
-    $stat['nbContractInactif'] = modGetNumberInactiveContracts();
-    $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
-    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
-    $stat['sumAccount'] = modSumAllSolde();
-    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
-    $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
-    $stat['nbClientAt'] = modGetNumberClientsAt($date);
-    return $stat;
-}
 
-/**
- * Fonction qui demande la génération des statistiques et l'envoie à la vue
- * @param string $dateStart C'est la date de début
- * @param string $dateEnd C'est la date de fin
- * @param string $date C'est une date
- */
-function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
-    if ($dateStart == ''){
-        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
-    }
-    if ($dateEnd == ''){
-        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
-    }
-    if ($date == ''){
-        $date = (new DateTime('today'))->format('Y-m-d');
-    }
-    $stat = ctlGetStats($dateStart, $dateEnd, $date);
-    vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
-}
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- EMPLOYE ----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
 
 /**
  * Fonction qui de demander au model la liste des employés et de l'envoyer à la vue
@@ -294,90 +526,6 @@ function ctlGestionPersonnelDelete($idEmployee){
 }
 
 /**
- * Fonction qui demande au model de récupérer les informations des type de compte et de contrat puis appel la page de gestion des services
- * @return void
- */
-function ctlGestionServiceslAll(){
-    $listTypeAccount = modGetAllAccountTypes();
-    $listTypeContract = modGetAllContractTypes();
-    vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
-}
-
-/**
- * Fonction qui demande à la vue d'afficher la page de création d'un type de compte ou de contrat
- * @return void
- */
-function ctlGestionServicesAdd(){
-    vueDisplayGestionServicesAdd();
-}
-
-/**
- * Fonction qui demande au model d'ajouter un type de compte ou de contrat puis appel la page de gestion des services
- * @param string $name C'est le nom du type de compte ou de contrat
- * @param int $type C'est le type de service (1 pour compte, 2 pour contrat)
- * @param int $active C'est si le service est actif ou non (1 pour actif, 0 pour inactif)
- * @param string $document C'est le document du service
- * @return void
- */
-function ctlGestionServicesAddSubmit($name, $type, $active, $document){
-    if ($type == 1){
-        modAddTypeAccount($name, $active, $document);
-    }
-    elseif ($type == 2){
-        modAddTypeContract($name, $active, $document);
-    }
-    ctlGestionServiceslAll();
-}
-
-/**
- * Fonction qui demande au model de modifier un type de compte puis appel la page de gestion des services
- * @param int $idAccount C'est l'id du type de compte
- * @param string $name C'est le nom du type de compte
- * @param int $active C'est si le type de compte est actif ou non (1 pour actif, 0 pour inactif)
- * @param string $document C'est le document du type de compte
- * @param int $idMotif C'est l'id du motif de modification
- * @return void
- */
-function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
-    modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
-    ctlGestionServiceslAll();
-}
-
-/**
- * Fonction qui demande au model de modifier un type de contrat puis appel la page de gestion des services
- * @param int $idContract C'est l'id du type de contrat
- * @param string $name C'est le nom du type de contrat
- * @param int $active C'est si le type de contrat est actif ou non (1 pour actif, 0 pour inactif)
- * @param string $document C'est le document du type de contrat
- * @param int $idMotif C'est l'id du motif de modification
- * @return void
- */
-function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
-    modModifTypeContract($idContract, $name, $active, $document, $idMotif);
-    ctlGestionServiceslAll();
-}
-
-/**
- * Fonction qui demande au model de supprimer un type de compte puis appel la page de gestion des services
- * @param int $idAccount C'est l'id du type de compte
- * @return void
- */
-function ctlGestionAccountDelete($idAccount){
-    modDeleteTypeAccount($idAccount);
-    ctlGestionServiceslAll();
-}
-
-/**
- * Fonction qui demande au model de supprimer un type de contrat puis appel la page de gestion des services
- * @param int $idContract C'est l'id du type de contrat
- * @return void
- */
-function ctlGestionContractDelete($idContract){
-    modDeleteTypeContract($idContract);
-    ctlGestionServiceslAll();
-}
-
-/**
  * Fonction qui demande au model de récupérer les informations d'un employé
  * @param int $idEmploye C'est l'id de l'employé
  * @return object C'est les informations de l'employé
@@ -386,6 +534,37 @@ function ctlGetInfoEmploye($idEmploye) {
     $employee = modGetEmployeFromId($idEmploye);
     return $employee;
 }
+
+/**
+ * Fonction qui demande à la vue d'afficher la page de modification des paramètres d'un employé
+ * @return void
+ */
+function ctlSetting(){
+    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
+    vueDisplaySetting($identity);
+}
+
+/**
+ * Fonction qui demande au model de modifier les paramètres d'un employé puis appel la page d'accueil
+ * @param int $idEmploye C'est l'id de l'employé
+ * @param string $login C'est le login de l'employé
+ * @param string $password C'est le mot de passe de l'employé
+ * @param string $color C'est la couleur de l'employé
+ * @return void
+ */
+function ctlSettingSubmit($idEmploye, $login, $password, $color){
+    if ($password == ''){
+        $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    }
+    modModifEmployeSetting($idEmploye, $login, $password, $color);
+    ctlHome();
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- AGENDA -----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
 
 /**
  * Fonction qui demande au model de récupérer les RDV et les tâches administratives entre deux dates
@@ -486,184 +665,11 @@ function getSundayOfWeek($date) {
     }
 }
 
-/**
- * Fonction qui demande au model de récupérer tout les operation de tout les comptes d'un client
- * @param int $idClient C'est l'id du client
- * @return array C'est un tableau avec les opérations de tout les comptes du client (map idCompte => opérations (IDOPERATION, IDCOMPTE, SOURCE, LIBELLE, DATEOPERATION, MONTANT, ISCREDIT) (tableau d'objets))
- */
-function ctlGetOperation($idClient){
-    $accounts=modGetAccounts($idClient);
-    $array = array();
-    foreach ($accounts as $account){
-        $array["$account->idCompte"]=(modGetOperations($account->idCompte));
-    }
-    return $array;
-}
 
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- RDV --------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 
-
-/**
- * Fonction qui demande à la vue d'afficher la page de création d'un client
- * @return void
- */
-function ctlDisplayNewClientForm()  {
-    vueDisplayCreateClient(modGetAllCounselors());
-}
-
-/**
- * Fonction qui demande au model de créer un client puis appel la page d'accueil
- * Update la liste des clients dans la session
- * @param string $civilite C'est la civilité du client
- * @param string $name C'est le nom du client
- * @param string $firstName C'est le prénom du client
- * @param string $dateOfBirth C'est la date de naissance du client
- * @param string $address C'est l'adresse du client
- * @param string $phone C'est le numéro de téléphone du client
- * @param string $email C'est l'email du client
- * @param string $profession C'est la profession du client
- * @param string $situation C'est la situation du client
- * @param int $idEmployee C'est l'id de l'employé qui a créé le client
- * @return void
- */
-function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
-    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
-    $_SESSION["listClient"] = modGetAllClients();
-    ctlHome();
-}
-
-/**
- * Fonction qui demande à la vue d'afficher la page de modification des paramètres d'un employé
- * @return void
- */
-function ctlSetting(){
-    $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
-    vueDisplaySetting($identity);
-}
-
-/**
- * Fonction qui demande au model de modifier les paramètres d'un employé puis appel la page d'accueil
- * @param int $idEmploye C'est l'id de l'employé
- * @param string $login C'est le login de l'employé
- * @param string $password C'est le mot de passe de l'employé
- * @param string $color C'est la couleur de l'employé
- * @return void
- */
-function ctlSettingSubmit($idEmploye, $login, $password, $color){
-    if ($password == ''){
-        $password = modGetEmployeFromId($idEmploye)->PASSWORD;
-    }
-    modModifEmployeSetting($idEmploye, $login, $password, $color);
-    ctlHome();
-}
-
-/**
- * Fonction qui demande au model de récupérer la liste des types de contrat actif
- * Puis demande à la vue d'afficher la page de création d'un contrat
- * @param int $idClient C'est l'id du client
- * @return void
- */
-function ctlAddContract($idClient){
-    $listTypeContract = modGetAllContractTypesEnable();
-    $listAllClient = modGetAllClients();
-    vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
-}
-
-/**
- * Fonction qui demande au model de créer un contrat puis appel la sythèse du client
- * @param int $idClient C'est l'id du client
- * @param string $monthCost C'est le coût mensuel du contrat
- * @param int $idTypeContract C'est l'id du type de contrat
- * @param int $idClient2 C'est l'id du deuxième client (si c'est un compte joint)
- * @return void
- */
-function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
-    if ($idClient2 == $idClient){
-        throw new Exception('Vous ne pouvez pas créer un contrat avec vous même');
-    }
-    if ($idClient2 == ""){
-        modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
-    }
-    else{
-        modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeContract);
-    }
-    ctlSearchIdClient($idClient);
-}
-
-/**
- * Fonction qui demande au model de récupérer la liste des types de compte actif
- * Puis demande à la vue d'afficher la page de création d'un compte
- * @param int $idClient C'est l'id du client
- * @return void
- */
-function ctlAddAccount($idClient){
-    $listTypeAccount = modGetAllAccountTypesEnable();
-    $listAllClient = modGetAllClients();
-    vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
-}
-
-/**
- * Fonction qui demande au model de créer un compte puis appel la sythèse du client
- * @param int $idClient C'est l'id du client
- * @return void
- */
-function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
-    if ($idClient2 == $idClient){
-        throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
-    }
-    $listAccount = modGetAccounts($idClient);
-    foreach ($listAccount as $account){
-        if ($account->idtypecompte == $idTypeAccount){
-            throw new Exception('Compte déjà existant');
-        }
-    }
-    if ($idClient2 == ""){
-        modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount);
-    }
-    else{
-        $listAccount = modGetAccounts($idClient2);
-        foreach ($listAccount as $account){
-            if ($account->idtypecompte == $idTypeAccount){
-                throw new Exception('Compte déjà existant pour la deuxième personne');
-            }
-        }
-        modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount);
-    }
-    ctlSearchIdClient($idClient);
-}
-
-/**
- * Fonction qui demande au model de supprimer un compte puis appel la sythèse du client
- * @param int $idAccount C'est l'id du compte
- * @return void
- */
-function ctlDeleteAccount($idAccount){
-    $idClient = modGetIdClientFromAccount($idAccount);
-    modDeleteAccount($idAccount);
-    ctlSearchIdClient($idClient);
-}
-
-/**
- * Fonction qui demande au model de supprimer un contrat puis appel la sythèse du client
- * @param int $idContract C'est l'id du contrat
- * @return void
-*/
-function ctlDeleteContract($idContract){
-    $idClient = modGetIdClientFromContract($idContract);
-    modDeleteContract($idContract);
-    ctlSearchIdClient($idClient);
-}
-
-/**
- * Fonction qui demande au model de modifier le découvert d'un compte puis appel la sythèse du client
- * @param int $idAccount C'est l'id du compte
- * @param string $overdraft C'est le découvert du compte
- * @return void
-*/
-function ctlModifOverdraft($idAccount, $overdraft){
-    modModifOverdraft($idAccount, $overdraft);
-    $idClient = modGetIdClientFromAccount($idAccount);
-    ctlSearchIdClient($idClient);
-}
 
 /**
  * Fonction qui demande au model la liste des conseillers, des clients et des motifs
@@ -741,6 +747,22 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
 }
 
 /**
+ * Fonction qui demande au model de supprimer un rendez-vous puis appel la page d'accueil
+ * @param int $idAppointment C'est l'id du rendez-vous
+ * @return void
+ */
+function ctlDeleteAppointment($idAppointment) {
+    modDeleteAppointment($idAppointment);
+    ctlHome();
+}
+
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- Tache administrative -------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
+/**
  * Fonction qui demande au model de créer une tâche administrative puis appel la page d'accueil
  * C'est ici que l'on vérifie si la tâche administrative est possible ou non
  * @param int $idEmployee C'est l'id du conseiller
@@ -786,16 +808,6 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
 }
 
 /**
- * Fonction qui demande au model de supprimer un rendez-vous puis appel la page d'accueil
- * @param int $idAppointment C'est l'id du rendez-vous
- * @return void
- */
-function ctlDeleteAppointment($idAppointment) {
-    modDeleteAppointment($idAppointment);
-    ctlHome();
-}
-
-/**
  * Fonction qui demande au model de supprimer une tâche administrative puis appel la page d'accueil
  * @param int $idTA C'est l'id de la tâche administrative
  * @return void
@@ -805,23 +817,73 @@ function ctlDeleteTA($idTA) {
     ctlHome();
 }
 
+
+// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------- STATISTIQUES -----------------------------------------------
+// ------------------------------------------------------------------------------------------------------
+
+
 /**
- * Fonction qui permet d'afficher les erreurs
- * @param string $error C'est le message d'erreur
- * @return void
+ * Fonction qui permet d'afficher les statistiques
+ * @return array C'est un tableau (map) avec les statistiques
  */
-function ctlError($error) {
-    vueDisplayError($error);
+function ctlGetStats($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
+    $stat = array();
+    $stat['nbClient'] = modGetNumberClients();
+    $stat['nbAccount'] = modGetNumberAccounts();
+    $stat['nbContract'] = modGetNumberContracts();
+    $stat['nbConseiller'] = modGetNumberCounselors();
+    $stat['nbAgent'] = modGetNumberAgents();
+    $stat['nbTypeAccount'] = modGetNumberAccountTypes();
+    $stat['nbTypeContract'] = modGetNumberContractTypes();
+    $stat['nbAccountActive'] = modGetNumberActiveAccounts();
+    $stat['nbAccountInactif'] = modGetNumberInactiveAccounts();
+    $stat['nbContractActive'] = modGetNumberActiveContracts();
+    $stat['nbContractInactif'] = modGetNumberInactiveContracts();
+    $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
+    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    $stat['sumAccount'] = modSumAllSolde();
+    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
+    $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
+    $stat['nbClientAt'] = modGetNumberClientsAt($date);
+    return $stat;
 }
 
 /**
- * Fonction qui permet d'afficher dans la console le contenu de la variable
- * @param mixed $what C'est la variable à afficher
- * @return void
+ * Fonction qui demande la génération des statistiques et l'envoie à la vue
+ * @param string $dateStart C'est la date de début
+ * @param string $dateEnd C'est la date de fin
+ * @param string $date C'est une date
  */
-function debug($what = "debugString") {
-    echo("<script>console.log(". json_encode($what) .")</script>");
+function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
+    if ($dateStart == ''){
+        $dateStart = (new DateTime('monday this week'))->format('Y-m-d');
+    }
+    if ($dateEnd == ''){
+        $dateEnd = (new DateTime('sunday this week'))->format('Y-m-d');
+    }
+    if ($date == ''){
+        $date = (new DateTime('today'))->format('Y-m-d');
+    }
+    $stat = ctlGetStats($dateStart, $dateEnd, $date);
+    vueDisplayHomeDirecteur($stat, $_SESSION["name"]);
 }
+
+
+
+
+
+
+
 
 
 
@@ -874,6 +936,10 @@ function ctlGestionContractOne($idContract){
     vueDisplayGestionContractOne($contract);
 }
 
+
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
+}
 
 
 

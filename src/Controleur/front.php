@@ -229,7 +229,6 @@ try {
         ctlGestionAccountDelete($idAccount);
     }
     elseif (isset($_POST['GestionContractDeleteBtn'])){ // Si le bouton de suppression d'un contrat est cliqué
-        debug($_POST);
         $idContract = $_POST['idContract'];
         ctlGestionContractDelete($idContract);
     }
