@@ -409,7 +409,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
 
 /**
  * Fonction qui demande au model de récupérer les RDV et les tâches administratives pour une journée
- * @param DateTime $date C'est la date
+ * @param DateTime|string $date C'est la date
  * @return ArrayObject C'est un tableau avec les RDV, les tâches administratives
  */
 function ctlRDVDate($date) {
@@ -502,26 +502,52 @@ function ctlGetOperation($idClient){
 
 
 
-
+/**
+ * Fonction qui demande à la vue d'afficher la page de création d'un client
+ * @return void
+ */
 function ctlDisplayNewClientForm()  {
     vueDisplayCreateClient(modGetAllCounselors());
 }
 
-
+/**
+ * Fonction qui demande au model de créer un client puis appel la page d'accueil
+ * Update la liste des clients dans la session
+ * @param string $civilite C'est la civilité du client
+ * @param string $name C'est le nom du client
+ * @param string $firstName C'est le prénom du client
+ * @param string $dateOfBirth C'est la date de naissance du client
+ * @param string $address C'est l'adresse du client
+ * @param string $phone C'est le numéro de téléphone du client
+ * @param string $email C'est l'email du client
+ * @param string $profession C'est la profession du client
+ * @param string $situation C'est la situation du client
+ * @param int $idEmployee C'est l'id de l'employé qui a créé le client
+ * @return void
+ */
 function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
     modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
     $_SESSION["listClient"] = modGetAllClients();
     ctlHome();
 }
 
-
-
+/**
+ * Fonction qui demande à la vue d'afficher la page de modification des paramètres d'un employé
+ * @return void
+ */
 function ctlSetting(){
     $identity = modGetEmployeFromId($_SESSION["idEmploye"]);
     vueDisplaySetting($identity);
 }
 
-
+/**
+ * Fonction qui demande au model de modifier les paramètres d'un employé puis appel la page d'accueil
+ * @param int $idEmploye C'est l'id de l'employé
+ * @param string $login C'est le login de l'employé
+ * @param string $password C'est le mot de passe de l'employé
+ * @param string $color C'est la couleur de l'employé
+ * @return void
+ */
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
     if ($password == ''){
         $password = modGetEmployeFromId($idEmploye)->PASSWORD;
@@ -530,15 +556,26 @@ function ctlSettingSubmit($idEmploye, $login, $password, $color){
     ctlHome();
 }
 
-
-
+/**
+ * Fonction qui demande au model de récupérer la liste des types de contrat actif
+ * Puis demande à la vue d'afficher la page de création d'un contrat
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
 function ctlAddContract($idClient){
     $listTypeContract = modGetAllContractTypesEnable();
     $listAllClient = modGetAllClients();
     vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
 }
 
-
+/**
+ * Fonction qui demande au model de créer un contrat puis appel la sythèse du client
+ * @param int $idClient C'est l'id du client
+ * @param string $monthCost C'est le coût mensuel du contrat
+ * @param int $idTypeContract C'est l'id du type de contrat
+ * @param int $idClient2 C'est l'id du deuxième client (si c'est un compte joint)
+ * @return void
+ */
 function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
     if ($idClient2 == $idClient){
         throw new Exception('Vous ne pouvez pas créer un contrat avec vous même');
@@ -552,15 +589,24 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
     ctlSearchIdClient($idClient);
 }
 
-
+/**
+ * Fonction qui demande au model de récupérer la liste des types de compte actif
+ * Puis demande à la vue d'afficher la page de création d'un compte
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
 function ctlAddAccount($idClient){
     $listTypeAccount = modGetAllAccountTypesEnable();
     $listAllClient = modGetAllClients();
     vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
 }
 
-
-function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
+/**
+ * Fonction qui demande au model de créer un compte puis appel la sythèse du client
+ * @param int $idClient C'est l'id du client
+ * @return void
+ */
+function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
     if ($idClient2 == $idClient){
         throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
     }
@@ -571,7 +617,7 @@ function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
         }
     }
     if ($idClient2 == ""){
-        modAddAccountToClientOne($idClient, $monthCost, $idTypeAccount);
+        modAddAccountToClientOne($idClient, $overdraft, $idTypeAccount);
     }
     else{
         $listAccount = modGetAccounts($idClient2);
@@ -580,29 +626,52 @@ function ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2=""){
                 throw new Exception('Compte déjà existant pour la deuxième personne');
             }
         }
-        modAddAccountToClientTwo($idClient, $idClient2, $monthCost, $idTypeAccount);
+        modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount);
     }
     ctlSearchIdClient($idClient);
 }
 
+/**
+ * Fonction qui demande au model de supprimer un compte puis appel la sythèse du client
+ * @param int $idAccount C'est l'id du compte
+ * @return void
+ */
 function ctlDeleteAccount($idAccount){
     $idClient = modGetIdClientFromAccount($idAccount);
     modDeleteAccount($idAccount);
     ctlSearchIdClient($idClient);
 }
 
+/**
+ * Fonction qui demande au model de supprimer un contrat puis appel la sythèse du client
+ * @param int $idContract C'est l'id du contrat
+ * @return void
+*/
 function ctlDeleteContract($idContract){
     $idClient = modGetIdClientFromContract($idContract);
     modDeleteContract($idContract);
     ctlSearchIdClient($idClient);
 }
 
+/**
+ * Fonction qui demande au model de modifier le découvert d'un compte puis appel la sythèse du client
+ * @param int $idAccount C'est l'id du compte
+ * @param string $overdraft C'est le découvert du compte
+ * @return void
+*/
 function ctlModifOverdraft($idAccount, $overdraft){
     modModifOverdraft($idAccount, $overdraft);
     $idClient = modGetIdClientFromAccount($idAccount);
     ctlSearchIdClient($idClient);
 }
 
+/**
+ * Fonction qui demande au model la liste des conseillers, des clients et des motifs
+ * Puis demande à la vue d'afficher la page de création d'un rendez-vous
+ * Version Agent d'accueil
+ * @param DateTime|string $date C'est la date du rendez-vous
+ * @return void
+ */
 function ctlDisplayAddAppointement($date) {
     $listConseillers = modGetAllCounselors();
     $listClients = modGetAllClients();
@@ -611,6 +680,13 @@ function ctlDisplayAddAppointement($date) {
     vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
 }
 
+/**
+ * Fonction qui demande au model la liste des conseillers, des clients et des motifs
+ * Puis demande à la vue d'afficher la page de création d'un rendez-vous
+ * Version Conseiller
+ * @param DateTime|string $date C'est la date du rendez-vous
+ * @return void
+ */
 function ctlDisplayAddAppointementConseiller($date) {
     $listClients = modGetAllClientsByCounselors($_SESSION["idEmploye"]);
     $listMotifs = modGetAllMotif();
@@ -618,6 +694,17 @@ function ctlDisplayAddAppointementConseiller($date) {
     vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray);
 }
 
+/**
+ * Fonction qui demande au model de créer un rendez-vous puis appel la page d'accueil
+ * C'est ici que l'on vérifie si le rendez-vous est possible ou non
+ * @param int $idClient C'est l'id du client
+ * @param int $idEmployee C'est l'id du conseiller
+ * @param DateTime|string $date C'est la date du rendez-vous
+ * @param string $heureDebut C'est l'heure de début du rendez-vous
+ * @param string $heureFin C'est l'heure de fin du rendez-vous
+ * @param int $idMotif C'est l'id du motif du rendez-vous
+ * @return void
+ */
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
     if ($heureDebut < $heureFin) {
         $horaireDebut= $date.' '.$heureDebut.':00';
@@ -653,8 +740,16 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
     }
 }
 
-
-
+/**
+ * Fonction qui demande au model de créer une tâche administrative puis appel la page d'accueil
+ * C'est ici que l'on vérifie si la tâche administrative est possible ou non
+ * @param int $idEmployee C'est l'id du conseiller
+ * @param DateTime|string $date C'est la date de la tâche administrative
+ * @param string $heureDebut C'est l'heure de début de la tâche administrative
+ * @param string $heureFin C'est l'heure de fin de la tâche administrative
+ * @param string $libelle C'est le libellé de la tâche administrative
+ * @return void
+ */
 function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
     if ($heureDebut < $heureFin) {
         $horaireDebut= $date.' '.$heureDebut.':00';
@@ -690,23 +785,25 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
     }
 }
 
-
-function debug($what = "debugString") {
-    echo("<script>console.log(". json_encode($what) .")</script>");
-}
-
-
+/**
+ * Fonction qui demande au model de supprimer un rendez-vous puis appel la page d'accueil
+ * @param int $idAppointment C'est l'id du rendez-vous
+ * @return void
+ */
 function ctlDeleteAppointment($idAppointment) {
     modDeleteAppointment($idAppointment);
     ctlHome();
 }
 
+/**
+ * Fonction qui demande au model de supprimer une tâche administrative puis appel la page d'accueil
+ * @param int $idTA C'est l'id de la tâche administrative
+ * @return void
+ */
 function ctlDeleteTA($idTA) {
     modDeleteTA($idTA);
     ctlHome();
 }
-
-
 
 /**
  * Fonction qui permet d'afficher les erreurs
@@ -716,6 +813,17 @@ function ctlDeleteTA($idTA) {
 function ctlError($error) {
     vueDisplayError($error);
 }
+
+/**
+ * Fonction qui permet d'afficher dans la console le contenu de la variable
+ * @param mixed $what C'est la variable à afficher
+ * @return void
+ */
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
+}
+
+
 
 
 /*

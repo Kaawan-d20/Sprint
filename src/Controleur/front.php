@@ -112,9 +112,9 @@ try {
     elseif (isset($_POST['createAccountBtn'])){ // Si le bouton de validation d'ajout de compte est cliqué
         $idClient = $_POST['idClient'];
         $idClient2 = $_POST['idClient2'];
-        $monthCost = $_POST['monthCost'];
+        $overdraft = $_POST['overdraft'];
         $idTypeAccount = $_POST['idTypeAccount'];
-        ctlCreateAccount($idClient, $monthCost, $idTypeAccount, $idClient2);
+        ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2);
     }
     // ------------------------------------------------------- Création Contrat -------------------------------------------------------
     elseif (isset($_POST['addContractBtn'])){ // Si le bouton d'ajout de contrat est cliqué

@@ -760,7 +760,6 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
 
 function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     $navbar = vueGenerateNavBar();
-    debug($listTypeAccount);
     if (count($listTypeAccount) == 0) {
         $content = "<div>Aucun type de compte disponible</div>";
         require_once('gabaritGestion.php');
@@ -781,7 +780,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
                     <h1>Ajouter un Type de Compte</h1>
                     '.$optionSelect.$datalist.'
-                    <input type="number" name="monthCost" placeholder="Découvert" step="0.01" class="addContractField">
+                    <input type="number" name="overdraft" placeholder="Découvert" step="0.01" class="addContractField">
                     <input type="hidden" name="idClient" value="'.$idClient.'">
                     <button type="submit" name="createAccountBtn" class="addContractField cta">
                         Valider la création
