@@ -25,6 +25,16 @@ class isEmptyException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
 /**
  * Classe incorrectLoginException
  *
@@ -51,6 +61,16 @@ class incorrectLoginException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
 /**
  * Classe notFoundClientException
  *
@@ -77,11 +97,31 @@ class notFoundClientException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Classe notFoundAccountException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'un débit est supérieur au solde et au découvert.
+ **/
 class soldeInsuffisantException extends Exception{
     /**
      * Constructeur de la classe
      *
-     * @param string $message Message d'erreur à afficher (par défaut : "Aucun client trouvé")
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas débiter plus que le solde et le découvert")
      * @param int $code Code d'erreur (par défaut : 0)
      * @return void
      */
@@ -98,11 +138,34 @@ class soldeInsuffisantException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Classe notFoundAccountException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'un client veut créer un compte déjà existant.
+ **/
 class existingAccountException extends Exception{
     /**
      * Constructeur de la classe
      *
-     * @param string $message Message d'erreur à afficher (par défaut : "Aucun client trouvé")
+     * @param string $message Message d'erreur à afficher (par défaut : "Compte déjà existant")
      * @param int $code Code d'erreur (par défaut : 0)
      * @return void
      */
@@ -119,11 +182,32 @@ class existingAccountException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Classe notFoundAccountException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'un client veut créer un compte ou un contrat avec lui même.
+ **/
 class clientIncorrectException extends Exception{
     /**
      * Constructeur de la classe
      *
-     * @param string $message Message d'erreur à afficher (par défaut : "Aucun client trouvé")
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas créer un compte avec vous même")
      * @param int $code Code d'erreur (par défaut : 0)
      * @return void
      */
@@ -140,3 +224,71 @@ class clientIncorrectException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
+
+
+
+
+/**
+ * Classe appointementHoraireException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'un RDV est pris à une heure où il y a déjà un événement.
+ **/
+class appointementHoraireException extends Exception{
+    /**
+     * Constructeur de la classe
+     *
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas créer un rendez-vous à cette heure")
+     * @param int $code Code d'erreur (par défaut : 0)
+     * @return void
+     */
+    public function __construct($message="Vous ne pouvez pas créer un rendez-vous à cette heure", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+    /**
+     * Fonction qui permet d'afficher l'erreur
+     *
+     * @return string
+     */
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+/**
+ * Classe TAHoraireException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'une TA est pris à une heure où il y a déjà un événement
+ **/
+class TAHoraireException extends Exception{
+    /**
+     * Constructeur de la classe
+     *
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas créer une TA à cette heure")
+     * @param int $code Code d'erreur (par défaut : 0)
+     * @return void
+     */
+    public function __construct($message="Vous ne pouvez pas créer une TA à cette heure", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+    /**
+     * Fonction qui permet d'afficher l'erreur
+     *
+     * @return string
+     */
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

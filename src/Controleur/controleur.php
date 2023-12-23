@@ -378,18 +378,18 @@ function ctlDeleteContract($idContract){
 /**
  * Fonction qui permet de chercher un client en fonction de son idClient
  * @param int $idClient C'est l'id du client
- * @throws Exception Si l'id est vide
- * @throws Exception Si aucun client n'est trouvé
+ * @throws isEmptyException Si l'id est vide
+ * @throws notFoundClientException Si aucun client n'est trouvé
  * @return void
  */
 function ctlSearchIdClient($idClient){
     if ($idClient == '') {
-        throw new Exception('Veuillez entrer un ID');
+        throw new isEmptyException();
     }
     else{
         $client = modGetClientFromId($idClient);
         if (empty($client)){
-            throw new Exception('Aucun client trouvé');
+            throw new notFoundClientException();
         }
         else{
             vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
@@ -402,13 +402,13 @@ function ctlSearchIdClient($idClient){
  * @param string $nameClient C'est le nom du client
  * @param string $firstNameClient C'est le prénom du client
  * @param string $dateOfBirth C'est la date de naissance du client
- * @throws Exception Si tous les champs sont vides
- * @throws Exception Si aucun client n'est trouvé
+ * @throws isEmptyException Si tous les champs sont vides
+ * @throws notFoundClientException Si aucun client n'est trouvé
  * @return void
  */
 function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
     if (empty($nameClient) && empty($firstNameClient) && empty($dateOfBirth)) { // Aucun champ rempli
-        throw new Exception('Veuillez remplir tous les champs');
+        throw new isEmptyException('Veuillez remplir au moins un champ');
     }
     elseif (!empty($nameClient) && !empty($firstNameClient) && !empty($dateOfBirth)){ // Il y a tout de rempli
         $listClient=modAdvancedSearchClientABC($nameClient, $firstNameClient, $dateOfBirth);
@@ -432,7 +432,7 @@ function cltAdvanceSearchClient($nameClient, $firstNameClient, $dateOfBirth) {
         $listClient=modAdvancedSearchClientC($dateOfBirth);
     }
     if (empty($listClient)){
-        throw new Exception('Aucun client trouvé');
+        throw new notFoundClientException();
     }
     else{
         vueDisplayAdvanceSearchClient($listClient);
@@ -716,6 +716,7 @@ function ctlDisplayAddAppointementConseiller($date) {
  * @param string $heureDebut C'est l'heure de début du rendez-vous
  * @param string $heureFin C'est l'heure de fin du rendez-vous
  * @param int $idMotif C'est l'id du motif du rendez-vous
+ * @throws appointementHoraireException Si le rendez-vous est impossible car il y a un autre rendez-vous ou une tâche administrative à ce moment là
  * @return void
  */
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
@@ -728,24 +729,24 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
         $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
         foreach ($listAppointement as $appointement){
             if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
             if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
             if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
         }
         foreach ($listTA as $TA){
             if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
             if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
             if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
-                throw new Exception('Vous ne pouvez pas créer un rendez-vous à cette heure');
+                throw new appointementHoraireException();
             }
         }
         modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
@@ -777,6 +778,7 @@ function ctlDeleteAppointment($idAppointment) {
  * @param string $heureDebut C'est l'heure de début de la tâche administrative
  * @param string $heureFin C'est l'heure de fin de la tâche administrative
  * @param string $libelle C'est le libellé de la tâche administrative
+ * @throws TAHoraireException Si la tâche administrative est impossible car il y a un autre rendez-vous ou une tâche administrative à ce moment là
  * @return void
  */
 function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
@@ -789,24 +791,24 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
         $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
         foreach ($listAppointement as $appointement){
             if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
             if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
             if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
         }
         foreach ($listTA as $TA){
             if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
             if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
             if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
-                throw new Exception('Vous ne pouvez pas créer une tache admin à cette heure');
+                throw new TAHoraireException();
             }
         }
         modCreateTA($idEmployee, $horaireDebut, $horaireFin, $libelle);
