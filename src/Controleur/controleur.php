@@ -1,7 +1,7 @@
 <?php
 require_once('modele/modele.php');
 require_once('vue/vue.php');
-//require_once('exception.php');
+require_once('Exception.php');
 
 if(session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -34,17 +34,17 @@ function ctlHome (){
  * C'est ici que l'on initialise la session 
  * @param string $username C'est le nom d'utilisateur qui est le login dans la base de données
  * @param string $password C'est le mot de passe de l'utilisateur mais il est hashé et salé
- * @throws Exception Si le login ou le mot de passe est incorrect
- * @throws Exception Si le login ou le mot de passe est vide
+ * @throws incorrectLoginException Si le login ou le mot de passe est incorrect
+ * @throws isEmptyException Si le login ou le mot de passe est vide
  * @return void
  */
 function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {
-        throw new Exception("Veuillez remplir tous les champs");
+        throw new isEmptyException();
     }
     $resultConnnect = modConnect($username, $password);
     if (empty($resultConnnect)){
-        throw new Exception('Nom d\'utilisateur ou mot de passe incorrect');
+        throw new incorrectLoginException();
     }
     else{
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
@@ -197,13 +197,13 @@ function ctlGetAccount($idClient){
  * Fonction qui permet de débiter un compte
  * @param int $idAccount C'est l'id du compte
  * @param string $amount C'est le montant à débiter
- * @throws Exception Si le montant est supérieur au solde et au découvert
+ * @throws soldeInsuffisantException Si le montant est supérieur au solde et au découvert
  * @return void
  */
 function ctlDebit($idAccount, $amount){
     $account = modGetInfoAccount($idAccount);
     if ($amount > $account->solde + $account->decouvert){
-        throw new Exception('Vous ne pouvez pas débiter plus que le solde et le découvert');
+        throw new soldeInsuffisantException();
     }
     modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
     $client = modGetClientFromId($account->idClient);
@@ -264,16 +264,22 @@ function ctlAddAccount($idClient){
 /**
  * Fonction qui demande au model de créer un compte puis appel la sythèse du client
  * @param int $idClient C'est l'id du client
+ * @param string $overdraft C'est le découvert du compte
+ * @param int $idTypeAccount C'est l'id du type de compte
+ * @param int $idClient2 C'est l'id du deuxième client (si c'est un compte joint)
+ * @throws clientIncorrectException Si le client veut créer un compte avec lui même
+ * @throws existingAccountException Si le client a déjà un compte de ce type
+ * @throws existingAccountException Si le deuxième client a déjà un compte de ce type
  * @return void
  */
 function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
     if ($idClient2 == $idClient){
-        throw new Exception('Vous ne pouvez pas créer un compte avec vous même');
+        throw new clientIncorrectException();
     }
     $listAccount = modGetAccounts($idClient);
     foreach ($listAccount as $account){
         if ($account->idtypecompte == $idTypeAccount){
-            throw new Exception('Compte déjà existant');
+            throw new existingAccountException();
         }
     }
     if ($idClient2 == ""){
@@ -283,7 +289,7 @@ function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
         $listAccount = modGetAccounts($idClient2);
         foreach ($listAccount as $account){
             if ($account->idtypecompte == $idTypeAccount){
-                throw new Exception('Compte déjà existant pour la deuxième personne');
+                throw new existingAccountException('Compte déjà existant pour la deuxième personne');
             }
         }
         modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAccount);
@@ -336,11 +342,12 @@ function ctlAddContract($idClient){
  * @param string $monthCost C'est le coût mensuel du contrat
  * @param int $idTypeContract C'est l'id du type de contrat
  * @param int $idClient2 C'est l'id du deuxième client (si c'est un compte joint)
+ * @throws clientIncorrectException Si le client veut créer un compte avec lui même
  * @return void
  */
 function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""){
     if ($idClient2 == $idClient){
-        throw new Exception('Vous ne pouvez pas créer un contrat avec vous même');
+        throw new clientIncorrectException();
     }
     if ($idClient2 == ""){
         modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
