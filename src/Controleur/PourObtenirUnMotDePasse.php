@@ -1,5 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de mot de passe pour la BD</title>
+</head>
+<body>
+    <form action="PourObtenirUnMotDePasse.php" method="post">
+        <label for="password">Mot de passe à hasher</label>
+        <input type="text" name="password" id="password">
+        <input type="submit" name="btn" value="hasher">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
 <?php
 
+if (isset($_POST['btn'])) {
+    $password = $_POST['password'];
+    $hashedPassword = hashPassword($password);
+    echo '<br>';
+    echo "le mot de passe à hasher est : ".$password;
+    echo '<br>';
+    echo '<br>';
+    echo 'le mot de passe hashé est : <input type="text" value="'.$hashedPassword.'">';
+    echo '<br>';
+    echo '<br>';
+    echo "c'est bon ? : ".checkPassword($password, $hashedPassword);
+}
 
 function checkPassword($password, $hashedPassword) {
     if (password_verify($password, $hashedPassword)) {
@@ -13,20 +52,3 @@ function hashPassword($password) {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT, $options);
     return $hashedPassword;
 }
-
-
-#C'est ici que l'on rentre le mot de passe que l'on veut hasher
-$password = 'AZERTY';
-
-
-
-
-
-
-
-
-
-$hashedPassword = hashPassword($password);
-echo "le mot de passe hashé est : ".$hashedPassword;
-echo '<br>';
-echo checkPassword($password, $hashedPassword);

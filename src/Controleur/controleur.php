@@ -494,6 +494,7 @@ function ctlGestionPersonnelAll(){
  * @return void
  */
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
+    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
@@ -562,6 +563,9 @@ function ctlSetting(){
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
     if ($password == ''){
         $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    }
+    else{
+        $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
     }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
     ctlHome();
