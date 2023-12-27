@@ -3,36 +3,34 @@ require_once('modele/token.php');
 require_once('token.php');
 
 /**
- * Renvoie le salt correspondant au login passé en paramètre,
+ * Renvoie le password correspondant au login passé en paramètre,
  * Rien si ce login n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé.
- * @return string Le salt de l'employé.
+ * @return string Le password hashé et salé de l'employé.
  */
-function modGetSalt($login) {
+function modGetPassword($login) {
     $connection = Connection::getInstance()->getConnection();
-    $query = $connection -> prepare("SELECT SALT FROM employe WHERE login=:login");
+    $query = "SELECT PASSWORD FROM employe WHERE login=:login";
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(":login", $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->SALT;
+    return $result->PASSWORD;
 }
 
 /**
- * Renvoie toutes les infos de l'employé dont le login et password sont en paramètres,
+ * Renvoie toutes les infos de l'employé dont le login sont en paramètres,
  * Rien si celui-ci n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé
- * @param string $password Le password salé de l'employé
  * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM)
  */
-function modConnect($login, $password) {
+function modGetEmployeFromLogin($login) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM FROM employe WHERE login=:login AND password=:password';
+    $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM FROM employe WHERE login=:login';
     $prepared = $connection->prepare($query);
     $prepared -> bindParam(':login',$login,PDO::PARAM_STR);
-    $prepared -> bindParam(':password',$password,PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
