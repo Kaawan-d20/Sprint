@@ -17,14 +17,14 @@
             </div>
             <div class="weekSelector">
                 <form action="index.php" method="post" id="previousWeekForm">
-                    <button class="previous" name="weekSelectorPreviousConseiller" id="weekSelectorPrevious" title="Semaine Precedente" type="submit">
+                    <button class="previous" name="weekSelectorPreviousConseiller" id="weekSelectorPrevious" title="Semaine Précédente" type="submit">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
                     <input type="date" name="previousWeekDate" id="previousWeekDate" class="hidden">
                 </form>
                 <form action="index.php" method="post" id="weekSelectorForm" class="weekSelectorForm">
-                    <label for="weekSelectorDateField" class="visually-hidden">Selectionner une Semaine</label>
-                    <input type="date" name="weekSelectorDateFieldConseiller" id="weekSelectorDateField" class="weekSelectorDateField"  title="Selectionner une semaine" onblur="attemptUpdate()">
+                    <label for="weekSelectorDateField" class="visually-hidden">Sélectionner une Semaine</label>
+                    <input type="date" name="weekSelectorDateFieldConseiller" id="weekSelectorDateField" class="weekSelectorDateField"  title="Sélectionner une semaine" onblur="attemptUpdate()">
                     <input type="submit" name="weekSelectorDateBtnConseiller" id="weekSelectorDateBtn" class="hidden">
                 </form>
                 <form action="index.php" method="post">

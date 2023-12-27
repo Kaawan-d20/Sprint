@@ -6,7 +6,7 @@ require_once('token.php');
  * Renvoie le password correspondant au login passé en paramètre,
  * Rien si ce login n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé.
- * @return string Le password hashé et salé de l'employé.
+ * @return string Le password haché et salé de l'employé.
  */
 function modGetPassword($login) {
     $connection = Connection::getInstance()->getConnection();
@@ -247,7 +247,7 @@ function modCredit($idAccount,$sum,$date) {
 }
 
 /**
- * Modifie le decouvert du compte dont l'id est en paramètre
+ * Modifie le découvert du compte dont l'id est en paramètre
  * @param int $idAccount L'id du compte
  * @param string $overdraft Le montant du découvert
  * @return void
@@ -812,7 +812,7 @@ function modGetAppointmentsClient($id) {
  * Crée un nouveau rdv
  * @param int $idMotif L'id du motif
  * @param int $idClient L'id du client
- * @param int $idEmploye L'id de l'employe
+ * @param int $idEmploye L'id de l’employé
  * @param string $horaireDebut L'horaire de début
  * @param string $horaireFin L'horaire de fin 
  */
@@ -1159,14 +1159,14 @@ function modGetAllClients() {
  * @param int $idClient L'id du client
  * @param int $idEmploye L'id du conseiller
  * @param string $name Le nom
- * @param string $firstName Le prenom
+ * @param string $firstName Le prénom
  * @param string $birthDate La date de naissance
  * @param string $adress L'adresse
  * @param string $num Le numero de tel
  * @param string $email L'adresse mail
  * @param string $job La profession
  * @param string $situationFamiliale La situation familiale
- * @param string $civilite La civilite
+ * @param string $civilite La civilité
  */
 function modModifClient($idClient,$idEmploye,$name,$firstName,$birthDate,$adress,$num,$email,$job,$situationFamiliale,$civilite) {
     $connection = Connection::getInstance()->getConnection();
@@ -1191,14 +1191,14 @@ function modModifClient($idClient,$idEmploye,$name,$firstName,$birthDate,$adress
  * Crée un client avec les infos en paramètre
  * @param int $idEmploye L'id du conseiller
  * @param string $name Le nom
- * @param string $firstName Le prenom
+ * @param string $firstName Le prénom
  * @param string $birthDate La date de naissance
  * @param string $adress L'adresse
  * @param string $num Le numero de tel
  * @param string $email L'adresse mail
  * @param string $job La profession
  * @param string $situationFamiliale La situation familiale
- * @param string $civilite La civilite
+ * @param string $civilite La civilité
  */
 function modCreateClient($idEmploye,$name,$firstName,$birthDate,$adress,$num,$email,$job,$situationFamiliale,$civilite) {
     $connection = Connection::getInstance()->getConnection();

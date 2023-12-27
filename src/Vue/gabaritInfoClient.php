@@ -81,7 +81,7 @@
             <div class="accountTableWrapper <?php echo $typeClass?>">
                     <div class="accountCell header">Compte</div>
                     <div class="accountCell header">Solde</div>
-                    <div class="accountCell header">Decouvert </div>
+                    <div class="accountCell header">Découvert </div>
 
                     <?php echo $listA ?>
             </div>

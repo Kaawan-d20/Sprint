@@ -49,8 +49,8 @@
         <div>
             <h1>Nombre de contrat & RDV sur une période</h1>
             <form action="index.php" method="post" class="statForm">
-                <input type="date" name="datedebut" class="statDateField"  title="Selectionner une date de début" required>
-                <input type="date" name="datefin" class="statDateField"  title="Selectionner une date de fin" required>
+                <input type="date" name="datedebut" class="statDateField"  title="Sélectionner une date de début" required>
+                <input type="date" name="datefin" class="statDateField"  title="Sélectionner une date de fin" required>
                 <button type="submit" name="searchStatClient2" class="statBtn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Rechercher
@@ -77,7 +77,7 @@
         <div>
             <h1>Nombre de Clients à une date</h1>
             <form action="index.php" method="post" class="statForm">
-                <input type="date" name="date" class="statDateField"  title="Selectionner une semaine">
+                <input type="date" name="date" class="statDateField"  title="Sélectionner une semaine">
                 <button type="submit" name="searchStatClient1" class="statBtn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     Rechercher

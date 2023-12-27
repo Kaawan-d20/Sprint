@@ -16,9 +16,9 @@
 
     <h2>Hacher PHP</h2>
     <form action="PourObtenirUnMotDePasse.php" method="post">
-        <label for="password">Mot de passe à hasher</label>
+        <label for="password">Mot de passe à hacher</label>
         <input type="text" name="password" id="password">
-        <input type="submit" name="btn" value="hasher">
+        <input type="submit" name="btn" value="hacher">
     </form>
 </body>
 <script>
@@ -46,10 +46,10 @@ if (isset($_POST['btn'])) {
     $password = $_POST['password'];
     $hashedPassword = hashPassword($password);
     echo '<br>';
-    echo "le mot de passe à hasher est : ".$password;
+    echo "le mot de passe à hacher est : ".$password;
     echo '<br>';
     echo '<br>';
-    echo 'le mot de passe hashé est : <input type="text" value="'.$hashedPassword.'">';
+    echo 'le mot de passe haché est : <input type="text" value="'.$hashedPassword.'">';
     echo '<br>';
     echo '<br>';
     echo "c'est bon ? : ".checkPassword($password, $hashedPassword);

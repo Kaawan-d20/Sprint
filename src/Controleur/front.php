@@ -58,7 +58,7 @@ try {
         $dateOfBirth = $_POST['searchBirthClientField'];
         cltAdvanceSearchClient($name, $firstName, $dateOfBirth);
     }
-    elseif (isset($_POST['infoClientFromAdvancedBtn'])){ // Si le bouton d'information client (synthése) est cliqué
+    elseif (isset($_POST['infoClientFromAdvancedBtn'])){ // Si le bouton d'information client (synthèse) est cliqué
         $idClient = $_POST['idClient'];
         ctlSearchIdClient($idClient);
     }
@@ -87,13 +87,13 @@ try {
         ctlModifOverdraft($idAccount, $overdraft);
     }
     // ------------------------------------------------------- Agenda -------------------------------------------------------
-    elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente de l'agent d'acceuil est cliqué
+    elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente de l'agent d’accueil est cliqué
         ctlUpdateCalendar($_POST['previousWeekDate']);
     }
-    elseif (isset($_POST['weekSelectorNext'])){ // Si le bouton de semaine suivante de l'agent d'acceuil est cliqué
+    elseif (isset($_POST['weekSelectorNext'])){ // Si le bouton de semaine suivante de l'agent d’accueil est cliqué
         ctlUpdateCalendar($_POST['nextWeekDate']);
     }
-    elseif (isset($_POST["weekSelectorDateField"])){ // Si le champ de date de l'agent d'acceuil à été modifié (onblur)
+    elseif (isset($_POST["weekSelectorDateField"])){ // Si le champ de date de l'agent d’accueil à été modifié (onblur)
         ctlUpdateCalendar($_POST['weekSelectorDateField']);
     }
     elseif (isset($_POST['weekSelectorPreviousConseiller'])){ // Si le bouton de semaine précédente du conseiller est cliqué

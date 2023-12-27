@@ -30,7 +30,7 @@ function vueDisplayHomeDirecteur($stat, $username){
 
 /**
  * Fonction qui affiche la page d'accueil du conseiller
- * Déclanche la création de la navbar et du code HTML des events
+ * Déclenche la création de la navbar et du code HTML des events
  * @param array $appointments c'est les rendez-vous
  * @param array $TAS c'est les tâches à accomplir
  * @param DateTime $dateOfWeek c'est les dates de la semaine
@@ -41,7 +41,7 @@ function vueDisplayHomeDirecteur($stat, $username){
 function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $fullName){
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
-    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
+    // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
         $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
@@ -57,7 +57,7 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
 
 /**
  * Fonction qui affiche la page d'accueil de l'agent d'accueil
- * Déclanche la création de la navbar et du code HTML des events
+ * Déclenche la création de la navbar et du code HTML des events
  * @param array $appointments c'est les rendez-vous
  * @param array $TAS c'est les tâches à accomplir
  * @param DateTime $dateOfWeek c'est les dates de la semaine
@@ -67,7 +67,7 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
 function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
-    // $weekEvents represente pour chaque entrée de 0 à 6, en chaine de caracteres, les eventHTML du jour correspondant
+    // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
         $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
@@ -262,7 +262,7 @@ function vueGenerateAccountFilterBtnHTML ($account) {
 }
 
 /**
- * Fonction qui affiche la page de resultat de recherche d'un client
+ * Fonction qui affiche la page de résultat de recherche d'un client
  * Ne retourne rien
  * @param array $listClient c'est la liste des clients (optionnel)
  * @return void
@@ -293,7 +293,7 @@ function vueDisplayAdvanceSearchClient($listClient="") {
 }
 
 /**
- * Fonction qui afficge la page de gestion des employés
+ * Fonction qui affiche la page de gestion des employés
  * @param array $listEmployee c'est la liste des employés
  * @return void
  */
@@ -499,7 +499,7 @@ function vueDisplayGestionServicesAdd(){
  * @return void
  */
 function vueDisplayError ($error) {
-    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir à l'acceuil </a></p>";
+    $content = "<p>".$error."</p><p><a href=\"index.php\"/> Revenir à l’accueil </a></p>";
     require_once('gabaritErreur.php');
 }
 
@@ -541,7 +541,7 @@ function vueDisplayCreateClient($listConseiller) {
                         <label for="situationClient" class="visually-hidden">Situation familiale</label>
                         <input type="text" name="situationClient" id="situationClient" placeholder="Situation familiale" required>
                             '.$optionSelect.'
-                        <input type="submit" name="createClientBtn" value="Creer le Client" class="cta" required>
+                        <input type="submit" name="createClientBtn" value="Créer le Client" class="cta" required>
                     </form>
                 </div>';
     require_once('gabaritGestion.php');
@@ -625,7 +625,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
     $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
                 <h1>Ajouter un Type de Contrat</h1>
                 '.$optionSelect.$datalist.'
-                <input type="number" name="monthCost" placeholder="Cout Mensuel" step="0.01" class="addContractField" required>
+                <input type="number" name="monthCost" placeholder="Coût Mensuel" step="0.01" class="addContractField" required>
                 <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="createContractBtn" class="addContractField cta">
                     Valider la création
@@ -678,7 +678,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
  * @param array $listClients c'est la liste des clients
  * @param array $listMotifs c'est la liste des motifs
  * @param string $date c'est la date de l'évènement
- * @param array $rdvArray c'est la liste des rendez-vous
+ * @param array|ArrayObject $rdvArray c'est la liste des rendez-vous
  * @param string $clientActuel c'est le client actuel (optionnel)
  * @return void
  */
@@ -758,7 +758,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
  * @param array $listClients c'est la liste des clients
  * @param array $listMotifs c'est la liste des motifs
  * @param string $date c'est la date de l'évènement
- * @param array $rdvArray c'est la liste des rendez-vous
+ * @param array|ArrayObject $rdvArray c'est la liste des rendez-vous
  * @return void
  */
 function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray) {
@@ -882,7 +882,7 @@ function vueAppointementClient($listRDVClients){
  * @return string Le code HTML de la liste des contrats
  */
 function vueCreateListContract($listContract){
-    $listC = ($_SESSION["type"] == 2) ? '<div class="accountCell header">Supression</div>' : '';
+    $listC = ($_SESSION["type"] == 2) ? '<div class="accountCell header">Suppression</div>' : '';
     foreach ($listContract as $contract) {
         $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
             <div class="contractCell content">'.$contract->tarifmensuel.'€</div>';
@@ -908,7 +908,7 @@ function vueCreateListAccount($listAccounts){
     $optionSelect = "";
     // pour faire la liste des comptes
     if ($_SESSION["type"] == 2) {
-        $listA = '<div class="accountCell header">Supression</div>';
+        $listA = '<div class="accountCell header">Suppression</div>';
         $typeClass = 'conseiller';
     }
     else{
@@ -1165,7 +1165,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
     $events = "";
     // pour faire la liste des comptes
     if ($_SESSION["type"] == 2) {
-        $listA = '<div class="accountCell header">Supression</div>';
+        $listA = '<div class="accountCell header">Suppression</div>';
         $typeClass = 'conseiller';
     }
     else{

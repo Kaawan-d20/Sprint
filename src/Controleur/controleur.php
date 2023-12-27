@@ -33,7 +33,7 @@ function ctlHome (){
  * Fonction qui permet de se connecter
  * C'est ici que l'on initialise la session 
  * @param string $username C'est le nom d'utilisateur qui est le login dans la base de données
- * @param string $password C'est le mot de passe de l'utilisateur mais il est hashé et salé
+ * @param string $password C'est le mot de passe de l'utilisateur mais il est haché et salé
  * @throws incorrectLoginException Si le login ou le mot de passe est incorrect
  * @return void
  */
@@ -237,7 +237,7 @@ function ctlGetOperation($idClient){
 }
 
 /**
- * Fonction qui demande au model de modifier le découvert d'un compte puis appel la sythèse du client
+ * Fonction qui demande au model de modifier le découvert d'un compte puis appel la synthèse du client
  * @param int $idAccount C'est l'id du compte
  * @param string $overdraft C'est le découvert du compte
  * @return void
@@ -261,7 +261,7 @@ function ctlAddAccount($idClient){
 }
 
 /**
- * Fonction qui demande au model de créer un compte puis appel la sythèse du client
+ * Fonction qui demande au model de créer un compte puis appel la synthèse du client
  * @param int $idClient C'est l'id du client
  * @param string $overdraft C'est le découvert du compte
  * @param int $idTypeAccount C'est l'id du type de compte
@@ -297,7 +297,7 @@ function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
 }
 
 /**
- * Fonction qui demande au model de supprimer un compte puis appel la sythèse du client
+ * Fonction qui demande au model de supprimer un compte puis appel la synthèse du client
  * @param int $idAccount C'est l'id du compte
  * @return void
  */
@@ -336,7 +336,7 @@ function ctlAddContract($idClient){
 }
 
 /**
- * Fonction qui demande au model de créer un contrat puis appel la sythèse du client
+ * Fonction qui demande au model de créer un contrat puis appel la synthèse du client
  * @param int $idClient C'est l'id du client
  * @param string $monthCost C'est le coût mensuel du contrat
  * @param int $idTypeContract C'est l'id du type de contrat
@@ -358,7 +358,7 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
 }
 
 /**
- * Fonction qui demande au model de supprimer un contrat puis appel la sythèse du client
+ * Fonction qui demande au model de supprimer un contrat puis appel la synthèse du client
  * @param int $idContract C'est l'id du contrat
  * @return void
 */
@@ -494,7 +494,7 @@ function ctlGestionPersonnelAll(){
  * @return void
  */
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
-    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
+    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
@@ -518,7 +518,7 @@ function ctlGestionPersonnelAdd(){
  * @return void
  */
 function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color){
-    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
+    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
     modAddEmploye($category, $name, $firstName, $login, $password, $color);
     ctlGestionPersonnelAll();
 }
@@ -565,7 +565,7 @@ function ctlSettingSubmit($idEmploye, $login, $password, $color){
         $password = modGetEmployeFromId($idEmploye)->PASSWORD;
     }
     else{
-        $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
+        $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
     }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
     ctlHome();
@@ -621,7 +621,7 @@ function ctlRDVDate($date) {
 
 /**
  * Fonction qui permet de récupérer les évènements d'une semaine
- * Fonction qui demande à une fonction du controleur la liste des RDV et des tâches administratives pour une semaine
+ * Fonction qui demande à une fonction du contrôleur la liste des RDV et des tâches administratives pour une semaine
  * @param DateTime|string $targetDate C'est la date de la semaine
  * @return void
  */
@@ -634,7 +634,7 @@ function ctlUpdateCalendarConseiller($targetDate) {
 
 /**
  * Fonction qui permet de récupérer les évènements d'une semaine
- * Fonction qui demande à une fonction du controleur la liste des RDV et des tâches administratives pour une semaine
+ * Fonction qui demande à une fonction du contrôleur la liste des RDV et des tâches administratives pour une semaine
  * @param DateTime|string $targetDate C'est la date de la semaine
  * @return void
  */

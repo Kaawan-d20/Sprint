@@ -32,7 +32,7 @@
             }
         }
         let isLightTheme = c.substring(nom_du_cookie.length, c.length) != "light";
-        /** switch beetween light and dark theme */ 
+        /** switch between light and dark theme */ 
         function toggleTheme() {
             let icon = document.getElementById("themeSwitcherIcon");
             let btn = document.getElementById("themeSwitcherBtn");
