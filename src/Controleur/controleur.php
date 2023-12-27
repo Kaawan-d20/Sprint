@@ -35,18 +35,13 @@ function ctlHome (){
  * @param string $username C'est le nom d'utilisateur qui est le login dans la base de données
  * @param string $password C'est le mot de passe de l'utilisateur mais il est hashé et salé
  * @throws incorrectLoginException Si le login ou le mot de passe est incorrect
- * @throws isEmptyException Si le login ou le mot de passe est vide
  * @return void
  */
-function ctlLogin ($username, $password) {
-    if ($username == '' || $password == '') {
-        throw new isEmptyException();
-    }
-    $resultConnnect = modConnect($username, $password);
-    if (empty($resultConnnect)){
-        throw new incorrectLoginException();
-    }
-    else{
+function ctlLogin($username, $password){
+    $BDPWD = modGetPassword($username);
+    $result = password_verify($password, $BDPWD);
+    if ($result == true){
+        $resultConnnect = modGetEmployeFromLogin($username);
         $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
         $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
         $_SESSION["name"] = $resultConnnect->NOM;
@@ -54,6 +49,10 @@ function ctlLogin ($username, $password) {
         $_SESSION["listClient"] = modGetAllClients();
         ctlHome();
     }
+    else{
+        throw new incorrectLoginException();
+    }
+
 }
 
 /**
@@ -495,6 +494,7 @@ function ctlGestionPersonnelAll(){
  * @return void
  */
 function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
+    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
@@ -518,6 +518,7 @@ function ctlGestionPersonnelAdd(){
  * @return void
  */
 function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color){
+    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
     modAddEmploye($category, $name, $firstName, $login, $password, $color);
     ctlGestionPersonnelAll();
 }
@@ -562,6 +563,9 @@ function ctlSetting(){
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
     if ($password == ''){
         $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    }
+    else{
+        $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hashage et salage du mot de passe
     }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
     ctlHome();
@@ -950,6 +954,22 @@ function debug($what = "debugString") {
     echo("<script>console.log(". json_encode($what) .")</script>");
 }
 
-
+function ctlLogin ($username, $password) {
+    if ($username == '' || $password == '') {
+        throw new isEmptyException();
+    }
+    $resultConnnect = modConnect($username, $password);
+    if (empty($resultConnnect)){
+        throw new incorrectLoginException();
+    }
+    else{
+        $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
+        $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
+        $_SESSION["name"] = $resultConnnect->NOM;
+        $_SESSION["firstName"] = $resultConnnect->PRENOM;
+        $_SESSION["listClient"] = modGetAllClients();
+        ctlHome();
+    }
+}
 
 */
