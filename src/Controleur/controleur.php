@@ -896,7 +896,9 @@ function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
 
 
 
-
+function debug($what = "debugString") {
+    echo("<script>console.log(". json_encode($what) .")</script>");
+}
 
 
 
@@ -950,9 +952,7 @@ function ctlGestionContractOne($idContract){
 }
 
 
-function debug($what = "debugString") {
-    echo("<script>console.log(". json_encode($what) .")</script>");
-}
+
 
 function ctlLogin ($username, $password) {
     if ($username == '' || $password == '') {

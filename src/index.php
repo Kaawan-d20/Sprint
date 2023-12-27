@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./Vue/style.css">
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <title>Bank</title>
 </head>
 <body>
@@ -58,6 +59,18 @@
             
         }
         toggleTheme();
+
+
+        /** send the hashed password 
+         * @param {string} passwordField the id of the password field
+         * @param {string} submitBtn the id of the submit button
+        */
+        function sent(passwordField, submitBtn) {
+            let password = document.getElementById(passwordField).value;
+            password = CryptoJS.SHA256(password).toString();
+            document.getElementById(passwordField).value = password;
+            document.getElementById(submitBtn).click();
+        }
     </script>
 </body>
 </html>

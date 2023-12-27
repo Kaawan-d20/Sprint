@@ -348,11 +348,12 @@ function vueGenerateGestionEmployeRow($employee) {
             <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
             <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
             <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
-            <input type="password" name="passwordEmployee" class="employeCell content" value="">
+            <input type="password" name="passwordEmployee" id="passwordEmployee'.$employee->IDEMPLOYE.'" class="employeCell content" value="">
             <select name="colorEmployee" class="employeCell content">
                 '.$selectOptions.'
             </select>
-            <button type="submit" name="ModifPersonnelOneBtn" class="employeBtn"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
+            <input type="submit" name="ModifPersonnelOneBtn" id="ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'" class="hidden">
+            <button type="button" class="employeBtn" onclick="sent(\'passwordEmployee'.$employee->IDEMPLOYE.'\',\'ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'\')"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
             <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i>Supprimer</button>
         </form>';
     return $row;
@@ -366,9 +367,8 @@ function vueDisplayGestionPersonnelAdd(){
     $navbar = vueGenerateNavBar();
     $selectOptions = '';
     global $colors;
-    $selectOptions = "";
     foreach ($colors as $color) {
-        $selectOptions .= '<option value="'.$color.'" class="'.$color.'-text'.'>'.$color.'</option>';
+        $selectOptions .= '<option value="'.$color.'" class="'.$color.'-text">'.$color.'</option>';
     }
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
                     <div>
@@ -381,11 +381,12 @@ function vueDisplayGestionPersonnelAdd(){
                         <input type="text" name="nameEmployee" placeholder="Nom" class="gestionPersonnelAddInput" required>
                         <input type="text" name="firstNameEmployee" placeholder="Prénom" class="gestionPersonnelAddInput" required>
                         <input type="text" name="loginEmployee" placeholder="Login" class="gestionPersonnelAddInput" required>
-                        <input type="password" name="passwordEmployee" placeholder="Mot de passe" class="gestionPersonnelAddInput" required>
+                        <input type="password" name="passwordEmployee" id="passwordEmployee" placeholder="Mot de passe" class="gestionPersonnelAddInput" required>
                         <select name="colorEmployee" class="gestionPersonnelAddInput" required>
                             '.$selectOptions.'
                         </select>
-                        <button type="submit" name="AddPersonnelSubmitBtn" class="gestionPersonnelAddInput" required>
+                        <input type="submit" name="AddPersonnelSubmitBtn" id="AddPersonnelSubmitBtn" class="hidden">
+                        <button type="button" name="AddPersonnelSubmitBtn" class="gestionPersonnelAddInput" onclick="sent(\'passwordEmployee\',\'AddPersonnelSubmitBtn\')">
                             <i class="fa-solid fa-check"></i> Valider ajout
                         </button>
                     </div>
@@ -574,7 +575,8 @@ function vueDisplaySetting($identity) {
                     <select name="colorEmployee" id="colorEmployee" class="modInfoField">
                     '.$selectOptions.'
                     </select>
-                    <input type="submit" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField">
+                    <input type="button" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField" onclick="sent(\'passwordEmployee\',\'connectBtn\')">
+                    <input type="submit" name="ModifSettingOneBtn" id="connectBtn" class="hidden">
                 </form>
             </div>
             <script>

@@ -5,14 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de mot de passe pour la BD</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
+    <h1>Générateur de mot de passe pour la BD</h1>
+    <h2>Hacher JS</h2>
+    <input type="text" id="password" onchange="hashed()">
+    <input type="text" id="hashedpassword">
+
+
+    <h2>Hacher PHP</h2>
     <form action="PourObtenirUnMotDePasse.php" method="post">
         <label for="password">Mot de passe à hasher</label>
         <input type="text" name="password" id="password">
         <input type="submit" name="btn" value="hasher">
     </form>
 </body>
+<script>
+    function hashed(){
+        password = document.getElementById("password").value;
+        hash = CryptoJS.SHA256(password).toString();
+        document.getElementById("hashedpassword").value = hash;
+    }
+</script>
 </html>
 
 

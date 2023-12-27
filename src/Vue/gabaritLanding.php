@@ -14,7 +14,7 @@
             <h1>Connection</h1>
         </header>
         <div>
-            <form action="index.php" method="POST" class="loginForm">
+            <form action="index.php" method="POST" class="loginForm" id="formLogin">
                 <div class="loginFormFieldWrapper">
                     <label for="landingLoginField" class="visually-hidden">Nom d'utilisateur</label>
                     <input type="text" name="landingLoginField" id="landingLoginField" class="loginFormField" placeholder="Login" required>
@@ -26,7 +26,8 @@
                 </div>
                 <!-- <p>Pas de compte ? <a href="i dont know">en créer un</a></p> -->
                 <div class="ctaContainer">
-                    <input type="submit" name="landingSubmitBtn"  id="landingSubmitBtn" value="Connection" class="cta">
+                    <input type="button" id="landingSubmitBtn" value="Connection" class="cta" onclick="sent('landingPasswordField','connectBtn')">
+                    <input type="submit" name="landingSubmitBtn"  id="connectBtn" value="Connection" class="hidden">
                 </div>
             </form>
             <button class="landingThemeBtn" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">
@@ -40,6 +41,7 @@
         </div>
     </div>
 </div>
+<input type="button" value="test" onclick="maFonction('param1', 'param2')">
 <script>
     function togglePasswordVisibility() {
         let passwordField = document.getElementById("landingPasswordField");
@@ -52,8 +54,8 @@
             passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
-        }
-}
+        }   
+    }
 </script>
 </body>
 </html>
