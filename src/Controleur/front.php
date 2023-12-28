@@ -10,6 +10,7 @@ if(session_status() === PHP_SESSION_NONE) {
 
 
 try {
+    
     // ------------------------------------------------------- Theme -------------------------------------------------------
     if(!isset($_COOKIE["Theme"])) { // Si le cookie pour le thème n'existe pas
         setcookie("Theme", "light", [
@@ -19,10 +20,13 @@ try {
         ]);
     }
     // ------------------------------------------------------- Landing Page -------------------------------------------------------
-    if (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
+    elseif (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
         ctlLogin($username, $password);
+    }
+    elseif (!isset($_SESSION["idEmploye"])){
+        ctlHome();
     }
     // ------------------------------------------------------- Nav Bar -------------------------------------------------------
     elseif (isset($_POST['searchClientBtn'])){ // Si le bouton de recherche de client par id (datalist) est cliqué
