@@ -1,7 +1,7 @@
 
-
 let selectedFilters = [];
-let globalCurrentDate = new Date(document.getElementById("transmetterJS").textContent);
+let currentFilter = null;
+let globalCurrentDate = new Date(document.getElementById("transmetterJS1").textContent);
 document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
 
 let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
@@ -26,6 +26,7 @@ let correspondingMonth = [
     "Novembre",
     "Décembre"
 ];
+
 /** returns a Date as a string "yyyy-mm-dd" */ 
 function dateToString(globalCurrentDate) {
     return (globalCurrentDate.getFullYear() 
@@ -49,6 +50,10 @@ function generateSingleFilter(name, colorClass) {
     filterBtn.appendChild(document.createTextNode(name));
 
     filterBtn.dataset.conseiller = name;
+
+    if (name == document.getElementById("transmetterJS2").textContent) {
+        currentFilter = filterBtn;
+    }
 
     return filterBtn;
 } 
@@ -136,12 +141,12 @@ function filterEvents() {
 function setdayCellSpan (week) {
     let spanToFill = document.querySelectorAll(".day .dayCell span")
     for (let i = 0; i < 7; i++) {
-        spanToFill[i].textContent = week[i];
+        spanToFill[i].textContent = week[i]
     }
 }
 
 function setHiddenDatefield (week) {
-    let datefieldToFill = document.querySelectorAll("#newRDVdateField");
+    let datefieldToFill = document.querySelectorAll("#newRDVdateFieldConseiller");
     for (let i = 0; i < 7; i++) {
         datefieldToFill[i].value = week[i];
     }
@@ -198,3 +203,4 @@ function attemptUpdate() {
 
 generateFilters();
 updateCalendar(globalCurrentDate);
+filterToggle(currentFilter);

@@ -1151,6 +1151,7 @@ nav {
     font-size: var(--classic-font-size);
     font-family: var(--mono-font);
     padding: 1em;
+    color : var(--text);
 }
 
 .field input {

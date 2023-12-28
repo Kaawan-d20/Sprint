@@ -268,7 +268,7 @@ function vueDisplaySetting($identity) {
                     <div class="loginFormFieldWrapper">
                         <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
                         <input type="password" name="passwordEmployee" id="passwordEmployee" class="modInfoPasswordField" placeholder="Password" required>
-                        <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+                        <button onclick="togglePasswordVisibility(\'passwordEmployee\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                     </div>
                     <label for="colorEmployee" class="visually-hidden">Couleur : </label>
                     <select name="colorEmployee" id="colorEmployee" class="modInfoField">
@@ -277,22 +277,7 @@ function vueDisplaySetting($identity) {
                     <input type="button" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField" onclick="sent(\'passwordEmployee\',\'connectBtn\')">
                     <input type="submit" name="ModifSettingOneBtn" id="connectBtn" class="hidden">
                 </form>
-            </div>
-            <script>
-            function togglePasswordVisibility() {
-                let passwordField = document.getElementById("passwordEmployee");
-                let icon = document.getElementById("visibilityIcon");
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    passwordField.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
-            }
-            </script> ';
+            </div>';
     require_once('gabaritGestion.php');
 }
 
@@ -933,16 +918,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         '.$events.'
                     </div>
                 </div>
-            </div>
-                <script>
-                    function changeConseiller(select) {
-                        let option =select.options[select.selectedIndex];
-                        console.log(option);
-                        let value = option.dataset.conseiller;
-                        console.log(value);
-                        document.getElementById("appointementsConseillerField").value = value;
-                    }
-                </script>';
+            </div>';
     require_once('gabaritGestion.php');
 
 }
@@ -1018,30 +994,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                         '.$events.'
                     </div>
                 </div>
-            </div>
-            <script>
-                let isAdmin = false;
-                function toggleTA() {
-                    console.log(isAdmin);
-                    isAdmin = ! isAdmin ;
-                    console.log(isAdmin);
-                    if (isAdmin) {
-                        document.querySelectorAll(".admin").forEach(function (item) {
-                            item.classList.remove("hidden")
-                        });
-                        document.querySelectorAll(".appointement").forEach(function (item) {
-                            item.classList.add("hidden")
-                        });
-                    } else {
-                        document.querySelectorAll(".appointement").forEach(function (item) {
-                            item.classList.remove("hidden")
-                        });
-                        document.querySelectorAll(".admin").forEach(function (item) {
-                            item.classList.add("hidden")
-                        });
-                    }
-                }
-            </script>';
+            </div>';
     require_once('gabaritGestion.php');
 }
 

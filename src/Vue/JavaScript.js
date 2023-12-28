@@ -94,8 +94,8 @@ function sent(passwordField, submitBtn) {
 
 
 
-function togglePasswordVisibility() {
-    let passwordField = document.getElementById("landingPasswordField");
+function togglePasswordVisibility(password) {
+    let passwordField = document.getElementById(password);
     let icon = document.getElementById("visibilityIcon");
     if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -107,6 +107,77 @@ function togglePasswordVisibility() {
         icon.classList.add("fa-eye");
     }   
 }
+
+
+
+
+
+//Synthèse client 
+
+
+function toggleFilter(filterBtn) {
+    let oldIcon =currentFilter.children[0];
+    let icon = filterBtn.children[0];
+
+    oldIcon.classList.remove("fa-circle-dot");
+    oldIcon.classList.add("fa-circle");
+    currentFilter.classList.add("inactive");
+
+    icon.classList.remove("fa-circle");
+    icon.classList.add("fa-circle-dot");
+    filterBtn.classList.remove("inactive");
+
+    let oldWrapper = document.getElementById("account"+currentFilter.dataset.id);
+    oldWrapper.classList.add("hidden");
+    let newWrapper = document.getElementById("account"+filterBtn.dataset.id);
+    newWrapper.classList.remove("hidden");
+
+    currentFilter = filterBtn;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//Prise de TA
+
+let isAdmin = false;
+function toggleTA() {
+    isAdmin = ! isAdmin ;
+    if (isAdmin) {
+        document.querySelectorAll(".admin").forEach(function (item) {
+            item.classList.remove("hidden")
+        });
+        document.querySelectorAll(".appointement").forEach(function (item) {
+            item.classList.add("hidden")
+        });
+    } else {
+        document.querySelectorAll(".appointement").forEach(function (item) {
+            item.classList.remove("hidden")
+        });
+        document.querySelectorAll(".admin").forEach(function (item) {
+            item.classList.add("hidden")
+        });
+    }
+}
+
+
+//Prise de RDV
+function changeConseiller(select) {
+    let option =select.options[select.selectedIndex];
+    console.log(option);
+    let value = option.dataset.conseiller;
+    console.log(value);
+    document.getElementById("appointementsConseillerField").value = value;
+}
+
 
 
 

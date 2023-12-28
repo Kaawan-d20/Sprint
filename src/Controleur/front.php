@@ -21,6 +21,8 @@ try {
     if (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
+        debug($username);
+        debug($password);
         ctlLogin($username, $password);
     }
     elseif (!isset($_SESSION["idEmploye"])){
