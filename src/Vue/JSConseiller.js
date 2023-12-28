@@ -3,7 +3,6 @@
 window.addEventListener('load', init);
 
 function init(){
-    console.log("init");
     selectedFilters = [];
     currentFilter = null;
     globalCurrentDate = new Date(document.getElementById("transmetterJS1").textContent);
@@ -19,9 +18,7 @@ function init(){
 
     generateFilters();
     updateCalendar(globalCurrentDate);
-    console.log("before filterToggle");
     filterToggle(currentFilter);
-    console.log("after filterToggle");
 }
 
 let correspondingMonth = [
@@ -82,10 +79,7 @@ function generateFilters () {
             conseillerColors[event.dataset.conseiller] = event.dataset.color;
         }
     })
-    console.log(conseillers);
     conseillers.forEach((conseiller) => {
-        console.log("conseiller");
-        console.log(conseiller);
         let filterBtn = generateSingleFilter(conseiller, conseillerColors[conseiller]);
         filterWrapper.appendChild(filterBtn);
     })
@@ -94,8 +88,9 @@ function generateFilters () {
 
 /** called by the filterBtn dynamically created above, will toggle the filter mode for each type */ 
 function filterToggle(filterBtn) {
-    console.log("filterToggle");
-    console.log(filterBtn);
+    if (filterBtn == null) {
+        return null;
+    }
     let icon = filterBtn.childNodes[0];
     if (filterBtn.classList.value.includes("inactive")) {
 
