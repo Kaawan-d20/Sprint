@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Vue/JSAgent.js"></script>
     <!-- Importation de JS en bas car j'ai pas le choix -->
     <title>Accueil - Agent</title>
 </head>
@@ -145,7 +146,7 @@
     </div>
 </div>
 <div class="hidden" id="transmetterJS"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
-<script src="Vue/JSAgent.js"></script>
+
 <!-- je suis obliger de placer la balse js ici car en haut la page n'est pas charger donc transmetterJS n'est pas encore present -->
 </body>
 </html>

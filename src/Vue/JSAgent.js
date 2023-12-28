@@ -1,16 +1,22 @@
 
 
-let selectedFilters = [];
-let globalCurrentDate = new Date(document.getElementById("transmetterJS").textContent);
-document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
 
-let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
-document.getElementById("previousWeekDate").value = dateToString(datePreviousWeek);
+window.addEventListener('load', function init(){
+    selectedFilters = [];
+    globalCurrentDate = new Date(document.getElementById("transmetterJS").textContent);
+    document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
+    
+    datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+    document.getElementById("previousWeekDate").value = dateToString(datePreviousWeek);
+    
+    dateNextWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
+    document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
+    
+    globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
-let dateNextWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
-document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
-
-globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+    generateFilters();
+    updateCalendar(globalCurrentDate);
+});
 
 let correspondingMonth = [
     "Janvier",
@@ -196,5 +202,5 @@ function attemptUpdate() {
     }
 }
 
-generateFilters();
-updateCalendar(globalCurrentDate);
+
+
