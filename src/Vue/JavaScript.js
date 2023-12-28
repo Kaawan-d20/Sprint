@@ -137,11 +137,13 @@ function toggleFilter(filterBtn) {
 
 
 
+function initToggleFilter() {
+    currentFilter = document.getElementById("operationsFilterWrapper").children[0];
+    toggleFilter(currentFilter);
+}
 
 
-
-
-
+window.addEventListener('load', initToggleFilter);
 
 
 

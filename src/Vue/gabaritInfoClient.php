@@ -102,10 +102,6 @@
         </div>
         <?php echo $operationDisplay; ?>
     </div>
-    <script>
-        let currentFilter = document.getElementById("operationsFilterWrapper").children[0];
-        toggleFilter(currentFilter);
-    </script>
 </div>
 </body>
 </html>
