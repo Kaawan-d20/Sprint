@@ -1,16 +1,28 @@
 
-let selectedFilters = [];
-let currentFilter = null;
-let globalCurrentDate = new Date(document.getElementById("transmetterJS1").textContent);
-document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
 
-let datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
-document.getElementById("previousWeekDate").value = dateToString(datePreviousWeek);
+window.addEventListener('load', init);
 
-let dateNextWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
-document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
+function init(){
+    console.log("init");
+    selectedFilters = [];
+    currentFilter = null;
+    globalCurrentDate = new Date(document.getElementById("transmetterJS1").textContent);
+    document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
 
-globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+    datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+    document.getElementById("previousWeekDate").value = dateToString(datePreviousWeek);
+
+    dateNextWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() + 14)));
+    document.getElementById("nextWeekDate").value =dateToString(dateNextWeek);
+
+    globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
+
+    generateFilters();
+    updateCalendar(globalCurrentDate);
+    console.log("before filterToggle");
+    filterToggle(currentFilter);
+    console.log("after filterToggle");
+}
 
 let correspondingMonth = [
     "Janvier",
@@ -70,7 +82,10 @@ function generateFilters () {
             conseillerColors[event.dataset.conseiller] = event.dataset.color;
         }
     })
+    console.log(conseillers);
     conseillers.forEach((conseiller) => {
+        console.log("conseiller");
+        console.log(conseiller);
         let filterBtn = generateSingleFilter(conseiller, conseillerColors[conseiller]);
         filterWrapper.appendChild(filterBtn);
     })
@@ -79,6 +94,8 @@ function generateFilters () {
 
 /** called by the filterBtn dynamically created above, will toggle the filter mode for each type */ 
 function filterToggle(filterBtn) {
+    console.log("filterToggle");
+    console.log(filterBtn);
     let icon = filterBtn.childNodes[0];
     if (filterBtn.classList.value.includes("inactive")) {
 
@@ -200,7 +217,3 @@ function attemptUpdate() {
         document.getElementById("weekSelectorForm").submit();
     }
 }
-
-generateFilters();
-updateCalendar(globalCurrentDate);
-filterToggle(currentFilter);

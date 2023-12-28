@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Vue/JSConseiller.js"></script> <!-- Script JS pour le calendrier -->
     <title>Accueil - Conseiller</title>
 </head>
 <body class="light">
@@ -145,7 +146,5 @@
 </div>
 <div class="hidden" id="transmetterJS1"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
 <div class="hidden" id="transmetterJS2"><?php echo $fullName ?></div>
-<script src="Vue/JSConseiller.js"></script>
-<!-- je suis obliger de placer la balse js ici car en haut la page n'est pas charger donc transmetterJS n'est pas encore present -->
 </body>
 </html>
