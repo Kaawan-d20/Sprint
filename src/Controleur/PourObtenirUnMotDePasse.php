@@ -20,6 +20,15 @@
         <input type="text" name="password" id="password">
         <input type="submit" name="btn" value="hacher">
     </form>
+
+
+    <h2>Hacher PHP verif</h2>
+    <form action="PourObtenirUnMotDePasse.php" method="post">
+        <label for="password">Mot de passe à hacher</label>
+        <input type="text" name="password" id="password" placeholder="password">
+        <input type="text" name="seed" id="seed" placeholder="seed">
+        <input type="submit" name="verif" value="hacher">
+    </form>
 </body>
 <script>
     function hashed(){
@@ -53,6 +62,19 @@ if (isset($_POST['btn'])) {
     echo '<br>';
     echo '<br>';
     echo "c'est bon ? : ".checkPassword($password, $hashedPassword);
+}
+
+if (isset($_POST['verif'])) {
+    $password = $_POST['password'];
+    $seed = $_POST['seed'];
+    echo '<br>';
+    echo "le mot de passe à tester est est : ".$password;
+    echo '<br>';
+    echo '<br>';
+    echo 'la seed est : '.$seed;
+    echo '<br>';
+    echo '<br>';
+    echo "c'est bon ? : ".checkPassword($password, $seed);
 }
 
 function checkPassword($password, $hashedPassword) {

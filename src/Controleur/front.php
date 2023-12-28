@@ -176,6 +176,7 @@ try {
         $firstName = $_POST['firstNameEmployee'];
         $login = $_POST['loginEmployee'];
         $password = $_POST['passwordEmployee'];
+        debug($password);
         $category = $_POST['idCategorie'];
         $color = $_POST['colorEmployee'];
         ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color);

@@ -1000,6 +1000,7 @@ nav {
     margin: 1px 0 0 .5em;
     border-radius: 5px;
     font-size: var(--classic-font-size);
+    color : var(--text);
 }
 
 .employeBtn:hover {

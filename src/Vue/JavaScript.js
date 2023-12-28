@@ -205,19 +205,27 @@ POUBELLE
 
 
 
-function onSubmitButtonClick() {
-    console.log("in");
+function onSubmitButtonClick(data='') {
+    if (data==''){
+        var formID='formPassword';
+        var passwordField='PasswordField';
+    }
+    else{
+        var idEmploye = data.currentTarget.id.replace(/\D/g, '');
+        var formID='formPassword'+idEmploye;
+        var passwordField='PasswordField'+idEmploye;
+    }
+
     // Récupérer le mot de passe depuis le champ de formulaire
-    var password = document.getElementById('landingPasswordField').value;
+    var password = document.getElementById(passwordField).value;
 
     // Hasher le mot de passe
     var hashedPassword = CryptoJS.SHA256(password).toString();
 
     // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe hashé
-    document.getElementById('landingPasswordField').value = hashedPassword;
-
+    document.getElementById(passwordField).value = hashedPassword;
     // Soumettre le formulaire
-    document.getElementById('formLogin').submit();
+    document.getElementById(formID).submit();
 }
 
 // Ajouter un écouteur d'événements pour le clic sur le bouton "Soumettre"
@@ -225,5 +233,12 @@ function onSubmitButtonClick() {
 window.addEventListener('load', function() {
     if (document.querySelector('#connectBtn') != null){
         document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick);
+    }
+    else{
+        list=document.getElementsByName('ModifPersonnelOneBtn');
+        for (var i = 0; i < list.length; i++) {
+            list[i].addEventListener('click', onSubmitButtonClick.bind(list[i].id));
+            
+        }
     }
 });

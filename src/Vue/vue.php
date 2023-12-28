@@ -261,21 +261,20 @@ function vueDisplaySetting($identity) {
         $selectOptions .= '<option value="'.$color.'"'.$selected.' class="'.$color.'-text'.'">'.$color.'</option>';
     }
     $content='<div class="modInfoWrapper">
-                <form action="index.php" method="post">
+                <form action="index.php" method="post" id="formPassword">
                     <h1>Modifier info personnel</h1>
                     <label for="loginEmployee"  class="visually-hidden">Login :</label>
                     <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" placeholder="Login" required>
                     <div class="loginFormFieldWrapper">
                         <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
-                        <input type="password" name="passwordEmployee" id="passwordEmployee" class="modInfoPasswordField" placeholder="Password" required>
-                        <button onclick="togglePasswordVisibility(\'passwordEmployee\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+                        <input type="password" name="passwordEmployee" id="PasswordField" class="modInfoPasswordField" placeholder="Password" required>
+                        <button onclick="togglePasswordVisibility(\'PasswordField\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                     </div>
                     <label for="colorEmployee" class="visually-hidden">Couleur : </label>
                     <select name="colorEmployee" id="colorEmployee" class="modInfoField">
                     '.$selectOptions.'
                     </select>
-                    <input type="button" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField" onclick="sent(\'passwordEmployee\',\'connectBtn\')">
-                    <input type="submit" name="ModifSettingOneBtn" id="connectBtn" class="hidden">
+                    <input type="submit" name="ModifSettingOneBtn" value="Valider modification" id="connectBtn" class="cta modInfoField">
                 </form>
             </div>';
     require_once('gabaritGestion.php');
@@ -327,7 +326,7 @@ function vueGenerateGestionEmployeRow($employee) {
     $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
     $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
     $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
-    $row='<form action="index.php" method="post" class="employeTableContentWrapper">
+    $row='<form action="index.php" method="post" class="employeTableContentWrapper" id="formPassword'.$employee->IDEMPLOYE.'">
             <input  type="number" class="employeCell content" name="idEmployee" value="'.$employee->IDEMPLOYE.'" readonly="true">
             <select name="idCategorie" class="employeCell content">
                 <option value="1" '.$etat1.' >Directeur</option>
@@ -337,12 +336,11 @@ function vueGenerateGestionEmployeRow($employee) {
             <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
             <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
             <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
-            <input type="password" name="passwordEmployee" id="passwordEmployee'.$employee->IDEMPLOYE.'" class="employeCell content" value="">
+            <input type="password" name="passwordEmployee" id="PasswordField'.$employee->IDEMPLOYE.'" class="employeCell content" value="">
             <select name="colorEmployee" class="employeCell content">
                 '.$selectOptions.'
             </select>
-            <input type="submit" name="ModifPersonnelOneBtn" id="ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'" class="hidden">
-            <button type="button" class="employeBtn" onclick="sent(\'passwordEmployee'.$employee->IDEMPLOYE.'\',\'ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'\')"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
+            <input type="submit" name="ModifPersonnelOneBtn" id="connectBtn'.$employee->IDEMPLOYE.'" class="employeBtn">
             <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i>Supprimer</button>
         </form>';
     return $row;
