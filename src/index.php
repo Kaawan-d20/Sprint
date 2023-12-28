@@ -6,15 +6,11 @@
     <link rel="stylesheet" href="./Vue/style.css">
     <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="Vue/JavaScript.js"></script>
     <title>Bank</title>
 </head>
 <body>
-    <!-- <script type="text/javascript">
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () {
-            history.go(1);
-        };
-    </script> -->
+    
 
     <?php require_once 'controleur/front.php'; ?>
 
