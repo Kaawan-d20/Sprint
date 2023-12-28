@@ -23,8 +23,7 @@
                     <button onclick="togglePasswordVisibility('landingPasswordField')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                 </div>
                 <div class="ctaContainer">
-                    <input type="button" id="landingSubmitBtn" value="Connection" class="cta" onclick="sent('landingPasswordField','connectBtn')">
-                    <input type="submit" name="landingSubmitBtn"  id="connectBtn" value="Connection" class="hidden">
+                    <input type="submit" name="landingSubmitBtn"  id="connectBtn" value="Connection" class="cta">
                 </div>
             </form>
             <button class="landingThemeBtn" onclick="toggleTheme()" type="button" id="themeSwitcherBtn">

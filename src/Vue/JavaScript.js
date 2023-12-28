@@ -205,5 +205,25 @@ POUBELLE
 
 
 
+function onSubmitButtonClick() {
+    console.log("in");
+    // Récupérer le mot de passe depuis le champ de formulaire
+    var password = document.getElementById('landingPasswordField').value;
 
+    // Hasher le mot de passe
+    var hashedPassword = CryptoJS.SHA256(password).toString();
 
+    // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe hashé
+    document.getElementById('landingPasswordField').value = hashedPassword;
+
+    // Soumettre le formulaire
+    document.getElementById('formLogin').submit();
+}
+
+// Ajouter un écouteur d'événements pour le clic sur le bouton "Soumettre"
+
+window.addEventListener('load', function() {
+    if (document.querySelector('#connectBtn') != null){
+        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick);
+    }
+});
