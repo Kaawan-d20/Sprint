@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/31ad525f9a.js" crossorigin="anonymous"></script> -->
     <title>Connexion - Bank</title>
 </head>
 <body class="light">
@@ -24,7 +22,6 @@
                     <input type="password" name="landingPasswordField" id="landingPasswordField" class="loginFormField" placeholder="Password" required>
                     <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                 </div>
-                <!-- <p>Pas de compte ? <a href="i dont know">en créer un</a></p> -->
                 <div class="ctaContainer">
                     <input type="button" id="landingSubmitBtn" value="Connection" class="cta" onclick="sent('landingPasswordField','connectBtn')">
                     <input type="submit" name="landingSubmitBtn"  id="connectBtn" value="Connection" class="hidden">
@@ -34,28 +31,7 @@
                 <i class="fa-solid fa-moon" id="themeSwitcherIcon"></i>
             </button>
         </div>
-        <div>
-            <p class="error">
-                <?php $content ?>
-            </p>
-        </div>
     </div>
 </div>
-<input type="button" value="test" onclick="maFonction('param1', 'param2')">
-<script>
-    function togglePasswordVisibility() {
-        let passwordField = document.getElementById("landingPasswordField");
-        let icon = document.getElementById("visibilityIcon");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
-            icon.classList.remove("fa-eye-slash");
-            icon.classList.add("fa-eye");
-        }   
-    }
-</script>
 </body>
 </html>

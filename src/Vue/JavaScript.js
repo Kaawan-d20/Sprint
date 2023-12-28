@@ -17,7 +17,9 @@ for(var i = 0; i <ca.length; i++) {
 console.log(c.substring(nom_du_cookie.length, c.length));
 let isLightTheme = c.substring(nom_du_cookie.length, c.length) == "light";
 
-
+/**
+ * Fonction qui au chargement de la page va charger le thème en fonction du cookie
+ */
 function loadTheme() {
     if (isLightTheme) {
         makeLightTheme(document.getElementById("themeSwitcherIcon"), document.getElementById("themeSwitcherBtn"));
@@ -28,7 +30,9 @@ function loadTheme() {
 
 
 
-/** switch between light and dark theme */ 
+/**
+ * Fonction qui va changer le thème de la page
+ */ 
 function toggleTheme() {
     console.log("toggleTheme");
     console.log(isLightTheme);
@@ -43,6 +47,11 @@ function toggleTheme() {
     
 }
 
+/**
+ * Focntion qui va changer le thème de la page en thème clair
+ * @param {Document} icon l'icone du bouton
+ * @param {Document} btn le bouton
+ */
 function makeLightTheme(icon, btn) {
     document.body.classList.add("light");
     document.body.classList.remove("dark");
@@ -54,6 +63,11 @@ function makeLightTheme(icon, btn) {
     document.cookie = "Theme=light; path=/";
 }
 
+/**
+ * Focntion qui va changer le thème de la page en thème sombre
+ * @param {Document} icon l'icone du bouton
+ * @param {Document} btn le bouton
+ */
 function makeDarkTheme(icon, btn) {
     document.body.classList.add("dark");
     document.body.classList.remove("light");
@@ -83,7 +97,19 @@ function sent(passwordField, submitBtn) {
 
 
 
-
+function togglePasswordVisibility() {
+    let passwordField = document.getElementById("landingPasswordField");
+    let icon = document.getElementById("visibilityIcon");
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        passwordField.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }   
+}
 
 
 
