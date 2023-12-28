@@ -1,7 +1,9 @@
 
 
 
-window.addEventListener('load', function init(){
+window.addEventListener('load', init);
+
+function init(){
     selectedFilters = [];
     globalCurrentDate = new Date(document.getElementById("transmetterJS").textContent);
     document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
@@ -16,7 +18,7 @@ window.addEventListener('load', function init(){
 
     generateFilters();
     updateCalendar(globalCurrentDate);
-});
+}
 
 let correspondingMonth = [
     "Janvier",
