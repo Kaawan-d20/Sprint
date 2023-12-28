@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script> <!-- Crypto JS pour le hashage -->
     <script src="Vue/JavaScript.js"></script> <!-- Script JS -->
 </head>
-<body onload="toggleTheme()">
+<body onload="loadTheme()">
     <?php require_once 'controleur/front.php'; ?>
 </body>
 </html>
