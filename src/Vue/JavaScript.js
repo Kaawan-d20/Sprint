@@ -10,11 +10,10 @@ for(var i = 0; i <ca.length; i++) {
     while (c.charAt(0) == ' ') {
         c = c.substring(1);
     }
-    if (c.indexOf(nom_du_cookie) == 0) {
-        console.log(c.substring(nom_du_cookie.length, c.length));
-    }
+    // if (c.indexOf(nom_du_cookie) == 0) {
+    //     console.log(c.substring(nom_du_cookie.length, c.length));
+    // }
 }
-console.log(c.substring(nom_du_cookie.length, c.length));
 let isLightTheme = c.substring(nom_du_cookie.length, c.length) == "light";
 
 /**
@@ -34,8 +33,6 @@ function loadTheme() {
  * Fonction qui va changer le thème de la page
  */ 
 function toggleTheme() {
-    console.log("toggleTheme");
-    console.log(isLightTheme);
     let icon = document.getElementById("themeSwitcherIcon");
     let btn = document.getElementById("themeSwitcherBtn");
     if (isLightTheme) {

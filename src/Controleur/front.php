@@ -7,10 +7,8 @@ if(session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-debug("front");
 
 try {
-    debug("try");
     // ------------------------------------------------------- Theme -------------------------------------------------------
     if(!isset($_COOKIE["Theme"])) { // Si le cookie pour le thème n'existe pas
         setcookie("Theme", "light", [
@@ -26,7 +24,6 @@ try {
         ctlLogin($username, $password);
     }
     elseif (!isset($_SESSION["idEmploye"])){
-        debug("landing");
          ctlHome();
     }
     // ------------------------------------------------------- Nav Bar -------------------------------------------------------
@@ -276,10 +273,8 @@ try {
     }
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{
-        debug("default");
         ctlHome();
     }
-    debug("fin try");
 } 
 
 catch(Exception $e) { 
@@ -287,7 +282,6 @@ catch(Exception $e) {
      ctlError($msg);
 }
 
-debug("fin front");
 /*
 POUBELLE
 
