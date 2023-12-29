@@ -60,17 +60,26 @@ function vueDisplayHomeDirecteur($stat, $username){
 function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $fullName){
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
+    $listConseiller = array();
     // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
+        if (!in_array("$appointment->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$appointment->IDENTITEEMPLOYE", "$appointment->COLOR");
+        }
         $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
     foreach ($TAS as $TA) {
+        if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$TA->IDENTITEEMPLOYE");
+        }
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
         $weekNumber = date_format($TADate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
     }
+    $filterWrapper="";
+    $filterWrapper = vueGenerateCalendarFilter($listConseiller);
     require_once('gabaritConseillerHomePage.php');
 }
 
@@ -97,7 +106,7 @@ function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
     foreach ($TAS as $TA) {
-    if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
+        if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
             array_push($listConseiller, "$TA->IDENTITEEMPLOYE");
         }
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);

@@ -16,7 +16,7 @@ function init(){
 
     globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
-    generateFilters();
+    //generateFilters();
     updateCalendar(globalCurrentDate);
     filterToggle(currentFilter);
 }
