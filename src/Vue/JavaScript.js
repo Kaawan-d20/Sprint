@@ -138,6 +138,9 @@ function toggleFilter(filterBtn) {
 
 
 function initToggleFilter() {
+    if (document.querySelector("#operationsFilterWrapper") == null) {
+        return;
+    }
     currentFilter = document.getElementById("operationsFilterWrapper").children[0];
     toggleFilter(currentFilter);
 }

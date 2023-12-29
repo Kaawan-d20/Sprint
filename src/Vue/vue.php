@@ -288,6 +288,7 @@ function vueDisplaySetting($identity) {
  * @return void
  */
 function vueDisplayGestionPersonnelAll($listEmployee) {
+    $titre = "Gestion du personnel - Bank";
     $navbar = vueGenerateNavBar();
     $content='<div class="employeTableWrapper">
                 <h1>Gestion des Employés</h1>
@@ -356,6 +357,7 @@ function vueGenerateGestionEmployeRow($employee) {
  * @return void
  */
 function vueDisplayGestionPersonnelAdd(){
+    $titre = "Ajout d'un employé - Bank";
     $navbar = vueGenerateNavBar();
     $selectOptions = '';
     global $colors;
@@ -399,6 +401,7 @@ function vueDisplayGestionPersonnelAdd(){
  * @return void
  */
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
+    $titre = "Gestion des services - Bank";
     $navbar = vueGenerateNavBar();
     $content ='<div class="gestionServiceWrapper">
                 <h1>Gestion des services</h1>
@@ -471,6 +474,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
  * @return void
  */
 function vueDisplayGestionServicesAdd(){
+    $titre = "Ajout d'un service - Bank";
     $navbar = vueGenerateNavBar();
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
                     <div>
