@@ -590,9 +590,13 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeekString, $dateEndOfWeekString);
     $listTA = modGetAllTABetween($dateStartOfWeekString, $dateEndOfWeekString);
 
+    $event = array_merge($listRDV, $listTA);
+    usort($event, function($a, $b) {
+        return $a->HORAIREDEBUT > $b->HORAIREDEBUT;
+    });
+
     $array = new ArrayObject();
-    $array->append($listRDV);
-    $array->append($listTA);
+    $array->append($event);
     $array->append($dateStartOfWeek);
     return $array;
 }
@@ -629,7 +633,7 @@ function ctlUpdateCalendarConseiller($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
     $fullName = $_SESSION["firstName"]." ".$_SESSION["name"];
-    vueDisplayHomeConseiller($array[0], $array[1], $array[2], $_SESSION["name"], $fullName);
+    vueDisplayHomeConseiller($array[0], $array[1], $_SESSION["name"], $fullName);
 }
 
 /**
@@ -641,8 +645,11 @@ function ctlUpdateCalendarConseiller($targetDate) {
 function ctlUpdateCalendar($targetDate) {
     $targetDate = ($targetDate instanceof DateTime) ? $targetDate : date_create($targetDate);
     $array = ctlRDVBetween(getMondayOfWeek($targetDate), getSundayOfWeek($targetDate));
-    vueDisplayHomeAgent($array[0], $array[1], $array[2], $_SESSION["name"]);
+    vueDisplayHomeAgent($array[0], $array[1], $_SESSION["name"]);
 }
+
+
+
 
 /**
  * Fonction qui renvoie la date du lundi de la semaine de la date donnée

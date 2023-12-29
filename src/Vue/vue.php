@@ -57,26 +57,25 @@ function vueDisplayHomeDirecteur($stat, $username){
  * @param string $fullName c'est le nom complet de l'utilisateur qui sera affiché dans la navbar
  * @return void
  */
-function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $fullName){
+function vueDisplayHomeConseiller($events, $dateOfWeek, $username, $fullName){
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
     $listConseiller = array();
     // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
-    foreach ($appointments as $appointment) {
-        if (!in_array("$appointment->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$appointment->IDENTITEEMPLOYE", "$appointment->COLOR");
+    foreach ($events as $event) {
+        if (!in_array("$event->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$event->IDENTITEEMPLOYE", "$event->COLOR");
         }
-        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
-        $weekNumber = date_format($appointmentDate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
-    }
-    foreach ($TAS as $TA) {
-        if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$TA->IDENTITEEMPLOYE", "$TA->COLOR");
+        if (isset($event->IDRDV)){
+            $appointmentDate = date_create_from_format("Y-m-d H:i:s", $event->HORAIREDEBUT);
+            $weekNumber = date_format($appointmentDate, "N");
+            $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($event);
         }
-        $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
-        $weekNumber = date_format($TADate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
+        else{
+            $TADate = date_create_from_format("Y-m-d H:i:s", $event->HORAIREDEBUT);
+            $weekNumber = date_format($TADate, "N");
+            $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($event);
+        }
     }
     $filterWrapper="";
     $filterWrapper = vueGenerateCalendarFilter($listConseiller);
@@ -92,26 +91,25 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
  * @param string $username c'est le nom de l'utilisateur qui sera affiché dans la navbar
  * @return void
  */
-function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
+function vueDisplayHomeAgent($events, $dateOfWeek, $username) {
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
     $listConseiller = array();
     // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
-    foreach ($appointments as $appointment) {
-        if (!in_array("$appointment->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$appointment->IDENTITEEMPLOYE", "$appointment->COLOR");
+    foreach ($events as $event) {
+        if (!in_array("$event->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$event->IDENTITEEMPLOYE", "$event->COLOR");
         }
-        $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
-        $weekNumber = date_format($appointmentDate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
-    }
-    foreach ($TAS as $TA) {
-        if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$TA->IDENTITEEMPLOYE", "$TA->COLOR");
+        if (isset($event->IDRDV)){
+            $appointmentDate = date_create_from_format("Y-m-d H:i:s", $event->HORAIREDEBUT);
+            $weekNumber = date_format($appointmentDate, "N");
+            $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($event);
         }
-        $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
-        $weekNumber = date_format($TADate, "N");
-        $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
+        else{
+            $TADate = date_create_from_format("Y-m-d H:i:s", $event->HORAIREDEBUT);
+            $weekNumber = date_format($TADate, "N");
+            $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($event);
+        }
     }
     $filterWrapper="";
     $filterWrapper = vueGenerateCalendarFilter($listConseiller);
