@@ -6,7 +6,7 @@
     <title>ERREUR</title>
 </head>
 <body class="light">
-    <h1>erreur</h1>
+    <h1>Erreur</h1>
     <?php echo $content; ?>
 </body>
 </html>

@@ -1000,6 +1000,7 @@ nav {
     margin: 1px 0 0 .5em;
     border-radius: 5px;
     font-size: var(--classic-font-size);
+    color : var(--text);
 }
 
 .employeBtn:hover {
@@ -1151,6 +1152,7 @@ nav {
     font-size: var(--classic-font-size);
     font-family: var(--mono-font);
     padding: 1em;
+    color : var(--text);
 }
 
 .field input {

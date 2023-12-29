@@ -202,6 +202,7 @@ function vueDisplayAdvanceSearchClient($listClient="") {
  * @return void
  */
 function vueDisplayCreateClient($listConseiller) {
+    $titre = "Création d'un client - Bank";
     $navbar = vueGenerateNavBar();
     $optionSelect = '<label for="idEmployee" class="visually-hidden">Conseiller</label><select name="idEmployee" id="idEmployee" required>';
     foreach ($listConseiller as $conseiller) {
@@ -252,6 +253,7 @@ function vueDisplayCreateClient($listConseiller) {
  * @return void
  */
 function vueDisplaySetting($identity) {
+    $titre = "Paramètres - Bank";
     $navbar = vueGenerateNavBar();
     $selectOptions = '';
     global $colors;
@@ -261,38 +263,22 @@ function vueDisplaySetting($identity) {
         $selectOptions .= '<option value="'.$color.'"'.$selected.' class="'.$color.'-text'.'">'.$color.'</option>';
     }
     $content='<div class="modInfoWrapper">
-                <form action="index.php" method="post">
+                <form action="index.php" method="post" id="formPassword">
                     <h1>Modifier info personnel</h1>
                     <label for="loginEmployee"  class="visually-hidden">Login :</label>
                     <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" placeholder="Login" required>
                     <div class="loginFormFieldWrapper">
                         <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
-                        <input type="password" name="passwordEmployee" id="passwordEmployee" class="modInfoPasswordField" placeholder="Password" required>
-                        <button onclick="togglePasswordVisibility()" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+                        <input type="password" name="passwordEmployee" id="PasswordField" class="modInfoPasswordField" placeholder="Password" required>
+                        <button onclick="togglePasswordVisibility(\'PasswordField\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
                     </div>
                     <label for="colorEmployee" class="visually-hidden">Couleur : </label>
                     <select name="colorEmployee" id="colorEmployee" class="modInfoField">
                     '.$selectOptions.'
                     </select>
-                    <input type="button" name="ModifSettingOneBtn" value="Valider modification" class="cta modInfoField" onclick="sent(\'passwordEmployee\',\'connectBtn\')">
-                    <input type="submit" name="ModifSettingOneBtn" id="connectBtn" class="hidden">
+                    <input type="submit" name="ModifSettingOneBtn" value="Valider modification" id="connectBtn" class="cta modInfoField">
                 </form>
-            </div>
-            <script>
-            function togglePasswordVisibility() {
-                let passwordField = document.getElementById("passwordEmployee");
-                let icon = document.getElementById("visibilityIcon");
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    passwordField.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
-            }
-            </script> ';
+            </div>';
     require_once('gabaritGestion.php');
 }
 
@@ -302,6 +288,7 @@ function vueDisplaySetting($identity) {
  * @return void
  */
 function vueDisplayGestionPersonnelAll($listEmployee) {
+    $titre = "Gestion du personnel - Bank";
     $navbar = vueGenerateNavBar();
     $content='<div class="employeTableWrapper">
                 <h1>Gestion des Employés</h1>
@@ -342,7 +329,7 @@ function vueGenerateGestionEmployeRow($employee) {
     $etat1=$employee->IDCATEGORIE==1 ? "selected": "";
     $etat2=$employee->IDCATEGORIE==2 ? "selected": "";
     $etat3=$employee->IDCATEGORIE==3 ? "selected": "";
-    $row='<form action="index.php" method="post" class="employeTableContentWrapper">
+    $row='<form action="index.php" method="post" class="employeTableContentWrapper" id="formPassword'.$employee->IDEMPLOYE.'">
             <input  type="number" class="employeCell content" name="idEmployee" value="'.$employee->IDEMPLOYE.'" readonly="true">
             <select name="idCategorie" class="employeCell content">
                 <option value="1" '.$etat1.' >Directeur</option>
@@ -352,12 +339,14 @@ function vueGenerateGestionEmployeRow($employee) {
             <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
             <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
             <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
-            <input type="password" name="passwordEmployee" id="passwordEmployee'.$employee->IDEMPLOYE.'" class="employeCell content" value="">
+            <div class="employeCell content">
+            <input type="password" name="passwordEmployee" id="PasswordField'.$employee->IDEMPLOYE.'" class="loginFormField">
+            <button onclick="togglePasswordVisibility(\'PasswordField'.$employee->IDEMPLOYE.'\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+            </div>
             <select name="colorEmployee" class="employeCell content">
                 '.$selectOptions.'
             </select>
-            <input type="submit" name="ModifPersonnelOneBtn" id="ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'" class="hidden">
-            <button type="button" class="employeBtn" onclick="sent(\'passwordEmployee'.$employee->IDEMPLOYE.'\',\'ModifPersonnelOneBtn'.$employee->IDEMPLOYE.'\')"><i class="fa-solid fa-pen-to-square"></i>Valider</button>
+            <input type="submit" name="ModifPersonnelOneBtn" id="connectBtn'.$employee->IDEMPLOYE.'" class="employeBtn">
             <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i>Supprimer</button>
         </form>';
     return $row;
@@ -368,6 +357,7 @@ function vueGenerateGestionEmployeRow($employee) {
  * @return void
  */
 function vueDisplayGestionPersonnelAdd(){
+    $titre = "Ajout d'un employé - Bank";
     $navbar = vueGenerateNavBar();
     $selectOptions = '';
     global $colors;
@@ -411,6 +401,7 @@ function vueDisplayGestionPersonnelAdd(){
  * @return void
  */
 function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
+    $titre = "Gestion des services - Bank";
     $navbar = vueGenerateNavBar();
     $content ='<div class="gestionServiceWrapper">
                 <h1>Gestion des services</h1>
@@ -483,6 +474,7 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
  * @return void
  */
 function vueDisplayGestionServicesAdd(){
+    $titre = "Ajout d'un service - Bank";
     $navbar = vueGenerateNavBar();
     $content='<form action="index.php" method="post" class="gestionPersonnelAddForm">
                     <div>
@@ -721,6 +713,7 @@ function vueGenerateButtonCreate($idClient){
  * @return void
  */
 function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
+    $titre = "Création d'un contrat - Bank";
     $navbar = vueGenerateNavBar();
     $optionSelect = '<select name="idTypeContract" class="addContractField">';
     if (count($listTypeContract) == 0) {
@@ -758,6 +751,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
  * @return void
  */
 function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
+    $titre = "Création d'un compte - Bank";
     $navbar = vueGenerateNavBar();
     if (count($listTypeAccount) == 0) {
         $content = "<div>Aucun type de compte disponible</div>";
@@ -876,7 +870,8 @@ function vueGenerateAdminHTML($TA) {
  * @param string $clientActuel c'est le client actuel (optionnel)
  * @return void
  */
-function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray, $clientActuel = "") {
+function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray) {
+    $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $conseillersOption = "";
     $clientOption = "";
@@ -933,16 +928,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         '.$events.'
                     </div>
                 </div>
-            </div>
-                <script>
-                    function changeConseiller(select) {
-                        let option =select.options[select.selectedIndex];
-                        console.log(option);
-                        let value = option.dataset.conseiller;
-                        console.log(value);
-                        document.getElementById("appointementsConseillerField").value = value;
-                    }
-                </script>';
+            </div>';
     require_once('gabaritGestion.php');
 
 }
@@ -956,6 +942,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
  * @return void
  */
 function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray) {
+    $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $clientOption = "";
     $motifsOption = "";
@@ -1018,30 +1005,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                         '.$events.'
                     </div>
                 </div>
-            </div>
-            <script>
-                let isAdmin = false;
-                function toggleTA() {
-                    console.log(isAdmin);
-                    isAdmin = ! isAdmin ;
-                    console.log(isAdmin);
-                    if (isAdmin) {
-                        document.querySelectorAll(".admin").forEach(function (item) {
-                            item.classList.remove("hidden")
-                        });
-                        document.querySelectorAll(".appointement").forEach(function (item) {
-                            item.classList.add("hidden")
-                        });
-                    } else {
-                        document.querySelectorAll(".appointement").forEach(function (item) {
-                            item.classList.remove("hidden")
-                        });
-                        document.querySelectorAll(".admin").forEach(function (item) {
-                            item.classList.add("hidden")
-                        });
-                    }
-                }
-            </script>';
+            </div>';
     require_once('gabaritGestion.php');
 }
 

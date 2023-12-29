@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info</title>
+    <title>Synthèse de <?php echo $nameClient; ?> <?php echo $firstNameClient; ?></title>
 </head>
 <body class="light">
 <?php echo $navbar ?>
@@ -103,29 +103,5 @@
         <?php echo $operationDisplay; ?>
     </div>
 </div>
-<script>
-let currentFilter = document.getElementById("operationsFilterWrapper").children[0];
-toggleFilter(currentFilter);
-
-function toggleFilter(filterBtn) {
-    let oldIcon =currentFilter.children[0];
-    let icon = filterBtn.children[0];
-
-    oldIcon.classList.remove("fa-circle-dot");
-    oldIcon.classList.add("fa-circle");
-    currentFilter.classList.add("inactive");
-
-    icon.classList.remove("fa-circle");
-    icon.classList.add("fa-circle-dot");
-    filterBtn.classList.remove("inactive");
-
-    let oldWrapper = document.getElementById("account"+currentFilter.dataset.id);
-    oldWrapper.classList.add("hidden");
-    let newWrapper = document.getElementById("account"+filterBtn.dataset.id);
-    newWrapper.classList.remove("hidden");
-
-    currentFilter = filterBtn;
-}
-</script>
 </body>
 </html>

@@ -7,10 +7,8 @@ if(session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-debug("front");
 
 try {
-    debug("try");
     // ------------------------------------------------------- Theme -------------------------------------------------------
     if(!isset($_COOKIE["Theme"])) { // Si le cookie pour le thème n'existe pas
         setcookie("Theme", "light", [
@@ -23,10 +21,11 @@ try {
     if (isset($_POST['landingSubmitBtn'])){ // Si le bouton de connexion est cliqué
         $username = $_POST['landingLoginField'];
         $password = $_POST['landingPasswordField'];
+        debug($username);
+        debug($password);
         ctlLogin($username, $password);
     }
     elseif (!isset($_SESSION["idEmploye"])){
-        debug("landing");
          ctlHome();
     }
     // ------------------------------------------------------- Nav Bar -------------------------------------------------------
@@ -177,6 +176,7 @@ try {
         $firstName = $_POST['firstNameEmployee'];
         $login = $_POST['loginEmployee'];
         $password = $_POST['passwordEmployee'];
+        debug($password);
         $category = $_POST['idCategorie'];
         $color = $_POST['colorEmployee'];
         ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $category, $color);
@@ -276,10 +276,8 @@ try {
     }
     // ------------------------------------------------------- Default -------------------------------------------------------
     else{
-        debug("default");
         ctlHome();
     }
-    debug("fin try");
 } 
 
 catch(Exception $e) { 
@@ -287,7 +285,6 @@ catch(Exception $e) {
      ctlError($msg);
 }
 
-debug("fin front");
 /*
 POUBELLE
 
