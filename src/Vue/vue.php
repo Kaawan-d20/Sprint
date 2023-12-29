@@ -86,19 +86,43 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
 function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
     $navbar = vueGenerateNavBar();
     $weekEvents = array("", "", "", "", "", "", "");
+    $listConseiller = array();
     // $weekEvents représente pour chaque entrée de 0 à 6, en chaîne de caractères, les eventHTML du jour correspondant
     foreach ($appointments as $appointment) {
+        if (!in_array("$appointment->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$appointment->IDENTITEEMPLOYE", "$appointment->COLOR");
+        }
         $appointmentDate = date_create_from_format("Y-m-d H:i:s", $appointment->HORAIREDEBUT);
         $weekNumber = date_format($appointmentDate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAppointementHTML($appointment);
     }
     foreach ($TAS as $TA) {
+    if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
+            array_push($listConseiller, "$TA->IDENTITEEMPLOYE");
+        }
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
         $weekNumber = date_format($TADate, "N");
         $weekEvents[$weekNumber -1] .= vueGenerateAdminHTML($TA);
     }
+    $filterWrapper="";
+    $filterWrapper = vueGenerateCalendarFilter($listConseiller);
+
+
+
     require_once('gabaritAgentHomePage.php');
 }
+
+function vueGenerateCalendarFilter($listConseiller){
+    $filterWrapper = '<div class="filterWrapper">';
+    for ($i=0; $i < count($listConseiller); $i+=2) {
+        $conseiller = $listConseiller[$i];
+        $color = $listConseiller[$i+1];
+        $filterWrapper .= '<button class="filterBtn inactive '.$color.'" onclick="filterToggle(this)" title="Selectionner '.$conseiller.'" data-conseiller="'.$conseiller.'"><i class="fa-regular fa-square" aria-hidden="true"></i>'.$conseiller.'</button>';
+    }
+    $filterWrapper .= '</div>';
+    return $filterWrapper;
+}
+
 
 /**
  * Fonction qui génère le code HTML de la navbar
@@ -833,10 +857,9 @@ function vueGenerateAppointementHTML($appointment) {
  * @return string Le code HTML de l'event
  */
 function vueGenerateAdminHTML($TA) {
-    $identiteEmploye = $TA->PRENOM.' '.$TA->NOM;
     $heureDebut = (substr($TA->HORAIREDEBUT, 11, 5));
     $heureFin = (substr($TA->HORAIREFIN, 11, 5));
-    return '<div class="event" data-conseiller="'. $identiteEmploye .'" data-color="'. $TA->COLOR .'">
+    return '<div class="event" data-conseiller="'. $TA->IDENTITEEMPLOYE .'" data-color="'. $TA->COLOR .'">
         <div class="eventTitleCard">
             <h2>'. $TA->LIBELLE .'</h2>
             <i class="fa-solid fa-user-lock"></i>
@@ -848,7 +871,7 @@ function vueGenerateAdminHTML($TA) {
             </div>
             <div class="eventConseiller '.$TA->COLOR.'">
                 <i class="fa-solid fa-user-tie"></i>
-                '. $identiteEmploye .'
+                '. $TA->IDENTITEEMPLOYE .'
             </div>
         </div>
         <form action="index.php" method="post" class="deleteForm">

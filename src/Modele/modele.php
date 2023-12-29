@@ -663,11 +663,11 @@ function modGetTABetweenCounselor($idConseiller,$dateDebut,$dateFin) {
  * Rien si il n'y en a pas dans la base de données
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
- * @return array tous les ta entre la première et la deuxième date mises en paramètres (IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, NOM, PRENOM, COLOR) (tableau d'objets)
+ * @return array tous les ta entre la première et la deuxième date mises en paramètres (IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, IDENTITEEMPLOYE, COLOR) (tableau d'objets)
  */
 function modGetAllTABetween($dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, NOM, PRENOM, COLOR  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
+    $query = 'SELECT IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE, COLOR  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);

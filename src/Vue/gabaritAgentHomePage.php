@@ -15,6 +15,7 @@
                 <h1>Novembre</h1>
                 <span>1812</span>
             </div>
+            <?php echo($filterWrapper); ?>
             <div class="weekSelector">
                 <form action="index.php" method="post" id="previousWeekForm">
                     <button class="previous" name="weekSelectorPrevious" id="weekSelectorPrevious" title="Semaine Précédente" type="submit">

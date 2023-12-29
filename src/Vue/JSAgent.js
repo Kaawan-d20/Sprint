@@ -16,7 +16,7 @@ function init(){
     
     globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
-    generateFilters();
+    //generateFilters();
     updateCalendar(globalCurrentDate);
 }
 
@@ -42,43 +42,7 @@ function dateToString(globalCurrentDate) {
     + ((globalCurrentDate.getDate() <= 9) ? "0" : "") + globalCurrentDate.getDate());
 }
 
-/** generate a single filter button, and returns it designed to be used in the generateFilters() function */
-function generateSingleFilter(name, colorClass) {
-    let filterBtn = document.createElement("button");
-    filterBtn.classList.add("filterBtn", "inactive", colorClass);
 
-    filterBtn.setAttribute("onclick", "filterToggle(this)");
-    filterBtn.setAttribute("title", "Selectionner " + name);
-
-    let icon = document.createElement("i");
-    icon.classList.add("fa-regular", "fa-square")
-
-    filterBtn.appendChild(icon)
-    filterBtn.appendChild(document.createTextNode(name));
-
-    filterBtn.dataset.conseiller = name;
-
-    return filterBtn;
-} 
-
-/** generates the filters, must be called AFTER the events are all stored in the board */ 
-function generateFilters () {
-    let filterWrapper = document.createElement("div");
-    filterWrapper.classList.add("filterWrapper");
-    let conseillers = [];
-    let conseillerColors = [];
-    document.querySelectorAll(".event").forEach(event => {
-        if (! conseillers.includes(event.dataset.conseiller)) {
-            conseillers.push(event.dataset.conseiller);
-            conseillerColors[event.dataset.conseiller] = event.dataset.color;
-        }
-    })
-    conseillers.forEach((conseiller) => {
-        let filterBtn = generateSingleFilter(conseiller, conseillerColors[conseiller]);
-        filterWrapper.appendChild(filterBtn);
-    })
-    document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
-}
 
 /** called by the filterBtn dynamically created above, will toggle the filter mode for each type */ 
 function filterToggle(filterBtn) {
@@ -206,3 +170,51 @@ function attemptUpdate() {
 
 
 
+
+
+
+
+/*
+POUBELLE
+
+
+function generateSingleFilter(name, colorClass) {
+    let filterBtn = document.createElement("button");
+    filterBtn.classList.add("filterBtn", "inactive", colorClass);
+
+    filterBtn.setAttribute("onclick", "filterToggle(this)");
+    filterBtn.setAttribute("title", "Selectionner " + name);
+
+    let icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-square")
+
+    filterBtn.appendChild(icon)
+    filterBtn.appendChild(document.createTextNode(name));
+
+    filterBtn.dataset.conseiller = name;
+
+    return filterBtn;
+} 
+
+function generateFilters () {
+    let filterWrapper = document.createElement("div");
+    filterWrapper.classList.add("filterWrapper");
+    let conseillers = [];
+    let conseillerColors = [];
+    document.querySelectorAll(".event").forEach(event => {
+        if (! conseillers.includes(event.dataset.conseiller)) {
+            conseillers.push(event.dataset.conseiller);
+            conseillerColors[event.dataset.conseiller] = event.dataset.color;
+        }
+    })
+    conseillers.forEach((conseiller) => {
+        let filterBtn = generateSingleFilter(conseiller, conseillerColors[conseiller]);
+        filterWrapper.appendChild(filterBtn);
+    })
+    document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
+}
+
+
+
+
+*/
