@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="Vue/JSConseiller.js"></script> <!-- Script JS pour le calendrier -->
-    <title>Accueil - Conseiller</title>
+    <title>Accueil - Conseiller - Bank</title>
 </head>
 <body class="light">
 <?php echo $navbar ?>

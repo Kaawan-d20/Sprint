@@ -202,6 +202,7 @@ function vueDisplayAdvanceSearchClient($listClient="") {
  * @return void
  */
 function vueDisplayCreateClient($listConseiller) {
+    $titre = "Création d'un client - Bank";
     $navbar = vueGenerateNavBar();
     $optionSelect = '<label for="idEmployee" class="visually-hidden">Conseiller</label><select name="idEmployee" id="idEmployee" required>';
     foreach ($listConseiller as $conseiller) {
@@ -252,6 +253,7 @@ function vueDisplayCreateClient($listConseiller) {
  * @return void
  */
 function vueDisplaySetting($identity) {
+    $titre = "Paramètres - Bank";
     $navbar = vueGenerateNavBar();
     $selectOptions = '';
     global $colors;
@@ -707,6 +709,7 @@ function vueGenerateButtonCreate($idClient){
  * @return void
  */
 function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
+    $titre = "Création d'un contrat - Bank";
     $navbar = vueGenerateNavBar();
     $optionSelect = '<select name="idTypeContract" class="addContractField">';
     if (count($listTypeContract) == 0) {
@@ -744,6 +747,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
  * @return void
  */
 function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
+    $titre = "Création d'un compte - Bank";
     $navbar = vueGenerateNavBar();
     if (count($listTypeAccount) == 0) {
         $content = "<div>Aucun type de compte disponible</div>";
@@ -862,7 +866,8 @@ function vueGenerateAdminHTML($TA) {
  * @param string $clientActuel c'est le client actuel (optionnel)
  * @return void
  */
-function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray, $clientActuel = "") {
+function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray) {
+    $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $conseillersOption = "";
     $clientOption = "";
@@ -933,6 +938,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
  * @return void
  */
 function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray) {
+    $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $clientOption = "";
     $motifsOption = "";

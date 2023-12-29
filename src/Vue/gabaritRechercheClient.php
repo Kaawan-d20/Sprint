@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recherche Client</title>
+    <title>Recherche Client - Bank</title>
 </head>
 <body class="light">
     <?php echo $navbar ?>

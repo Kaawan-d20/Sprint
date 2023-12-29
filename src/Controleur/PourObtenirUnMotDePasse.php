@@ -10,14 +10,14 @@
 <body>
     <h1>Générateur de mot de passe pour la BD</h1>
     <h2>Hacher JS</h2>
-    <input type="text" id="password" onchange="hashed()">
-    <input type="text" id="hashedpassword">
+    <input type="text" id="password" onchange="hashed()" size="30">
+    <input type="text" id="hashedpassword" size="80">
 
 
     <h2>Hacher PHP</h2>
     <form action="PourObtenirUnMotDePasse.php" method="post">
         <label for="password">Mot de passe à hacher</label>
-        <input type="text" name="password" id="password">
+        <input type="text" name="password" id="password"size="80">
         <input type="submit" name="btn" value="hacher">
     </form>
 
@@ -25,8 +25,8 @@
     <h2>Hacher PHP verif</h2>
     <form action="PourObtenirUnMotDePasse.php" method="post">
         <label for="password">Mot de passe à hacher</label>
-        <input type="text" name="password" id="password" placeholder="password">
-        <input type="text" name="seed" id="seed" placeholder="seed">
+        <input type="text" name="password" id="password" placeholder="password"size="80">
+        <input type="text" name="seed" id="seed" placeholder="seed"size="80">
         <input type="submit" name="verif" value="hacher">
     </form>
 </body>
@@ -58,7 +58,7 @@ if (isset($_POST['btn'])) {
     echo "le mot de passe à hacher est : ".$password;
     echo '<br>';
     echo '<br>';
-    echo 'le mot de passe haché est : <input type="text" value="'.$hashedPassword.'">';
+    echo 'le mot de passe haché est : <input type="text" value="'.$hashedPassword.'" size="80">';
     echo '<br>';
     echo '<br>';
     echo "c'est bon ? : ".checkPassword($password, $hashedPassword);
