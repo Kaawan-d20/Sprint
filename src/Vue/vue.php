@@ -72,7 +72,7 @@ function vueDisplayHomeConseiller($appointments, $TAS, $dateOfWeek, $username, $
     }
     foreach ($TAS as $TA) {
         if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$TA->IDENTITEEMPLOYE");
+            array_push($listConseiller, "$TA->IDENTITEEMPLOYE", "$TA->COLOR");
         }
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
         $weekNumber = date_format($TADate, "N");
@@ -107,7 +107,7 @@ function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
     }
     foreach ($TAS as $TA) {
         if (!in_array("$TA->IDENTITEEMPLOYE", $listConseiller)){
-            array_push($listConseiller, "$TA->IDENTITEEMPLOYE");
+            array_push($listConseiller, "$TA->IDENTITEEMPLOYE", "$TA->COLOR");
         }
         $TADate = date_create_from_format("Y-m-d H:i:s", $TA->HORAIREDEBUT);
         $weekNumber = date_format($TADate, "N");
@@ -123,10 +123,11 @@ function vueDisplayHomeAgent($appointments, $TAS, $dateOfWeek, $username) {
 
 function vueGenerateCalendarFilter($listConseiller){
     $filterWrapper = '<div class="filterWrapper">';
+    debug($listConseiller);
     for ($i=0; $i < count($listConseiller); $i+=2) {
         $conseiller = $listConseiller[$i];
         $color = $listConseiller[$i+1];
-        $filterWrapper .= '<button class="filterBtn inactive '.$color.'" onclick="filterToggle(this)" title="Selectionner '.$conseiller.'" data-conseiller="'.$conseiller.'"><i class="fa-regular fa-square" aria-hidden="true"></i>'.$conseiller.'</button>';
+        $filterWrapper .= '<button class="filterBtn inactive '.$color.'" onclick="filterToggle(this)" title="Selectionner '.$conseiller.'" data-conseiller="'.$conseiller.'" id="'.$conseiller.'"><i class="fa-regular fa-square" aria-hidden="true"></i>'.$conseiller.'</button>';
     }
     $filterWrapper .= '</div>';
     return $filterWrapper;
