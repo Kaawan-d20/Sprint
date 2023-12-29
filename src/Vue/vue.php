@@ -923,6 +923,12 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
     foreach ($listMotifs as $motif) {
         $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
     }
+    $datalist = '<input list="listClient" name="appointementsClientField" class="field" placeholder="Id du client" id="appointementsClientField" onChange="changeConseiller(this)" required><datalist id="listClient">';
+    foreach ($_SESSION["listClient"] as $client) {
+        $datalist .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'" id="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
+        debug($client);
+    }
+    $datalist .= "</datalist>";
     $content = '
             <div class="addAppointementRDVWrapper">
                 <div class="addAppointementWrapper">
@@ -940,9 +946,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                             <label for="appointementsDateField">Horaire de fin</label>
                             <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" class="colortext" required>
                         </div>
-                        <select name="appointementsClientField" id="appointementsClientField" class="field" required onChange="changeConseiller(this)">
-                            '.$clientOption.'
-                        </select>
+                            '.$datalist.'
                         <select name="appointementsConseillerField" id="appointementsConseillerField" class="field"required>
                             '.$conseillersOption.'
                         </select>

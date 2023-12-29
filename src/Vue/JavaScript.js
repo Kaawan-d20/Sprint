@@ -116,6 +116,9 @@ function togglePasswordVisibility(password) {
 
 
 function toggleFilter(filterBtn) {
+    if (filterBtn == null) {
+        return;
+    }
     let oldIcon =currentFilter.children[0];
     let icon = filterBtn.children[0];
 
@@ -176,7 +179,9 @@ function toggleTA() {
 
 //Prise de RDV
 function changeConseiller(select) {
-    let option =select.options[select.selectedIndex];
+    let nbClient = document.getElementById(select.id).value;
+    //let option =select.options[select.selectedIndex];
+    let option = document.getElementById(nbClient);
     console.log(option);
     let value = option.dataset.conseiller;
     console.log(value);
