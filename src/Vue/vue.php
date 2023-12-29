@@ -930,15 +930,15 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         <h1>Ajouter un rendez-vous</h1>
                         <div class="field">
                             <label for="appointementsDateField">Date</label>
-                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" required readonly>
+                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" class="colortext" required readonly>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de début</label>
-                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" required>
+                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" class="colortext" required>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de fin</label>
-                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" required>
+                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" class="colortext" required>
                         </div>
                         <select name="appointementsClientField" id="appointementsClientField" class="field" required onChange="changeConseiller(this)">
                             '.$clientOption.'
@@ -1001,15 +1001,15 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Date</label>
-                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" required readonly>
+                            <input type="date" name="appointementsDateField" id="appointementsDateField" value="'.$date.'" class="colortext" required readonly>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de début</label>
-                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" required>
+                            <input type="time" name="appointementsHoraireDebutField" id="appointementsHoraireDebutField" class="colortext" required>
                         </div>
                         <div class="field">
                             <label for="appointementsDateField">Horaire de fin</label>
-                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" required>
+                            <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" class="colortext" required>
                         </div>
                         <select name="appointementsClientField" id="appointementsClientField" class="field appointement" required>
                             '.$clientOption.'
@@ -1021,7 +1021,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                             '.$motifsOption.'
                         </select>
                         <div class="field admin hidden">
-                            <input type="text" name="adminLibelleField" id="adminLibelleField" placeholder="Motif">
+                            <input type="text" name="adminLibelleField" id="adminLibelleField" class="colortext" placeholder="Motif">
                         </div>
                         <button type="submit" name="addAppointementsBtn" class="cta field appointement">
                             Valider
