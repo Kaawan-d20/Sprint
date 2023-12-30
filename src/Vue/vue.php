@@ -542,7 +542,7 @@ function vueDisplayGestionServicesAdd(){
  * @param array $listRDVClients c'est la liste des rendez-vous du client
  * @return void
  */
-function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperationsAccount, $listRDVClients){
+function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperationsAccount, $listRDVClients, $listConseiller){
     $navbar = vueGenerateNavBar();
     $events = vueAppointementClient($listRDVClients);
     $listC = vueCreateListContract($listContract);
@@ -552,7 +552,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
 
     // pour faire la synthèse
     $idClient = $client->IDCLIENT;
-    $nameConseiller = $client->NOMCONSEILLER." ".$client->PRENOMCONSEILLER;
+    $nameConseiller = vueGenerateSelectEmployee($listConseiller, $client->IDEMPLOYE);
     $nameClient = $client->NOM;
     $naissance = $client->DATENAISSANCE;
     $creation = $client->DATECREATION;
@@ -564,6 +564,16 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
     $situation = $client->SITUATIONFAMILIALE;
     $civi = $client->CIVILITEE;
     require_once('gabaritInfoClient.php');
+}
+
+function vueGenerateSelectEmployee($listConseiller, $idConseiller){
+    $optionSelect = '<select name="idConseiller" id="idEmployee" class="contactCell content" required>';
+    foreach ($listConseiller as $conseiller) {
+        $selected = ($conseiller->idEmploye == $idConseiller) ? "selected" : "";
+        $optionSelect .= '<option value="'.$conseiller->idEmploye.'" '.$selected.'>'.$conseiller->identiteEmploye.'</option>';
+    }
+    $optionSelect .= "</select>";
+    return $optionSelect;
 }
 
 /**

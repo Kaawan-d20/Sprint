@@ -229,7 +229,7 @@ function ctlDebit($idAccount, $amount){
     }
     modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
     $client = modGetClientFromId($account->idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient), modGetAllCounselors());
 }
 
 /**
@@ -242,7 +242,7 @@ function ctlCredit($idAccount, $amount){
     modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
     $idClient = modGetIdClientFromAccount($idAccount);
     $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
+    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient), modGetAllCounselors());
 }
 
 /**
@@ -330,6 +330,10 @@ function ctlDeleteAccount($idAccount){
     ctlSearchIdClient($idClient);
 }
 
+function ctlEditClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance){
+    modModifClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance);
+    ctlSearchIdClient($idClient);
+}
 
 // ------------------------------------------------------------------------------------------------------
 // ----------------------------------------- CONTRAT ----------------------------------------------------
@@ -414,7 +418,7 @@ function ctlSearchIdClient($idClient){
             throw new notFoundClientException();
         }
         else{
-            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient));
+            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient), modGetAllCounselors());
         }
     }
 }
@@ -755,6 +759,9 @@ function ctlDisplayAddAppointementConseiller($date) {
  */
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
     if ($heureDebut < $heureFin) {
+        if (empty(modGetClientFromId($idClient))){
+            throw new notFoundClientException();
+        }
         $horaireDebut= $date.' '.$heureDebut.':00';
         $horaireFin= $date.' '.$heureFin.':00';
         $debutCall = $date . ' 00:00:00';

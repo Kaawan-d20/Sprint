@@ -90,6 +90,17 @@ try {
         $overdraft = $_POST['overdraft'];
         ctlModifOverdraft($idAccount, $overdraft);
     }
+    elseif (isset($_POST['editClientBtn'])){ // Si le bouton de modification d'un client est cliqué
+        $idClient = $_POST['idClient'];
+        $profession = $_POST['profession'];
+        $situation = $_POST['situation'];
+        $address = $_POST['addressClient'];
+        $phone = $_POST['phoneClient'];
+        $email = $_POST['emailClient'];
+        $idConseiller = $_POST['idConseiller'];
+        $naissance = $_POST['naissance'];
+        ctlEditClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance);
+    }
     // ------------------------------------------------------- Agenda -------------------------------------------------------
     elseif (isset($_POST['weekSelectorPrevious'])){ // Si le bouton de semaine précédente de l'agent d’accueil est cliqué
         ctlUpdateCalendar($_POST['previousWeekDate']);

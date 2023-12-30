@@ -990,11 +990,11 @@ function modAddEmploye($idCategorie, $name, $firstName, $login, $password, $colo
  * Renvoie toutes les infos du client dont l'id est en paramètre, 
  * Rien si il n'est pas présent dans la base de données.
  * @param int $idClient L'id du client
- * @return object Les infos du client (IDCLIENT, NOM, PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, NOMCONSEILLER, PRENOMCONSEILLER)
+ * @return object Les infos du client (IDCLIENT, NOM, PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, NOMCONSEILLER, PRENOMCONSEILLER, IDEMPLOYE)
  */
 function modGetClientFromId($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDCLIENT, client.NOM, client.PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, employe.NOM AS NOMCONSEILLER, employe.PRENOM AS PRENOMCONSEILLER 
+    $query = 'SELECT IDCLIENT, client.NOM, client.PRENOM, DATENAISSANCE, DATECREATION, ADRESSE, NUMTEL, EMAIL, PROFESSION, SITUATIONFAMILIALE, CIVILITEE, employe.NOM AS NOMCONSEILLER, employe.PRENOM AS PRENOMCONSEILLER, client.IDEMPLOYE 
     FROM client JOIN employe ON client.IDEMPLOYE=employe.IDEMPLOYE WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
@@ -1159,31 +1159,25 @@ function modGetAllClients() {
  * Modifie les infos du client dont l'id est en paramètre
  * @param int $idClient L'id du client
  * @param int $idEmploye L'id du conseiller
- * @param string $name Le nom
- * @param string $firstName Le prénom
- * @param string $birthDate La date de naissance
+ * @param string $job La profession
+ * @param string $situationFamiliale La situation familiale
  * @param string $adress L'adresse
  * @param string $num Le numero de tel
  * @param string $email L'adresse mail
- * @param string $job La profession
- * @param string $situationFamiliale La situation familiale
- * @param string $civilite La civilité
+ * @param string $birthDate La date de naissance
  */
-function modModifClient($idClient,$idEmploye,$name,$firstName,$birthDate,$adress,$num,$email,$job,$situationFamiliale,$civilite) {
+function modModifClient($idClient,$idEmploye,$job,$situationFamiliale,$adress,$num,$email,$birthDate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE client SET idEmploye=:idEmploye, nom=:name, prenom=:firstName, dateNaissance=:birthDate, adresse=:adress, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:situationFamiliale, civilitee=:civilite WHERE idClient=:idClient';
+    $query = 'UPDATE client SET idEmploye=:idEmploye, dateNaissance=:birthDate, adresse=:adress, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:situationFamiliale WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
-    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
-    $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
-    $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
+    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
+    $prepared -> bindParam(':situationFamiliale', $situationFamiliale, PDO::PARAM_STR);
     $prepared -> bindParam(':adress', $adress, PDO::PARAM_STR);
     $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
     $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
-    $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
-    $prepared -> bindParam(':situationFamiliale', $situationFamiliale, PDO::PARAM_STR);
-    $prepared -> bindParam(':civilite', $civilite, PDO::PARAM_STR);
+    $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }

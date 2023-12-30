@@ -19,7 +19,7 @@
             <div class="infoCell header">Situation familiale</div>
             <div class="infoCell header">Client·e depuis</div>
             
-            <input type="date" class="infoCell content" id="naissance" name="naissance" value="<?php echo $naissance; ?>" readonly="true">
+            <input type="date" class="infoCell content" id="naissance" name="naissance" value="<?php echo $naissance; ?>">
             <input type="text" class="infoCell content" id="profession" name="profession" value="<?php echo $profession; ?>">
             <input type="text" class="infoCell content" id="situation" name="situation" value="<?php echo $situation; ?>">
             <input type="date" class="infoCell content" id="creation" name="creation" disabled="disabled" value="<?php echo $creation; ?>">
@@ -38,9 +38,11 @@
                     <input type="email" class="contactCell content" name="emailClient" id="emailClient" value="<?php echo $emailClient; ?>">
                     
                     <div class="contactCell header">Conseiller : </div>
-                    <input type="text" class="contactCell content" name="nameConseiller" id="nameConseiller" value="<?php echo $nameConseiller; ?>">
+                    
+                    <?php echo $nameConseiller; ?>
                 </div>
                 <div class="btnWrapper">
+                    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>">
                     <button type="submit" name="editClientBtn" class="btn">
                         <i class="fa-solid fa-pen-to-square"></i> Enregistrer les modifications
                     </button>
