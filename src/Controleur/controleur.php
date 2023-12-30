@@ -321,6 +321,7 @@ function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
 /**
  * Fonction qui demande au model de supprimer un compte puis appel la synthèse du client
  * @param int $idAccount C'est l'id du compte
+ * @param int $idClient C'est l'id du client
  * @return void
  */
 function ctlDeleteAccount($idAccount, $idClient){

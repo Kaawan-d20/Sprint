@@ -608,7 +608,7 @@ function vueCreateListContract($listContract){
                         </form>
                     </div>';
         }
-        $listC .= '</div>';
+        // $listC .= '</div>';
     }
     return $listC;
 }
