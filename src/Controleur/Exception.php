@@ -284,8 +284,59 @@ class TAHoraireException extends Exception{
 
 
 
+/**
+ * Classe existingTypeAccountException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsque l'on veut créer un type de compte déjà existant
+ **/
+class existingTypeAccountException extends Exception{
+    /**
+     * Constructeur de la classe
+     *
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas créer une deuxième fois le même type de compte")
+     * @param int $code Code d'erreur (par défaut : 0)
+     * @return void
+     */
+    public function __construct($message="Vous ne pouvez pas créer une deuxième fois le même type de compte", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+    /**
+     * Fonction qui permet d'afficher l'erreur
+     *
+     * @return string
+     */
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
 
-
+/**
+ * Classe existingTypeContractException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsque l'on veut créer un type de contrat déjà existant
+ **/
+class existingTypeContractException extends Exception{
+    /**
+     * Constructeur de la classe
+     *
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas créer une deuxième fois le même type de contrat")
+     * @param int $code Code d'erreur (par défaut : 0)
+     * @return void
+     */
+    public function __construct($message="Vous ne pouvez pas créer une deuxième fois le même type de contrat", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+    /**
+     * Fonction qui permet d'afficher l'erreur
+     *
+     * @return string
+     */
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
 
 
 

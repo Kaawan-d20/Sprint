@@ -108,14 +108,37 @@ function ctlGestionServicesAdd(){
  */
 function ctlGestionServicesAddSubmit($name, $type, $active, $document){
     if ($type == 1){
+    
+        if (in_array($name, ctlGetTypeAccount())){
+            throw new existingTypeAccountException();
+        }
         modAddTypeAccount($name, $active, $document);
     }
     elseif ($type == 2){
+        if (in_array($name, ctlGetTypeContract())){
+            throw new existingTypeContractException();
+        }
         modAddTypeContract($name, $active, $document);
     }
     ctlGestionServiceslAll();
 }
 
+function ctlGetTypeAccount(){
+    $listTypeAccount = modGetAllAccountTypes();
+    $list = array();
+    foreach ($listTypeAccount as $typeAccount){
+        array_push($list, $typeAccount->NOM);
+    }
+    return $list;
+}
+function ctlGetTypeContract(){
+    $listTypeContract = modGetAllContractTypes();
+    $list = array();
+    foreach ($listTypeContract as $typeContract){
+        array_push($list, $typeContract->NOM);
+    }
+    return $list;
+}
 
 // ------------------------------------------------------------------------------------------------------
 // ----------------------------------------- TYPE COMPTE ------------------------------------------------

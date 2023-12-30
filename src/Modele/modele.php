@@ -603,6 +603,7 @@ function modAddTypeContract($name, $active, $document){
     INSERT INTO `typecontrat`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':nameMotif', $nameMotif, PDO::PARAM_STR);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':active', $active, PDO::PARAM_INT);
     $prepared -> bindParam(':document', $document, PDO::PARAM_STR);
     $prepared -> execute();
