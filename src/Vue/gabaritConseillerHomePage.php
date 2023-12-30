@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="Vue/JSConseiller.js"></script> <!-- Script JS pour le calendrier -->
     <title>Accueil - Conseiller - Bank</title>
 </head>
 <body class="light">
 <?php echo $navbar ?>
 <div class="conseillerWrapper">
-    <div class="calendarWrapper">
+    <div class="calendarWrapper" id="calendar">
         <div class="calendarNavWrapper">
             <div class="dateBlock">
                 <h1>Novembre</h1>
@@ -45,7 +44,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[0]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -60,7 +59,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[1]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -75,7 +74,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[2]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -90,7 +89,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[3]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -105,7 +104,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[4]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -120,7 +119,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[5]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -135,7 +134,7 @@
                 <div class="events">
                     <?php echo( $weekEvents[6]); ?>
                     <form action="index.php" method="post">
-                        <input type="date" name="newRDVdateFieldConseiller" id="newRDVdateFieldConseiller" class="hidden">
+                        <input type="date" name="newRDVdateField" id="newRDVdateField" class="hidden">
                         <button type="submit" class="newRDVbtn" name="newRDVConseillerbtn">
                             <i class="fa-solid fa-plus"></i> Ajouter un rendez-vous
                         </button>
@@ -145,7 +144,7 @@
         </div>
     </div>
 </div>
-<div class="hidden" id="transmetterJS1"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
+<div class="hidden" id="transmetterJS"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
 <div class="hidden" id="transmetterJS2"><?php echo $fullName ?></div>
 </body>
 </html>

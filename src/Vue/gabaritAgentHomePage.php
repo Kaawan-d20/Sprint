@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="Vue/JSAgent.js"></script> <!-- Script JS pour le calendrier -->
     <title>Accueil - Agent - Bank</title>
 </head>
 <body class="light">
 <div class="agentWrapper">
     <?php echo $navbar ?>
-    <div class="calendarWrapper">
+    <div class="calendarWrapper" id="calendar">
         <div class="calendarNavWrapper">
             <div class="dateBlock">
                 <h1>Novembre</h1>
