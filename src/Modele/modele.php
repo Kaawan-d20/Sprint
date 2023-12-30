@@ -3,7 +3,7 @@ require_once('modele/token.php');
 require_once('token.php');
 
 /**
- * Renvoie le password correspondant au login passé en paramètre,
+ * Renvoie le password correspondant au login passé en paramètre
  * Rien si ce login n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé.
  * @return string Le password haché et salé de l'employé.
@@ -11,7 +11,7 @@ require_once('token.php');
 function modGetPassword($login) {
     $connection = Connection::getInstance()->getConnection();
     $query = "SELECT PASSWORD FROM employe WHERE login=:login";
-    $prepared = $connection->prepare($query);
+    $prepared = $connection -> prepare($query);
     $prepared -> bindParam(":login", $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
@@ -21,7 +21,7 @@ function modGetPassword($login) {
 }
 
 /**
- * Renvoie toutes les infos de l'employé dont le login sont en paramètres,
+ * Renvoie toutes les infos de l'employé dont le login sont en paramètres
  * Rien si celui-ci n'est pas présent dans la base de données.
  * @param string $login Le login de l'employé
  * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM)
@@ -29,8 +29,8 @@ function modGetPassword($login) {
 function modGetEmployeFromLogin($login) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT IDEMPLOYE, IDCATEGORIE, NOM, PRENOM FROM employe WHERE login=:login';
-    $prepared = $connection->prepare($query);
-    $prepared -> bindParam(':login',$login,PDO::PARAM_STR);
+    $prepared = $connection ->prepare($query);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
@@ -59,14 +59,14 @@ function modGetAllMotif() {
 
 
 /**
- * Renvoie tous les comptes du client dont l'id est en paramètre,
+ * Renvoie tous les comptes du client dont l'id est en paramètre
  * Rien si il n'est pas présent dans la base de données.
  * @param int $idClient L'id du client
  * @return array Les comptes du client (IDCOMPTE, NOM, SOLDE, DECOUVERT, DATECREATION, IDTYPECOMPTE) (tableau d'objets)
  */
 function modGetAccounts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT compte.idCompte,typecompte.NOM,solde,decouvert,datecreation, idtypecompte
+    $query = 'SELECT compte.idCompte, typecompte.NOM, solde, decouvert, datecreation, idtypecompte
                 FROM compte
                 LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte
                 NATURAL JOIN typecompte
@@ -88,7 +88,7 @@ function modGetAccounts($idClient) {
  */
 function modGetInfoAccount($idAccount){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT solde,decouvert,idClient
+    $query = 'SELECT solde, decouvert, idClient
                 FROM compte
                 LEFT JOIN possedeCompte ON compte.idCompte=possedeCompte.idCompte
                 WHERE compte.idCompte=:idAccount';
@@ -99,24 +99,6 @@ function modGetInfoAccount($idAccount){
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
     return $result;
-}
-
-/**
- * Renvoie d'id du client à qui appartient le compte dont l'id est en paramètre,
- * Rien si il n'est pas présent dans la base de données.
- * @param int $idAccount L'id du compte
- * @return int L'id du client
- */
-function modGetIdClientFromAccount($idAccount){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idAccount';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->idClient;
 }
 
 /**
@@ -155,7 +137,7 @@ function modAddAccountToClientTwo($idClient, $idClient2, $overdraft, $idTypeAcco
     $prepared -> execute();
 
     // Récupérer l'ID du contrat inséré
-    $idCompte = $connection->lastInsertId();
+    $idCompte = $connection -> lastInsertId();
 
     // Deuxième requête ajout du compte au premier client
     $query = 'INSERT INTO possedeCompte(idClient, idCompte) VALUES (:idClient, :idCompte)';
@@ -214,10 +196,10 @@ function modGetAllClientsByCounselors($idEmployee){
  * @param string $sum La somme à débiter (positive)
  * @return void
  */
-function modDebit($idAccount,$sum) {
+function modDebit($idAccount, $sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idAccount;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Debit',NOW(),:sum,0)";
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount, 'Banque', 'Debit', NOW(), :sum, 0)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
@@ -231,10 +213,10 @@ function modDebit($idAccount,$sum) {
  * @param string $sum La somme à créditer
  * @return void
  */
-function modCredit($idAccount,$sum) {
+function modCredit($idAccount, $sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = "UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idAccount;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Crédit',NOW(),:sum,1)";
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount, 'Banque', 'Crédit', NOW(), :sum, 1)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
@@ -310,24 +292,6 @@ function modGetAllAccountTypesEnable() {
 }
 
 /**
- * Renvoie toutes les infos du type de compte dont l'id est en paramètre,
- * Rien si il n'est pas présent dans la base de données
- * @param int $idTypeAccount l'id du type de compte
- * @return object Les infos du type de compte (IDMOTIF, IDTYPECOMPTE, NOM, ACTIF, INTITULE, DOCUMENT)
- */
-function modGetTypeAccount($idTypeAccount) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecompte NATURAL JOIN motif WHERE idtypecompte=:idTypeCompte';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result;
-}
-
-/**
  * Fonction qui permet de mettre à jour les informations d'un type de compte
  * @param int $idAccount L'id du type de compte
  * @param string $name Le nom du type de compte
@@ -358,11 +322,11 @@ function modModifTypeAccount($idAccount, $name, $active, $document, $idMotif){
  * @return void
  */
 function modAddTypeAccount($name, $active, $document){
-    $nameMotif = 'Gestion de '.$name;
+    $nameMotif = 'Gestion du compte '.$name;
     $connection = Connection::getInstance()->getConnection();
-    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    $query = 'INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif,:document);
-    INSERT INTO `typecompte`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)';
+    $connection -> setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $query = 'INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif, :document);
+    INSERT INTO `typecompte`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()), :name, :active)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':nameMotif', $nameMotif, PDO::PARAM_STR);
@@ -380,7 +344,7 @@ function modAddTypeAccount($name, $active, $document){
  */
 function modDeleteTypeAccount($idTypeAccount){
     $connection = Connection::getInstance()->getConnection();
-    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $connection -> setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
     $query = 'DELETE FROM `possedecompte` WHERE IDCOMPTE IN (SELECT IDCOMPTE FROM compte WHERE IDTYPECOMPTE=:idtypecompte);
                 DELETE FROM `operation` WHERE IDCOMPTE IN (SELECT IDCOMPTE FROM compte WHERE IDTYPECOMPTE=:idtypecompte);
                 SET @IDM = (SELECT IDMOTIF FROM typecompte WHERE IDTYPECOMPTE=:idtypecompte);
@@ -401,14 +365,14 @@ function modDeleteTypeAccount($idTypeAccount){
 
 
 /**
- * Renvoie tous les contrats du client dont l'id est en paramètre,
+ * Renvoie tous les contrats du client dont l'id est en paramètre
  * Rien si il n'est pas présent dans la base de données.
  * @param int $idClient L'id du client
  * @return array Les contrats du client (IDCONTRAT, IDTYPECONTRAT, TARIFMENSUEL, DATEOUVERTURE, NOM) (tableau d'objets)
  */
 function modGetContracts($idClient) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT contrat.idContrat,idTypeContrat,tarifmensuel,dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idClient';
+    $query = 'SELECT contrat.idContrat, idTypeContrat, tarifmensuel, dateouverture, typecontrat.NOM FROM contrat LEFT JOIN possedeContrat ON contrat.idContrat=possedeContrat.idContrat NATURAL JOIN typecontrat WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam('idClient', $idClient, PDO::PARAM_INT);
     $prepared -> execute();
@@ -416,24 +380,6 @@ function modGetContracts($idClient) {
     $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
-}
-
-/**
- * Renvoie l'id du client à qui appartient le contrat dont l'id est en paramètre,
- * Rien si il n'est pas présent dans la base de données
- * @param int $idContract l'id du contrat
- * @return int L'id du client
- */
-function modGetIdClientFromContract($idContract){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idClient';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idClient', $idContract, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result->idClient;
 }
 
 /**
@@ -474,7 +420,7 @@ function modAddContractToClientTwo($idClient, $idClient2, $monthCost, $idTypeCon
     $prepared -> execute();
 
     // Récupérer l'ID du contrat inséré
-    $idContrat = $connection->lastInsertId();
+    $idContrat = $connection -> lastInsertId();
 
     // Deuxième requête
     $query = 'INSERT INTO possedeContrat(idClient, idContrat) VALUES (:idClient, :idContrat)';
@@ -544,24 +490,6 @@ function modGetAllContractTypesEnable() {
 }
 
 /**
- * Renvoie toutes les infos du type de contrat dont l'id est en paramètre,
- * Rien si il n'est pas présent dans la base de données
- * @param int $idContractType L'id du type de contrat
- * @return object Les infos du type de contrat (IDTYPECONTRAT, NOM, ACTIF, DOCUMENT, IDMOTIF)
- */
-function modGetContractFromId($idContractType) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT * FROM typecontrat NATURAL JOIN motif WHERE idtypecontrat=:idContractType';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idContractType', $idContractType, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result = $prepared -> fetch();
-    $prepared -> closeCursor();
-    return $result;
-}
-
-/**
  * Fonction qui permet de mettre à jour les informations d'un type de contrat
  * @param int $idContractType L'id du type de contrat
  * @param string $name Le nom du type de contrat
@@ -592,11 +520,11 @@ function modModifTypeContract($idContractType, $name, $active, $document, $idMot
  * @return void
  */
 function modAddTypeContract($name, $active, $document){
-    $nameMotif = 'Gestion de '.$name;
+    $nameMotif = 'Gestion du contrat '.$name;
     $connection = Connection::getInstance()->getConnection();
-    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
-    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif,:document);
-    INSERT INTO `typecontrat`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()),:name,:active)";
+    $connection -> setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $query = "INSERT INTO `motif`(`INTITULE`, `DOCUMENT`) VALUES (:nameMotif, :document);
+    INSERT INTO `typecontrat`(`IDMOTIF`, `NOM`, `ACTIF`) VALUES ((SELECT LAST_INSERT_ID()), :name, :active)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':nameMotif', $nameMotif, PDO::PARAM_STR);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
@@ -614,7 +542,7 @@ function modAddTypeContract($name, $active, $document){
  */
 function modDeleteTypeContract($idTypeContract){
     $connection = Connection::getInstance()->getConnection();
-    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $connection -> setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
     $query = 'DELETE FROM `possedecontrat` WHERE IDCONTRAT IN (SELECT IDCONTRAT FROM contrat WHERE IDTYPECONTRAT=:idtypecontrat);
                 SET @IDM = (SELECT IDMOTIF FROM typecontrat WHERE IDTYPECONTRAT=:idtypecontrat);
                 DELETE FROM `RDV` WHERE IDMOTIF = @IDM;
@@ -634,43 +562,43 @@ function modDeleteTypeContract($idTypeContract){
 
 
 /**
- * Renvoie tous les TA entre la première et la deuxième date mises en paramètres,
+ * Renvoie tous les TA entre la première et la deuxième date mises en paramètres
  * Rien si il n'y en a pas dans la base de données
  * @param int $id L'id du conseiller
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
  * @return array tous les TA entre la première et la deuxième date mises en paramètres (HORAIREDEBUT, HORAIREFIN) (tableau d'objets)
  */
-function modGetTABetweenCounselor($idConseiller,$dateDebut,$dateFin) {
+function modGetTABetweenCounselor($idConseiller, $dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM tacheadmin WHERE horairedebut>:dateDebut AND horairedebut<=:dateFin AND idEmploye=:idConseiller';
+    $query = 'SELECT HORAIREDEBUT, HORAIREFIN FROM tacheadmin WHERE horairedebut>=:dateDebut AND horairedebut<=:dateFin AND idEmploye=:idConseiller';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
     $prepared -> bindParam(':idConseiller', $idConseiller, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result= $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
 
 /**
- * Renvoie toutes les ta entre la première et la deuxième date mises en paramètres,
+ * Renvoie toutes les ta entre la première et la deuxième date mises en paramètres
  * Rien si il n'y en a pas dans la base de données
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
  * @return array tous les ta entre la première et la deuxième date mises en paramètres (IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, IDENTITEEMPLOYE, COLOR) (tableau d'objets)
  */
-function modGetAllTABetween($dateDebut,$dateFin) {
+function modGetAllTABetween($dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE, COLOR  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
+    $query = 'SELECT IDTA, HORAIREDEBUT, HORAIREFIN, LIBELLE, CONCAT(employe.PRENOM, " ", employe.NOM) AS IDENTITEEMPLOYE, COLOR  FROM tacheAdmin NATURAL JOIN employe WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result=$prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -683,9 +611,9 @@ function modGetAllTABetween($dateDebut,$dateFin) {
  * @param string $libelle Le libelle
  * @return void
  */
-function modCreateTA($idEmploye,$horaireDebut,$horaireFin,$libelle) {
+function modCreateTA($idEmploye, $horaireDebut, $horaireFin, $libelle) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO tacheAdmin(idEmploye,horaireDebut,horaireFin,libelle) VALUES (:idEmploye,:horaireDebut,:horaireFin,:libelle)';
+    $query = 'INSERT INTO tacheAdmin(idEmploye, horaireDebut, horaireFin, libelle) VALUES (:idEmploye, :horaireDebut, :horaireFin, :libelle)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
     $prepared -> bindParam(':horaireDebut', $horaireDebut, PDO::PARAM_STR);
@@ -716,19 +644,19 @@ function modDeleteTA($idTA){
 
 
 /**
- * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres,
+ * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres
  * Rien si il n'y en a pas dans la base de données
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
  * @return array tous les rdv entre la première et la deuxième date mises en paramètres (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
-function modGetAllAppointmentsBetween($dateDebut,$dateFin) {
+function modGetAllAppointmentsBetween($dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
     CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
     employe.COLOR,
     rdv.IDCLIENT,
-    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    CONCAT(client.CIVILITEE, " ", client.PRENOM, " ", client.NOM) AS identiteClient,
     rdv.HORAIREDEBUT,
     rdv.HORAIREFIN,
     motif.INTITULE,
@@ -742,25 +670,25 @@ function modGetAllAppointmentsBetween($dateDebut,$dateFin) {
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result= $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
 
 /**
- * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre,
+ * Renvoie tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre
  * Rien si il n'y en a pas dans la base de données
  * @param int $idConseiller L'id du conseiller
  * @param string $dateDebut Date de début
  * @param string $dateFin Date de fin
  * @return array Tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
-function modGetAppointmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
+function modGetAppointmentsBetweenCounselor($idConseiller, $dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
-    CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
+    CONCAT(employe.PRENOM, " ", employe.NOM) AS IDENTITEEMPLOYE,
     employe.COLOR, rdv.IDCLIENT,
-    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    CONCAT(client.CIVILITEE, " ", client.PRENOM, " ", client.NOM) AS identiteClient,
     rdv.HORAIREDEBUT, rdv.HORAIREFIN, motif.INTITULE, motif.DOCUMENT
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
@@ -773,7 +701,7 @@ function modGetAppointmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $prepared -> bindParam(':idConseiller', $idConseiller, PDO::PARAM_INT);
     $prepared -> execute();
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
-    $result= $prepared -> fetchAll();
+    $result = $prepared -> fetchAll();
     $prepared -> closeCursor();
     return $result;
 }
@@ -787,9 +715,9 @@ function modGetAppointmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
 function modGetAppointmentsClient($id) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
-    CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
+    CONCAT(employe.PRENOM, " ", employe.NOM) AS IDENTITEEMPLOYE,
     employe.COLOR, rdv.IDCLIENT,
-    CONCAT(client.CIVILITEE," ", client.PRENOM," ", client.NOM) AS identiteClient,
+    CONCAT(client.CIVILITEE, " ", client.PRENOM, " ", client.NOM) AS identiteClient,
     rdv.HORAIREDEBUT, rdv.HORAIREFIN, motif.INTITULE, motif.DOCUMENT
     FROM rdv
     JOIN employe ON rdv.IDEMPLOYE=employe.IDEMPLOYE
@@ -813,9 +741,9 @@ function modGetAppointmentsClient($id) {
  * @param string $horaireDebut L'horaire de début
  * @param string $horaireFin L'horaire de fin 
  */
-function modAddAppointment($idMotif,$idClient,$idEmploye,$horaireDebut,$horaireFin) {
+function modAddAppointment($idMotif, $idClient, $idEmploye, $horaireDebut, $horaireFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO rdv(idMotif,idClient,idEmploye,horaireDebut,horaireFin) VALUES (:idMotif,:idClient,:idEmploye,:horaireDebut,:horaireFin)';
+    $query = 'INSERT INTO rdv(idMotif, idClient, idEmploye, horaireDebut, horaireFin) VALUES (:idMotif, :idClient, :idEmploye, :horaireDebut, :horaireFin)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idMotif', $idMotif, PDO::PARAM_INT);
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
@@ -847,7 +775,7 @@ function modDeleteAppointment($idAppointment){
 
 
 /**
- * Renvoie toutes les infos de l'employé dont l'id est en paramètre,
+ * Renvoie toutes les infos de l'employé dont l'id est en paramètre
  * Rien si il n'est pas présent dans la base de données
  * @param string $idEmploye L'id de l'employé
  * @return object Les infos de l'employé (IDEMPLOYE, IDCATEGORIE, NOM, PRENOM, LOGIN, COLOR)
@@ -879,52 +807,12 @@ function modGetAllEmployes() {
 }
 
 /**
- * Modifie les nom, prénom, login, password et id de catégorie de l'employé dont l'id est en premier paramètre
- * @param int $idEmploye L'id de l'employé
- * @param string $name Le nom de l'employé
- * @param string $firstName Le prénom de l'employé
- * @param string $login Le login de l'employé
- * @param string $password Le password (salé) de l'employé
- * @param int $idCategorie L'id de la catégorie de l'employé
- * @param string $color La couleur de l'employé
- * @return void
- */
-function modModifEmploye($idEmploye, $name, $firstName, $login, $password, $idCategorie, $color) {
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE employe set nom=:name, prenom=:firstName, login=:login, password=:password, idCategorie=:idCategorie, color=:color WHERE idEmploye=:idEmploye';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
-    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
-    $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
-    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
-    $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
-    $prepared -> bindParam(':idCategorie', $idCategorie, PDO::PARAM_INT);
-    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
-
-/**
- * Fonction qui permet de supprimer un employé
- * @param int $idEmployee L'id de l'employé
- * @return void
- */
-function modDeleteEmploye($idEmployee){
-    $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM employe WHERE idEmploye=:idEmployee';
-    $prepared = $connection -> prepare($query);
-    $prepared -> bindParam(':idEmployee', $idEmployee, PDO::PARAM_INT);
-    $prepared -> execute();
-    $prepared -> closeCursor();
-}
-
-/**
  * Renvoie tous les conseillers
  * @return array Tous les conseillers (IDEMPLOYE, IDENTITEEMPLOYE) (tableau d'objets)
  */
 function modGetAllCounselors(){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idEmploye, CONCAT(employe.PRENOM," ", employe.NOM) AS identiteEmploye FROM employe WHERE idCategorie=2';
+    $query = 'SELECT idEmploye, CONCAT(employe.PRENOM, " ", employe.NOM) AS identiteEmploye FROM employe WHERE idCategorie=2';
     $prepared = $connection -> query($query);
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetchAll();
@@ -976,6 +864,46 @@ function modAddEmploye($idCategorie, $name, $firstName, $login, $password, $colo
     $prepared -> closeCursor();
 }
 
+/**
+ * Modifie les nom, prénom, login, password et id de catégorie de l'employé dont l'id est en premier paramètre
+ * @param int $idEmploye L'id de l'employé
+ * @param string $name Le nom de l'employé
+ * @param string $firstName Le prénom de l'employé
+ * @param string $login Le login de l'employé
+ * @param string $password Le password (salé) de l'employé
+ * @param int $idCategorie L'id de la catégorie de l'employé
+ * @param string $color La couleur de l'employé
+ * @return void
+ */
+function modModifEmploye($idEmploye, $name, $firstName, $login, $password, $idCategorie, $color) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'UPDATE employe set nom=:name, prenom=:firstName, login=:login, password=:password, idCategorie=:idCategorie, color=:color WHERE idEmploye=:idEmploye';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
+    $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
+    $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
+    $prepared -> bindParam(':login', $login, PDO::PARAM_STR);
+    $prepared -> bindParam(':password', $password, PDO::PARAM_STR);
+    $prepared -> bindParam(':idCategorie', $idCategorie, PDO::PARAM_INT);
+    $prepared -> bindParam(':color', $color, PDO::PARAM_STR);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
+/**
+ * Fonction qui permet de supprimer un employé
+ * @param int $idEmployee L'id de l'employé
+ * @return void
+ */
+function modDeleteEmploye($idEmployee){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'DELETE FROM employe WHERE idEmploye=:idEmployee';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idEmployee', $idEmployee, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> closeCursor();
+}
+
 
 # ------------------------------------------------------------------------------------------------------------------------------------------ #
 # ----------------------------------------------------------------- CLIENT ----------------------------------------------------------------- #
@@ -1002,14 +930,14 @@ function modGetClientFromId($idClient) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $name Le nom du client
  * @param string $firstName Le prénom du client
  * @param string $birthDate La date de naissance du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
-function modAdvancedSearchClientABC($name,$firstName,$birthDate) {
+function modAdvancedSearchClientABC($name, $firstName, $birthDate) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:name AND prenom=:firstName AND dateNaissance=:birthDate';
     $prepared = $connection -> prepare($query);
@@ -1024,15 +952,15 @@ function modAdvancedSearchClientABC($name,$firstName,$birthDate) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $name Le nom du client
  * @param string $firstName Le prénom du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
-function modAdvancedSearchClientAB($name,$firstName) {
+function modAdvancedSearchClientAB($name, $firstName) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:name AND prenom=:firstName';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:name AND prenom=:firstName';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
@@ -1044,15 +972,15 @@ function modAdvancedSearchClientAB($name,$firstName) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $firstName Le prénom du client
  * @param string $birthDate La date de naissance du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
-function modAdvancedSearchClientBC($firstName,$birthDate) {
+function modAdvancedSearchClientBC($firstName, $birthDate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:firstName AND dateNaissance=:birthDate';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE prenom=:firstName AND dateNaissance=:birthDate';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
     $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
@@ -1064,15 +992,15 @@ function modAdvancedSearchClientBC($firstName,$birthDate) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $name Le nom du client
  * @param string $birthDate La date de naissance du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
-function modAdvancedSearchClientAC($name,$birthDate) {
+function modAdvancedSearchClientAC($name, $birthDate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:name AND dateNaissance=:birthDate';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:name AND dateNaissance=:birthDate';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
@@ -1084,14 +1012,14 @@ function modAdvancedSearchClientAC($name,$birthDate) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $name Le nom du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
 function modAdvancedSearchClientA($name) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE nom=:name';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE nom=:name';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> execute();
@@ -1102,14 +1030,14 @@ function modAdvancedSearchClientA($name) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $firstName Le prénom du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
 function modAdvancedSearchClientB($firstName) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE prenom=:firstName';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE prenom=:firstName';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
     $prepared -> execute();
@@ -1120,14 +1048,14 @@ function modAdvancedSearchClientB($firstName) {
 }
 
 /**
- * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres,
+ * Renvoie l'id, le nom, le prénom et la date de naissance de tous les clients correspondants aux critères en paramètres
  * Rien si il n'est pas présent dans la base de données.
  * @param string $birthDate La date de naissance du client
  * @return array Les clients correspondants aux critères (IDCLIENT, NOM, PRENOM, DATENAISSANCE) (tableau d'objets)
  */
 function modAdvancedSearchClientC($birthDate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idClient,nom,prenom,dateNaissance FROM client WHERE dateNaissance=:birthDate';
+    $query = 'SELECT idClient, nom, prenom, dateNaissance FROM client WHERE dateNaissance=:birthDate';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
     $prepared -> execute();
@@ -1157,20 +1085,20 @@ function modGetAllClients() {
  * @param int $idEmploye L'id du conseiller
  * @param string $job La profession
  * @param string $situationFamiliale La situation familiale
- * @param string $adress L'adresse
+ * @param string $address L'adresse
  * @param string $num Le numero de tel
  * @param string $email L'adresse mail
  * @param string $birthDate La date de naissance
  */
-function modModifClient($idClient,$idEmploye,$job,$situationFamiliale,$adress,$num,$email,$birthDate) {
+function modModifClient($idClient, $idEmploye, $job, $situationFamiliale, $address, $num, $email, $birthDate) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'UPDATE client SET idEmploye=:idEmploye, dateNaissance=:birthDate, adresse=:adress, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:situationFamiliale WHERE idClient=:idClient';
+    $query = 'UPDATE client SET idEmploye=:idEmploye, dateNaissance=:birthDate, adresse=:address, numTel=:num, email=:email, profession=:job, SITUATIONFAMILIALE=:situationFamiliale WHERE idClient=:idClient';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idClient', $idClient, PDO::PARAM_INT);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
     $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
     $prepared -> bindParam(':situationFamiliale', $situationFamiliale, PDO::PARAM_STR);
-    $prepared -> bindParam(':adress', $adress, PDO::PARAM_STR);
+    $prepared -> bindParam(':address', $address, PDO::PARAM_STR);
     $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
     $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
     $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
@@ -1184,22 +1112,22 @@ function modModifClient($idClient,$idEmploye,$job,$situationFamiliale,$adress,$n
  * @param string $name Le nom
  * @param string $firstName Le prénom
  * @param string $birthDate La date de naissance
- * @param string $adress L'adresse
+ * @param string $address L'adresse
  * @param string $num Le numero de tel
  * @param string $email L'adresse mail
  * @param string $job La profession
  * @param string $situationFamiliale La situation familiale
  * @param string $civilite La civilité
  */
-function modCreateClient($idEmploye,$name,$firstName,$birthDate,$adress,$num,$email,$job,$situationFamiliale,$civilite) {
+function modCreateClient($idEmploye, $name, $firstName, $birthDate, $address, $num, $email, $job, $situationFamiliale, $civilite) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO client(idEmploye,nom,prenom,dateNaissance,dateCreation,adresse,numTel,email,profession,SITUATIONFAMILIALE,civilitee) VALUES (:idEmploye,:name,:firstName,:birthDate,NOW(),:adress,:num,:email,:job,:situationFamiliale,:civilite)';
+    $query = 'INSERT INTO client(idEmploye, nom, prenom, dateNaissance, dateCreation, addresse, numTel, email, profession, SITUATIONFAMILIALE, civilitee) VALUES (:idEmploye, :name, :firstName, :birthDate, NOW(), :adress, :num, :email, :job, :situationFamiliale, :civilite)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
     $prepared -> bindParam(':firstName', $firstName, PDO::PARAM_STR);
     $prepared -> bindParam(':birthDate', $birthDate, PDO::PARAM_STR);
-    $prepared -> bindParam(':adress', $adress, PDO::PARAM_STR);
+    $prepared -> bindParam(':address', $address, PDO::PARAM_STR);
     $prepared -> bindParam(':num', $num, PDO::PARAM_STR);
     $prepared -> bindParam(':email', $email, PDO::PARAM_STR);
     $prepared -> bindParam(':job', $job, PDO::PARAM_STR);
@@ -1227,7 +1155,7 @@ function modSumAllSolde() {
     $prepared -> setFetchMode(PDO::FETCH_OBJ);
     $result = $prepared -> fetch();
     $prepared -> closeCursor();
-    return $result->somme;
+    return $result -> somme;
 }
 
 /**
@@ -1418,7 +1346,7 @@ function modGetNumberNonOverdraftAccounts() {
  * @param string $dateFin Date de fin
  * @return int Le nombre de rdv après la dateDebut mais avant la dateFin
  */
-function modGetNumberAppointmentsBetween($dateDebut,$dateFin) {
+function modGetNumberAppointmentsBetween($dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbAppointments FROM rdv WHERE horairedebut>:dateDebut AND horairedebut<:dateFin';
     $prepared = $connection -> prepare($query);
@@ -1437,7 +1365,7 @@ function modGetNumberAppointmentsBetween($dateDebut,$dateFin) {
  * @param string $dateFin Date de fin
  * @return int Le nombre de contrats souscrit entre la première et la deuxième date mises en paramètres
  */
-function modGetNumberContractsBetween($dateDebut,$dateFin) {
+function modGetNumberContractsBetween($dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>:dateDebut AND dateouverture<:dateFin';
     $prepared = $connection -> prepare($query);
@@ -1545,7 +1473,7 @@ function modGetTypeStaff($id) {
 
 function modGetAppointmentConseiller($id) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT idRDV,idMotif,idClient,idEmploye,horairedebut, horairefin FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
+    $query = 'SELECT idRDV, idMotif, idClient, idEmploye, horairedebut, horairefin FROM rdv NATURAL JOIN employe WHERE idEmploye=:id';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':id', $id, PDO::PARAM_STR);
     $prepared -> execute();
@@ -1594,9 +1522,9 @@ function modGetIntituleCategorie($id) {
 }
 
 
-function modCreateMotive($label,$doc) {
+function modCreateMotive($label, $doc) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO motif(intitule,document) VALUES (:label,:doc)';
+    $query = 'INSERT INTO motif(intitule, document) VALUES (:label, :doc)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':label', $label, PDO::PARAM_STR);
     $prepared -> bindParam(':doc', $doc, PDO::PARAM_STR);
@@ -1607,8 +1535,8 @@ function modCreateMotive($label,$doc) {
 
 function modGetRichestClient() {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'CREATE OR REPLACE VIEW totalIndividualWealth(idClient,totalWealth) AS
-                SELECT idClient,SUM(solde) 
+    $query = 'CREATE OR REPLACE VIEW totalIndividualWealth(idClient, totalWealth) AS
+                SELECT idClient, SUM(solde) 
 	            FROM Client NATURAL JOIN PossedeCompte NATURAL JOIN Compte;
             SELECT IDCLIENT, NOM, PRENOM FROM client WHERE idClient IN (SELECT idClient FROM totalIndividualWealth WHERE totalWealth=(SELECT MAX(totalWealth) FROM totalIndividualWealth));';
     $prepared = $connection -> query($query);
@@ -1618,5 +1546,54 @@ function modGetRichestClient() {
     return $result;
 }
 
+
+function modGetIdClientFromAccount($idAccount){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeCompte WHERE idCompte=:idAccount';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idClient;
+}
+
+function modGetTypeAccount($idTypeAccount) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecompte NATURAL JOIN motif WHERE idtypecompte=:idTypeCompte';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idTypeCompte', $idTypeAccount, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+
+function modGetIdClientFromContract($idContract){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idClient FROM possedeContrat WHERE idContrat=:idClient';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idClient', $idContract, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result->idClient;
+}
+
+function modGetContractFromId($idContractType) {
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT * FROM typecontrat NATURAL JOIN motif WHERE idtypecontrat=:idContractType';
+    $prepared = $connection -> prepare($query);
+    $prepared -> bindParam(':idContractType', $idContractType, PDO::PARAM_INT);
+    $prepared -> execute();
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetch();
+    $prepared -> closeCursor();
+    return $result;
+}
 
 */

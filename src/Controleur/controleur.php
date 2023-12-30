@@ -688,7 +688,7 @@ function getSundayOfWeek($date) {
 function ctlDisplayAddAppointment($date) {
     $dateTime = ($date instanceof DateTime) ? $date : date_create($date);
     $listConseillers = modGetAllCounselors();
-    $listClients = modGetAllClients();
+    $listClients = $_SESSION["listClient"];
     $listMotifs = modGetAllMotif();
     $rdvArray = ctlRDVBetween($dateTime, $dateTime)[0];
     vueDisplayAddAppointment($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
