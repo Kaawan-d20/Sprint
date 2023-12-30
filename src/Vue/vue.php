@@ -121,7 +121,6 @@ function vueDisplayHomeAgent($events, $dateOfWeek, $username) {
 
 function vueGenerateCalendarFilter($listConseiller){
     $filterWrapper = '<div class="filterWrapper">';
-    debug($listConseiller);
     for ($i=0; $i < count($listConseiller); $i+=2) {
         $conseiller = $listConseiller[$i];
         $color = $listConseiller[$i+1];
@@ -545,7 +544,7 @@ function vueDisplayGestionServicesAdd(){
 function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperationsAccount, $listRDVClients, $listConseiller){
     $navbar = vueGenerateNavBar();
     $events = vueAppointementClient($listRDVClients);
-    $listC = vueCreateListContract($listContract);
+    $listC = vueCreateListContract($listContract, $client->IDCLIENT);
     list($listA, $optionSelect, $typeClass) = vueCreateListAccount($listAccounts, $client->IDCLIENT);
     list($filterBtns, $operationDisplay) = vueGenerateOperation($listAccounts, $listOperationsAccount);
     list($createAccount, $createContract) = vueGenerateButtonCreate($client->IDCLIENT);
@@ -595,7 +594,7 @@ function vueAppointementClient($listRDVClients){
  * @param array $listContract c'est la liste des contrats du client
  * @return string Le code HTML de la liste des contrats
  */
-function vueCreateListContract($listContract){
+function vueCreateListContract($listContract, $idClient){
     $listC = ($_SESSION["type"] == 2) ? '<div class="accountCell header">Suppression</div>' : '';
     foreach ($listContract as $contract) {
         $listC .= '<div class="contractCell content">'.$contract->NOM.'</div>
@@ -604,6 +603,7 @@ function vueCreateListContract($listContract){
             $listC.='<div class="contractCell content">
                         <form action="index.php" method="post">
                             <input type="hidden" name="idContract" value="'.$contract->idContrat.'">
+                            <input type="hidden" name="idClient" value="'.$idClient.'">
                             <button type="submit" name="deleteContractBtn" class="suppContract">
                                 <i class="fa-solid fa-trash-can"></i>
                                 Supprimer le contrat
@@ -916,21 +916,20 @@ function vueGenerateAdminHTML($TA) {
  * @param string $clientActuel c'est le client actuel (optionnel)
  * @return void
  */
-function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray) {
+function vueDisplayAddAppointment($listConseillers, $listClients, $listMotifs, $date, $events) {
     $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $conseillersOption = "";
     $clientOption = "";
     $motifsOption = "";
-    $events = "";
-    foreach ($rdvArray[0] as $appointment) {
-        $events .= vueGenerateAppointementHTML($appointment);
-    }
-    foreach ($rdvArray[1] as $TA) {
-        $events .= vueGenerateAdminHTML($TA);
-    }
-    foreach ($listClients as $client) {
-        $clientOption .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
+    $eventsHTML = "";
+    foreach ($events as $event) {
+        if (isset($event->IDRDV)){
+            $eventsHTML .= vueGenerateAppointementHTML($event);
+        }
+        else{
+            $eventsHTML .= vueGenerateAdminHTML($event);
+        }
     }
     foreach ($listConseillers as $conseiller) {
         $conseillersOption .= '<option value="'.$conseiller->idEmploye.'">'.$conseiller->identiteEmploye.'</option>';
@@ -974,7 +973,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                 </div>
                 <div class="addAppointementWrapper">
                     <div class="events">
-                        '.$events.'
+                        '.$eventsHTML.'
                     </div>
                 </div>
             </div>';
@@ -990,20 +989,19 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
  * @param array|ArrayObject $rdvArray c'est la liste des rendez-vous
  * @return void
  */
-function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray) {
+function vueDisplayAddAppointmentConseiller($listClients, $listMotifs, $date, $events) {
     $titre = "Prendre un rendez-vous - Bank";
     $navbar = vueGenerateNavBar();
     $clientOption = "";
     $motifsOption = "";
-    $events = "";
-    foreach ($rdvArray[0] as $appointment) {
-        $events .= vueGenerateAppointementHTML($appointment);
-    }
-    foreach ($rdvArray[1] as $TA) {
-        $events .= vueGenerateAdminHTML($TA);
-    }
-    foreach ($listClients as $client) {
-        $clientOption .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'">'.$client->PRENOM.' '.$client->NOM.'</option>';
+    $eventsHTML = "";
+    foreach ($events as $event) {
+        if (isset($event->IDRDV)){
+            $eventsHTML .= vueGenerateAppointementHTML($event);
+        }
+        else{
+            $eventsHTML .= vueGenerateAdminHTML($event);
+        }
     }
     foreach ($listMotifs as $motif) {
         $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
@@ -1051,7 +1049,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                 </div>
                 <div class="addAppointementWrapper">
                     <div class="events">
-                        '.$events.'
+                        '.$eventsHTML.'
                     </div>
                 </div>
             </div>';

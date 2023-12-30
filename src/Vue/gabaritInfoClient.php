@@ -64,6 +64,7 @@
             <form action="index.php" method="post" class="debitCreditWrapper">
                 <div class="accountSelectorWrapper">
                     <h1>Compte:</h1>
+                    <input type="hidden" name="idClient" value="<?php echo $idClient; ?>">
                     <select name="debitAccountSelector" id="debitAccountSelector" class="debitAccountSelector">
                             <?php
                                 echo $optionSelect;

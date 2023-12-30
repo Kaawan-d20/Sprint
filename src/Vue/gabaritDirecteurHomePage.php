@@ -38,7 +38,7 @@
             <div class="statCell content"><?php echo $stat['nbAccountActive'] ?></div>
             <div class="statCell content"><?php echo $stat['nbAccountInactif'] ?></div>
             <div class="statCell content"><?php echo $stat['nbAccountDecouvert'] ?></div>
-            <div class="statCell content"><?php echo $stat['nbAccoutNonDecouvert'] ?></div>
+            <div class="statCell content"><?php echo $stat['nbAccountNonDecouvert'] ?></div>
             <div class="statCell content"><?php echo $stat['sumAccount'] ?></div>
             <div class="statCell content"><?php echo $stat['nbContractActive'] ?></div>
             <div class="statCell content"><?php echo $stat['nbContractInactif'] ?></div>
@@ -64,7 +64,7 @@
         <p></p>
         <div class="statResultTableWrapper">
             <div class="statResultCell header">Nombre de RDV entre deux dates</div>
-            <div class="statResultCell content"><?php echo $stat['AppoinmentBetween'] ?></div>
+            <div class="statResultCell content"><?php echo $stat['AppointmentBetween'] ?></div>
             
             <div class="statResultCell header">Nombre de Contrat souscrit entre deux dates</div>
             <div class="statResultCell content"><?php echo $stat['ContractBetween'] ?></div>

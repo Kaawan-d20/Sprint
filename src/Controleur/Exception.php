@@ -229,11 +229,11 @@ class clientIncorrectException extends Exception{
 
 
 /**
- * Classe appointementHoraireException
+ * Classe appointmentHoraireException
  *
  * Cette classe est utilisée pour gérer les exceptions lorsqu'un RDV est pris à une heure où il y a déjà un événement.
  **/
-class appointementHoraireException extends Exception{
+class appointmentHoraireException extends Exception{
     /**
      * Constructeur de la classe
      *

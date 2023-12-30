@@ -231,12 +231,14 @@ function onSubmitButtonClick(data='') {
 
     // Récupérer le mot de passe depuis le champ de formulaire
     var password = document.getElementById(passwordField).value;
+    if (password != '') {
+         // Hasher le mot de passe
+        var hashedPassword = CryptoJS.SHA256(password).toString();
 
-    // Hasher le mot de passe
-    var hashedPassword = CryptoJS.SHA256(password).toString();
+        // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe hashé
+        document.getElementById(passwordField).value = hashedPassword;
+    }
 
-    // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe hashé
-    document.getElementById(passwordField).value = hashedPassword;
     // Soumettre le formulaire
     document.getElementById(formID).submit();
 }

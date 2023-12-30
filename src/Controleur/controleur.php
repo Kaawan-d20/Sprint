@@ -10,7 +10,6 @@ if(session_status() === PHP_SESSION_NONE) {
 /**
  * Fonction qui affiche la page d'accueil en fonction de la catégorie de l'utilisateur
  * Si l'utilisateur n'est pas connecté, affiche la page de login
- * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
 function ctlHome (){
@@ -39,13 +38,12 @@ function ctlHome (){
  */
 function ctlLogin($username, $password){
     $BDPWD = modGetPassword($username);
-    $result = password_verify($password, $BDPWD);
-    if ($result == true){
-        $resultConnnect = modGetEmployeFromLogin($username);
-        $_SESSION["idEmploye"] = $resultConnnect->IDEMPLOYE;
-        $_SESSION["type"] = $resultConnnect->IDCATEGORIE;
-        $_SESSION["name"] = $resultConnnect->NOM;
-        $_SESSION["firstName"] = $resultConnnect->PRENOM;
+    if (password_verify($password, $BDPWD)){
+        $resultConnect = modGetEmployeFromLogin($username);
+        $_SESSION["idEmploye"] = $resultConnect->IDEMPLOYE;
+        $_SESSION["type"] = $resultConnect->IDCATEGORIE;
+        $_SESSION["name"] = $resultConnect->NOM;
+        $_SESSION["firstName"] = $resultConnect->PRENOM;
         $_SESSION["listClient"] = modGetAllClients();
         ctlHome();
     }
@@ -57,7 +55,6 @@ function ctlLogin($username, $password){
 
 /**
  * Fonction qui permet de se déconnecter
- * Ne prend pas de paramètres et ne retourne rien
  * @return void
  */
 function ctlLogout() {
@@ -84,7 +81,7 @@ function ctlError($error) {
  * Fonction qui demande au model de récupérer les informations des type de compte et de contrat puis appel la page de gestion des services
  * @return void
  */
-function ctlGestionServiceslAll(){
+function ctlGestionServicesAll(){
     $listTypeAccount = modGetAllAccountTypes();
     $listTypeContract = modGetAllContractTypes();
     vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract);
@@ -104,6 +101,8 @@ function ctlGestionServicesAdd(){
  * @param int $type C'est le type de service (1 pour compte, 2 pour contrat)
  * @param int $active C'est si le service est actif ou non (1 pour actif, 0 pour inactif)
  * @param string $document C'est le document du service
+ * @throws existingTypeAccountException Si le type de compte existe déjà
+ * @throws existingTypeContractException Si le type de contrat existe déjà
  * @return void
  */
 function ctlGestionServicesAddSubmit($name, $type, $active, $document){
@@ -120,25 +119,10 @@ function ctlGestionServicesAddSubmit($name, $type, $active, $document){
         }
         modAddTypeContract($name, $active, $document);
     }
-    ctlGestionServiceslAll();
+    ctlGestionServicesAll();
 }
 
-function ctlGetTypeAccount(){
-    $listTypeAccount = modGetAllAccountTypes();
-    $list = array();
-    foreach ($listTypeAccount as $typeAccount){
-        array_push($list, $typeAccount->NOM);
-    }
-    return $list;
-}
-function ctlGetTypeContract(){
-    $listTypeContract = modGetAllContractTypes();
-    $list = array();
-    foreach ($listTypeContract as $typeContract){
-        array_push($list, $typeContract->NOM);
-    }
-    return $list;
-}
+
 
 // ------------------------------------------------------------------------------------------------------
 // ----------------------------------------- TYPE COMPTE ------------------------------------------------
@@ -156,7 +140,7 @@ function ctlGetTypeContract(){
  */
 function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMotif){
     modModifTypeAccount($idAccount, $name, $active, $document, $idMotif);
-    ctlGestionServiceslAll();
+    ctlGestionServicesAll();
 }
 
 /**
@@ -166,7 +150,20 @@ function ctlGestionAccountOneSubmit($idAccount, $name, $active, $document, $idMo
  */
 function ctlGestionAccountDelete($idAccount){
     modDeleteTypeAccount($idAccount);
-    ctlGestionServiceslAll();
+    ctlGestionServicesAll();
+}
+
+/**
+ * Fonction qui demande au model de récupérer les informations des type de compte
+ * @return array C'est la liste des nom de types de compte
+ */
+function ctlGetTypeAccount(){
+    $listTypeAccount = modGetAllAccountTypes();
+    $list = array();
+    foreach ($listTypeAccount as $typeAccount){
+        array_push($list, $typeAccount->NOM);
+    }
+    return $list;
 }
 
 
@@ -182,7 +179,7 @@ function ctlGestionAccountDelete($idAccount){
  */
 function ctlGestionContractDelete($idContract){
     modDeleteTypeContract($idContract);
-    ctlGestionServiceslAll();
+    ctlGestionServicesAll();
 }
 
 /**
@@ -196,7 +193,20 @@ function ctlGestionContractDelete($idContract){
  */
 function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $idMotif){
     modModifTypeContract($idContract, $name, $active, $document, $idMotif);
-    ctlGestionServiceslAll();
+    ctlGestionServicesAll();
+}
+
+/**
+ * Fonction qui demande au model de récupérer les informations des type de contrat
+ * @return array C'est la liste des nom de types de contrat
+ */
+function ctlGetTypeContract(){
+    $listTypeContract = modGetAllContractTypes();
+    $list = array();
+    foreach ($listTypeContract as $typeContract){
+        array_push($list, $typeContract->NOM);
+    }
+    return $list;
 }
 
 
@@ -205,44 +215,35 @@ function ctlGestionContractOneSubmit($idContract, $name, $active, $document, $id
 // ------------------------------------------------------------------------------------------------------
 
 
-/**
- * Fonction qui permet d'obtenir la liste des compte d'un client
- * @param int $idClient C'est l'id du client
- * @return array C'est la liste des comptes du client (c'est un tableau d'objet)
- */
-function ctlGetAccount($idClient){
-    $account = modGetAccounts($idClient);
-    return $account;
-}
+
 
 /**
  * Fonction qui permet de débiter un compte
  * @param int $idAccount C'est l'id du compte
  * @param string $amount C'est le montant à débiter
+ * @param int $idClient C'est l'id du client
  * @throws soldeInsuffisantException Si le montant est supérieur au solde et au découvert
  * @return void
  */
-function ctlDebit($idAccount, $amount){
+function ctlDebit($idAccount, $amount, $idClient){
     $account = modGetInfoAccount($idAccount);
     if ($amount > $account->solde + $account->decouvert){
         throw new soldeInsuffisantException();
     }
-    modDebit($idAccount, $amount, date('Y-m-d H:i:s'));
-    $client = modGetClientFromId($account->idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($account->idClient),ctlGetContracts($account->idClient), ctlGetOperation($account->idClient), modGetAppointmentsClient($account->idClient), modGetAllCounselors());
+    modDebit($idAccount, $amount);
+    ctlSearchIdClient($idClient);
 }
 
 /**
  * Fonction qui permet de créditer un compte
  * @param int $idAccount C'est l'id du compte
  * @param string $amount C'est le montant à créditer
+ * @param int $idClient C'est l'id du client
  * @return void
 */
-function ctlCredit($idAccount, $amount){
-    modCredit($idAccount, $amount, date('Y-m-d H:i:s'));
-    $idClient = modGetIdClientFromAccount($idAccount);
-    $client = modGetClientFromId($idClient);
-    vueDisplayInfoClient($client, ctlGetAccount($idClient),ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient), modGetAllCounselors());
+function ctlCredit($idAccount, $amount, $idClient){
+    modCredit($idAccount, $amount);
+    ctlSearchIdClient($idClient);
 }
 
 /**
@@ -263,6 +264,7 @@ function ctlGetOperation($idClient){
  * Fonction qui demande au model de modifier le découvert d'un compte puis appel la synthèse du client
  * @param int $idAccount C'est l'id du compte
  * @param string $overdraft C'est le découvert du compte
+ * @param int $idClient C'est l'id du client
  * @return void
 */
 function ctlModifOverdraft($idAccount, $overdraft, $idClient){
@@ -278,7 +280,7 @@ function ctlModifOverdraft($idAccount, $overdraft, $idClient){
  */
 function ctlAddAccount($idClient){
     $listTypeAccount = modGetAllAccountTypesEnable();
-    $listAllClient = modGetAllClients();
+    $listAllClient = $_SESSION["listClient"];
     vueDisplayAddAccount($idClient, $listTypeAccount, $listAllClient);
 }
 
@@ -329,25 +331,11 @@ function ctlDeleteAccount($idAccount, $idClient){
     ctlSearchIdClient($idClient);
 }
 
-function ctlEditClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance){
-    modModifClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance);
-    ctlSearchIdClient($idClient);
-}
 
 // ------------------------------------------------------------------------------------------------------
 // ----------------------------------------- CONTRAT ----------------------------------------------------
 // ------------------------------------------------------------------------------------------------------
 
-
-/**
- * Fonction qui permet d'obtenir la liste des contrat d'un client
- * @param int $idClient C'est l'id du client
- * @return array C'est la liste des contrat du client (c'est un tableau d'objet)
- */
-function ctlGetContracts($idClient){
-    $contracts = modGetContracts($idClient);
-    return $contracts;
-}
 
 /**
  * Fonction qui demande au model de récupérer la liste des types de contrat actif
@@ -357,7 +345,7 @@ function ctlGetContracts($idClient){
  */
 function ctlAddContract($idClient){
     $listTypeContract = modGetAllContractTypesEnable();
-    $listAllClient = modGetAllClients();
+    $listAllClient = $_SESSION["listClient"];
     vueDisplayAddContract($idClient, $listTypeContract, $listAllClient);
 }
 
@@ -374,7 +362,7 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
     if ($idClient2 == $idClient){
         throw new clientIncorrectException();
     }
-    if ($idClient2 == ""){
+    elseif ($idClient2 == ""){
         modAddContractToClientOne($idClient, $monthCost, $idTypeContract);
     }
     else{
@@ -388,8 +376,7 @@ function ctlCreateContract($idClient, $monthCost, $idTypeContract, $idClient2=""
  * @param int $idContract C'est l'id du contrat
  * @return void
 */
-function ctlDeleteContract($idContract){
-    $idClient = modGetIdClientFromContract($idContract);
+function ctlDeleteContract($idContract, $idClient){
     modDeleteContract($idContract);
     ctlSearchIdClient($idClient);
 }
@@ -411,15 +398,11 @@ function ctlSearchIdClient($idClient){
     if ($idClient == '') {
         throw new isEmptyException();
     }
-    else{
-        $client = modGetClientFromId($idClient);
-        if (empty($client)){
-            throw new notFoundClientException();
-        }
-        else{
-            vueDisplayInfoClient($client, ctlGetAccount($idClient), ctlGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient), modGetAllCounselors());
-        }
+    $client = modGetClientFromId($idClient);
+    if (empty($client)){
+        throw new notFoundClientException();
     }
+    vueDisplayInfoClient($client, modGetAccounts($idClient), modGetContracts($idClient), ctlGetOperation($idClient), modGetAppointmentsClient($idClient), modGetAllCounselors());
 }
 
 /**
@@ -475,7 +458,7 @@ function ctlDisplayNewClientForm()  {
 /**
  * Fonction qui demande au model de créer un client puis appel la page d'accueil
  * Update la liste des clients dans la session
- * @param string $civilite C'est la civilité du client
+ * @param int $idEmployee C'est l'id de l'employé qui a créé le client
  * @param string $name C'est le nom du client
  * @param string $firstName C'est le prénom du client
  * @param string $dateOfBirth C'est la date de naissance du client
@@ -484,13 +467,30 @@ function ctlDisplayNewClientForm()  {
  * @param string $email C'est l'email du client
  * @param string $profession C'est la profession du client
  * @param string $situation C'est la situation du client
- * @param int $idEmployee C'est l'id de l'employé qui a créé le client
+ * @param string $civilite C'est la civilité du client
  * @return void
  */
-function ctlAddClient($civilite, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $idEmployee){
-    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation,$civilite);
+function ctlAddClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $civilite){
+    modCreateClient($idEmployee, $name, $firstName, $dateOfBirth, $address, $phone, $email, $profession, $situation, $civilite);
     $_SESSION["listClient"] = modGetAllClients();
     ctlHome();
+}
+
+/**
+ * Fonction qui demande au model de modifier un client puis appel la synthèse du client
+ * @param int $idClient C'est l'id du client
+ * @param int $idConseiller C'est l'id du conseiller du client
+ * @param string $profession C'est la profession du client
+ * @param string $situation C'est la situation du client
+ * @param string $address C'est l'adresse du client
+ * @param string $phone C'est le numéro de téléphone du client
+ * @param string $email C'est l'email du client
+ * @param string $naissance C'est la date de naissance du client
+ * @return void
+ */
+function ctlEditClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance){
+    modModifClient($idClient, $idConseiller, $profession, $situation, $address, $phone, $email, $naissance);
+    ctlSearchIdClient($idClient);
 }
 
 
@@ -509,12 +509,20 @@ function ctlGestionPersonnelAll(){
 }
 
 /**
+ * Fonction qui demande à la vue d'afficher la page de création d'un employé
+ * @return void
+ */
+function ctlGestionPersonnelAdd(){
+    vueDisplayGestionPersonnelAdd();
+}
+
+/**
  * Fonction qui demande au model de modifier un employé puis appel la page de gestion du personnel
  * @param int $idEmployee C'est l'id de l'employé
  * @param string $name C'est le nom de l'employé
  * @param string $firstName C'est le prénom de l'employé
  * @param string $login C'est le login de l'employé
- * @param string $password C'est le mot de passe de l'employé
+ * @param string $password C'est le mot de passe de l'employé (haché dans le JS en SHA256)
  * @param int $category C'est la catégorie de l'employé
  * @param string $color C'est la couleur de l'employé
  * @return void
@@ -526,19 +534,11 @@ function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $p
 }
 
 /**
- * Fonction qui demande à la vue d'afficher la page de création d'un employé
- * @return void
- */
-function ctlGestionPersonnelAdd(){
-    vueDisplayGestionPersonnelAdd();
-}
-
-/**
  * Fonction qui demande au model d'ajouter un employé puis appel la page de gestion du personnel
  * @param string $name C'est le nom de l'employé
  * @param string $firstName C'est le prénom de l'employé
  * @param string $login C'est le login de l'employé
- * @param string $password C'est le mot de passe de l'employé
+ * @param string $password C'est le mot de passe de l'employé (haché dans le JS en SHA256)
  * @param int $category C'est la catégorie de l'employé
  * @param string $color C'est la couleur de l'employé
  * @return void
@@ -557,16 +557,6 @@ function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $cat
 function ctlGestionPersonnelDelete($idEmployee){
     modDeleteEmploye($idEmployee);
     ctlGestionPersonnelAll();
-}
-
-/**
- * Fonction qui demande au model de récupérer les informations d'un employé
- * @param int $idEmploye C'est l'id de l'employé
- * @return object C'est les informations de l'employé
- */
-function ctlGetInfoEmploye($idEmploye) {
-    $employee = modGetEmployeFromId($idEmploye);
-    return $employee;
 }
 
 /**
@@ -613,7 +603,7 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $dateStartOfWeekString = $dateStartOfWeek->format('Y-m-d') . " 00:00:00";
     $dateEndOfWeekString = $dateEndOfWeek->format('Y-m-d') . " 23:59:59";
 
-    $listRDV = modGetAllAppoinmentsBetween($dateStartOfWeekString, $dateEndOfWeekString);
+    $listRDV = modGetAllAppointmentsBetween($dateStartOfWeekString, $dateEndOfWeekString);
     $listTA = modGetAllTABetween($dateStartOfWeekString, $dateEndOfWeekString);
 
     $event = array_merge($listRDV, $listTA);
@@ -624,28 +614,6 @@ function ctlRDVBetween($dateStartOfWeek, $dateEndOfWeek){
     $array = new ArrayObject();
     $array->append($event);
     $array->append($dateStartOfWeek);
-    return $array;
-}
-
-/**
- * Fonction qui demande au model de récupérer les RDV et les tâches administratives pour une journée
- * @param DateTime|string $date C'est la date
- * @return ArrayObject C'est un tableau avec les RDV, les tâches administratives
- */
-function ctlRDVDate($date) {
-    $date = ($date instanceof DateTime) ? $date : date_create($date);
-
-    $dateStart = $date->format('Y-m-d');
-    $dateStart .= ' 00:00:00';
-    $dateEnd = $date->format('Y-m-d');
-    $dateEnd .= ' 23:59:59';
-
-    $listRDV = modGetAllAppoinmentsBetween($dateStart, $dateEnd);
-    $listTA = modGetAllTABetween($dateStart, $dateEnd);
-
-    $array = new ArrayObject();
-    $array->append($listRDV);
-    $array->append($listTA);
     return $array;
 }
 
@@ -674,16 +642,12 @@ function ctlUpdateCalendar($targetDate) {
     vueDisplayHomeAgent($array[0], $array[1], $_SESSION["name"]);
 }
 
-
-
-
 /**
  * Fonction qui renvoie la date du lundi de la semaine de la date donnée
  * @param DateTime $date C'est la date
  * @return DateTime C'est la date du lundi de la semaine
  */
 function getMondayOfWeek($date) {
-    $date = ($date instanceof DateTime) ? $date : date_create($date);
     $dayOfWeek = date_format($date, 'N');
     if ($dayOfWeek == 1) {
         return $date;
@@ -699,7 +663,6 @@ function getMondayOfWeek($date) {
  * @return DateTime C'est la date du dimanche de la semaine
  */
 function getSundayOfWeek($date) {
-    $date = ($date instanceof DateTime) ? $date : date_create($date);
     $dayOfWeek = date_format($date, 'N');
     if ($dayOfWeek == 7) {
         return $date;
@@ -722,12 +685,13 @@ function getSundayOfWeek($date) {
  * @param DateTime|string $date C'est la date du rendez-vous
  * @return void
  */
-function ctlDisplayAddAppointement($date) {
+function ctlDisplayAddAppointment($date) {
+    $dateTime = ($date instanceof DateTime) ? $date : date_create($date);
     $listConseillers = modGetAllCounselors();
     $listClients = modGetAllClients();
     $listMotifs = modGetAllMotif();
-    $rdvArray = ctlRDVDate($date);
-    vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
+    $rdvArray = ctlRDVBetween($dateTime, $dateTime)[0];
+    vueDisplayAddAppointment($listConseillers, $listClients, $listMotifs, $date, $rdvArray);
 }
 
 /**
@@ -737,11 +701,12 @@ function ctlDisplayAddAppointement($date) {
  * @param DateTime|string $date C'est la date du rendez-vous
  * @return void
  */
-function ctlDisplayAddAppointementConseiller($date) {
+function ctlDisplayAddAppointmentConseiller($date) {
+    $dateTime = ($date instanceof DateTime) ? $date : date_create($date);
     $listClients = modGetAllClientsByCounselors($_SESSION["idEmploye"]);
     $listMotifs = modGetAllMotif();
-    $rdvArray = ctlRDVDate($date);
-    vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $rdvArray);
+    $rdvArray = ctlRDVBetween($dateTime, $dateTime)[0];
+    vueDisplayAddAppointmentConseiller($listClients, $listMotifs, $date, $rdvArray);
 }
 
 /**
@@ -753,12 +718,12 @@ function ctlDisplayAddAppointementConseiller($date) {
  * @param string $heureDebut C'est l'heure de début du rendez-vous
  * @param string $heureFin C'est l'heure de fin du rendez-vous
  * @param int $idMotif C'est l'id du motif du rendez-vous
- * @throws appointementHoraireException Si le rendez-vous est impossible car il y a un autre rendez-vous ou une tâche administrative à ce moment là
+ * @throws appointmentHoraireException Si le rendez-vous est impossible car il y a un autre rendez-vous ou une tâche administrative à ce moment là
  * @throws HoraireException Si l'heure de début est supérieur ou égale à l'heure de fin
  * @throws notFoundClientException Si le client n'existe pas
  * @return void
  */
-function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
+function ctlCreateNewAppointment($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
     if ($heureDebut > $heureFin) {
         throw new HoraireException();
     }
@@ -769,28 +734,28 @@ function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $h
     $horaireFin= $date.' '.$heureFin.':00';
     $debutCall = $date . ' 00:00:00';
     $finCall = $date . ' 23:59:59';
-    $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+    $listAppointment = modGetAppointmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
     $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
-    foreach ($listAppointement as $appointement){
-        if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
-            throw new appointementHoraireException();
+    foreach ($listAppointment as $appointment){
+        if ($horaireDebut < $appointment->HORAIREDEBUT && $appointment->HORAIREDEBUT < $horaireFin){
+            throw new appointmentHoraireException();
         }
-        if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
-            throw new appointementHoraireException();
+        if ($horaireDebut < $appointment->HORAIREFIN && $appointment->HORAIREFIN < $horaireFin){
+            throw new appointmentHoraireException();
         }
-        if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
-            throw new appointementHoraireException();
+        if ($horaireDebut >= $appointment->HORAIREDEBUT && $horaireFin <= $appointment->HORAIREFIN){
+            throw new appointmentHoraireException();
         }
     }
     foreach ($listTA as $TA){
         if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
-            throw new appointementHoraireException();
+            throw new appointmentHoraireException();
         }
         if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
-            throw new appointementHoraireException();
+            throw new appointmentHoraireException();
         }
         if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
-            throw new appointementHoraireException();
+            throw new appointmentHoraireException();
         }
     }
     modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
@@ -830,16 +795,16 @@ function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
         $horaireFin= $date.' '.$heureFin.':00';
         $debutCall = $date . ' 00:00:00';
         $finCall = $date . ' 23:59:59';
-        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+        $listAppointment = modGetAppointmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
         $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
-        foreach ($listAppointement as $appointement){
-            if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
+        foreach ($listAppointment as $appointment){
+            if ($horaireDebut < $appointment->HORAIREDEBUT && $appointment->HORAIREDEBUT < $horaireFin){
                 throw new TAHoraireException();
             }
-            if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
+            if ($horaireDebut < $appointment->HORAIREFIN && $appointment->HORAIREFIN < $horaireFin){
                 throw new TAHoraireException();
             }
-            if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
+            if ($horaireDebut >= $appointment->HORAIREDEBUT && $horaireFin <= $appointment->HORAIREFIN){
                 throw new TAHoraireException();
             }
         }
@@ -902,9 +867,9 @@ function ctlGetStats($dateStart="", $dateEnd="", $date=""){
     $stat['nbContractActive'] = modGetNumberActiveContracts();
     $stat['nbContractInactif'] = modGetNumberInactiveContracts();
     $stat['nbAccountDecouvert'] = modGetNumberOverdraftAccounts();
-    $stat['nbAccoutNonDecouvert'] = modGetNumberNonOverdraftAccounts();
+    $stat['nbAccountNonDecouvert'] = modGetNumberNonOverdraftAccounts();
     $stat['sumAccount'] = modSumAllSolde();
-    $stat['AppoinmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
+    $stat['AppointmentBetween'] = modGetNumberAppointmentsBetween($dateStart, $dateEnd);
     $stat['ContractBetween'] = modGetNumberContractsBetween($dateStart, $dateEnd);
     $stat['nbClientAt'] = modGetNumberClientsAt($date);
     return $stat;
@@ -934,15 +899,19 @@ function ctlStatsDisplay($dateStart="", $dateEnd="", $date=""){
 
 
 
-
-function debug($what = "debugString") {
-    echo("<script>console.log(". json_encode($what) .")</script>");
+/**
+ * Fonction qui permet d'afficher tout ce que l'on veut
+ * @param string $element C'est ce que l'on veut afficher
+ */
+function debug($element = "debugString") {
+    echo("<script>console.log(". json_encode($element) .")</script>");
 }
 
 
 
 
 /*
+POUBELLE
 
 function ctlCalendarConseiller($loginEmploye="GayBoi"){
     $appointment = modGetAppointmentConseiller($loginEmploye);
@@ -1009,6 +978,42 @@ function ctlLogin ($username, $password) {
         $_SESSION["listClient"] = modGetAllClients();
         ctlHome();
     }
+}
+
+
+function ctlGetContracts($idClient){
+    $contracts = modGetContracts($idClient);
+    return $contracts;
+}
+
+
+function ctlGetAccount($idClient){
+    $account = modGetAccounts($idClient);
+    return $account;
+}
+
+function ctlGetInfoEmploye($idEmploye) {
+    $employee = modGetEmployeFromId($idEmploye);
+    return $employee;
+}
+
+
+function ctlRDVDate($date) {
+    $date = ($date instanceof DateTime) ? $date : date_create($date);
+
+    $dateStart = $date->format('Y-m-d');
+    $dateStart .= ' 00:00:00';
+    $dateEnd = $date->format('Y-m-d');
+    $dateEnd .= ' 23:59:59';
+
+    $listRDV = modGetAllAppointmentsBetween($dateStart, $dateEnd);
+    $listTA = modGetAllTABetween($dateStart, $dateEnd);
+
+    $event = array_merge($listRDV, $listTA);
+    usort($event, function($a, $b) {
+        return $a->HORAIREDEBUT > $b->HORAIREDEBUT;
+    });
+    return $event;
 }
 
 */

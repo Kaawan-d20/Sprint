@@ -212,16 +212,14 @@ function modGetAllClientsByCounselors($idEmployee){
  * Crée une opération affiliée au compte
  * @param int $idAccount L'id du compte à débiter
  * @param string $sum La somme à débiter (positive)
- * @param string $date La date de l'opération
  * @return void
  */
-function modDebit($idAccount,$sum,$date) {
+function modDebit($idAccount,$sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = "UPDATE Compte SET solde=solde-:sum WHERE idCompte=:idAccount;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Debit',:date,:sum,0)";
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Debit',NOW(),:sum,0)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
-    $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
@@ -231,17 +229,15 @@ function modDebit($idAccount,$sum,$date) {
  * Crédite le compte dont l'id est en paramètre de la somme en paramètre 
  * @param int $idAccount L'id du compte à créditer
  * @param string $sum La somme à créditer
- * @param string $date La date de l'opération
  * @return void
  */
-function modCredit($idAccount,$sum,$date) {
+function modCredit($idAccount,$sum) {
     $connection = Connection::getInstance()->getConnection();
     $query = "UPDATE Compte SET solde=solde+:sum WHERE idCompte=:idAccount;
-                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Crédit',:date,:sum,1)";
+                INSERT INTO `operation`(`IDCOMPTE`, `SOURCE`, `LIBELLE`, `DATEOPERATION`, `MONTANT`, `ISCREDIT`) VALUES (:idAccount,'Banque','Crédit',NOW(),:sum,1)";
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idAccount', $idAccount, PDO::PARAM_INT);
     $prepared -> bindParam(':sum', $sum, PDO::PARAM_STR);
-    $prepared -> bindParam(':date', $date, PDO::PARAM_STR);
     $prepared -> execute();
     $prepared -> closeCursor();
 }
@@ -726,7 +722,7 @@ function modDeleteTA($idTA){
  * @param string $dateFin Date de fin
  * @return array tous les rdv entre la première et la deuxième date mises en paramètres (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
-function modGetAllAppoinmentsBetween($dateDebut,$dateFin) {
+function modGetAllAppointmentsBetween($dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
     CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
@@ -759,7 +755,7 @@ function modGetAllAppoinmentsBetween($dateDebut,$dateFin) {
  * @param string $dateFin Date de fin
  * @return array Tous les rdv entre la première et la deuxième date mises en paramètres du conseiller dont l'id est en paramètre (IDEMPLOYE, IDRDV, IDENTITEEMPLOYE, COLOR, IDCLIENT, IDENTITECLIENT, HORAIREDEBUT, HORAIREFIN, INTITULE, DOCUMENT) (tableau d'objets)
  */
-function modGetAppoinmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
+function modGetAppointmentsBetweenCounselor($idConseiller,$dateDebut,$dateFin) {
     $connection = Connection::getInstance()->getConnection();
     $query = 'SELECT rdv.IDEMPLOYE, rdv.IDRDV,
     CONCAT(employe.PRENOM," ", employe.NOM) AS IDENTITEEMPLOYE,
