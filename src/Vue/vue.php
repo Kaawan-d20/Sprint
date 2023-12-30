@@ -1039,10 +1039,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                         <div class="field admin hidden">
                             <input type="text" name="adminLibelleField" id="adminLibelleField" class="colortext" placeholder="Motif">
                         </div>
-                        <button type="submit" name="addAppointementsBtn" class="cta field appointement">
-                            Valider
-                        </button>
-                        <button type="submit" name="addAdminBtn" class="cta field admin hidden">
+                        <button type="submit" name="addEventBtn" class="cta field">
                             Valider
                         </button>
                     </form>

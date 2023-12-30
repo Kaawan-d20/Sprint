@@ -258,14 +258,12 @@ try {
         $date = $_POST['newRDVdateFieldConseiller'];
         ctlDisplayAddAppointementConseiller($date);
     }
-    
     elseif (isset($_POST['deleteRDVbtn'])) { // Si le bouton de suppression de rendez-vous est cliqué
         $idRDV = $_POST['idRDVField'];
         ctlDeleteAppointment($idRDV);
     }
     // ------------------------------------------------------- TA -------------------------------------------------------
-    
-    elseif (isset($_POST['addAdminBtn']) || isset($_POST['addAppointementsBtn'])) { // Si le bouton de prise de TA est cliqué
+    elseif (isset($_POST['addEventBtn'])) { // Si le bouton de prise de TA est cliqué
         if (isset($_POST['TAToggle'])) {
             $idEmployee = $_POST['appointementsConseillerField'];
             $date = $_POST['appointementsDateField'];
@@ -284,7 +282,6 @@ try {
             ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
         }
     }
-    
     elseif (isset($_POST['deleteTAbtn'])){ // Si le bouton de suppression de TA est cliqué
         $idRDV = $_POST['idTAField'];
         ctlDeleteTA($idRDV);
