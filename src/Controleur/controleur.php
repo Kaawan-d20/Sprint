@@ -755,44 +755,47 @@ function ctlDisplayAddAppointementConseiller($date) {
  * @param string $heureFin C'est l'heure de fin du rendez-vous
  * @param int $idMotif C'est l'id du motif du rendez-vous
  * @throws appointementHoraireException Si le rendez-vous est impossible car il y a un autre rendez-vous ou une tâche administrative à ce moment là
+ * @throws HoraireException Si l'heure de début est supérieur ou égale à l'heure de fin
+ * @throws notFoundClientException Si le client n'existe pas
  * @return void
  */
 function ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif) {
-    if ($heureDebut < $heureFin) {
-        if (empty(modGetClientFromId($idClient))){
-            throw new notFoundClientException();
-        }
-        $horaireDebut= $date.' '.$heureDebut.':00';
-        $horaireFin= $date.' '.$heureFin.':00';
-        $debutCall = $date . ' 00:00:00';
-        $finCall = $date . ' 23:59:59';
-        $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
-        $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
-        foreach ($listAppointement as $appointement){
-            if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
-                throw new appointementHoraireException();
-            }
-            if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
-                throw new appointementHoraireException();
-            }
-            if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
-                throw new appointementHoraireException();
-            }
-        }
-        foreach ($listTA as $TA){
-            if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
-                throw new appointementHoraireException();
-            }
-            if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
-                throw new appointementHoraireException();
-            }
-            if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
-                throw new appointementHoraireException();
-            }
-        }
-        modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
-        ctlHome();
+    if ($heureDebut > $heureFin) {
+        throw new HoraireException();
     }
+    if (empty(modGetClientFromId($idClient))){
+        throw new notFoundClientException();
+    }
+    $horaireDebut= $date.' '.$heureDebut.':00';
+    $horaireFin= $date.' '.$heureFin.':00';
+    $debutCall = $date . ' 00:00:00';
+    $finCall = $date . ' 23:59:59';
+    $listAppointement = modGetAppoinmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+    $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
+    foreach ($listAppointement as $appointement){
+        if ($horaireDebut < $appointement->HORAIREDEBUT && $appointement->HORAIREDEBUT < $horaireFin){
+            throw new appointementHoraireException();
+        }
+        if ($horaireDebut < $appointement->HORAIREFIN && $appointement->HORAIREFIN < $horaireFin){
+            throw new appointementHoraireException();
+        }
+        if ($horaireDebut >= $appointement->HORAIREDEBUT && $horaireFin <= $appointement->HORAIREFIN){
+            throw new appointementHoraireException();
+        }
+    }
+    foreach ($listTA as $TA){
+        if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
+            throw new appointementHoraireException();
+        }
+        if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
+            throw new appointementHoraireException();
+        }
+        if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
+            throw new appointementHoraireException();
+        }
+    }
+    modAddAppointment($idMotif, $idClient, $idEmployee, $horaireDebut, $horaireFin);
+    ctlHome();
 }
 
 /**

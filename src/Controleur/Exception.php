@@ -255,6 +255,35 @@ class appointementHoraireException extends Exception{
     }
 }
 
+
+/**
+ * Classe HoraireException
+ *
+ * Cette classe est utilisée pour gérer les exceptions lorsqu'il y a un problème avec l'horaire
+ **/
+class HoraireException extends Exception{
+    /**
+     * Constructeur de la classe
+     *
+     * @param string $message Message d'erreur à afficher (par défaut : "Vous ne pouvez pas finir un rendez-vous avant de l'avoir commencé")
+     * @param int $code Code d'erreur (par défaut : 0)
+     * @return void
+     */
+    public function __construct($message="Vous ne pouvez pas finir un rendez-vous avant de l'avoir commencé", $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+    /**
+     * Fonction qui permet d'afficher l'erreur
+     *
+     * @return string
+     */
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+}
+
+
 /**
  * Classe TAHoraireException
  *

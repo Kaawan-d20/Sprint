@@ -635,7 +635,7 @@ function vueCreateListAccount($listAccounts){
         $listA .= '<div class="accountCell content">'.$account->NOM.'</div>
             <div class="accountCell content">'.$account->solde.'€</div>
             <form action="index.php" method="post" class="accountCell content">
-                <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01">
+                <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01" min="0">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
                 <button type="submit" name="modifOverdraftBtn">
                     <i class="fa-solid fa-pen-to-square"></i>
@@ -936,7 +936,6 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
     $datalist = '<input list="listClient" name="appointementsClientField" class="field" placeholder="Id du client" id="appointementsClientField" onChange="changeConseiller(this)" required><datalist id="listClient">';
     foreach ($_SESSION["listClient"] as $client) {
         $datalist .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'" id="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
-        debug($client);
     }
     $datalist .= "</datalist>";
     $content = '
@@ -1004,6 +1003,11 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
     foreach ($listMotifs as $motif) {
         $motifsOption .= '<option value="'.$motif->IDMOTIF.'">'.$motif->INTITULE.'</option>';
     }
+    $datalist = '<input list="listClient" name="appointementsClientField" class="field appointement" placeholder="Id du client" id="appointementsClientField" onChange="changeConseiller(this)" required><datalist id="listClient">';
+    foreach ($_SESSION["listClient"] as $client) {
+        $datalist .= '<option value="'.$client->IDCLIENT.'" data-conseiller="'.$client->IDEMPLOYE.'" id="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
+    }
+    $datalist .= "</datalist>";
     $content = '
             <div class="addAppointementRDVWrapper">
                 <div class="addAppointementWrapper">
@@ -1025,9 +1029,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                             <label for="appointementsDateField">Horaire de fin</label>
                             <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" class="colortext" required>
                         </div>
-                        <select name="appointementsClientField" id="appointementsClientField" class="field appointement" required>
-                            '.$clientOption.'
-                        </select>
+                            '.$datalist.'
                         <select name="appointementsConseillerField" id="appointementsConseillerField" class="field hidden" readonly>
                             <option value="'.$_SESSION['idEmploye'].'">'.$_SESSION['name'].'</option>
                         </select>

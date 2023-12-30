@@ -161,14 +161,17 @@ function toggleTA() {
     isAdmin = ! isAdmin ;
     if (isAdmin) {
         document.querySelectorAll(".admin").forEach(function (item) {
+            console.log(item);
             item.classList.remove("hidden")
         });
         document.querySelectorAll(".appointement").forEach(function (item) {
             item.classList.add("hidden")
+            item.removeAttribute("required")
         });
     } else {
         document.querySelectorAll(".appointement").forEach(function (item) {
             item.classList.remove("hidden")
+            item.setAttribute("required", "")
         });
         document.querySelectorAll(".admin").forEach(function (item) {
             item.classList.add("hidden")

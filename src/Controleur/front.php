@@ -258,27 +258,31 @@ try {
         $date = $_POST['newRDVdateFieldConseiller'];
         ctlDisplayAddAppointementConseiller($date);
     }
-    elseif (isset($_POST['addAppointementsBtn'])) { // Si le bouton de validation de prise de rendez-vous est cliqué
-        $idClient = $_POST['appointementsClientField'];
-        $idEmployee = $_POST['appointementsConseillerField'];
-        $date = $_POST['appointementsDateField'];
-        $heureDebut = $_POST['appointementsHoraireDebutField'];
-        $heureFin = $_POST['appointementsHoraireFinField'];
-        $idMotif = $_POST['appointementsMotifField'];
-        ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
-    }
+    
     elseif (isset($_POST['deleteRDVbtn'])) { // Si le bouton de suppression de rendez-vous est cliqué
         $idRDV = $_POST['idRDVField'];
         ctlDeleteAppointment($idRDV);
     }
     // ------------------------------------------------------- TA -------------------------------------------------------
-    elseif (isset($_POST['addAdminBtn'])) { // Si le bouton de prise de TA est cliqué
-        $idEmployee = $_POST['appointementsConseillerField'];
-        $date = $_POST['appointementsDateField'];
-        $heureDebut = $_POST['appointementsHoraireDebutField'];
-        $heureFin = $_POST['appointementsHoraireFinField'];
-        $libelle = $_POST['adminLibelleField'];
-        ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle);
+    
+    elseif (isset($_POST['addAdminBtn']) || isset($_POST['addAppointementsBtn'])) { // Si le bouton de prise de TA est cliqué
+        if (isset($_POST['TAToggle'])) {
+            $idEmployee = $_POST['appointementsConseillerField'];
+            $date = $_POST['appointementsDateField'];
+            $heureDebut = $_POST['appointementsHoraireDebutField'];
+            $heureFin = $_POST['appointementsHoraireFinField'];
+            $libelle = $_POST['adminLibelleField'];
+            ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle);
+        }
+        else {
+            $idClient = $_POST['appointementsClientField'];
+            $idEmployee = $_POST['appointementsConseillerField'];
+            $date = $_POST['appointementsDateField'];
+            $heureDebut = $_POST['appointementsHoraireDebutField'];
+            $heureFin = $_POST['appointementsHoraireFinField'];
+            $idMotif = $_POST['appointementsMotifField'];
+            ctlCreateNewAppointement($idClient, $idEmployee, $date, $heureDebut, $heureFin, $idMotif);
+        }
     }
     
     elseif (isset($_POST['deleteTAbtn'])){ // Si le bouton de suppression de TA est cliqué
