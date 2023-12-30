@@ -23,7 +23,7 @@ try {
         $password = $_POST['landingPasswordField'];
         ctlLogin($username, $password);
     }
-    elseif (!isset($_SESSION["idEmploye"])){
+    elseif (!isset($_SESSION["idEmploye"])){ // Si l'utilisateur n'est pas connecté
          ctlHome();
     }
     // ------------------------------------------------------- Nav Bar -------------------------------------------------------
@@ -45,7 +45,7 @@ try {
         $name = $_POST['nameClient'];
         $firstName = $_POST['firstNameClient'];
         $dateOfBirth = $_POST['dateOfBirthClient'];
-        $address = $_POST['adressClient'];
+        $address = $_POST['addressClient'];
         $phone = $_POST['phoneClient'];
         $email = $_POST['emailClient'];
         $profession = $_POST['professionClient'];
@@ -265,7 +265,7 @@ try {
         ctlDeleteAppointment($idRDV);
     }
     // ------------------------------------------------------- TA -------------------------------------------------------
-    elseif (isset($_POST['addEventBtn'])) { // Si le bouton de prise de TA est cliqué
+    elseif (isset($_POST['addEventBtn'])) { // Si le bouton de prise d’événement est cliqué
         if (isset($_POST['TAToggle'])) {
             $idEmployee = $_POST['appointementsConseillerField'];
             $date = $_POST['appointementsDateField'];
@@ -289,7 +289,7 @@ try {
         ctlDeleteTA($idRDV);
     }
     // ------------------------------------------------------- Default -------------------------------------------------------
-    else{
+    else{ // Si aucune action n'est détectée
         ctlHome();
     }
 } 

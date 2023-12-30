@@ -255,8 +255,8 @@ function vueDisplayCreateClient($listConseiller) {
 
                         <label for="dateOfBirthClient" class="visually-hidden">Date de naissance:</label>
                         <input type="date" name="dateOfBirthClient" id="dateOfBirthClient" placeholder="Date de naissance" required>
-                        <label for="adressClient" class="visually-hidden">Adresse</label>
-                        <input type="text" name="adressClient" id="adressClient" placeholder="Adresse" required>
+                        <label for="addressClient" class="visually-hidden">Adresse</label>
+                        <input type="text" name="addressClient" id="addressClient" placeholder="Adresse" required>
                         <label for="phoneClient" class="visually-hidden">Numéro de téléphone</label>
                         <input type="tel" name="phoneClient" id="phoneClient" placeholder="Numéro de téléphone" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" required>
                         <label for="emailClient" class="visually-hidden">Email</label>

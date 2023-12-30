@@ -27,14 +27,6 @@ class isEmptyException extends Exception{
 }
 
 
-
-
-
-
-
-
-
-
 /**
  * Classe incorrectLoginException
  *
@@ -61,14 +53,6 @@ class incorrectLoginException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
-
-
-
-
-
-
-
-
 
 
 /**
@@ -99,19 +83,6 @@ class notFoundClientException extends Exception{
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Classe notFoundAccountException
  *
@@ -138,22 +109,6 @@ class soldeInsuffisantException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -184,20 +139,6 @@ class existingAccountException extends Exception{
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  * Classe notFoundAccountException
  *
@@ -224,8 +165,6 @@ class clientIncorrectException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
-
-
 
 
 /**
@@ -312,7 +251,6 @@ class TAHoraireException extends Exception{
 }
 
 
-
 /**
  * Classe existingTypeAccountException
  *
@@ -340,6 +278,7 @@ class existingTypeAccountException extends Exception{
     }
 }
 
+
 /**
  * Classe existingTypeContractException
  *
@@ -366,9 +305,3 @@ class existingTypeContractException extends Exception{
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }
-
-
-
-
-
-
