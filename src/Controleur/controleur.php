@@ -265,9 +265,8 @@ function ctlGetOperation($idClient){
  * @param string $overdraft C'est le découvert du compte
  * @return void
 */
-function ctlModifOverdraft($idAccount, $overdraft){
+function ctlModifOverdraft($idAccount, $overdraft, $idClient){
     modModifOverdraft($idAccount, $overdraft);
-    $idClient = modGetIdClientFromAccount($idAccount);
     ctlSearchIdClient($idClient);
 }
 
@@ -324,8 +323,7 @@ function ctlCreateAccount($idClient, $overdraft, $idTypeAccount, $idClient2=""){
  * @param int $idAccount C'est l'id du compte
  * @return void
  */
-function ctlDeleteAccount($idAccount){
-    $idClient = modGetIdClientFromAccount($idAccount);
+function ctlDeleteAccount($idAccount, $idClient){
     modDeleteAccount($idAccount);
     ctlSearchIdClient($idClient);
 }

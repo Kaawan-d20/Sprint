@@ -79,7 +79,8 @@ try {
     }
     elseif (isset($_POST['deleteAccountBtn'])){ // Si le bouton de suppression de compte est cliqué
         $idAccount = $_POST['idAccount'];
-        ctlDeleteAccount($idAccount);
+        $idClient = $_POST['idClient'];
+        ctlDeleteAccount($idAccount, $idClient);
     }
     elseif (isset($_POST['deleteContractBtn'])){ // Si le bouton de suppression de contrat est cliqué
         $idContract = $_POST['idContract'];
@@ -88,7 +89,8 @@ try {
     elseif (isset($_POST['modifOverdraftBtn'])){ // Si le bouton de modification du découvert autorisé est cliqué
         $idAccount = $_POST['idAccount'];
         $overdraft = $_POST['overdraft'];
-        ctlModifOverdraft($idAccount, $overdraft);
+        $idClient = $_POST['idClient'];
+        ctlModifOverdraft($idAccount, $overdraft, $idClient);
     }
     elseif (isset($_POST['editClientBtn'])){ // Si le bouton de modification d'un client est cliqué
         $idClient = $_POST['idClient'];

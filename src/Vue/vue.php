@@ -546,7 +546,7 @@ function vueDisplayInfoClient($client, $listAccounts, $listContract, $listOperat
     $navbar = vueGenerateNavBar();
     $events = vueAppointementClient($listRDVClients);
     $listC = vueCreateListContract($listContract);
-    list($listA, $optionSelect, $typeClass) = vueCreateListAccount($listAccounts);
+    list($listA, $optionSelect, $typeClass) = vueCreateListAccount($listAccounts, $client->IDCLIENT);
     list($filterBtns, $operationDisplay) = vueGenerateOperation($listAccounts, $listOperationsAccount);
     list($createAccount, $createContract) = vueGenerateButtonCreate($client->IDCLIENT);
 
@@ -618,7 +618,7 @@ function vueCreateListContract($listContract){
  * @param array $listContract c'est la liste des comptes du client
  * @return array retourne un tableau avec le code HTML de la liste des comptes et le code HTML de la liste des comptes pour le select et la classe de la div
  */
-function vueCreateListAccount($listAccounts){
+function vueCreateListAccount($listAccounts, $idClient){
     $optionSelect = "";
     // pour faire la liste des comptes
     if ($_SESSION["type"] == 2) {
@@ -637,6 +637,7 @@ function vueCreateListAccount($listAccounts){
             <form action="index.php" method="post" class="accountCell content">
                 <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01" min="0">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="modifOverdraftBtn">
                     <i class="fa-solid fa-pen-to-square"></i>
                     Modifier le découvert
@@ -646,6 +647,7 @@ function vueCreateListAccount($listAccounts){
             $listA.='
             <form action="index.php" method="post" class="accountCell content">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
+                <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="deleteAccountBtn" class="red">
                     <i class="fa-solid fa-trash-can"></i>
                     Supprimer le compte
@@ -962,7 +964,7 @@ function vueDisplayAddAppointement($listConseillers, $listClients, $listMotifs, 
                         <select name="appointementsMotifField" id="appointementsMotifField" class="field"required>
                             '.$motifsOption.'
                         </select>
-                        <button type="submit" name="addAppointementsBtn" class="cta field">
+                        <button type="submit" name="addEventBtn" class="cta field">
                             Valider
                         </button>
                     </form>
@@ -1029,7 +1031,7 @@ function vueDisplayAddAppointementConseiller($listClients, $listMotifs, $date, $
                             <label for="appointementsDateField">Horaire de fin</label>
                             <input type="time" name="appointementsHoraireFinField" id="appointementsHoraireFinField" class="colortext" required>
                         </div>
-                            '.$datalist.'
+                        '.$datalist.'
                         <select name="appointementsConseillerField" id="appointementsConseillerField" class="field hidden" readonly>
                             <option value="'.$_SESSION['idEmploye'].'">'.$_SESSION['name'].'</option>
                         </select>
