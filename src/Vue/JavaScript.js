@@ -1,23 +1,22 @@
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------ Theme ------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-
-let nom_du_cookie = "Theme=";
+let nomDuCookie = "Theme=";
 let decodedCookie = decodeURIComponent(document.cookie);
-let ca = decodedCookie.split(';');
-for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-        c = c.substring(1);
+let listCookie = decodedCookie.split(';');
+for(var i = 0; i <listCookie.length; i++) {
+    var cookie = listCookie[i];
+    while (cookie.charAt(0) == ' ') {
+        cookie = cookie.substring(1);
     }
-    // if (c.indexOf(nom_du_cookie) == 0) {
-    //     console.log(c.substring(nom_du_cookie.length, c.length));
-    // }
 }
-let isLightTheme = c.substring(nom_du_cookie.length, c.length) == "light";
+let isLightTheme = cookie.substring(nomDuCookie.length, cookie.length) == "light";
 
 /**
  * Fonction qui au chargement de la page va charger le thème en fonction du cookie
+ * @returns {void}
  */
 function loadTheme() {
     if (isLightTheme) {
@@ -27,27 +26,25 @@ function loadTheme() {
     }
 }
 
-
-
 /**
  * Fonction qui va changer le thème de la page
+ * @returns {void}
  */ 
 function toggleTheme() {
     let icon = document.getElementById("themeSwitcherIcon");
     let btn = document.getElementById("themeSwitcherBtn");
     if (isLightTheme) {
         makeDarkTheme(icon, btn);
-        
     } else {
         makeLightTheme(icon, btn);
     }
-    
 }
 
 /**
- * Focntion qui va changer le thème de la page en thème clair
- * @param {Document} icon l'icone du bouton
- * @param {Document} btn le bouton
+ * Fonction qui va changer le thème de la page en thème clair
+ * @param {Document} icon L’icône du bouton
+ * @param {Document} btn Le bouton
+ * @returns {void}
  */
 function makeLightTheme(icon, btn) {
     document.body.classList.add("light");
@@ -61,9 +58,10 @@ function makeLightTheme(icon, btn) {
 }
 
 /**
- * Focntion qui va changer le thème de la page en thème sombre
- * @param {Document} icon l'icone du bouton
- * @param {Document} btn le bouton
+ * Fonction qui va changer le thème de la page en thème sombre
+ * @param {Document} icon L’icône du bouton
+ * @param {Document} btn Le bouton
+ * @returns {void}
  */
 function makeDarkTheme(icon, btn) {
     document.body.classList.add("dark");
@@ -73,27 +71,67 @@ function makeDarkTheme(icon, btn) {
     btn.setAttribute("title", "Activer le thème Clair")
 
     isLightTheme = false;
-
     document.cookie = "Theme=dark; path=/";
 }
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------ Connexion --------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-/** envoie le mot de passe haché au serveur
- * @param {string} passwordField l'id du champ de mot de passe
- * @param {string} submitBtn l'id du bouton submit
+
+/** Fonction qui envoie le mot de passe haché au serveur
+ * @param {string} data L'id du bouton cliqué (si on est sur la page de modification des employés)
+ * @returns {void}
 */
-function sent(passwordField, submitBtn) {
-    let password = document.getElementById(passwordField).value;
-    password = CryptoJS.SHA256(password).toString();
-    document.getElementById(passwordField).value = password;
-    document.getElementById(submitBtn).click();
+function onSubmitButtonClick(data='') {
+    if (data==''){
+        var formID='formPassword';
+        var passwordField='PasswordField';
+    }
+    else{
+        var idEmploye = data.currentTarget.id.replace(/\D/g, ''); // On récupère l'id de l'employé
+        var formID='formPassword'+idEmploye;
+        var passwordField='PasswordField'+idEmploye;
+    }
+
+    // Récupérer le mot de passe depuis le champ de formulaire
+    var password = document.getElementById(passwordField).value;
+    if (password != '') {
+         // Hacher le mot de passe
+        var hashedPassword = CryptoJS.SHA256(password).toString();
+
+        // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe haché
+        document.getElementById(passwordField).value = hashedPassword;
+    }
+
+    // Soumettre le formulaire
+    document.getElementById(formID).submit();
 }
 
+/**
+ * Fonction qui va initialiser le mot de passe
+ * @returns {void}
+ */
+function initPassword() {
+    if (document.querySelector('#connectBtn') != null){
+        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick);
+    }
+    else{
+        list=document.getElementsByName('ModifPersonnelOneBtn');
+        for (var i = 0; i < list.length; i++) {
+            list[i].addEventListener('click', onSubmitButtonClick.bind(list[i].id));
+        }
+    }
+}
 
+window.addEventListener('load', initPassword);
 
-
-
+/**
+ * Fonction qui va afficher ou cacher le mot de passe
+ * @param {string} password L'id du champ de mot de passe
+ * @returns {void}
+ */
 function togglePasswordVisibility(password) {
     let passwordField = document.getElementById(password);
     let icon = document.getElementById("visibilityIcon");
@@ -109,17 +147,21 @@ function togglePasswordVisibility(password) {
 }
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------ Synthèse client --------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
-//Synthèse client 
-
-
+/**
+ * Fonction qui va afficher ou cacher les opérations des comptes sur la page de synthèse client
+ * @param {string} filterBtn L'id du bouton de filtre cliqué
+ * @returns {void}
+ */
 function toggleFilter(filterBtn) {
     if (filterBtn == null) {
         return;
     }
-    let oldIcon =currentFilter.children[0];
+    let oldIcon = currentFilter.children[0];
     let icon = filterBtn.children[0];
 
     oldIcon.classList.remove("fa-circle-dot");
@@ -138,38 +180,43 @@ function toggleFilter(filterBtn) {
     currentFilter = filterBtn;
 }
 
-
-
+/**
+ * Fonction qui va initialiser le filtre de la page de synthèse client
+ * @returns {void}
+ */
 function initToggleFilter() {
-    if (document.querySelector("#operationsFilterWrapper") == null) {
+    if (document.querySelector("#operationsFilterWrapper") == null) { // Si on est pas sur la page de synthèse client
         return;
     }
     currentFilter = document.getElementById("operationsFilterWrapper").children[0];
     toggleFilter(currentFilter);
 }
 
-
 window.addEventListener('load', initToggleFilter);
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------ Prise de rendez-vous ---------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-//Prise de TA
 
 let isAdmin = false;
+/**
+ * Fonction qui va afficher ou cacher des éléments si c'est un rendez-vous ou une tache administrative
+ * @returns {void} 
+ */
 function toggleTA() {
     isAdmin = ! isAdmin ;
     if (isAdmin) {
         document.querySelectorAll(".admin").forEach(function (item) {
-            console.log(item);
             item.classList.remove("hidden")
         });
-        document.querySelectorAll(".appointement").forEach(function (item) {
+        document.querySelectorAll(".appointement").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.add("hidden")
             item.removeAttribute("required")
         });
     } else {
-        document.querySelectorAll(".appointement").forEach(function (item) {
+        document.querySelectorAll(".appointement").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.remove("hidden")
             item.setAttribute("required", "")
         });
@@ -179,93 +226,31 @@ function toggleTA() {
     }
 }
 
-
-//Prise de RDV
-function changeConseiller(select) {
-    let nbClient = document.getElementById(select.id).value;
-    //let option =select.options[select.selectedIndex];
+/**
+ * Fonction qui change la valeur du champ de conseiller en fonction du client choisi
+ * @param {*} input L'id de l'input
+ */
+function changeConseiller(input) {
+    let nbClient = document.getElementById(input.id).value;
     let option = document.getElementById(nbClient);
-    console.log(option);
     let value = option.dataset.conseiller;
-    console.log(value);
     document.getElementById("appointementsConseillerField").value = value;
 }
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------ Calendrier -------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+window.addEventListener('load', initCalendar);
 
-
-
-
-/*
-POUBELLE
-<!-- <script type="text/javascript">
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () {
-            history.go(1);
-        };
-    </script> -->
-
-
-
-*/
-
-
-
-
-
-
-
-
-function onSubmitButtonClick(data='') {
-    if (data==''){
-        var formID='formPassword';
-        var passwordField='PasswordField';
-    }
-    else{
-        var idEmploye = data.currentTarget.id.replace(/\D/g, '');
-        var formID='formPassword'+idEmploye;
-        var passwordField='PasswordField'+idEmploye;
-    }
-
-    // Récupérer le mot de passe depuis le champ de formulaire
-    var password = document.getElementById(passwordField).value;
-    if (password != '') {
-         // Hasher le mot de passe
-        var hashedPassword = CryptoJS.SHA256(password).toString();
-
-        // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe hashé
-        document.getElementById(passwordField).value = hashedPassword;
-    }
-
-    // Soumettre le formulaire
-    document.getElementById(formID).submit();
-}
-
-// Ajouter un écouteur d'événements pour le clic sur le bouton "Soumettre"
-
-window.addEventListener('load', function() {
-    if (document.querySelector('#connectBtn') != null){
-        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick);
-    }
-    else{
-        list=document.getElementsByName('ModifPersonnelOneBtn');
-        for (var i = 0; i < list.length; i++) {
-            list[i].addEventListener('click', onSubmitButtonClick.bind(list[i].id));
-            
-        }
-    }
-});
-
-
-
-
-
-window.addEventListener('load', init);
-
-function init(){
-    if (document.querySelector("#calendar") == null) {
+/**
+ * Fonction qui va initialiser le calendrier pour l'agent et le conseiller
+ * @returns {void}
+ */
+function initCalendar(){
+    if (document.querySelector("#calendar") == null) { // Si on est pas sur la page du calendrier
         return;
     }
     selectedFilters = [];
@@ -281,32 +266,34 @@ function init(){
     
     globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
+    correspondingMonth = [
+        "Janvier",
+        "Février",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Août",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Décembre"
+    ];
+
     updateCalendar(globalCurrentDate);
     if (document.querySelector("#transmetteurJS2") != null) {
         let name = document.getElementById("transmetteurJS2").textContent;
         currentFilter = document.getElementById(name);
         filterToggle(currentFilter);
     }
-
-
 }
 
-let correspondingMonth = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre"
-];
-
-/** returns a Date as a string "yyyy-mm-dd" */ 
+/**
+ * Fonction qui transforme une date en string au format "yyyy-mm-dd"
+ * @param {Date} globalCurrentDate Une date 
+ * @returns {string} Une date sous forme de string au format "yyyy-mm-dd"
+ */ 
 function dateToString(globalCurrentDate) {
     return (globalCurrentDate.getFullYear() 
     + "-" + ((globalCurrentDate.getMonth() <= 8) ? "0" : "") 
@@ -314,9 +301,11 @@ function dateToString(globalCurrentDate) {
     + ((globalCurrentDate.getDate() <= 9) ? "0" : "") + globalCurrentDate.getDate());
 }
 
-
-
-/** called by the filterBtn dynamically created above, will toggle the filter mode for each type */ 
+/**
+ * Fonction qui modifie les bouton de filtre et appel une autre fonction qui va afficher ou de cacher les événements sur le calendrier
+ * @param {*} filterBtn Le bouton de filtre cliqué
+ * @returns {void} 
+ */
 function filterToggle(filterBtn) {
     if (filterBtn == null) {
         return;
@@ -324,9 +313,8 @@ function filterToggle(filterBtn) {
     let icon = filterBtn.childNodes[0];
     if (filterBtn.classList.value.includes("inactive")) {
 
-        filterBtn.setAttribute("title", "Deselectionner " + filterBtn.textContent);
+        filterBtn.setAttribute("title", "Désélectionner " + filterBtn.textContent);
 
-        // filterBtn.classList.add("active");
         filterBtn.classList.remove("inactive");
 
         icon.classList.add("fa-square-check")
@@ -335,32 +323,41 @@ function filterToggle(filterBtn) {
         selectedFilters.push(filterBtn.dataset.conseiller);
     }
     else {
-        filterBtn.setAttribute("title", "Selectionner " + filterBtn.textContent);
+        filterBtn.setAttribute("title", "Sélectionner " + filterBtn.textContent);
 
         filterBtn.classList.add("inactive");
-        // filterBtn.classList.remove("active");
 
         icon.classList.add("fa-square")
         icon.classList.remove("fa-user-square-check")
 
-        selectedFilters = selectedFilters.filter(item => item !== filterBtn.dataset.conseiller) // GOD THIS IS UGLY
-        // This is basically selectedFilters.remove(filterBtn.dataset.conseiller), I hate that this is not an option
+        selectedFilters = selectedFilters.filter(item => item !== filterBtn.dataset.conseiller)
     }
 
     filterEvents();  
 }
 
-/** used to hide the events that are filtered out */ 
+/**
+ * Fonction qui va cacher l'élément passé en paramètre
+ * @param {*} eventHTML L'élément à cacher
+ * @returns {void}
+ */
 function hide (eventHTML) {
     eventHTML.classList.add("hidden")
 }
 
-/** used to dehide the events that are filtered in again (yes it's callded show, but technically it de-hide.) */ 
+/**
+ * Fonction qui va afficher l'élément passé en paramètre
+ * @param {*} eventHTML L'élément à afficher
+ * @returns {void}
+ */
 function show (eventHTML) {
     eventHTML.classList.remove("hidden");
 }
 
-/** used to hide and dehide the events that are filtered in or out */ 
+/**
+ * Fonction qui va cacher ou afficher les événements en fonction des filtres sélectionnés
+ * @returns {void}
+ */
 function filterEvents() {
     if (selectedFilters.length == 0) {
         // No button selected, show everything
@@ -379,69 +376,89 @@ function filterEvents() {
     }
 }
 
-/** takes in a week array of seven string, corresponding to the number of each day of the week. /!\ week start on monday because we are in france */ 
-function setdayCellSpan (week) {
+/**
+ * Fonction qui va mettre à jour les spans des cellules du calendrier avec les numéros des jours de la semaine
+ * @param {Array} week Un tableau de 7 string, correspondant au numéro de chaque jour de la semaine
+ * @returns {void}
+ */
+function setDayCellSpan (week) {
     let spanToFill = document.querySelectorAll(".day .dayCell span")
     for (let i = 0; i < 7; i++) {
         spanToFill[i].textContent = week[i];
     }
 }
 
-function setHiddenDatefield (week) {
-    var datefieldToFill = document.querySelectorAll("#newRDVdateField");
+/**
+ * Fonction qui va mettre à jour les champs cachés du formulaire avec les dates de la semaine
+ * @param {Array} week Un tableau de 7 string, correspondant au numéro de chaque jour de la semaine
+ * @returns {void}
+ */
+function setHiddenDateField (week) {
+    var dateFieldToFill = document.querySelectorAll("#newRDVdateField");
     for (let i = 0; i < 7; i++) {
-        datefieldToFill[i].value = week[i];
+        dateFieldToFill[i].value = week[i];
     }
 }
 
-/** called during the updating of the title to setup the month and year label */ 
+/**
+ * Fonction qui va mettre à jour le titre du calendrier avec le mois et l'année
+ * @param {Date} currentDate La date actuelle
+ */
 function updateDateTitle(currentDate) {
-    document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()]
+    document.querySelector(".dateBlock h1").textContent = correspondingMonth[currentDate.getMonth()];
     document.querySelector(".dateBlock span").textContent = currentDate.getFullYear();
 }
 
-
+/**
+ * Fonction qui va mettre à jour le calendrier avec la date passée en paramètre
+ * @param {Date} currentDate La date actuelle
+ * @returns {void}
+ */
 function updateCalendar(currentDate) {
     updateDateTitle(currentDate);
-    currentDateCopy = new Date(currentDate);
-    setdayCellSpan(getWeekArray(currentDate));
-    setHiddenDatefield(getWeekArrayFullDate(currentDateCopy));
+    currentDateCopy = new Date(currentDate); // On fait une copie de la date pour ne pas modifier la date actuelle
+    setDayCellSpan(getWeekArray(currentDate));
+    setHiddenDateField(getWeekArrayFullDate(currentDateCopy));
 }
 
+/**
+ * Fonction qui va faire un tableau de 7 string, correspondant au numéro de chaque jour de la semaine
+ * @param {Date} mondayDate La date du lundi de la semaine
+ * @returns {Array} Un tableau de 7 string, correspondant au numéro de chaque jour de la semaine
+ */
 function getWeekArray(mondayDate) {
     let weekArray = [];
-    let currentDate =mondayDate;
+    let currentDate = mondayDate;
     for (let i = 0; i < 7; i++) {
-        let currentday = currentDate.getDate().toString();
-        weekArray.push((currentday.length < 2) ? '0' + currentday :currentday);
+        let currentDay = currentDate.getDate().toString();
+        weekArray.push((currentDay.length < 2) ? '0' + currentDay :currentDay);
         currentDate.setDate(currentDate.getDate() + 1);
     }
     return (weekArray);
 }
 
+/**
+ * Fonction qui va faire un tableau de 7 string, correspondant à la date complète de chaque jour de la semaine
+ * @param {*} mondayDate La date du lundi de la semaine
+ * @returns {Array} Un tableau de 7 string, correspondant à la date complète de chaque jour de la semaine
+ */
 function getWeekArrayFullDate(mondayDate) {
     let weekArray = [];
     let currentDate = mondayDate;
     for (let i = 0; i < 7; i++) {
-        let currentday = currentDate.getDate().toString();
-        currentday = (currentday.length < 2) ? '0' + currentday : currentday;
-        let currentmonth = (currentDate.getMonth() +1 ).toString();
-        currentmonth = (currentmonth.length < 2) ? '0' + currentmonth : currentmonth;
-        let currentyear = currentDate.getFullYear().toString();
-        let currentFullDate = currentyear + "-" + currentmonth + '-' + currentday;
+        let currentDay = currentDate.getDate().toString();
+        currentDay = (currentDay.length < 2) ? '0' + currentDay : currentDay;
+        let currentMonth = (currentDate.getMonth() +1 ).toString();
+        currentMonth = (currentMonth.length < 2) ? '0' + currentMonth : currentMonth;
+        let currentYear = currentDate.getFullYear().toString();
+        let currentFullDate = currentYear + "-" + currentMonth + '-' + currentDay;
         weekArray.push(currentFullDate);
         currentDate.setDate(currentDate.getDate() + 1);
     }
     return (weekArray);
 }
 
-function attemptUpdate() {
-    let weekSelectorInput = document.getElementById("weekSelectorDateField");
-    let attemptedDate = new Date(weekSelectorInput.value);
-    if (attemptedDate.getFullYear() > 200 && attemptedDate.getFullYear() < 20000) {
-        document.getElementById("weekSelectorForm").submit();
-    }
-}
+
 
 
 
@@ -453,12 +470,21 @@ function attemptUpdate() {
 POUBELLE
 
 
+
+
+function interdireRetour() {
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+}
+
 function generateSingleFilter(name, colorClass) {
     let filterBtn = document.createElement("button");
     filterBtn.classList.add("filterBtn", "inactive", colorClass);
 
     filterBtn.setAttribute("onclick", "filterToggle(this)");
-    filterBtn.setAttribute("title", "Selectionner " + name);
+    filterBtn.setAttribute("title", "Sélectionner " + name);
 
     let icon = document.createElement("i");
     icon.classList.add("fa-regular", "fa-square")
@@ -489,7 +515,13 @@ function generateFilters () {
     document.querySelector(".calendarNavWrapper").insertBefore(filterWrapper, document.querySelector(".weekSelector"))
 }
 
-
+function attemptUpdate() {
+    let weekSelectorInput = document.getElementById("weekSelectorDateField");
+    let attemptedDate = new Date(weekSelectorInput.value);
+    if (attemptedDate.getFullYear() > 200 && attemptedDate.getFullYear() < 20000) {
+        document.getElementById("weekSelectorForm").submit();
+    }
+}
 
 
 */
