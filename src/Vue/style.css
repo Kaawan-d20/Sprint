@@ -1428,6 +1428,13 @@ input[type="number"] {
     color: var(--text);
 }
 
+.suppContract{
+    color: var(--invalid-red)!important;
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 0.5em;
+}
 /* MEDIA QUERIES */
 
 @media screen and (max-width: 1200px) {

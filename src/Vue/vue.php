@@ -604,7 +604,10 @@ function vueCreateListContract($listContract){
             $listC.='<div class="contractCell content">
                         <form action="index.php" method="post">
                             <input type="hidden" name="idContract" value="'.$contract->idContrat.'">
-                            <input type="submit" value="Supprimer le contrat" name="deleteContractBtn">
+                            <button type="submit" name="deleteContractBtn" class="suppContract">
+                                <i class="fa-solid fa-trash-can"></i>
+                                Supprimer le contrat
+                            </button>
                         </form>
                     </div>';
         }
