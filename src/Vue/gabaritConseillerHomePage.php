@@ -144,7 +144,7 @@
         </div>
     </div>
 </div>
-<div class="hidden" id="transmetterJS"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
-<div class="hidden" id="transmetterJS2"><?php echo $fullName ?></div>
+<div class="hidden" id="transmetteurJS"><?php echo($dateOfWeek->format('Y-m-d')); ?></div>
+<div class="hidden" id="transmetteurJS2"><?php echo $fullName ?></div>
 </body>
 </html>

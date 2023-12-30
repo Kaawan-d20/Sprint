@@ -270,7 +270,7 @@ function init(){
     }
     selectedFilters = [];
 
-    globalCurrentDate = new Date(document.getElementById("transmetterJS").textContent);
+    globalCurrentDate = new Date(document.getElementById("transmetteurJS").textContent);
     document.getElementById("weekSelectorDateField").value =dateToString(globalCurrentDate);
     
     datePreviousWeek = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
@@ -282,8 +282,8 @@ function init(){
     globalCurrentDate = (new Date(globalCurrentDate.setDate(globalCurrentDate.getDate() - 7)));
 
     updateCalendar(globalCurrentDate);
-    if (document.querySelector("#transmetterJS2") != null) {
-        let name = document.getElementById("transmetterJS2").textContent;
+    if (document.querySelector("#transmetteurJS2") != null) {
+        let name = document.getElementById("transmetteurJS2").textContent;
         currentFilter = document.getElementById(name);
         filterToggle(currentFilter);
     }
