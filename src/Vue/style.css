@@ -175,7 +175,7 @@ nav {
     gap: 1em;
 }
 
-.advancedSearchandAccountWrapper {
+.advancedSearchAndAccountWrapper {
     display: flex;
     justify-content: end;
     gap: 1em;
@@ -462,7 +462,7 @@ nav {
     display: block;
 }
 
-.deleteRDVbtn {
+.deleteRDVBtn {
     border: 1px solid var(--text);
     border-radius: 5px;
     padding: .5em;
@@ -952,7 +952,7 @@ nav {
     margin: 0;
 }
 
-.GestionPersonnelAddBtn {
+.gestionPersonnelAddBtn {
     margin-top: .5em;
     padding: 1em;
     border: 1px solid var(--text);
@@ -962,7 +962,7 @@ nav {
     font-family: var(--display-font);
 }
 
-.GestionPersonnelAddBtn:hover {
+.gestionPersonnelAddBtn:hover {
     background-color: var(--background-secondary);
 }
 
@@ -1129,7 +1129,7 @@ nav {
     text-decoration: underline;
 }
 
-.addAppointementWrapper {
+.addAppointmentWrapper {
     display: flex;
     min-height: 80vh;
     justify-content: center;
@@ -1137,7 +1137,7 @@ nav {
 
 }
 
-.addAppointementForm {
+.addAppointmentForm {
     display: flex;
     flex-direction: column;
     gap: .5em;
@@ -1186,12 +1186,12 @@ nav {
     background-color: var(--background-secondary);
 }
 
-.addAppointementRDVWrapper {
+.addAppointmentRDVWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
-.addAppointementRDVWrapper .events {
+.addAppointmentRDVWrapper .events {
     padding-right: 1em;
 } 
 
@@ -1424,7 +1424,7 @@ input[type="number"] {
     color: var(--invalid-red)!important;
 }
 
-.colortext {
+.colorText {
     color: var(--text);
 }
 

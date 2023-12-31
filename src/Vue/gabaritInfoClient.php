@@ -101,7 +101,7 @@
     </div>
     <div class="accountOperationsWrapper">
         <div class="filterWrapper" id="operationsFilterWrapper">
-            <?php echo $filterBtns; ?>
+            <?php echo $filtersBtn; ?>
         </div>
         <?php echo $operationDisplay; ?>
     </div>

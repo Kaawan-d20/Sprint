@@ -20,7 +20,7 @@
                 <div class="loginFormFieldWrapper">
                     <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
                     <input type="password" name="landingPasswordField" id="PasswordField" class="loginFormField" placeholder="Password" required>
-                    <button onclick="togglePasswordVisibility('PasswordField')" type="button" class="visibilityButton"><i class="fa-solid fa-eye-slash" id="visibilityIcon"></i></button>
+                    <button onclick="togglePasswordVisibility('')" type="button" class="visibilityButton"><i class="fa-solid fa-eye" id="visibilityIcon"></i></button>
                 </div>
                 <div class="ctaContainer">
                     <input type="submit" name="landingSubmitBtn"  id="connectBtn" value="Connection" class="cta">

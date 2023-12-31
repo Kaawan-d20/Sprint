@@ -85,6 +85,7 @@ function makeDarkTheme(icon, btn) {
  * @returns {void}
 */
 function onSubmitButtonClick(data='') {
+    console.log("in onSubmitButtonClick");
     if (data==''){
         var formID='formPassword';
         var passwordField='PasswordField';
@@ -100,6 +101,7 @@ function onSubmitButtonClick(data='') {
     if (password != '') {
          // Hacher le mot de passe
         var hashedPassword = CryptoJS.SHA256(password).toString();
+        console.log(hashedPassword);
 
         // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe haché
         document.getElementById(passwordField).value = hashedPassword;
@@ -129,12 +131,14 @@ window.addEventListener('load', initPassword);
 
 /**
  * Fonction qui va afficher ou cacher le mot de passe
- * @param {string} password L'id du champ de mot de passe
+ * @param {string} number Le numéro du champ de mot de passe cliqué (optionnel)
  * @returns {void}
  */
-function togglePasswordVisibility(password) {
+function togglePasswordVisibility(number) {
+    let password = "PasswordField"+number;
+    iconField = "visibilityIcon"+number;
     let passwordField = document.getElementById(password);
-    let icon = document.getElementById("visibilityIcon");
+    let icon = document.getElementById(iconField);
     if (passwordField.type === "password") {
         passwordField.type = "text";
         icon.classList.remove("fa-eye");
@@ -211,12 +215,12 @@ function toggleTA() {
         document.querySelectorAll(".admin").forEach(function (item) {
             item.classList.remove("hidden")
         });
-        document.querySelectorAll(".appointement").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
+        document.querySelectorAll(".appointment").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.add("hidden")
             item.removeAttribute("required")
         });
     } else {
-        document.querySelectorAll(".appointement").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
+        document.querySelectorAll(".appointment").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.remove("hidden")
             item.setAttribute("required", "")
         });
@@ -234,7 +238,7 @@ function changeConseiller(input) {
     let nbClient = document.getElementById(input.id).value;
     let option = document.getElementById(nbClient);
     let value = option.dataset.conseiller;
-    document.getElementById("appointementsConseillerField").value = value;
+    document.getElementById("appointmentsConseillerField").value = value;
 }
 
 
