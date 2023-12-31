@@ -18,7 +18,7 @@
                     <input type="text" name="landingLoginField" id="landingLoginField" class="loginFormField" placeholder="Login" required>
                 </div>
                 <div class="loginFormFieldWrapper">
-                    <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
+                    <label for="PasswordField" class="visually-hidden">Mot de Passe</label>
                     <input type="password" name="landingPasswordField" id="PasswordField" class="loginFormField" placeholder="Password" required>
                     <button onclick="togglePasswordVisibility('')" type="button" class="visibilityButton"><i class="fa-solid fa-eye" id="visibilityIcon"></i></button>
                 </div>

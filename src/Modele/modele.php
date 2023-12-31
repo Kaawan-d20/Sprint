@@ -821,6 +821,20 @@ function modGetAllCounselors(){
 }
 
 /**
+ * Renvoie tous les directeurs
+ * @return array Tous les directeurs (IDEMPLOYE, IDENTITEEMPLOYE) (tableau d'objets)
+ */
+function modGetAllDirectors(){
+    $connection = Connection::getInstance()->getConnection();
+    $query = 'SELECT idEmploye, CONCAT(employe.PRENOM, " ", employe.NOM) AS identiteEmploye FROM employe WHERE idCategorie=1';
+    $prepared = $connection -> query($query);
+    $prepared -> setFetchMode(PDO::FETCH_OBJ);
+    $result = $prepared -> fetchAll();
+    $prepared -> closeCursor();
+    return $result;
+}
+
+/**
  * Fonction qui permet de modifier les paramètres d'un employé
  * @param int $idEmploye L'id de l'employé
  * @param string $login Le login de l'employé
@@ -897,7 +911,10 @@ function modModifEmploye($idEmploye, $name, $firstName, $login, $password, $idCa
  */
 function modDeleteEmploye($idEmployee){
     $connection = Connection::getInstance()->getConnection();
-    $query = 'DELETE FROM employe WHERE idEmploye=:idEmployee';
+    $connection -> setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
+    $query = 'DELETE FROM RDV WHERE IDEMPLOYE=:idEmployee;
+                DELETE FROM tacheAdmin WHERE IDEMPLOYE=:idEmployee;
+                DELETE FROM employe WHERE idEmploye=:idEmployee';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idEmployee', $idEmployee, PDO::PARAM_INT);
     $prepared -> execute();
@@ -1121,7 +1138,7 @@ function modModifClient($idClient, $idEmploye, $job, $situationFamiliale, $addre
  */
 function modCreateClient($idEmploye, $name, $firstName, $birthDate, $address, $num, $email, $job, $situationFamiliale, $civilite) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'INSERT INTO client(idEmploye, nom, prenom, dateNaissance, dateCreation, addresse, numTel, email, profession, SITUATIONFAMILIALE, civilitee) VALUES (:idEmploye, :name, :firstName, :birthDate, NOW(), :adress, :num, :email, :job, :situationFamiliale, :civilite)';
+    $query = 'INSERT INTO client(idEmploye, nom, prenom, dateNaissance, dateCreation, adresse, numTel, email, profession, SITUATIONFAMILIALE, civilitee) VALUES (:idEmploye, :name, :firstName, :birthDate, NOW(), :address, :num, :email, :job, :situationFamiliale, :civilite)';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':idEmploye', $idEmploye, PDO::PARAM_INT);
     $prepared -> bindParam(':name', $name, PDO::PARAM_STR);
@@ -1367,7 +1384,7 @@ function modGetNumberAppointmentsBetween($dateDebut, $dateFin) {
  */
 function modGetNumberContractsBetween($dateDebut, $dateFin) {
     $connection = Connection::getInstance()->getConnection();
-    $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>:dateDebut AND dateouverture<:dateFin';
+    $query = 'SELECT COUNT(*) AS nbContracts FROM contrat WHERE dateouverture>=:dateDebut AND dateouverture<=:dateFin';
     $prepared = $connection -> prepare($query);
     $prepared -> bindParam(':dateDebut', $dateDebut, PDO::PARAM_STR);
     $prepared -> bindParam(':dateFin', $dateFin, PDO::PARAM_STR);

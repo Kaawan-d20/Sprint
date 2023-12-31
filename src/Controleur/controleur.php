@@ -41,6 +41,7 @@ function ctlLogin($username, $password){
     if (password_verify($password, $BDPWD)){
         $resultConnect = modGetEmployeFromLogin($username);
         $_SESSION["idEmploye"] = $resultConnect->IDEMPLOYE;
+        $_SESSION["login"] = $username;
         $_SESSION["type"] = $resultConnect->IDCATEGORIE;
         $_SESSION["name"] = $resultConnect->NOM;
         $_SESSION["firstName"] = $resultConnect->PRENOM;
@@ -522,13 +523,19 @@ function ctlGestionPersonnelAdd(){
  * @param string $name C'est le nom de l'employé
  * @param string $firstName C'est le prénom de l'employé
  * @param string $login C'est le login de l'employé
+ * @param string $old C'est l'ancien login de l'employé
  * @param string $password C'est le mot de passe de l'employé (haché dans le JS en SHA256)
  * @param int $category C'est la catégorie de l'employé
  * @param string $color C'est la couleur de l'employé
  * @return void
  */
-function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color){
-    $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
+function ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $old, $password, $category, $color){
+    if ($password == 'notChanged'){
+        $password = modGetPassword($old);
+    }
+    else{
+        $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
+    }
     modModifEmploye($idEmployee, $name, $firstName, $login, $password, $category, $color);
     ctlGestionPersonnelAll();
 }
@@ -555,6 +562,28 @@ function ctlGestionPersonnelAddSubmit($name, $firstName, $login, $password, $cat
  * @return void
  */
 function ctlGestionPersonnelDelete($idEmployee){
+    $info = modGetEmployeFromId($idEmployee);
+    if ($info->IDCATEGORIE == 1 && count(modGetAllDirectors()) == 1){ // Si c'est le dernier directeur
+        throw new deleteDirecteurException();
+    }
+    if ($info->IDCATEGORIE == 2 && count(modGetAllClientsByCounselors($idEmployee)) != 0 && count(modGetAllCounselors()) == 1){ // Si le conseiller a des clients et qu'il est le dernier conseiller
+        $director = modGetAllDirectors()[0]->idEmploye;
+        foreach (modGetAllClientsByCounselors($idEmployee) as $client){
+            modModifClient($client->IDCLIENT, $director, $client->PROFESSION, $client->SITUATIONFAMILIALE, $client->ADRESSE, $client->NUMTEL, $client->EMAIL, $client->DATENAISSANCE);
+        }
+    }
+    if ($info->IDCATEGORIE == 2 && count(modGetAllClientsByCounselors($idEmployee)) != 0 && count(modGetAllCounselors()) != 1){ // Si le conseiller a des clients et qu'il n'est pas le dernier conseiller
+        $counselors = modGetAllCounselors();
+        foreach ($counselors as $counselor){
+            if ($counselor->idEmploye != $idEmployee){
+                $counselors = $counselor->idEmploye;
+                break;
+            }
+        }
+        foreach (modGetAllClientsByCounselors($idEmployee) as $client){
+            modModifClient($client->IDCLIENT, $counselors, $client->PROFESSION, $client->SITUATIONFAMILIALE, $client->ADRESSE, $client->NUMTEL, $client->EMAIL, $client->DATENAISSANCE);
+        }
+    }       
     modDeleteEmploye($idEmployee);
     ctlGestionPersonnelAll();
 }
@@ -577,13 +606,14 @@ function ctlSetting(){
  * @return void
  */
 function ctlSettingSubmit($idEmploye, $login, $password, $color){
-    if ($password == ''){
-        $password = modGetEmployeFromId($idEmploye)->PASSWORD;
+    if ($password == 'notChanged'){
+        $password = modGetPassword($_SESSION["login"]);
     }
     else{
         $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]); // Hachage et salage du mot de passe
     }
     modModifEmployeSetting($idEmploye, $login, $password, $color);
+    $_SESSION["login"] = $login;
     ctlHome();
 }
 
@@ -790,38 +820,40 @@ function ctlDeleteAppointment($idAppointment) {
  * @return void
  */
 function ctlCreateNewTA($idEmployee, $date, $heureDebut, $heureFin, $libelle) {
-    if ($heureDebut < $heureFin) {
-        $horaireDebut= $date.' '.$heureDebut.':00';
-        $horaireFin= $date.' '.$heureFin.':00';
-        $debutCall = $date . ' 00:00:00';
-        $finCall = $date . ' 23:59:59';
-        $listAppointment = modGetAppointmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
-        $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
-        foreach ($listAppointment as $appointment){
-            if ($horaireDebut < $appointment->HORAIREDEBUT && $appointment->HORAIREDEBUT < $horaireFin){
-                throw new TAHoraireException();
-            }
-            if ($horaireDebut < $appointment->HORAIREFIN && $appointment->HORAIREFIN < $horaireFin){
-                throw new TAHoraireException();
-            }
-            if ($horaireDebut >= $appointment->HORAIREDEBUT && $horaireFin <= $appointment->HORAIREFIN){
-                throw new TAHoraireException();
-            }
-        }
-        foreach ($listTA as $TA){
-            if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
-                throw new TAHoraireException();
-            }
-            if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
-                throw new TAHoraireException();
-            }
-            if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
-                throw new TAHoraireException();
-            }
-        }
-        modCreateTA($idEmployee, $horaireDebut, $horaireFin, $libelle);
-        ctlHome();
+    if ($heureDebut > $heureFin) {
+        throw new HoraireException();
     }
+    $horaireDebut= $date.' '.$heureDebut.':00';
+    $horaireFin= $date.' '.$heureFin.':00';
+    $debutCall = $date . ' 00:00:00';
+    $finCall = $date . ' 23:59:59';
+    $listAppointment = modGetAppointmentsBetweenCounselor($idEmployee,$debutCall,$finCall);
+    $listTA = modGetTABetweenCounselor($idEmployee,$debutCall,$finCall);
+    foreach ($listAppointment as $appointment){
+        if ($horaireDebut < $appointment->HORAIREDEBUT && $appointment->HORAIREDEBUT < $horaireFin){
+            throw new TAHoraireException();
+        }
+        if ($horaireDebut < $appointment->HORAIREFIN && $appointment->HORAIREFIN < $horaireFin){
+            throw new TAHoraireException();
+        }
+        if ($horaireDebut >= $appointment->HORAIREDEBUT && $horaireFin <= $appointment->HORAIREFIN){
+            throw new TAHoraireException();
+        }
+    }
+    foreach ($listTA as $TA){
+        if ($horaireDebut < $TA->HORAIREDEBUT && $TA->HORAIREDEBUT < $horaireFin){
+            throw new TAHoraireException();
+        }
+        if ($horaireDebut < $TA->HORAIREFIN && $TA->HORAIREFIN < $horaireFin){
+            throw new TAHoraireException();
+        }
+        if ($horaireDebut >= $TA->HORAIREDEBUT && $horaireFin <= $TA->HORAIREFIN){
+            throw new TAHoraireException();
+        }
+    }
+    modCreateTA($idEmployee, $horaireDebut, $horaireFin, $libelle);
+    ctlHome();
+    
 }
 
 /**

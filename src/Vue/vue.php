@@ -119,7 +119,7 @@ function vueDisplayHomeAgent($events, $dateOfWeek, $username) {
  * @return string Le code HTML de la navbar
  */
 function vueGenerateNavBar() {
-    $dataList = '<input list="listClient" name="searchClientByIdField" class="searchField" placeholder="Id du client" required><datalist id="listClient">';
+    $dataList = '<input list="listClient" name="searchClientByIdField"  id="searchClientByIdField" class="searchField" placeholder="Id du client" required><datalist id="listClient">';
     foreach ($_SESSION["listClient"] as $client) {
         $dataList .= '<option value="'.$client->IDCLIENT.'">'.$client->IDCLIENT.' - '.$client->NOM.' '.$client->PRENOM.' - '.$client->DATENAISSANCE.'</option>';
     }
@@ -232,22 +232,22 @@ function vueDisplayCreateClient($listConseiller) {
                                 <option value="Mme." >Mme.</option>
                                 <option value="Mx." >Other</option>
                             </select>
-                            <input type="text" name="nameClient" placeholder="Nom" required>
-                            <input type="text" name="firstNameClient" placeholder="Prénom" required>
+                            <input type="text" name="nameClient" placeholder="Nom" maxlength="32" required>
+                            <input type="text" name="firstNameClient" placeholder="Prénom" maxlength="32" required>
                         </div>
 
                         <label for="dateOfBirthClient" class="visually-hidden">Date de naissance:</label>
                         <input type="date" name="dateOfBirthClient" id="dateOfBirthClient" placeholder="Date de naissance" required>
                         <label for="addressClient" class="visually-hidden">Adresse</label>
-                        <input type="text" name="addressClient" id="addressClient" placeholder="Adresse" required>
+                        <input type="text" name="addressClient" id="addressClient" placeholder="Adresse" maxlength="128" required>
                         <label for="phoneClient" class="visually-hidden">Numéro de téléphone</label>
                         <input type="tel" name="phoneClient" id="phoneClient" placeholder="Numéro de téléphone" pattern="((\+|00)?[1-9]{2}|0)[1-9]( ?[0-9]){8}" required>
                         <label for="emailClient" class="visually-hidden">Email</label>
-                        <input type="mail" name="emailClient" id="emailClient" placeholder="Email" required>
+                        <input type="mail" name="emailClient" id="emailClient" placeholder="Email" maxlength="64" required>
                         <label for="professionClient" class="visually-hidden">Profession</label>
-                        <input type="text" name="professionClient" id="professionClient" placeholder="Profession" required>
+                        <input type="text" name="professionClient" id="professionClient" placeholder="Profession" maxlength="32" required>
                         <label for="situationClient" class="visually-hidden">Situation familiale</label>
-                        <input type="text" name="situationClient" id="situationClient" placeholder="Situation familiale" required>
+                        <input type="text" name="situationClient" id="situationClient" placeholder="Situation familiale" maxlength="8" required>
                             '.$optionSelect.'
                         <input type="submit" name="createClientBtn" value="Créer le Client" class="cta" required>
                     </form>
@@ -279,10 +279,10 @@ function vueDisplaySetting($identity) {
                 <form action="index.php" method="post" id="formPassword">
                     <h1>Modifier info personnel</h1>
                     <label for="loginEmployee"  class="visually-hidden">Login :</label>
-                    <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" placeholder="Login" required>
+                    <input type="text" name="loginEmployee" id="loginEmployee" class="modInfoField" value="'.$identity->LOGIN.'" placeholder="Login" maxlength="32" required>
                     <div class="loginFormFieldWrapper">
-                        <label for="landingPasswordField" class="visually-hidden">Mot de Passe</label>
-                        <input type="password" name="passwordEmployee" id="PasswordField" class="modInfoPasswordField" placeholder="Password" required>
+                        <label for="PasswordField" class="visually-hidden">Mot de Passe</label>
+                        <input type="password" name="passwordEmployee" id="PasswordField" class="modInfoPasswordField" placeholder="Password" maxlength="128" required>
                         <button onclick="togglePasswordVisibility(\'\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye" id="visibilityIcon"></i></button>
                     </div>
                     <label for="colorEmployee" class="visually-hidden">Couleur : </label>
@@ -349,16 +349,17 @@ function vueGenerateGestionEmployeRow($employee) {
                 <option value="2" '.$etat2.' >Conseiller</option>
                 <option value="3" '.$etat3.' >Agent d\'accueil</option>
             </select>
-            <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'">
-            <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'">
-            <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'">
+            <input type="text" name="nameEmployee" class="employeCell content" value="'.$employee->NOM.'" maxlength="32">
+            <input type="text" name="firstNameEmployee" class="employeCell content" value="'.$employee->PRENOM.'" maxlength="32">
+            <input type="text" name="loginEmployee" class="employeCell content" value="'.$employee->LOGIN.'" maxlength="32">
             <div class="employeCell content">
-            <input type="password" name="passwordEmployee" id="PasswordField'.$employee->IDEMPLOYE.'" class="loginFormField">
+            <input type="password" name="passwordEmployee" id="PasswordField'.$employee->IDEMPLOYE.'" class="loginFormField" maxlength="128">
             <button onclick="togglePasswordVisibility(\''.$employee->IDEMPLOYE.'\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye" id="visibilityIcon'.$employee->IDEMPLOYE.'"></i></button>
             </div>
             <select name="colorEmployee" class="employeCell content">
-                '.$selectOptions.'
+            '.$selectOptions.'
             </select>
+            <input type="text" name="old" class="hidden" value="'.$employee->LOGIN.'">
             <input type="submit" name="ModifPersonnelOneBtn" id="connectBtn'.$employee->IDEMPLOYE.'" class="employeBtn">
             <button type="submit" name="GestionPersonnelDeleteBtn" class="employeBtn red"><i class="fa-solid fa-trash-can"></i> Supprimer</button>
         </form>';
@@ -385,10 +386,10 @@ function vueDisplayGestionPersonnelAdd(){
                             <option value="2" >Conseiller</option>
                             <option value="3" >Agent d\'accueil</option>
                         </select>
-                        <input type="text" name="nameEmployee" placeholder="Nom" class="gestionPersonnelAddInput" required>
-                        <input type="text" name="firstNameEmployee" placeholder="Prénom" class="gestionPersonnelAddInput" required>
-                        <input type="text" name="loginEmployee" placeholder="Login" class="gestionPersonnelAddInput" required>
-                        <input type="password" name="passwordEmployee" id="PasswordField" placeholder="Mot de passe" class="gestionPersonnelAddInput" required>
+                        <input type="text" name="nameEmployee" placeholder="Nom" class="gestionPersonnelAddInput" maxlength="32" required>
+                        <input type="text" name="firstNameEmployee" placeholder="Prénom" class="gestionPersonnelAddInput" maxlength="32" required>
+                        <input type="text" name="loginEmployee" placeholder="Login" class="gestionPersonnelAddInput" maxlength="32" required>
+                        <input type="password" name="passwordEmployee" id="PasswordField" placeholder="Mot de passe" class="gestionPersonnelAddInput" maxlength="128" required>
                         <button onclick="togglePasswordVisibility(\'\')" type="button" class="visibilityButton"><i class="fa-solid fa-eye" id="visibilityIcon"></i></button>
                         <select name="colorEmployee" class="gestionPersonnelAddInput" required>
                             '.$selectOptions.'
@@ -432,9 +433,9 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
         $actif = ($typeAccount->ACTIF == 1) ? "checked" : "";
         $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
                         <input type="text" name="idAccount" class="gestionServiceCell content" value="'.$typeAccount->IDTYPECOMPTE.'" readonly="true">
-                        <input type="text" name="nameAccount" class="gestionServiceCell content" value="'.$typeAccount->NOM.'">
+                        <input type="text" name="nameAccount" class="gestionServiceCell content" value="'.$typeAccount->NOM.'" maxlength="64">
                         <div class="gestionServiceCell content"><input type="checkbox" name="activeAccount" class="gestionServiceCell content" '.$actif.'></div>
-                        <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeAccount->DOCUMENT.'">
+                        <input type="text" name="documentAccount" class="gestionServiceCell content" value="'.$typeAccount->DOCUMENT.'" maxlength="128">
                         <input type="hidden" name="idMotif" value="'.$typeAccount->IDMOTIF.'" class="gestionPersonnelAddInput">
                         <button type="submit" name="ModifAccountOneBtn" class="employeBtn">
                         <i class="fa-solid fa-pen-to-square"></i> Modifier le type de compte
@@ -460,15 +461,15 @@ function vueDisplayGestionServicesAll($listTypeAccount, $listTypeContract) {
         $actif = ($typeContract->ACTIF == 1) ? "checked" : "";
         $content .= '<form action="index.php" method="post" class="gestionServiceTableContentWrapper">
                         <input type="text" name="idContract" class="gestionServiceCell content" value="'.$typeContract->IDTYPECONTRAT.'" readonly="true">
-                        <input type="text" name="nameContract" class="gestionServiceCell content" value="'.$typeContract->NOM.'">
+                        <input type="text" name="nameContract" class="gestionServiceCell content" value="'.$typeContract->NOM.'" maxlength="64">
                         <div class="gestionServiceCell content"><input type="checkbox" name="activeContract" class="gestionServiceCell content" '.$actif.'></div>
-                        <input type="text" name="documentContract" class="gestionServiceCell content" value="'.$typeContract->DOCUMENT.'">
+                        <input type="text" name="documentContract" class="gestionServiceCell content" value="'.$typeContract->DOCUMENT.'" maxlength="128">
                         <input type="hidden" name="idMotif" value="'.$typeContract->IDMOTIF.'" class="gestionPersonnelAddInput">
                         <button type="submit" name="ModifContractOneBtn" class="employeBtn">
-                        <i class="fa-solid fa-pen-to-square"></i>Modifier le type de contrat
+                        <i class="fa-solid fa-pen-to-square"></i> Modifier le type de contrat
                         </button>
                         <button type="submit" name="GestionContractDeleteBtn" class="employeBtn red">
-                            <i class="fa-solid fa-trash-can"></i>Supprimer le type de contrat
+                            <i class="fa-solid fa-trash-can"></i> Supprimer le type de contrat
                         </button>
                     </form>';
     }
@@ -496,8 +497,8 @@ function vueDisplayGestionServicesAdd(){
                             <option value="1" >Compte</option>
                             <option value="2" >Contrat</option>
                         </select>
-                        <input type="text" name="nameService" placeholder="Nom" class="gestionPersonnelAddInput" required>
-                        <input type="text" name="documentService" placeholder="Document" class="gestionPersonnelAddInput" required>
+                        <input type="text" name="nameService" placeholder="Nom" class="gestionPersonnelAddInput" maxlength="64" required>
+                        <input type="text" name="documentService" placeholder="Document" class="gestionPersonnelAddInput" maxlength="128" required>
                         <div class="gestionPersonnelAddInput">
                             <label for="activeService">Actif:<label>
                             <input type="checkbox" name="activeService" checked>
@@ -629,7 +630,7 @@ function vueCreateListAccount($listAccounts, $idClient){
         $listA .= '<div class="accountCell content">'.$account->NOM.'</div>
             <div class="accountCell content">'.$account->solde.'€</div>
             <form action="index.php" method="post" class="accountCell content">
-                <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01" min="0">
+                <input type="number" name="overdraft" value="'.$account->decouvert.'" step="0.01" min="0" max="99999999999.99">
                 <input type="hidden" name="idAccount" value="'.$account->idCompte.'">
                 <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="modifOverdraftBtn">
@@ -772,7 +773,7 @@ function vueDisplayAddContract($idClient, $listTypeContract, $listeClient){
     $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
                 <h1>Ajouter un Type de Contrat</h1>
                 '.$optionSelect.$datalist.'
-                <input type="number" name="monthCost" placeholder="Coût Mensuel" step="0.01" class="addContractField" required>
+                <input type="number" name="monthCost" placeholder="Coût Mensuel" step="0.01" min="0" max="99999999999.99" class="addContractField" required>
                 <input type="hidden" name="idClient" value="'.$idClient.'">
                 <button type="submit" name="createContractBtn" class="addContractField cta">
                     Valider la création
@@ -811,7 +812,7 @@ function vueDisplayAddAccount($idClient, $listTypeAccount, $listeClient){
     $content='<div class="addContractWrapper"><form action="index.php" method="post" class="addContractForm">
                     <h1>Ajouter un Type de Compte</h1>
                     '.$optionSelect.$dataList.'
-                    <input type="number" name="overdraft" placeholder="Découvert" step="0.01" class="addContractField">
+                    <input type="number" name="overdraft" placeholder="Découvert" step="0.01" min="0" max="99999999999.99" class="addContractField">
                     <input type="hidden" name="idClient" value="'.$idClient.'">
                     <button type="submit" name="createAccountBtn" class="addContractField cta">
                         Valider la création
@@ -1046,7 +1047,7 @@ function vueDisplayAddAppointmentConseiller($listClients, $listMotifs, $date, $e
                             '.$motifsOption.'
                         </select>
                         <div class="field admin hidden">
-                            <input type="text" name="adminLibelleField" id="adminLibelleField" class="colorText" placeholder="Motif">
+                            <input type="text" name="adminLibelleField" id="adminLibelleField" class="colorText" maxlength="32" placeholder="Motif">
                         </div>
                         <button type="submit" name="addEventBtn" class="cta field">
                             Valider

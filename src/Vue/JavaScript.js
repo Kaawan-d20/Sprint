@@ -85,7 +85,6 @@ function makeDarkTheme(icon, btn) {
  * @returns {void}
 */
 function onSubmitButtonClick(data='') {
-    console.log("in onSubmitButtonClick");
     if (data==''){
         var formID='formPassword';
         var passwordField='PasswordField';
@@ -95,17 +94,17 @@ function onSubmitButtonClick(data='') {
         var formID='formPassword'+idEmploye;
         var passwordField='PasswordField'+idEmploye;
     }
-
     // Récupérer le mot de passe depuis le champ de formulaire
     var password = document.getElementById(passwordField).value;
     if (password != '') {
          // Hacher le mot de passe
         var hashedPassword = CryptoJS.SHA256(password).toString();
-        console.log(hashedPassword);
-
-        // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe haché
-        document.getElementById(passwordField).value = hashedPassword;
     }
+    else{
+        var hashedPassword ="notChanged";
+    }
+    // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe haché
+    document.getElementById(passwordField).value = hashedPassword;
 
     // Soumettre le formulaire
     document.getElementById(formID).submit();
@@ -117,9 +116,9 @@ function onSubmitButtonClick(data='') {
  */
 function initPassword() {
     if (document.querySelector('#connectBtn') != null){
-        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick);
+        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick.bind(''));
     }
-    else{
+    else if (document.querySelector('[name="ModifPersonnelOneBtn"]') != null) {
         list=document.getElementsByName('ModifPersonnelOneBtn');
         for (var i = 0; i < list.length; i++) {
             list[i].addEventListener('click', onSubmitButtonClick.bind(list[i].id));

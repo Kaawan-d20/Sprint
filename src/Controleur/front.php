@@ -177,10 +177,11 @@ try {
         $name = $_POST['nameEmployee'];
         $firstName = $_POST['firstNameEmployee'];
         $login = $_POST['loginEmployee'];
+        $old = $_POST['old'];
         $password = $_POST['passwordEmployee'];
         $category = $_POST['idCategorie'];
         $color = $_POST['colorEmployee'];
-        ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $password, $category, $color);
+        ctlGestionPersonnelOneSubmit($idEmployee, $name, $firstName, $login, $old, $password, $category, $color);
     }
     elseif (isset($_POST['gestionPersonnelAddBtn'])){ // Si le bouton d'ajout d'un employé est cliqué
         ctlGestionPersonnelAdd();
