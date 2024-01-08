@@ -79,55 +79,6 @@ function makeDarkTheme(icon, btn) {
 // ------------------------------------------------------------------ Connexion --------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-/** Fonction qui envoie le mot de passe haché au serveur
- * @param {string} data L'id du bouton cliqué (si on est sur la page de modification des employés)
- * @returns {void}
-*/
-function onSubmitButtonClick(data='') {
-    if (data==''){
-        var formID='formPassword';
-        var passwordField='PasswordField';
-    }
-    else{
-        var idEmploye = data.currentTarget.id.replace(/\D/g, ''); // On récupère l'id de l'employé
-        var formID='formPassword'+idEmploye;
-        var passwordField='PasswordField'+idEmploye;
-    }
-    // Récupérer le mot de passe depuis le champ de formulaire
-    var password = document.getElementById(passwordField).value;
-    if (password != '') {
-         // Hacher le mot de passe
-        var hashedPassword = CryptoJS.SHA256(password).toString();
-    }
-    else{
-        var hashedPassword ="notChanged";
-    }
-    // Remplacer le mot de passe dans le champ du formulaire avec le mot de passe haché
-    document.getElementById(passwordField).value = hashedPassword;
-
-    // Soumettre le formulaire
-    document.getElementById(formID).submit();
-}
-
-/**
- * Fonction qui va initialiser le mot de passe
- * @returns {void}
- */
-function initPassword() {
-    if (document.querySelector('#connectBtn') != null){
-        document.getElementById('connectBtn').addEventListener('click', onSubmitButtonClick.bind(''));
-    }
-    else if (document.querySelector('[name="ModifPersonnelOneBtn"]') != null) {
-        list=document.getElementsByName('ModifPersonnelOneBtn');
-        for (var i = 0; i < list.length; i++) {
-            list[i].addEventListener('click', onSubmitButtonClick.bind(list[i].id));
-        }
-    }
-}
-
-window.addEventListener('load', initPassword);
-
 /**
  * Fonction qui va afficher ou cacher le mot de passe
  * @param {string} number Le numéro du champ de mot de passe cliqué (optionnel)
@@ -214,12 +165,12 @@ function toggleTA() {
         document.querySelectorAll(".admin").forEach(function (item) {
             item.classList.remove("hidden")
         });
-        document.querySelectorAll(".appointment").forEach(function (item) {
+        document.querySelectorAll(".appointment").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.add("hidden")
             item.removeAttribute("required")
         });
     } else {
-        document.querySelectorAll(".appointment").forEach(function (item) {
+        document.querySelectorAll(".appointment").forEach(function (item) { // Faute d'orthographe dans le nom de la classe
             item.classList.remove("hidden")
             item.setAttribute("required", "")
         });

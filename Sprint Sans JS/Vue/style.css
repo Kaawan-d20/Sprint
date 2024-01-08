@@ -1,0 +1,1462 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Mono&display=swap');
+:root {
+    --night: #0f0f0fff;
+    --jet: #2d2e2eff;
+    --dim-gray: #696969ff;
+    /* --rose-quartz: #bcabaeff; */
+    --mid-gray: #bababaff;
+    --light-gray: #d3cfd0ff;
+    --white: #fbfbfbff;
+    --dark-spring-green: #306b34ff;
+    --sunset-orange: #ff9f1cff;
+    --lush-green: #9eff1cff;
+    --validation-green: #94e8b4;
+    --invalid-red: #d52941;      
+
+    --heading-font: 'Dela Gothic One', sans-serif;
+    --display-font: 'system-ui', sans-serif;
+    --mono-font: 'Space Mono', monospace;
+
+    --smaller-font-size: .75em;
+    --small-font-size: .85em;
+    --classic-font-size: 1em;
+    --big-font-size: 1.25em;
+    --bigger-font-size: 2em;
+
+
+    /* --text: var(--night);
+    --text-secondary: var(--jet);
+    --mid-text: var(--dim-gray);
+    --mid-back: var(--mid-gray);
+    --background-secondary: var(--light-gray);
+    --background: var(--white); */
+
+    /* --cta: var(--dark-spring-green); */
+    --cta: var(--sunset-orange);
+    /* --cta: var(--lush-green); */
+}
+
+/* GENERIC */
+
+.light {
+    --text: var(--night);
+    --text-secondary: var(--jet);
+    --mid-text: var(--dim-gray);
+    --mid-back: var(--mid-gray);
+    --background-secondary: var(--light-gray);
+    --background: var(--white);
+}
+
+.dark {
+    --text: var(--white);
+    --text-secondary: var(--light-gray);
+    --mid-text: var(--mid-gray);
+    --mid-back: var(--dim-gray);
+    --background-secondary: var(--jet);
+    --background: var(--night);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--display-font);
+    margin: 0;
+}
+
+a {
+    color: var(--cta);
+}
+
+h1 {
+    font-family: var(--heading-font);
+}
+
+button {
+    color: var(--text);
+} 
+
+/* LOGIN SPECIFIC */
+
+.loginWrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginCard {
+    display: flex;
+    flex-direction: column;
+    min-width: 33%;
+}
+
+.loginCardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.loginFormFieldWrapper {
+    padding-left: 1em;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+    display: flex;
+}
+
+.loginFormField {
+    margin: 1em 0;
+    flex-grow: 1;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    border: none;
+}
+
+.loginFormField[type="password"] {
+    kerning: 5px;
+}
+
+/* .loginFormFieldWrapper:has(*:focus) {
+    border: 1px solid var(--cta);
+} */
+
+.loginFormField:focus {
+    outline: none;
+}
+
+.ctaContainer {
+    display: flex;
+    min-height: 4em;
+}
+
+.visibilityButton {
+    padding: 0 1.5em;
+    background-color: transparent;
+    border: none;
+}
+
+.visibilityButton:hover, .visibilityButton:focus {
+    background-color: var(--background-secondary);
+    border-radius: 0 5px 5px 0;
+}
+
+/* AGENT ACCUEIL SPECIFIC */
+
+.agentWrapper {
+    min-height: 100vh;
+}
+
+.navWrapper {
+    border-bottom: 1px solid var(--text);
+}
+
+nav {
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.searchWrapper {
+    flex-grow: 1;
+    padding-left: 1em;
+    border: 1px solid var(--text-secondary);
+    background-color: var(--background);
+    border-radius: 5px;
+    display: flex;
+    gap: 1em;
+}
+
+.advancedSearchAndAccountWrapper {
+    display: flex;
+    justify-content: end;
+    gap: 1em;
+}
+
+.searchField {
+    margin: 1em 0;
+    flex-grow: 1;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
+    border: none;
+}
+
+.searchButton, .squareIconButton {
+    padding: 0 1em;
+    background-color: var(--background);
+    color: var(--text);
+    font-size: var(--big-font-size);
+}
+
+.searchButton {
+    border: none;
+    border-radius: 5px;
+    border-left: 1px solid var(--text-secondary);
+}
+
+.searchButton:hover, .searchButton:focus, .squareIconButton:focus, .squareIconButton:hover {
+    background-color: var(--background-secondary);
+}
+
+.squareIconButton {
+    border-radius: 5px;
+    height: 60px;
+    border: 1px solid var(--text-secondary);
+}
+
+/* this is the div wrapper for the username menu */
+.dropdown { 
+    position: relative;
+    min-width: 10em;
+    z-index: 2;
+    /* flex-shrink: 1; */
+}
+
+.accountButton {
+    padding: 0 1.5em;
+    border: 1px solid var(--text-secondary);
+    background-color: var(--background);
+    color: var(--text);
+    font-size: var(--classic-font-size);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    height: 60px;
+    width: 100%;
+}
+
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    width: calc(100% - 2px);
+    
+}
+
+.dropdown:hover .dropdownContent {
+    /* padding-top: 5px;
+    margin-top: -5px; */
+    border: 1px solid var(--text-secondary);
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown:hover .accountButton, .dropdown:focus .accountButton {
+    background-color: var(--background-secondary);
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid var(--mid-back);
+}
+
+.dropdownButton {
+    padding: 1em;
+    border: none;
+    background-color: var(--background);
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.dropdownButton:hover, .dropdownButton:focus {
+    background-color: var(--background-secondary);
+}
+
+.dropdownButton:last-child {
+    border-radius: 0 0 5px 5px;
+}
+
+.dropdownButton:last-child:hover, .dropdownButton:last-child:focus {
+    background-color: var(--invalid-red);
+    color: var(--white);
+}
+
+.agentWrapper .calendarWrapper {
+    margin: 1em;
+}
+
+/* CALENDAR */
+
+.weekWrapper {
+    display: grid;    
+    border: 1px solid var(--text-secondary);
+    border-radius: 0 0 10px 10px;
+    min-height: 50vh;
+    grid-auto-flow:column;
+    grid-auto-columns: 1fr;  
+}
+
+.calendarNavWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--text-secondary);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+
+}
+
+.dateBlock {
+    display: flex;
+    align-items: baseline;
+    gap: .5em;
+    padding: 1em 2em 1em 1em;
+}
+
+.dateBlock h1 {
+    margin: 0;
+}
+
+.dateBlock span {
+    font-family: var(--mono-font);
+}
+
+.weekSelector {
+    margin: 1em;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+    display: flex;
+}
+
+/* .weekSelector:has(*:hover, *:focus) {
+    border: 1px solid var(--cta);
+} */
+
+.weekSelector button {
+    padding: 1em;
+    border: none;
+    background-color: var(--background);
+}
+
+.weekSelector button:hover, .weekSelector button:focus {
+    background-color: var(--background-secondary);
+}
+
+.weekSelector .previous {
+    border-radius: 5px 0 0 5px;
+}
+
+.weekSelector .next {
+    border-radius: 0 5px 5px 0;
+}
+
+.weekSelectorForm {
+    display: flex;
+}
+
+.weekSelectorDateField {
+    border: none;
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--mono-font);
+}
+
+.weekSelectorDateField:focus, .weekSelectorDateField:hover {
+    outline: none;
+    background-color: var(--background-secondary);
+}
+
+.day {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--text-secondary);
+}
+
+.day:last-child {
+    border-right: none;
+}
+
+.dayCell {
+    display: flex;
+    gap: .5em;
+    align-items: baseline;
+    justify-content: center;
+    border-bottom: 1px solid var(--text-secondary);
+}
+
+.dayCell span {
+    font-family: var(--mono-font);
+}
+
+/* .pronounsSpan {
+    color: var(--mid-text);
+    font-size: var(--smaller-font-size);
+} */
+
+.events {
+    display: flex;
+    flex-direction: column;
+}
+
+.event {
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+.event h2 {
+    margin: 0;
+}
+
+.event p {
+    margin: 0;
+}
+
+.eventDetails {
+    padding: .5em 0;
+    display: flex;
+    gap: .5em;
+    align-items: center;
+    margin : 0 -.5em;
+    
+}
+
+.event:not(:last-child):not(:has(+ .hidden)):not(:hover) .eventDetails{
+    border-bottom: 1px solid var(--mid-text);
+}
+
+.eventDetails p {
+    font-family: var(--mono-font);
+    font-size: var(--small-font-size);
+}
+
+.eventConseiller {
+    padding: .5em;
+    flex-grow: 1;
+    border-radius: 5px;
+    border: 1px solid var(--jet);
+    color: var(--night);
+    display: flex;
+    gap: .5em;
+    align-items: center;
+}
+
+.event:hover {
+    background-color: var(--background-secondary);
+    border-radius: 0 0 5px 5px;
+}
+
+.event .document, .event .deleteForm {
+    display: none;
+}
+
+.event:hover .document {
+    display: inline-block;
+}
+
+.event:hover .deleteForm {
+    display: block;
+}
+
+.deleteRDVBtn {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    width: 100%;
+    background-color: var(--invalid-red);
+    color: var(--white);
+    margin-bottom: 1em;
+}
+
+.monday .events .event:hover:last-child {
+    border-radius: 0 0 0 10px;
+}
+
+.sunday .events .event:hover:last-child {
+    border-radius: 0 0 10px 0;
+}
+
+.filterBtn {
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+    padding: 1em;
+    display: flex;
+    gap: 1em;
+    align-items: baseline;
+}
+
+.filterBtn:not(.inactive) {
+    color: var(--night);
+}
+
+.filterWrapper {
+    flex-grow: 1;
+    display: flex;
+    gap: 1em;
+    padding: 0 1em;
+    flex-wrap: wrap;
+}
+
+/* INFO CLIENT */
+
+.contactAndRDVWrapper {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 1em;
+}
+
+.syntheseWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 1em;
+}
+
+.nameWrapper {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.idDiv {
+    font-family: var(--mono-font);
+    margin: 0;
+    padding: .5em;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+}
+
+.header {
+    background-color: var(--text);
+    color: var(--background);
+}
+
+.header, .content {
+    padding: .5em;
+}
+
+.content {
+    font-family: var(--mono-font);
+    color: var(--text);
+    background-color: var(--background);
+    border: none;
+    outline: none;
+}
+
+.content:hover {
+    background-color: var(--background-secondary);
+}
+
+.content:disabled {
+    color: var(--text-secondary);
+}
+
+.infoCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+.contactCell.content:not(:last-child) {
+    border-bottom: 1px solid var(--text);
+}
+.agent .accountCell.content:not(:nth-child(3n)) {
+    border-right: 1px solid var(--text);
+}
+.agent .accountCell.content:not(:nth-last-child(-n+3)) {
+    border-bottom: 1px solid var(--text);
+}
+.conseiller .accountCell.content:not(:nth-child(4n)) {
+    border-right: 1px solid var(--text);
+}
+.conseiller .accountCell.content:not(:nth-last-child(-n+4)) {
+    border-bottom: 1px solid var(--text);
+}
+.agent .contractCell.content:not(:nth-child(2n)) {
+    border-right: 1px solid var(--text);
+}
+.agent .contractCell.content:not(:nth-last-child(-n+2)) {
+    border-bottom: 1px solid var(--text);
+}
+.conseiller .contractCell.content:not(:nth-child(3n)) {
+    border-right: 1px solid var(--text);
+}
+.conseiller .contractCell.content:not(:nth-last-child(-n+3)) {
+    border-bottom: 1px solid var(--text);
+}
+.rechercheCell.content:not(:nth-child(5n)) {
+    border-right: 1px solid var(--text);
+}
+.rechercheCell.content:not(:nth-last-child(-n+5)) {
+    border-bottom: 1px solid var(--text);
+}
+.statCell.content:not(:nth-child(14n)) {
+    border-right: 1px solid var(--text);
+}
+.infoCell.content:nth-last-child(4) {
+    border-radius: 0 0 0 5px;
+}
+.infoCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.contactCell.content:nth-child(2) {
+    border-radius: 0 5px 0 0;
+}
+.contactCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.agent .accountCell.content:nth-last-child(3) {
+    border-radius: 0 0 0 5px;
+}
+.agent .accountCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.conseiller .accountCell.content:nth-last-child(4) {
+    border-radius: 0 0 0 5px;
+}
+.conseiller .accountCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.agent .contractCell.content:nth-last-child(2) {
+    border-radius: 0 0 0 5px;
+}
+.agent .contractCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.conseiller .contractCell.content:nth-last-child(3) {
+    border-radius: 0 0 0 5px;
+}
+.conseiller .contractCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.rechercheCell.content:nth-last-child(5) {
+    border-radius: 0 0 0 5px;
+}
+.rechercheCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+.statCell.content:nth-last-child(14) {
+    border-radius: 0 0 0 5px;
+}
+.statCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.statCell.header {
+    font-size: var(--small-font-size);
+}
+
+.accountCell.content {
+    display: flex;
+    gap: .5em;
+}
+
+.accountCell.content input, .accountCell.content button {
+    padding: .5em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.accountCell.content input:hover {
+    background-color: var(--background-secondary);
+}
+
+.contactTableWrapper, .infoTableWrapper, .accountTableWrapper, .contractTableWrapper, .rechercheOutputTableWrapper, .statTableWrapper {
+    border: 1px solid var(--text);
+    display: grid;
+    border-radius: 5px;
+}
+
+.contactTableWrapper {
+    grid-template-columns: 1fr 3fr;
+}
+
+.infoTableWrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.accountTableWrapper.agent {
+    margin-top: .5em;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.accountTableWrapper.conseiller {
+    margin-top: .5em;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.contractTableWrapper.agent {
+    grid-template-columns: 1fr 1fr;
+}
+
+.contractTableWrapper.conseiller {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.rechercheOutputTableWrapper {
+    margin-top: .5em;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.statTableWrapper {
+    grid-template-columns: repeat(14, 1fr);
+}
+
+.rechercheOutputTableWrapper button {
+    font-size: var(--classic-font-size);
+}
+
+
+.syntheseWrapper h1, .RDVSectionWrapper h1, .contactWrapper h1 {
+    margin: 0;
+}
+
+.RDVWrapper {
+    border-radius: 5px;
+    border: 1px solid var(--text);
+}
+
+.debitAccountSelector {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    color: var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitAccountSelector:hover {
+    background-color: var(--background-secondary);
+}
+
+.debitCreditBtnWrapper {
+    display: flex;
+    gap: .5em;
+}
+
+.debitCreditBtn {
+    border: 1px solid var(--text);
+    padding: .5em;
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.debitCreditBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.accountSelectorWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.accountAndContractWrapper {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: 1em;
+}
+
+.amountInput {
+    border: none;
+    background-color: var(--background);
+    color: var(--text-secondary);
+    outline: none;
+    flex-grow: 1;
+}
+
+.amountInputWrapper {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    font-size: 1em;
+    color: var(--text-secondary);
+    flex-grow: 1;
+    display: flex;
+    align-items: baseline;
+}
+
+.debitCreditWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.operationCard {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: .5em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+.operationCard div {
+    display: flex;
+    gap: .5em;
+    align-items: baseline;
+}
+
+.operationCard div h2 {
+    margin: 0;
+}
+
+.operationCard .date {
+    color: var(--text-secondary);
+}
+
+.operationsListWrapper {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.clientCreationWrapper {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.clientCreationForm {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.clientCreationForm div {
+    display: flex;
+    gap: .5em;
+}
+
+.clientCreationForm input, .clientCreationForm select {
+    /* background-color: var(--background); */
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.clientCreationForm input:not(.cta), .clientCreationForm select:not(.cta) {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+.rechercheWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rechercheForm {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.rechercheForm input {
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.rechercheForm input:not(.cta) {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+.modInfoWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.modInfoWrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.modInfoField {
+    color: var(--text);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 1em;
+}
+
+.modInfoField {
+    background-color: var(--background);
+    font-family: var(--mono-font);
+}
+
+.modInfoPasswordField {
+    margin-left: -1em;
+    flex-grow: 1;
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--mono-font);
+    border: none;
+    padding: 1em;
+    outline: none;
+}
+
+.statWrapper {
+    padding: 1em;
+}
+
+.statWrapper h1 {
+    margin: 0;
+}
+
+.gestionBtn {
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    padding: 1em;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.gestionForm {
+    display: flex;
+    gap: 1em;
+}
+
+.gestionBtn:hover, .gestionBtn:focus {
+    background-color: var(--background-secondary);
+}
+
+.employeTableWrapper {
+    display: grid;
+    margin: 1em;
+    grid-auto-flow: row;
+}
+
+.employeTableWrapper h1 {
+    margin: 0;
+}
+
+.gestionPersonnelAddBtn {
+    margin-top: .5em;
+    padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    font-family: var(--display-font);
+}
+
+.gestionPersonnelAddBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.employeTableHeaderWrapper, .employeTableContentWrapper {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.employeCell.header:first-child {
+    border-radius: 5px 0 0 0;
+}
+.employeCell.header:nth-child(7) {
+    border-radius: 0 5px 0 0;
+    margin-right: -2px; /*Shuntus maximus*/
+}
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:first-child {
+    border-radius: 0 0 0 5px;
+}
+.employeTableContentWrapper:nth-last-child(2) .employeCell.content:nth-child(7) {
+    border-radius: 0 0 5px 0;
+}
+.employeCell.content:first-child {
+    border-left: 1px solid var(--text);
+}
+.employeCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+.employeCell.content:nth-child(-n+7) {
+    border-bottom: 1px solid var(--text);
+}
+
+.employeBtn {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    margin: 1px 0 0 .5em;
+    border-radius: 5px;
+    font-size: var(--classic-font-size);
+    color : var(--text);
+}
+
+.employeBtn:hover {
+    background-color: var(--background-secondary)
+}
+
+.gestionPersonnelAddForm {
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gestionPersonnelAddForm div {
+    display: flex;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    gap: .5em;
+}
+
+.gestionPersonnelAddInput {
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    color: var(--text);
+    padding: 1em;
+    border-radius: 5px;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+}
+
+.gestionPersonnelAddInput:not(:last-child):hover {
+    background-color: var(--background-secondary);
+}
+
+.gestionPersonnelAddInput:last-child {
+    background-color: var(--cta);
+}
+
+.gestionServiceWrapper {
+    padding: 1em;
+}
+
+.gestionServiceWrapper h1{
+    margin: 0;
+}
+
+.gestionServiceWrapper h2 {
+    margin: .5em 0 0 0 ;
+}
+
+.gestionServiceTableHeaderWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceTableContentWrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gestionServiceCell.content {
+    border-bottom: 1px solid var(--text);
+}
+.gestionServiceCell.content:first-child {
+    border-left: 1px solid var(--text);
+}
+.gestionServiceCell.content:not(:last-child) {
+    border-right: 1px solid var(--text);
+}
+
+.gestionServiceCell.header:first-child {
+    border-radius: 5px 0 0 0;
+}
+.gestionServiceCell.header:nth-child(4) {
+    border-radius: 0 5px 0 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:nth-child(4) {
+    border-radius: 0 0 5px 0;
+}
+.gestionServiceTableContentWrapper:last-child .content:first-child {
+    border-radius: 0 0 0 5px;
+}
+
+.btn {
+    margin: 0.5em 0;
+    padding: 1em;
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    font-size: var(--classic-font-size);
+    flex-grow: 1;
+}
+
+.btn:hover {
+    background-color: var(--background-secondary);
+}
+
+.btnWrapper {
+    display: flex;
+    gap: .5em;
+}
+
+.conseillerWrapper {
+    padding: 1em;
+}
+
+.eventTitleCard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.eventTitleCard i {
+    font-size: var(--bigger-font-size);
+}
+
+.eventClientInput {
+    border: none;
+    color: var(--text);
+    background-color: transparent;
+    font-size: var(--small-font-size);
+}
+
+.eventClientInput:hover {
+    text-decoration: underline;
+}
+
+.addAppointmentWrapper {
+    display: flex;
+    min-height: 80vh;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.addAppointmentForm {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.field {
+    display: flex;
+    gap: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: var(--background);
+    font-size: var(--classic-font-size);
+    font-family: var(--mono-font);
+    padding: 1em;
+    color : var(--text);
+}
+
+.field input {
+    border: none;
+    background-color: transparent;
+}
+
+.field input[type="text"] {
+    font-size: var(--classic-font-size);
+    font-family: var(--mono-font);
+    width: 100%;
+}
+
+.field:hover {
+    background-color: var(--background-secondary);
+}
+
+.field:last-child {
+    flex-grow: 1;
+    margin-bottom: 1em;
+}
+
+.newRDVbtn {
+    padding: 1em;
+    font-size: var(--classic-font-size);
+    border: none;
+    background-color: var(--background);
+}
+
+.newRDVbtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.addAppointmentRDVWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.addAppointmentRDVWrapper .events {
+    padding-right: 1em;
+} 
+
+.addContractForm {
+    display: flex;
+    gap: .5em;
+    flex-direction: column;
+    padding: 1em;
+}
+
+.addContractField {
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+    background-color: var(--background);
+    color: var(--text);
+    display: flex;
+    gap: .5em;
+    align-items: center;
+    font-size: var(--classic-font-size);
+}
+
+.addContractField.cta {
+    align-items: center;
+    justify-content: center;
+}
+
+.addContractField:hover {
+    background-color: var(--background-secondary);
+
+}
+
+.addContractField input {
+    flex-grow: 1;
+    font-size: var(--classic-font-size);
+    border: 1px solid var(--text);
+    background-color: var(--background);
+    color: var(--text);
+    padding: .5em;
+    border-radius: 5px;
+}
+
+.addContractField input:hover {
+    background-color: var(--background-secondary);
+}
+
+.addContractWrapper {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.landingThemeBtn {
+    position: absolute;
+    min-height: 62px;
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    bottom: 1em;
+    right: 1em;
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+    font-size: var(--big-font-size);
+    background-color: var(--background);
+    color: var(--text);
+}
+
+.landingThemeBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.statDateField, .statBtn {
+    background-color: var(--background);
+    color: var(--text);
+    padding: 1em;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+}
+
+.statDateField:hover, .statBtn:hover {
+    background-color: var(--background-secondary);
+}
+
+.statForm {
+    display: flex;
+    gap: .5em;
+}
+
+.statResultTableWrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-radius: 5px;
+    border: 1px solid var(--text);
+}
+
+.statResultCell.content:nth-child(2):not(:last-child) {
+    border-bottom: 1px solid var(--text);
+    border-radius: 0 5px 0 0;
+}
+
+.statResultCell.content:last-child {
+    border-radius: 0 0 5px 0;
+}
+
+.statResultCell.content:nth-child(2):last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+/* UTILITY */
+
+.cta {
+    background-color: var(--cta);
+    border: 1px solid var(--text-secondary);
+    flex-grow: 1;
+    border-radius: 5px;
+    color: var(--text);
+    font-size: var(--big-font-size);
+}
+
+
+.visually-hidden:not(:focus):not(:active) {
+    clip: rect(0 0 0 0); 
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap; 
+    width: 1px;
+}
+
+.error {
+    color: var(--invalid-red);
+}
+
+.searchField {
+    border: none;
+}
+
+input[type="number"] {
+    appearance: textfield;
+    font-family: var(--mono-font);
+    font-size: var(--classic-font-size);
+    background-color: var(--background);
+    color: var(--text-secondary);
+}
+
+.searchField:focus {
+    outline: none;
+}
+
+.number {
+    font-family: var(--mono-font);
+}
+
+.sunny-orange {
+    background-color: #FF9F1C;
+}
+.turquoise-cyan {
+    background-color: #41EAD4;
+}
+.berry-red {
+    background-color: #F71735;
+}
+.lush-green {
+    background-color: #9EFF1C;
+}
+.lavender {
+    background-color: #B57DFF;
+}
+.lemon-yellow {
+    background-color: #FFFF4D;
+}
+.royal-purple {
+    background-color: #D441EA;
+}
+.ocean-blue {
+    background-color: #1C7DFF;
+}
+.coral-pink {
+    background-color: #FF5387;
+}
+
+.sunny-orange-text {
+    color: #FF9F1C;
+}
+.turquoise-cyan-text {
+    color: #41EAD4;
+}
+.berry-red-text {
+    color: #F71735;
+}
+.lush-green-text {
+    color: #9EFF1C;
+}
+.lavender-text {
+    color: #B57DFF;
+}
+.lemon-yellow-text {
+    color: #FFFF4D;
+}
+.royal-purple-text {
+    color: #D441EA;
+}
+.ocean-blue-text {
+    color: #1C7DFF;
+}
+.coral-pink-text {
+    color: #FF5387;
+}
+
+.hidden  {
+    display: none;
+}
+
+.inactive:hover {
+    background-color: var(--background-secondary);
+}
+
+.inactive {
+    background-color: var(--background);
+}
+
+.green {
+    color: var(--dark-spring-green);
+}
+.red {
+    color: var(--invalid-red)!important;
+}
+
+.colorText {
+    color: var(--text);
+}
+
+.suppContract{
+    color: var(--invalid-red)!important;
+    background-color: var(--background);
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    padding: 0.5em;
+}
+/* MEDIA QUERIES */
+
+@media screen and (max-width: 1200px) {
+    .weekWrapper, .contactAndRDVWrapper, .accountAndContractWrapper {
+        grid-auto-flow: row;
+    }
+    .day {
+        border-right: none;
+    }
+
+    .day:last-child .dayCell {
+        /* border-bottom: 3px red solid; */
+        border-bottom: none;
+    }
+
+    .filterBtn {
+        font-size: var(--smaller-font-size);
+    }
+}
+
+@media screen and (max-width:1800px) {
+    .dayCell h1 {
+        font-size: var(--big-font-size);
+    }
+}
